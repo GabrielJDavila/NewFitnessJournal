@@ -1,0 +1,328 @@
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Oswald', sans-serif;
+}
+
+h2, h3, label, p {
+  font-size: 1.5rem;
+}
+
+/* ============= header and nav styles ==============*/
+header {
+  background: black;
+  color: white;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 1rem;
+}
+
+.app-title {
+  color: rgb(220, 104, 75);
+  margin: .5rem 0;
+}
+
+.nav {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  margin-left: auto;
+  gap: 20px;
+  align-items: center;
+}
+
+.nav-item {
+  font-size: 1.5em;
+  transition: .2s ease-in-out;
+  cursor: pointer;
+}
+
+.nav-item:hover,
+.main-nav-link {
+  color: rgb(220, 104, 75);
+}
+
+.main-nav-link {
+  color: white;
+}
+
+.user-menu {
+  position: absolute;
+  z-index: 2;
+  top: 38px;
+  right: -15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: rgb(220, 104, 75);
+  padding: 0;
+  width: 150px;
+  height: auto;
+  margin: 0 auto;
+  text-align: center;
+  transition: .2s all ease;
+  overflow: hidden;
+}
+
+.menu-item-link {
+  text-decoration: none;
+  color: white;
+}
+
+.menu-item {
+  width: 100%;
+  list-style: none;
+  margin: 0;
+  border-top: 1px solid rgb(191, 76, 48);
+  padding: .5rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: .2s ease-in-out;
+}
+
+.menu-item:hover {
+  background: rgb(183, 75, 47);
+}
+
+/* ============ Category.jsx styles ===================*/
+
+.category-container {
+ 
+}
+
+.category-dropdown {
+  background: rgb(220, 104, 75);
+  position: absolute;
+  right: 10px;
+  z-index: 2;
+  font-size: 1.5rem;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  padding: 0;
+  width: 120px;
+}
+
+
+
+.category-component-btns {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/*============ Dashboard styles ======================*/
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 10rem 0 0;
+}
+
+.current-log-container,
+.start-new-workout-container,
+.see-previous-workout-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.current-log-title {
+  color: lightgray;
+}
+
+.dash-links-container {
+  margin: 3rem 0;
+}
+
+.link-portal-dash {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  text-decoration: none;
+  color: rgb(220, 104, 75);
+  margin: 2rem 0;
+}
+
+.link-text {
+  margin-top: .5rem;
+}
+
+/*=============== AllCategories.jsx styles ====================*/
+
+.all-ex-page-container {
+  text-align: center;
+  width: 90%;
+  max-width: 900px;
+  margin: 1rem auto 0;
+}
+
+.search-ex-form {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.fa-magnifying-glass {
+  width: 10%;
+  font-size: 1.5rem;
+}
+
+.search-ex-input {
+  width: 90%;
+  margin: 0 auto;
+  height: 2rem;
+  border: none;
+  border-bottom: 2px solid lightgray;
+  padding: 1em;
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.5rem;
+}
+
+.search-ex-input:focus {
+  border: none;
+}
+
+.category-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid grey;
+  font-size: 1.5rem;
+}
+
+.category-name {
+  font-size: 1.5rem;
+}
+
+.category-edit {
+  transition: .2s ease-in-out;
+  cursor: pointer;
+}
+
+.category-edit:hover {
+  color: rgb(220, 104, 75);
+}
+
+/* AllCategories.jsx Modals */
+
+.edit-modal,
+.confirm-delete-modal {
+  max-width: 500px;
+  margin: 0 auto;
+  box-shadow: 0 0 10px 1px rgb(122, 122, 122);
+}
+
+.edit-cat-input {
+  height: 30px;
+  width: 90%;
+  margin: 0 auto 1rem;
+}
+
+.edit-modal-btns-container,
+.confirm-delete-modal-btns-container {
+  display: flex;
+}
+
+/*=================== NewEx.jsx styles ====================*/
+
+.add-ex-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  width: 90%;
+  max-width: 600px;
+  margin: 0 auto;
+  font-size: 1.5rem;
+}
+
+.new-ex-name, select {
+  height: 50px;
+  border: none;
+  border-bottom: 1px solid rgb(220, 104, 75);
+  font-family: "Oswald", sans-serif;
+  font-size: 1.5rem;
+  color: black;
+  margin-bottom: 2rem;
+}
+
+.message {
+  color: rgb(220, 104, 75);
+}
+
+/*============ NewCat.jsx styles ===================*/
+
+.new-cat-container {
+  position: fixed;
+  top: 100px;
+  right: 50px;
+  left: 50px;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  width: 70%;
+  height: 300px;
+  max-width: 300px;
+  margin: 0 auto;
+  background: white;
+  box-shadow: 0 0 10px 1px rgb(131, 131, 131);
+}
+
+.new-cat-title {
+  
+}
+
+.new-cat {
+  height: 2rem;
+  width: 90%;
+  margin: 1rem auto;
+}
+
+.new-cat-btns-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin: auto auto 0 auto;
+  justify-content: center;
+}
+
+.cancel-btn {
+  background: #EFEFEF;
+  border: 1px solid rgb(122, 122, 122);
+  height: 40px;
+  width: 50%;
+  margin: 0;
+  cursor: pointer;
+  transition: .2s ease-in-out;
+}
+
+.confirm-btn {
+  font-family: "Oswald", sans-serif;
+  border: 1px solid rgb(122, 122, 122);
+  font-size: 1.5rem;
+  width: 50%;
+  height: 40px;
+  cursor: pointer;
+  transition: .2s ease-in-out;
+}
+
+.cancel-cat:hover, .save-cat:hover {
+  background: rgb(220, 104, 75);
+}
+
+/* utility classes */
+.hide {
+  display: none;
+}
