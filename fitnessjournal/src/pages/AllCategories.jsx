@@ -1,5 +1,6 @@
 import Category from "../components/Category"
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { getCategories, categoriesCollection, editCategoryName, retrieveDoc } from "../firebase"
 
 export default function AllCategories() {
     const [toggleEditModal, setToggleEditModal] = useState(false)
@@ -10,14 +11,52 @@ export default function AllCategories() {
     const [title, setTitle] = useState({
         title: ""
     })
-    console.log(editCategoryTitle.title)
+    const [loadedCategories, setLoadedCategories] = useState([])
+    const [currentId, setCurrentId] = useState(null)
+
+    async function loadData() {
+        try {
+            const data = await getCategories(categoriesCollection)
+            setLoadedCategories(data)
+        } catch(e) {
+            console.log("error retrieving data: ", e)
+        }
+    }
+
+    useEffect(() => {
+        loadData()
+    }, [])
+
+    // async function loadSingleDoc
+
+    const renderedCategories = loadedCategories.map(obj => {
+        return (
+            <Category
+                key={obj.id}
+                id={obj.id}
+                name={obj.name}
+                toggleEdit={toggleEdit}
+                toggleDelete={toggleDelete}
+            />
+        )
+    })
+
+    function handleEditSubmit(e) {
+        e.preventDefault()
+        editCategoryName(categoriesCollection, currentId, editCategoryTitle.title)
+        loadData()
+        toggleEdit()
+    }
 
     function toggleDelete() {
         setOpenConfirmDeleteModal(prev => !prev)
     }
 
-    function toggleEdit() {
+    function toggleEdit(e) {
         setToggleEditModal(prev => !prev)
+        const itemId = e.target.dataset.id
+        setCurrentId(itemId)
+        clearForm()
     }
 
     function handleChange(name, value) {
@@ -27,8 +66,10 @@ export default function AllCategories() {
         }))
     }
 
-    function handleSubmit() {
-        
+    function clearForm() {
+        setEditCategoryTitle(prev => ({
+            title: ""
+        }))
     }
 
     const modalStyles = {
@@ -39,7 +80,7 @@ export default function AllCategories() {
     }
 
     const editModal =
-        <form className="edit-modal" style={modalStyles}>
+        <form onSubmit={handleEditSubmit} className="edit-modal" style={modalStyles}>
             <h2>Edit Category</h2>
             <input
                 name="title"
@@ -76,9 +117,7 @@ export default function AllCategories() {
             </form>
             {toggleEditModal && editModal}
             {openConfirmDeleteModal && confirmDeleteModal}
-            <Category name={editCategoryTitle.title} toggleEdit={toggleEdit} toggleDelete={toggleDelete}/>
-            <Category name={"Back"} toggleEdit={toggleEdit} toggleDelete={toggleDelete}/>
-            <Category name={"Chest"} toggleEdit={toggleEdit} toggleDelete={toggleDelete}/>
+            {loadedCategories && renderedCategories}
         </div>
     )
 }

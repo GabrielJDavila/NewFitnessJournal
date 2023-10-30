@@ -13,9 +13,10 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Dashboard />} />
-          <Route path="AllCategories" element={<AllCategories />} />
           <Route path="NewEx" element={<NewEx />} />
           <Route path="NewCat" element={<NewCat />} />
+          <Route path="AllCategories" element={<AllCategories />} />
+          {/* <Route path="AllCategories/:id" element={<ExercisesInCat />}/> */}
         </Route>
       </Routes>
     </BrowserRouter>

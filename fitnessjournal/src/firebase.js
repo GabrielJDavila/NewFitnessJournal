@@ -20,17 +20,6 @@ const db = getFirestore(app)
 
 // Initialize firestore references
 export const categoriesCollection = collection(db, "categories")
-// export const quads = doc(categoriesCollection, "quads")
-// export const hamstrings = doc(categoriesCollection, "hamstrings")
-// export const glutes = doc(categoriesCollection, "glutes")
-// export const calves = doc(categoriesCollection, "calves")
-// export const chest = doc(categoriesCollection, "chest")
-// export const back = doc(categoriesCollection, "back")
-// export const shoulders = doc(categoriesCollection, "shoulders")
-// export const biceps = doc(categoriesCollection, "biceps")
-// export const triceps = doc(categoriesCollection, "triceps")
-// export const abs = doc(categoriesCollection, "abs")
-// export const cardio = doc(categoriesCollection, "cardio")
 
 // add new category subcollection
 export async function addNewCategory(category, collectionType) {
@@ -68,4 +57,24 @@ export async function getCategories(collectionName) {
         id: doc.id
     }))
     return collections
+}
+
+// retrieve single doc from firestore
+export async function retrieveDoc(collectionType, itemId) {
+    const docRef = doc(collectionType, itemId)
+    const docSnap = await getDoc(docRef)
+    return docSnap
+}
+
+// update category name
+export async function editCategoryName(collectionType, docId, newName) {
+    try {
+        const docRef = doc(collectionType, docId)
+        await setDoc(docRef, {
+            name: newName
+        })
+    } catch(e) {
+        console.log("error performing edit: ", e)
+        throw e
+    }
 }
