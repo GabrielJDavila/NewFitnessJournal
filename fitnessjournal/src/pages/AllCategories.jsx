@@ -1,19 +1,17 @@
 import Category from "../components/Category"
 import { useState, useEffect } from "react"
-import { getCategories, categoriesCollection, editCategoryName, retrieveDoc } from "../firebase"
+import { Link } from "react-router-dom"
+import { getCategories, categoriesCollection, editCategoryName, deleteCategory } from "../firebase"
 
 export default function AllCategories() {
     const [toggleEditModal, setToggleEditModal] = useState(false)
     const [openConfirmDeleteModal, setOpenConfirmDeleteModal] = useState(false)
+    const [loadedCategories, setLoadedCategories] = useState([])
+    const [currentId, setCurrentId] = useState(null)
     const [editCategoryTitle, setEditCategoryTitle] = useState({
         title: ""
     })
-    const [title, setTitle] = useState({
-        title: ""
-    })
-    const [loadedCategories, setLoadedCategories] = useState([])
-    const [currentId, setCurrentId] = useState(null)
-
+    console.log(loadedCategories)
     async function loadData() {
         try {
             const data = await getCategories(categoriesCollection)
@@ -27,20 +25,6 @@ export default function AllCategories() {
         loadData()
     }, [])
 
-    // async function loadSingleDoc
-
-    const renderedCategories = loadedCategories.map(obj => {
-        return (
-            <Category
-                key={obj.id}
-                id={obj.id}
-                name={obj.name}
-                toggleEdit={toggleEdit}
-                toggleDelete={toggleDelete}
-            />
-        )
-    })
-
     function handleEditSubmit(e) {
         e.preventDefault()
         editCategoryName(categoriesCollection, currentId, editCategoryTitle.title)
@@ -48,13 +32,22 @@ export default function AllCategories() {
         toggleEdit()
     }
 
-    function toggleDelete() {
+    function handleDeleteSubmit(e) {
+        e.preventDefault()
+        deleteCategory(categoriesCollection, currentId)
+        loadData()
+        toggleDelete()
+    }
+
+    function toggleDelete(e) {
         setOpenConfirmDeleteModal(prev => !prev)
+        const itemId = e.target.dataset.delete
+        setCurrentId(itemId)
     }
 
     function toggleEdit(e) {
         setToggleEditModal(prev => !prev)
-        const itemId = e.target.dataset.id
+        const itemId = e.target.dataset.edit
         setCurrentId(itemId)
         clearForm()
     }
@@ -80,7 +73,7 @@ export default function AllCategories() {
     }
 
     const editModal =
-        <form onSubmit={handleEditSubmit} className="edit-modal" style={modalStyles}>
+        <form onSubmit={(e) => handleEditSubmit(e)} className="edit-modal" style={modalStyles}>
             <h2>Edit Category</h2>
             <input
                 name="title"
@@ -90,20 +83,32 @@ export default function AllCategories() {
                 placeholder="new category name"
             />
             <div className="edit-modal-btns-container">
-                <p onClick={toggleEdit} className="cancel-btn">cancel</p>
+                <p onClick={(e) => toggleEdit(e)} className="cancel-btn">cancel</p>
                 <button className="confirm-btn">save</button>
             </div>
         </form>
     
     const confirmDeleteModal =
-        <div className="confirm-delete-modal" style={modalStyles}>
+        <form onSubmit={(e) => handleDeleteSubmit(e)} className="confirm-delete-modal" style={modalStyles}>
             <h2>Delete Category</h2>
             <p>Are you sure you want to delete Cat. Name?</p>
             <div className="confirm-delete-modal-btns-container">
-                <p onClick={toggleDelete} className="cancel-btn">cancel</p>
+                <p onClick={(e) => toggleDelete(e)} className="cancel-btn">cancel</p>
                 <button className="confirm-btn">delete</button>
             </div>
-        </div>
+        </form>
+
+    const renderedCategories = loadedCategories.map(obj => {
+        return (
+            <Category
+                key={obj.id}
+                id={obj.id}
+                name={obj.name}
+                toggleEdit={(e) => toggleEdit(e)}
+                toggleDelete={(e) => toggleDelete(e)}
+            />
+        )
+    })
 
     return (
         <div className="all-ex-page-container">

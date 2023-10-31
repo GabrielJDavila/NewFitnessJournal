@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app"
-import { getFirestore, collection, getDocs, getDoc, addDoc, setDoc, doc, query } from "firebase/firestore"
+import { getFirestore, collection, getDocs, getDoc, addDoc, deleteDoc, setDoc, doc, query } from "firebase/firestore"
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -73,6 +73,17 @@ export async function editCategoryName(collectionType, docId, newName) {
         await setDoc(docRef, {
             name: newName
         })
+    } catch(e) {
+        console.log("error performing edit: ", e)
+        throw e
+    }
+}
+
+// delete category
+export async function deleteCategory(collectionType, docId) {
+    try {
+        const docRef = doc(collectionType, docId)
+        await deleteDoc(docRef)
     } catch(e) {
         console.log("error performing edit: ", e)
         throw e

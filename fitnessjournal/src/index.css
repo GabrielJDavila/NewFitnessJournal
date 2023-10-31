@@ -199,13 +199,25 @@ header {
   justify-content: space-between;
   border-bottom: 2px solid grey;
   font-size: 1.5rem;
+  width: 100%;
+}
+
+.category-name-link {
+  width: 75%;
 }
 
 .category-name {
   font-size: 1.5rem;
+  text-align: left;
 }
 
-.category-edit {
+.category-component-btns {
+  width: 20%;
+  display: flex;
+  justify-content: right;
+}
+
+.category-edit, .category-delete {
   transition: .2s ease-in-out;
   cursor: pointer;
 }

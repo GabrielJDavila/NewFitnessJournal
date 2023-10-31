@@ -1,18 +1,24 @@
 import { useState } from "react"
+import { Link, useSearchParams } from "react-router-dom"
 
 export default function Category(props) {
 
     return (
         <div className="category-container">
-            <p className="category-name">{props.name}</p>
+            <Link
+            to="/LoadedExercises"
+                className="category-name-link"
+            >
+                <p className="category-name">{props.name}</p>
+            </Link>
             <div className="category-component-btns">
                 <i
-                    data-id={props.id}
+                    data-edit={props.id}
                     className="fa-solid fa-pen-to-square category-edit"
                     onClick={props.toggleEdit}
                 ></i>
                 <i
-                    data-id={props.id}
+                    data-delete={props.id}
                     className="fa-solid fa-trash category-delete"
                     onClick={props.toggleDelete}
                 ></i>
