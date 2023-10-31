@@ -1,11 +1,18 @@
-import { Link } from "react-router-dom"
+import { useState, useEffect } from "react"
+import { Link, useParams } from "react-router-dom"
+import { retreiveFromCategory, categoriesCollection } from "../firebase"
 
 export default function LoadedExercises() {
+    const params = useParams()
+
+    useEffect(() => {
+        retreiveFromCategory(categoriesCollection, params)
+    }, [])
     return (
         <div>
             <Link
                 className="back-btn"
-                to=".."
+                to="/AllCategories"
                 relative="path"
             >
                 <i className="fa-solid fa-arrow-left"></i>

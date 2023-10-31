@@ -1,6 +1,6 @@
 import Category from "../components/Category"
 import { useState, useEffect } from "react"
-import { Link } from "react-router-dom"
+import LoadedExercises from "./LoadedExercises"
 import { getCategories, categoriesCollection, editCategoryName, deleteCategory } from "../firebase"
 
 export default function AllCategories() {
@@ -11,7 +11,7 @@ export default function AllCategories() {
     const [editCategoryTitle, setEditCategoryTitle] = useState({
         title: ""
     })
-    console.log(loadedCategories)
+
     async function loadData() {
         try {
             const data = await getCategories(categoriesCollection)

@@ -17,7 +17,7 @@ function App() {
           <Route path="NewEx" element={<NewEx />} />
           <Route path="NewCat" element={<NewCat />} />
           <Route path="AllCategories" element={<AllCategories />} />
-          <Route path="loadedExercises" element={<LoadedExercises />}/>
+          <Route path="AllCategories/:id" element={<LoadedExercises />}/>
         </Route>
       </Routes>
     </BrowserRouter>

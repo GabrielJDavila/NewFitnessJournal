@@ -21,6 +21,7 @@ const db = getFirestore(app)
 // Initialize firestore references
 export const categoriesCollection = collection(db, "categories")
 
+
 // add new category subcollection
 export async function addNewCategory(category, collectionType) {
     const capitalizedCat = category.charAt(0).toUpperCase() + category.slice(1)
@@ -30,6 +31,18 @@ export async function addNewCategory(category, collectionType) {
         })
     } catch(e) {
         console.log("error adding doc: ", e)
+    }
+}
+
+// retrieve exercises for a category
+export async function retreiveFromCategory(collectionType, categoryId) {
+    try {
+        const querySnapshot = await getDocs(collectionType, categoryId, "exercises")
+        querySnapshot.forEach((doc) => {
+            console.log(doc.id, " => ", doc.data())
+        })
+    } catch(e) {
+        console.log("error boi: ", e)
     }
 }
 

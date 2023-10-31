@@ -6,8 +6,9 @@ export default function Category(props) {
     return (
         <div className="category-container">
             <Link
-            to="/LoadedExercises"
+                to={props.id}
                 className="category-name-link"
+                data-id={props.id}
             >
                 <p className="category-name">{props.name}</p>
             </Link>
