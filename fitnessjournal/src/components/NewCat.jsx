@@ -27,6 +27,7 @@ export default function NewCat() {
                 name="name"
                 onChange={e => handleChange(e.target.name, e.target.value, setNewCatName)}
                 className="new-cat"
+                required
             />
             <div className="new-cat-btns-container">
                 <p className="cancel-btn">cancel</p>

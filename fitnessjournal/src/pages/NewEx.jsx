@@ -87,6 +87,7 @@ export default function NewEx() {
                 id="new-ex-name"
                 placeholder="exercise name"
                 className="new-ex-name"
+                required
             />
 
             <label htmlFor="categories-dropdown-menu">Category</label>

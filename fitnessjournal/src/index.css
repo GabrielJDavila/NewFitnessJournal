@@ -159,7 +159,8 @@ header {
 
 /*=============== AllCategories.jsx styles ====================*/
 
-.all-ex-page-container {
+.all-ex-page-container,
+.rendered-ex-list {
   text-align: center;
   width: 90%;
   max-width: 900px;
@@ -192,7 +193,8 @@ header {
   border: none;
 }
 
-.category-container {
+.category-container,
+.exercise-container {
   display: flex;
   flex-direction: row;
   align-items: center;

@@ -22,7 +22,7 @@ const db = getFirestore(app)
 export const categoriesCollection = collection(db, "categories")
 
 
-// add new category subcollection
+// add new category
 export async function addNewCategory(category, collectionType) {
     const capitalizedCat = category.charAt(0).toUpperCase() + category.slice(1)
     try {
@@ -37,12 +37,16 @@ export async function addNewCategory(category, collectionType) {
 // retrieve exercises for a category
 export async function retreiveFromCategory(collectionType, categoryId) {
     try {
-        const querySnapshot = await getDocs(collectionType, categoryId, "exercises")
-        querySnapshot.forEach((doc) => {
-            console.log(doc.id, " => ", doc.data())
-        })
-    } catch(e) {
-        console.log("error boi: ", e)
+        const categoryDocRef = doc(collectionType, categoryId)
+        const exercisesCollectionRef = collection(categoryDocRef, "exercises")
+        const snapshot = await getDocs(exercisesCollectionRef)
+        const exercises = snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        }))
+        return exercises
+    }catch(e) {
+        console.log("error retrieving exercises: ", e)
     }
 }
 
