@@ -1,8 +1,16 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
+import { addUpdateWorkoutList, currentWorkoutList } from "../firebase"
 
 export default function Exercise(props) {
 
+    useEffect(() => {
+        
+    }, [])
+    // function to handle button click of adding exercise
+    function handleAddExClick(e) {
+        console.log(e.target.dataset.id)
+    }
     return (
         <div className="exercise-container">
             <Link
@@ -12,19 +20,7 @@ export default function Exercise(props) {
             >
                 <p className="exercise-name">{props.name}</p>
             </Link>
-            <button data-id={props.id} className="add-btn">Add exercise</button>
-            {/* <div className="exercise-component-btns">
-                <i
-                    data-edit={props.id}
-                    className="fa-solid fa-pen-to-square category-edit"
-                    onClick={props.toggleEdit}
-                ></i>
-                <i
-                    data-delete={props.id}
-                    className="fa-solid fa-trash category-delete"
-                    onClick={props.toggleDelete}
-                ></i>
-            </div> */}
+            <button data-id={props.id} className="add-btn" onClick={handleAddExClick}>Add exercise</button>
         </div>
     )
 }

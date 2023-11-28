@@ -1,6 +1,16 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app"
-import { getFirestore, collection, getDocs, getDoc, addDoc, deleteDoc, setDoc, doc, query } from "firebase/firestore"
+import {
+    getFirestore,
+    collection,
+    getDocs,
+    getDoc,
+    addDoc,
+    deleteDoc,
+    setDoc,
+    doc,
+    query
+} from "firebase/firestore"
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -20,6 +30,7 @@ const db = getFirestore(app)
 
 // Initialize firestore references
 export const categoriesCollection = collection(db, "categories")
+export const currentWorkoutList = collection(db, "currentWorkoutList")
 
 
 // add new category
@@ -104,5 +115,19 @@ export async function deleteCategory(collectionType, docId) {
     } catch(e) {
         console.log("error performing edit: ", e)
         throw e
+    }
+}
+
+// add or udpdate current workout exercises
+export async function addUpdateWorkoutList(name, scheme, weightUnit, collectionType, exerciseId) {
+    try {
+        const docRef = doc(collectionType, name)
+        const docSnap = await getDoc(docRef)
+
+        if(docSnap.exists()) {
+            console.log(docSnap.data())
+        }
+    } catch(e) {
+        console.log("error adding exercise: ", e)
     }
 }

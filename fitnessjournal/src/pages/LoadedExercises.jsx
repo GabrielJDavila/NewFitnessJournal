@@ -6,13 +6,7 @@ import Exercise from "../components/Exercise"
 export default function LoadedExercises() {
     const params = useParams()
     const [exercises, setExercises] = useState([])
-    // const [toggleEditModal, setToggleEditModal] = useState(false)
-    // const [openConfirmDeleteModal, setOpenConfirmDeleteModal] = useState(false)
-    // const [loadedCategories, setLoadedCategories] = useState([])
-    // const [currentId, setCurrentId] = useState(null)
-    // const [editCategoryTitle, setEditCategoryTitle] = useState({
-    //     title: ""
-    // })
+    const [selectedExId, setSelectedExId] = useState([])
 
     async function loadExercisesData() {
         try {
@@ -22,44 +16,10 @@ export default function LoadedExercises() {
             console.log("error retrieving data: ", e)
         }
     }
-
+    
     useEffect(() => {
         loadExercisesData()
     }, [params.id])
-
-    // function handleEditSubmit(e) {
-    //     e.preventDefault()
-    //     editCategoryName(categoriesCollection, currentId, editCategoryTitle.title)
-    //     loadData()
-    //     toggleEdit()
-    // }
-
-    // function handleDeleteSubmit(e) {
-    //     e.preventDefault()
-    //     deleteCategory(categoriesCollection, currentId)
-    //     loadData()
-    //     toggleDelete()
-    // }
-
-    // function toggleDelete(e) {
-    //     setOpenConfirmDeleteModal(prev => !prev)
-    //     const itemId = e.target.dataset.delete
-    //     setCurrentId(itemId)
-    // }
-
-    // function toggleEdit(e) {
-    //     setToggleEditModal(prev => !prev)
-    //     const itemId = e.target.dataset.edit
-    //     setCurrentId(itemId)
-    //     clearForm()
-    // }
-
-    // function handleChange(name, value) {
-    //     setEditCategoryTitle(prev => ({
-    //         ...prev,
-    //         [name]: value
-    //     }))
-    // }
 
     const renderedExercises = exercises.map(exercise => {
         return (
@@ -72,39 +32,6 @@ export default function LoadedExercises() {
             />
         )
     })
-
-    // const modalStyles = {
-    //     position: "absolute",
-    //     right: "50px",
-    //     left: "50px",
-    //     background: "white"
-    // }
-
-    // const editModal =
-    //     <form onSubmit={(e) => handleEditSubmit(e)} className="edit-modal" style={modalStyles}>
-    //         <h2>Edit Category</h2>
-    //         <input
-    //             name="title"
-    //             onChange={e => handleChange(e.target.name, e.target.value)}
-    //             value={editCategoryTitle.title}
-    //             className="edit-cat-input"
-    //             placeholder="new category name"
-    //         />
-    //         <div className="edit-modal-btns-container">
-    //             <p onClick={(e) => toggleEdit(e)} className="cancel-btn">cancel</p>
-    //             <button className="confirm-btn">save</button>
-    //         </div>
-    //     </form>
-    
-    // const confirmDeleteModal =
-    //     <form onSubmit={(e) => handleDeleteSubmit(e)} className="confirm-delete-modal" style={modalStyles}>
-    //         <h2>Delete Category</h2>
-    //         <p>Are you sure you want to delete Cat. Name?</p>
-    //         <div className="confirm-delete-modal-btns-container">
-    //             <p onClick={(e) => toggleDelete(e)} className="cancel-btn">cancel</p>
-    //             <button className="confirm-btn">delete</button>
-    //         </div>
-    //     </form>
 
     return (
         <div>
