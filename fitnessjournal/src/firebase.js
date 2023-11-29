@@ -119,13 +119,20 @@ export async function deleteCategory(collectionType, docId) {
 }
 
 // add or udpdate current workout exercises
-export async function addUpdateWorkoutList(name, scheme, weightUnit, collectionType, exerciseId) {
+export async function addUpdateWorkoutList(exerciseId, name, scheme, weightUnit, collectionType) {
     try {
         const docRef = doc(collectionType, name)
         const docSnap = await getDoc(docRef)
 
         if(docSnap.exists()) {
-            console.log(docSnap.data())
+            alert("exercise already in workout")
+        } else {
+            await setDoc(docRef, {
+                id: exerciseId,
+                name: name,
+                scheme: scheme,
+                weightUnit: weightUnit
+            })
         }
     } catch(e) {
         console.log("error adding exercise: ", e)

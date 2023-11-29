@@ -27,6 +27,8 @@ export default function LoadedExercises() {
                 key={exercise.id}
                 id={exercise.id}
                 name={exercise.name}
+                scheme={exercise.scheme}
+                unit={exercise.weightUnit}
                 toggleEdit={(e) => toggleEdit(e)}
                 toggleDelete={(e) => toggleDelete(e)}
             />
