@@ -122,6 +122,7 @@ export async function deleteCategory(collectionType, docId) {
 export async function addUpdateWorkoutList(exerciseId, name, scheme, weightUnit, collectionType) {
     
     try {
+        // using exerciseId so it's easier to grab params later for use
         const docRef = doc(collectionType, exerciseId)
         const docSnap = await getDoc(docRef)
 
