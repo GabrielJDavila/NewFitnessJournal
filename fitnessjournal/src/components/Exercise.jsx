@@ -9,6 +9,7 @@ export default function Exercise(props) {
         scheme: props.scheme,
         unit: props.unit
     })
+    console.log(docInfo.id)
     // function to handle button click of adding exercise
     function handleAddExClick(e) {
         if(e.target.dataset.id === docInfo.id) {

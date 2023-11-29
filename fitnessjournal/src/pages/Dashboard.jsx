@@ -4,7 +4,7 @@ import { getCategories, currentWorkoutList } from "../firebase"
 
 export default function Dashboard() {
     const [workoutData, setWorkoutData] = useState([])
-
+    console.log(workoutData)
     useEffect(() => {
         loadExerciseList()
     }, [])
@@ -12,6 +12,7 @@ export default function Dashboard() {
     async function loadExerciseList() {
         try {
             const data = await getCategories(currentWorkoutList)
+            console.log(data)
             setWorkoutData(data)
         } catch(e) {
 
@@ -23,27 +24,11 @@ export default function Dashboard() {
         return (
             <div key={index} className="rendered-ex-dash-container">
                 <p>{ex.name}</p>
-                <span className="material-symbols-outlined edit-ex">
-                    edit
-                </span>
-                <fieldset className="dash-input-fieldset">
-                    <label htmlFor="sets">Sets:</label>
-                    <input type="text" name="sets"/>
-                </fieldset>
-                <fieldset className="dash-input-fieldset">
-                    <label htmlFor="sets">Reps:</label>
-                    <input type="text" name="sets"/>
-                </fieldset>
-                <fieldset className="dash-input-fieldset">
-                    <label htmlFor="sets">Weight:</label>
-                    <input type="text" name="sets"/>
-                    <select>
-                        <option>lb</option>
-                        <option>kg</option>
-                    </select>
-                </fieldset>
-                <button className="add-set-btn">Add set</button>
-                
+                <Link to={`/ExerciseDetail/${ex.id}`}>
+                    <span className="material-symbols-outlined edit-ex">
+                        edit
+                    </span>
+                </Link>
             </div>
         )
     })

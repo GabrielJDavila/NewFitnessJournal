@@ -120,8 +120,9 @@ export async function deleteCategory(collectionType, docId) {
 
 // add or udpdate current workout exercises
 export async function addUpdateWorkoutList(exerciseId, name, scheme, weightUnit, collectionType) {
+    
     try {
-        const docRef = doc(collectionType, name)
+        const docRef = doc(collectionType, exerciseId)
         const docSnap = await getDoc(docRef)
 
         if(docSnap.exists()) {
