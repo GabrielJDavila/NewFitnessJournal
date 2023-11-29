@@ -13,6 +13,7 @@ export default function Exercise(props) {
     function handleAddExClick(e) {
         if(e.target.dataset.id === docInfo.id) {
             addUpdateWorkoutList(docInfo.id, docInfo.name, docInfo.scheme, docInfo.unit, currentWorkoutList)
+            
         }
         
     }
