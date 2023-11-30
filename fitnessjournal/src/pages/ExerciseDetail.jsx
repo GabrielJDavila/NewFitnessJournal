@@ -3,25 +3,99 @@ import { useParams } from "react-router-dom"
 
 export default function ExerciseDetail() {
     const params = useParams()
-    console.log(params)
+    const [repsAndWeight, setRepsAndWeight] = useState({
+        reps: 0,
+        weight: 0
+    })
+    console.log(repsAndWeight)
+    // handles change of purchaseInfo if user increments/decrements quantity
+    function addOrMinusWeight(e) {
+        if(e.target.dataset.addweight) {
+            setRepsAndWeight(prev => ({
+                ...prev,
+                weight: prev.weight + 1
+            }))
+        }
+        if(e.target.dataset.minusweight && repsAndWeight.weight > 0) {
+            setRepsAndWeight(prev => ({
+                ...prev,
+                weight: prev.weight - 1
+            }))
+        }
+    }
+
+    function addOrMinusReps(e) {
+        if(e.target.dataset.addreps) {
+            setRepsAndWeight(prev => ({
+                ...prev,
+                reps: prev.reps + 1
+            }))
+        }
+        if(e.target.dataset.minusreps && repsAndWeight.reps > 0) {
+            setRepsAndWeight(prev => ({
+                ...prev,
+                reps: prev.reps - 1
+            }))
+        }
+    }
+
+    // handle change of reps and sets
+    function handleChange(name, value) {
+        const newVal = parseInt(value, 10) || 0
+        setRepsAndWeight(prev => ({
+            ...prev,
+            [name]: newVal
+        }))
+    }
+
     return (
         <div>
-            <fieldset className="dash-input-fieldset">
+            {/* <fieldset className="dash-input-fieldset">
                 <label htmlFor="sets">Sets:</label>
                 <input type="text" name="sets"/>
-            </fieldset>
+            </fieldset> */}
             <fieldset className="dash-input-fieldset">
-                <label htmlFor="sets">Reps:</label>
-                <input type="text" name="sets"/>
+                {/* <label htmlFor="sets">Weight:</label>
+                <input type="text" name="sets"/> */}
+                
+                <div className="ex-info-container">
+                    <p className="ex-info-text weight">Weight:</p>
+                    <div className="ex-info-btns">
+                        <p onClick={e => addOrMinusWeight(e)} data-minusweight="weight" className="q-btn">-</p>
+                        <input
+                            name="weight"
+                            onChange={e => handleChange(e.target.name, e.target.value)}
+                            value={repsAndWeight.weight}
+                            className="weight-input"
+                        />
+                        <p onClick={e => addOrMinusWeight(e)} data-addweight="weight" className="q-btn">+</p>
+                        <select className="weight-type">
+                            <option>lb</option>
+                            <option>kg</option>
+                        </select>
+                    </div>
+                </div>
             </fieldset>
+
             <fieldset className="dash-input-fieldset">
-                <label htmlFor="sets">Weight:</label>
-                <input type="text" name="sets"/>
-                <select>
-                    <option>lb</option>
-                    <option>kg</option>
-                </select>
+                {/* <label htmlFor="sets">Reps:</label>
+                <input type="text" name="sets"/> */}
+
+                <div className="ex-info-container">
+                    <p className="ex-info-text reps">Reps:</p>
+                    <div className="ex-info-btns">
+                        <p onClick={e => addOrMinusReps(e)} data-minusreps="minusreps" className="q-btn">-</p>
+                        <input
+                            name="reps"
+                            onChange={e => handleChange(e.target.name, e.target.value)}
+                            value={repsAndWeight.reps}
+                            className="reps-input"
+                        />
+                        <p onClick={e => addOrMinusReps(e)} data-addreps="addreps" className="q-btn">+</p>
+                    </div>
+                </div>
             </fieldset>
+            
             <button className="add-set-btn">Add set</button>
         </div>
     )

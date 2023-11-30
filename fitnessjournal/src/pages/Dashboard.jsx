@@ -4,6 +4,7 @@ import { getCategories, currentWorkoutList } from "../firebase"
 
 export default function Dashboard() {
     const [workoutData, setWorkoutData] = useState([])
+    const [setsReps, setSetsReps] = useState([])
     console.log(workoutData)
     useEffect(() => {
         loadExerciseList()
@@ -29,6 +30,7 @@ export default function Dashboard() {
                         edit
                     </span>
                 </Link>
+                {}
             </div>
         )
     })

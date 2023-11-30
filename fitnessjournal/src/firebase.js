@@ -140,3 +140,26 @@ export async function addUpdateWorkoutList(exerciseId, name, scheme, weightUnit,
         console.log("error adding exercise: ", e)
     }
 }
+
+// add or update sets and reps of current exercises
+export async function addSetsReps(exerciseId, name, scheme, weightUnit, collectionType) {
+    
+    try {
+        // using exerciseId so it's easier to grab params later for use
+        const docRef = doc(collectionType, exerciseId)
+        const docSnap = await getDoc(docRef)
+
+        if(docSnap.exists()) {
+            alert("exercise already in workout")
+        } else {
+            await setDoc(docRef, {
+                id: exerciseId,
+                name: name,
+                scheme: scheme,
+                weightUnit: weightUnit
+            })
+        }
+    } catch(e) {
+        console.log("error adding exercise: ", e)
+    }
+}

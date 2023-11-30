@@ -168,6 +168,49 @@ header {
   margin-top: .5rem;
 }
 
+/*=============== ExerciseDetail.jsx styles ====================*/
+
+.dash-input-fieldset {
+  padding: 0;
+}
+
+.ex-info-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+.ex-info-text {
+  margin: 0;
+}
+
+.ex-info-btns {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: .5rem;
+}
+
+.q-btn {
+  font-size: 3rem;
+  margin: 0;
+}
+
+.reps-input, .weight-input {
+  height: 35px;
+  width: 150px;
+  border: none;
+  border-bottom: 2px solid lightgray;
+  font-size: 2rem;
+  text-align: center;
+}
+
+.weight-type {
+  margin: 0;
+}
+
 /*=============== AllCategories.jsx styles ====================*/
 
 .all-ex-page-container,
