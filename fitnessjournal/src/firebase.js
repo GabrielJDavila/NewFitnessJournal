@@ -142,24 +142,35 @@ export async function addUpdateWorkoutList(exerciseId, name, scheme, weightUnit,
 }
 
 // add or update sets and reps of current exercises
-export async function addSetsReps(exerciseId, name, scheme, weightUnit, collectionType) {
-    
+export async function addSetsReps( exerciseId, weight, reps, collectionType) {
     try {
         // using exerciseId so it's easier to grab params later for use
-        const docRef = doc(collectionType, exerciseId)
-        const docSnap = await getDoc(docRef)
-
-        if(docSnap.exists()) {
-            alert("exercise already in workout")
-        } else {
-            await setDoc(docRef, {
-                id: exerciseId,
-                name: name,
-                scheme: scheme,
-                weightUnit: weightUnit
-            })
-        }
+        const exerciseToBeEdited = doc(collectionType, exerciseId)
+        const exerciseDocRef = collection(exerciseToBeEdited, "currentEx")
+        await addDoc(exerciseDocRef, {
+            weight: weight,
+            reps: reps
+        })
+        // const docSnap = await getDoc(docRef)
+            // await setDoc(docRef, {
+            //     id: exerciseId,
+            //     weight: weight,
+            //     reps: reps
+            // })
     } catch(e) {
         console.log("error adding exercise: ", e)
     }
 }
+// export async function addToCategory(name, scheme, weightUnit, collectionType, categoryId) {
+//     try {
+//         const categoryDocRef = doc(collectionType, categoryId)
+//         const exercisesCollectionRef = collection(categoryDocRef, "exercises")
+//         await addDoc(exercisesCollectionRef, {
+//             name: name,
+//             scheme: scheme,
+//             weightUnit: weightUnit
+//         })
+//     } catch(e) {
+//         console.log("error adding doc: ", e)
+//     }
+// }

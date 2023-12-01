@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
-import { useParams } from "react-router-dom" 
+import { useParams } from "react-router-dom"
+import { addSetsReps, currentWorkoutList} from "../firebase"
 
 export default function ExerciseDetail() {
     const params = useParams()
@@ -7,7 +8,13 @@ export default function ExerciseDetail() {
         reps: 0,
         weight: 0
     })
-    console.log(repsAndWeight)
+    console.log(params)
+
+    function handleAddSetClick() {
+            addSetsReps(params.id, repsAndWeight.weight, repsAndWeight.reps, currentWorkoutList)
+            
+        
+    }
     // handles change of purchaseInfo if user increments/decrements quantity
     function addOrMinusWeight(e) {
         if(e.target.dataset.addweight) {
@@ -96,7 +103,7 @@ export default function ExerciseDetail() {
                 </div>
             </fieldset>
             
-            <button className="add-set-btn">Add set</button>
+            <button onClick={handleAddSetClick} className="add-set-btn">Add set</button>
         </div>
     )
 }
