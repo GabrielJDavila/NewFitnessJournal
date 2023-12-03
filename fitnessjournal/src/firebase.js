@@ -9,7 +9,8 @@ import {
     deleteDoc,
     setDoc,
     doc,
-    query
+    query,
+    updateDoc
 } from "firebase/firestore"
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -93,58 +94,12 @@ export async function retrieveCurrentExSetsReps(collectionType) {
             exercises.push(exerciseData)
         }
         return exercises
-        // for(const exDoc of workoutSnapshot.docs) {
-        //     const exId = exDoc.id
-
-        //     const currentExRef = collection(exDoc.ref, "currentEx")
-
-        //     const repsSetsQuery = query(currentExRef)
-
-        //     const repsSetsSnapshot = await getDocs(repsSetsQuery)
-
-        //     repsSetsSnapshot.forEach(set => {
-        //         const setId = set.id
-        //         const { reps, weight } = set.data()
-
-        //         repsAndSets.push({
-        //             exId,
-        //             setId,
-        //             weight,
-        //             reps
-        //         })
-        //     })
-        // }
-        // return repsAndSets
 
     } catch(e) {
         console.log("ERROR ERROR ABORT!!!: " , e)
     }
 
-    // try {
-    //     const categoryDocRef = doc(collectionType, exerciseId)
-    //     const setsAndRepsRef = collection(categoryDocRef, "currentEx")
-    //     const snapshot = await getDocs(setsAndRepsRef)
-    //     const setsAndReps = snapshot.docs.map(doc => ({
-    //         id: exerciseId,
-    //         ...doc.data()
-    //     }))
-    //     return setsAndReps
-    // }catch(e) {
-    //     console.log("error retrieving exercises: ", e)
-    // }
 }
-
-// practice
-// export async function getSetsReps() {
-//     try {
-//         const querySnapshot = await getDocs(collection(currentWorkoutList, "currentEx"))
-//         querySnapshot.forEach((doc) => {
-//             console.log(doc.id, " => ", doc.data())
-//         })
-//     } catch(e) {
-//         console.log("error getting data: ", e)
-//     }
-// }
 
 // add new exercise to category
 export async function addToCategory(name, scheme, weightUnit, collectionType, categoryId) {
@@ -236,26 +191,24 @@ export async function addSetsReps( exerciseId, weight, reps, collectionType) {
             weight: weight,
             reps: reps
         })
-        // const docSnap = await getDoc(docRef)
-            // await setDoc(docRef, {
-            //     id: exerciseId,
-            //     weight: weight,
-            //     reps: reps
-            // })
     } catch(e) {
         console.log("error adding exercise: ", e)
+        throw e
     }
 }
-// export async function addToCategory(name, scheme, weightUnit, collectionType, categoryId) {
-//     try {
-//         const categoryDocRef = doc(collectionType, categoryId)
-//         const exercisesCollectionRef = collection(categoryDocRef, "exercises")
-//         await addDoc(exercisesCollectionRef, {
-//             name: name,
-//             scheme: scheme,
-//             weightUnit: weightUnit
-//         })
-//     } catch(e) {
-//         console.log("error adding doc: ", e)
-//     }
-// }
+
+export async function editSingleSet(exerciseId, setId, newReps, newWeight, collectionType) {
+    try {
+        const exerciseRef = doc(collectionType, exerciseId)
+        const setsRef = collection(exerciseRef, "currentEx")
+        const setDocRef = doc(setsRef, setId)
+
+        await updateDoc(setDocRef, {
+            reps: newReps,
+            weight: newWeight
+        })
+    } catch(e) {
+        console.log("error editing set: ", e)
+        throw e
+    }
+}

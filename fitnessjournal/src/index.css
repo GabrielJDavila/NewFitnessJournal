@@ -124,6 +124,7 @@ header {
   flex-direction: column;
   justify-content: center;
   margin: 4rem 0 0;
+  position: relative;
 }
 
 .current-log-container,
@@ -150,7 +151,7 @@ header {
   box-shadow: 0 0 10px 2px rgb(176, 176, 176);
   border-radius: 6px;
   width: 90%;
-  max-width: 600px;
+  max-width: 500px;
   padding: 1rem;
   text-align: center;
 }
@@ -190,7 +191,7 @@ header {
 
 .curr-ex-delete {
   position: absolute;
-  top: 0;
+  top: 24px;
   right: 0;
   font-size: 1.5rem;
 }
@@ -241,6 +242,65 @@ header {
   border: none;
   border-radius: 6px;
   color: white;
+  font-size: 1.5rem;
+}
+
+/*=============== EditSetModal.jsx styles ====================*/
+
+.edit-set-modal {
+  position: sticky;
+  top: 1rem;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  text-align: center;
+  box-shadow: 0 0 10px 2px rgb(176, 176, 176);
+  border-radius: 6px;
+  width: 95%;
+  height: 95vh;
+  max-height: 600px;
+  max-width: 600px;
+  margin: auto;
+  background: white;
+  z-index: 10;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.edit-set-title-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.edit-set-title {}
+
+.edit-set-close {
+  font-size: 1.5rem;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  cursor: pointer;
+}
+
+.new-reps-container, .new-weight-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.edit-set-text {
+  font-size: 1.5rem;
+}
+
+.edit-set-input {
+  border: 5px solid rgb(191, 76, 48);
+  border-radius: 6px;
+  height: 50px;
   font-size: 1.5rem;
 }
 
