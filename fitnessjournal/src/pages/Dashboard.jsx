@@ -1,20 +1,19 @@
 import { useState, useEffect } from "react"
 import { NavLink, Link } from "react-router-dom"
-import { getCategories, currentWorkoutList } from "../firebase" 
+import { currentWorkoutList, retrieveCurrentExSetsReps } from "../firebase" 
 
 export default function Dashboard() {
     const [workoutData, setWorkoutData] = useState([])
-    const [setsReps, setSetsReps] = useState([])
-    console.log(workoutData)
+
     useEffect(() => {
         loadExerciseList()
     }, [])
 
     async function loadExerciseList() {
         try {
-            const data = await getCategories(currentWorkoutList)
-            console.log(data)
-            setWorkoutData(data)
+            const setsData = await retrieveCurrentExSetsReps(currentWorkoutList)
+            setWorkoutData(setsData)
+
         } catch(e) {
 
             console.log("error fetching exercises list: ", e)
@@ -24,11 +23,29 @@ export default function Dashboard() {
     const workoutList = workoutData.map((ex, index) => {
         return (
             <div key={index} className="rendered-ex-dash-container">
-                <p>{ex.name}</p>
-                <Link to={`/ExerciseDetail/${ex.id}`}>
-                    <span className="material-symbols-outlined edit-ex">
-                        edit
-                    </span>
+                <div className="ex-name-container">
+                    <p className="current-ex-name">{ex.name}</p>
+                    <i
+                        
+                        className="fa-solid fa-trash curr-ex-delete"
+                        
+                    ></i>
+                </div>
+                
+                <ul className="all-sets-container">
+                    {ex.setsReps.map((set, setIndex) => (
+                        <li key={setIndex} className="set-container">
+                            {/* <p className="set-number"># {setIndex + 1}.</p> */}
+                            <p className="set-weight">lbs: {set.weight}</p>
+                            <p className="set-reps">reps: {set.reps}</p>
+                            <span className="material-symbols-outlined edit-ex">
+                                edit
+                            </span>
+                        </li>
+                    ))}
+                </ul>
+                <Link to={`/ExerciseDetail/${ex.id}`} className="add-set-link">
+                    <button className="add-set-btn">Add set</button>
                 </Link>
                 {}
             </div>

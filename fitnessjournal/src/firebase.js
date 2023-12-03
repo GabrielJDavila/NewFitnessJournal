@@ -45,7 +45,7 @@ export async function addNewCategory(category, collectionType) {
     }
 }
 
-// retrieve exercises for a category
+// retrieve exercises from list of total exercises category
 export async function retreiveFromCategory(collectionType, categoryId) {
     try {
         const categoryDocRef = doc(collectionType, categoryId)
@@ -60,6 +60,91 @@ export async function retreiveFromCategory(collectionType, categoryId) {
         console.log("error retrieving exercises: ", e)
     }
 }
+
+// retrieve sets and reps for current exercise in selection
+export async function retrieveCurrentExSetsReps(collectionType) {
+    try {
+        const workoutSnapshot = await getDocs(collectionType)
+        
+        const exercises = []
+
+        for(const exDoc of workoutSnapshot.docs) {
+            const exId = exDoc.id
+            const currentExRef = collection(exDoc.ref, "currentEx")
+            const repsSetsQuery = query(currentExRef)
+            const repsSetsSnapshot = await getDocs(repsSetsQuery)
+
+            const exerciseData = {
+                id: exId,
+                name: exDoc.data().name,
+                setsReps: []
+            }
+
+            repsSetsSnapshot.forEach(set => {
+                const setId = set.id
+                const { reps, weight } = set.data()
+
+                exerciseData.setsReps.push({
+                    setId,
+                    reps,
+                    weight
+                })
+            })
+            exercises.push(exerciseData)
+        }
+        return exercises
+        // for(const exDoc of workoutSnapshot.docs) {
+        //     const exId = exDoc.id
+
+        //     const currentExRef = collection(exDoc.ref, "currentEx")
+
+        //     const repsSetsQuery = query(currentExRef)
+
+        //     const repsSetsSnapshot = await getDocs(repsSetsQuery)
+
+        //     repsSetsSnapshot.forEach(set => {
+        //         const setId = set.id
+        //         const { reps, weight } = set.data()
+
+        //         repsAndSets.push({
+        //             exId,
+        //             setId,
+        //             weight,
+        //             reps
+        //         })
+        //     })
+        // }
+        // return repsAndSets
+
+    } catch(e) {
+        console.log("ERROR ERROR ABORT!!!: " , e)
+    }
+
+    // try {
+    //     const categoryDocRef = doc(collectionType, exerciseId)
+    //     const setsAndRepsRef = collection(categoryDocRef, "currentEx")
+    //     const snapshot = await getDocs(setsAndRepsRef)
+    //     const setsAndReps = snapshot.docs.map(doc => ({
+    //         id: exerciseId,
+    //         ...doc.data()
+    //     }))
+    //     return setsAndReps
+    // }catch(e) {
+    //     console.log("error retrieving exercises: ", e)
+    // }
+}
+
+// practice
+// export async function getSetsReps() {
+//     try {
+//         const querySnapshot = await getDocs(collection(currentWorkoutList, "currentEx"))
+//         querySnapshot.forEach((doc) => {
+//             console.log(doc.id, " => ", doc.data())
+//         })
+//     } catch(e) {
+//         console.log("error getting data: ", e)
+//     }
+// }
 
 // add new exercise to category
 export async function addToCategory(name, scheme, weightUnit, collectionType, categoryId) {
