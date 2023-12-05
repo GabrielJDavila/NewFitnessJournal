@@ -13,6 +13,16 @@ h2, h3, label, p {
   font-size: 1.5rem;
 }
 
+button {
+  font-family: 'Oswald', sans-serif;
+  height: 50px;
+  background: rgb(191, 76, 48);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.5rem;
+}
+
 /* ============= header and nav styles ==============*/
 header {
   background: black;
@@ -234,22 +244,24 @@ header {
   width: 100%;
 }
 
+.set-detail {
+  display: flex;
+  flex-direction: column;
+}
+
 .add-set-btn {
-  width: 100%;
+  width: 50%;
   height: 50px;
-  font-family: 'Oswald', sans-serif;
-  background: rgb(191, 76, 48);
-  border: none;
-  border-radius: 6px;
-  color: white;
-  font-size: 1.5rem;
+  margin: 1rem auto;
+  text-align: center;
+  
 }
 
 /*=============== EditSetModal.jsx styles ====================*/
 
 .edit-set-modal {
   position: sticky;
-  top: 1rem;
+  top: 4rem;
   bottom: 0;
   right: 0;
   left: 0;
@@ -301,13 +313,19 @@ header {
   border: 5px solid rgb(191, 76, 48);
   border-radius: 6px;
   height: 50px;
+  width: 70%;
   font-size: 1.5rem;
+}
+
+.confirm-edit-set-btn {
+  margin: auto 0 0;
 }
 
 /*=============== ExerciseDetail.jsx styles ====================*/
 
 .dash-input-fieldset {
   padding: 0;
+  border: none;
 }
 
 .ex-info-container {
@@ -316,6 +334,7 @@ header {
   align-items: center;
   gap: 1rem;
   padding: 1rem 0;
+  border: none;
 }
 
 .ex-info-text {

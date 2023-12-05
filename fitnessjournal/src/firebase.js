@@ -212,3 +212,16 @@ export async function editSingleSet(exerciseId, setId, newReps, newWeight, colle
         throw e
     }
 }
+
+export async function deleteSingleSet(collectionType, exerciseId, setId) {
+    try {
+        const exRef = doc(collectionType, exerciseId)
+        const allSetsRef = collection(exRef, "currentEx")
+        const setDocRef = doc(allSetsRef, setId)
+
+        await deleteDoc(setDocRef)
+    } catch(e) {
+        console.log("error deleting set: ", e)
+        throw e
+    }
+}

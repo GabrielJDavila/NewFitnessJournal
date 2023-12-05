@@ -56,7 +56,7 @@ export default function ExerciseDetail() {
     }
 
     return (
-        <div>
+        <div className="set-detail">
             {/* <fieldset className="dash-input-fieldset">
                 <label htmlFor="sets">Sets:</label>
                 <input type="text" name="sets"/>
