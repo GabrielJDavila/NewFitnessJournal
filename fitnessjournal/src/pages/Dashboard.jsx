@@ -3,6 +3,8 @@ import { NavLink, Link } from "react-router-dom"
 import { currentWorkoutList, retrieveCurrentExSetsReps, editSingleSet, deleteCategory, deleteSingleSet } from "../firebase"
 import ConfirmDeleteExModal from "../components/modals/ConfirmDeleteExModal"
 import ConfirmDeleteSetModal from "../components/modals/ConfirmDeleteSetModal"
+import EditSetModal from "../components/modals/EditSetModal"
+import CurrentWorkoutList from "../components/CurrentWorkoutList"
 
 export default function Dashboard() {
     const [workoutData, setWorkoutData] = useState([])
@@ -99,12 +101,12 @@ export default function Dashboard() {
 
     const modalStyles = {
         position: "sticky",
-        top: "1rem",
+        top: "2rem",
         bottom: "0",
         right: "0",
         left: "0",
         width: "95%",
-        height: "95vh",
+        height: "90vh",
         margin: "auto",
         background: "white",
         zIndex: "12"
@@ -152,75 +154,18 @@ export default function Dashboard() {
         )
     })
 
-    const editSetModal =
-        <form onSubmit={(e) => handleEditSetSubmit(e)} className="edit-set-modal">
-            <div className="edit-set-title-container">
-                <h2 className="edit-set-title">Edit Set</h2>
-                <i
-                    onClick={toggleEdit}
-                    className="fa-solid fa-close edit-set-close"
-                ></i>
-            </div>
-            <div className="new-reps-container">
-                <p className="edit-set-text">rep:</p>
-                <input
-                    name="reps"
-                    onChange={e => handleChange(e.target.name, e.target.value)}
-                    value={newSetInfo.title}
-                    className="edit-set-input"
-                />
-            </div>
-            <div className="new-weight-container">
-                <p className="edit-set-text">lbs:</p>
-                <input
-                    name="weight"
-                    onChange={e => handleChange(e.target.name, e.target.value)}
-                    value={newSetInfo.title}
-                    className="edit-set-input"
-                />
-            </div>
-            <button className="confirm-edit-set-btn">confirm</button>
-        </form>
-
-
-    // const confirmDeleteExModal =
-    //     <form onSubmit={(e) => handleDeleteExerciseSubmit(e)} className="confirm-delete-modal" style={modalStyles}>
-    //         <div className="edit-set-title-container">
-    //             <h2>Delete Exercise</h2>
-    //             <i
-    //                 onClick={toggleDelete}
-    //                 data-closedeleteexmodal
-    //                 className="fa-solid fa-close edit-set-close"
-    //             ></i>
-    //         </div>
-    //         <p>Are you sure you want to delete exercise?</p>
-    //         <div className="confirm-delete-modal-btns-container">
-    //             <p data-closedeleteexmodal onClick={(e) => toggleDelete(e)} className="cancel-btn">cancel</p>
-    //             <button className="confirm-btn">delete</button>
-    //         </div>
-    //     </form>
-
-    // const confirmDeleteSetModal =
-    //     <form onSubmit={e => handleDeleteSetSubmit(e)} className="confirm-delete-modal" style={modalStyles}>
-    //         <div className="edit-set-title-container">
-    //             <h2>Delete Set</h2>
-    //             <i
-    //                 onClick={toggleDelete}
-    //                 data-closedeletesetmodal
-    //                 className="fa-solid fa-close edit-set-close"
-    //             ></i>
-    //         </div>
-    //         <p>Are you sure you want to delete this set?</p>
-    //         <div className="confirm-delete-modal-btns-container">
-    //             <p data-closedeletesetmodal onClick={(e) => toggleDelete(e)} className="cancel-btn">cancel</p>
-    //             <button className="confirm-btn">delete</button>
-    //         </div>
-    //     </form>
-
     return (
         <main className="dashboard">
 
-            { toggleEditSetModal && editSetModal }
+            { toggleEditSetModal &&
+                <EditSetModal
+                    handleEditSet={handleEditSetSubmit}
+                    modalStyles={modalStyles}
+                    toggle={toggleEdit}
+                    handleChange={handleChange}
+                    title={newSetInfo.title}
+                />
+            }
 
             { toggleDeleteExModal &&
                 <ConfirmDeleteExModal
@@ -233,7 +178,7 @@ export default function Dashboard() {
             { toggleDeleteSetModal &&
                 <ConfirmDeleteSetModal
                     handleDeleteSet={handleDeleteSetSubmit}
-                    toggle={toggleDeleteSetModal}
+                    toggle={toggleDelete}
                     modalStyles={modalStyles}
                 />
             }
@@ -241,7 +186,12 @@ export default function Dashboard() {
             <div className="current-log-container">
                 {
                     workoutData ?
-                    workoutList : <h1 className="current-log-title">Workout Log Empty</h1>
+                    <CurrentWorkoutList
+                        data={workoutData}
+                        toggleDel={toggleDelete}
+                        toggleEdit={toggleEdit}
+                    /> : 
+                    <h1 className="current-log-title">Workout Log Empty</h1>
                 }
             </div>
 
