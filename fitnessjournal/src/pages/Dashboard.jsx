@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react"
 import { NavLink, Link } from "react-router-dom"
-import { currentWorkoutList, retrieveCurrentExSetsReps, editSingleSet, deleteCategory, deleteSingleSet } from "../firebase" 
+import { currentWorkoutList, retrieveCurrentExSetsReps, editSingleSet, deleteCategory, deleteSingleSet } from "../firebase"
+import ConfirmDeleteExModal from "../components/modals/ConfirmDeleteExModal"
+import ConfirmDeleteSetModal from "../components/modals/ConfirmDeleteSetModal"
 
 export default function Dashboard() {
     const [workoutData, setWorkoutData] = useState([])
@@ -18,7 +20,6 @@ export default function Dashboard() {
         setId: ""
     })
 
-    console.log(currentItemToDelete)
     useEffect(() => {
         loadExerciseList()
     }, [])
@@ -64,17 +65,15 @@ export default function Dashboard() {
             setIdToDelete: setId
         }))
 
-        if(e.target.dataset.deleteexid) {
+        if(e.target.dataset.deleteexid || e.target.dataset.closedeleteexmodal) {
             setToggleDeleteExModal(prev => !prev)
-        } else if(e.target.dataset.deletesetid) {
+        } else if(e.target.dataset.deletesetid || e.target.dataset.closedeletesetmodal) {
             setToggleDeleteSetModal(prev => !prev)
+        } else {
+            setToggleDeleteExModal(false)
+            setToggleDeleteSetModal(false)
         }
 
-        if(e.target.dataset.closedeletemodal) {
-            setToggleDeleteExModal(prev => !prev)
-        } else if(e.target.dataset.closedeletesetmodal) {
-            setToggleDeleteSetModal(prev => !prev)
-        }
     }
 
     function toggleEdit(e) {
@@ -183,46 +182,61 @@ export default function Dashboard() {
             <button className="confirm-edit-set-btn">confirm</button>
         </form>
 
-    const confirmDeleteModal =
-        <form onSubmit={(e) => handleDeleteExerciseSubmit(e)} className="confirm-delete-modal" style={modalStyles}>
-            <div className="edit-set-title-container">
-                <h2>Delete Exercise</h2>
-                <i
-                    onClick={toggleDelete}
-                    data-closedeletemodal
-                    className="fa-solid fa-close edit-set-close"
-                ></i>
-            </div>
-            <p>Are you sure you want to delete exercise?</p>
-            <div className="confirm-delete-modal-btns-container">
-                <p data-closedeletemodal onClick={(e) => toggleDelete(e)} className="cancel-btn">cancel</p>
-                <button className="confirm-btn">delete</button>
-            </div>
-        </form>
 
-    const confirmDeleteSetModal =
-        <form onSubmit={e => handleDeleteSetSubmit(e)} className="confirm-delete-modal" style={modalStyles}>
-            <div className="edit-set-title-container">
-                <h2>Delete Set</h2>
-                <i
-                    onClick={toggleDelete}
-                    data-closedeletesetmodal
-                    className="fa-solid fa-close edit-set-close"
-                ></i>
-            </div>
-            <p>Are you sure you want to delete this set?</p>
-            <div className="confirm-delete-modal-btns-container">
-                <p data-closedeletemodal onClick={(e) => toggleDelete(e)} className="cancel-btn">cancel</p>
-                <button className="confirm-btn">delete</button>
-            </div>
-        </form>
+    // const confirmDeleteExModal =
+    //     <form onSubmit={(e) => handleDeleteExerciseSubmit(e)} className="confirm-delete-modal" style={modalStyles}>
+    //         <div className="edit-set-title-container">
+    //             <h2>Delete Exercise</h2>
+    //             <i
+    //                 onClick={toggleDelete}
+    //                 data-closedeleteexmodal
+    //                 className="fa-solid fa-close edit-set-close"
+    //             ></i>
+    //         </div>
+    //         <p>Are you sure you want to delete exercise?</p>
+    //         <div className="confirm-delete-modal-btns-container">
+    //             <p data-closedeleteexmodal onClick={(e) => toggleDelete(e)} className="cancel-btn">cancel</p>
+    //             <button className="confirm-btn">delete</button>
+    //         </div>
+    //     </form>
+
+    // const confirmDeleteSetModal =
+    //     <form onSubmit={e => handleDeleteSetSubmit(e)} className="confirm-delete-modal" style={modalStyles}>
+    //         <div className="edit-set-title-container">
+    //             <h2>Delete Set</h2>
+    //             <i
+    //                 onClick={toggleDelete}
+    //                 data-closedeletesetmodal
+    //                 className="fa-solid fa-close edit-set-close"
+    //             ></i>
+    //         </div>
+    //         <p>Are you sure you want to delete this set?</p>
+    //         <div className="confirm-delete-modal-btns-container">
+    //             <p data-closedeletesetmodal onClick={(e) => toggleDelete(e)} className="cancel-btn">cancel</p>
+    //             <button className="confirm-btn">delete</button>
+    //         </div>
+    //     </form>
 
     return (
         <main className="dashboard">
 
             { toggleEditSetModal && editSetModal }
-            { toggleDeleteExModal && confirmDeleteModal }
-            { toggleDeleteSetModal && confirmDeleteSetModal }
+
+            { toggleDeleteExModal &&
+                <ConfirmDeleteExModal
+                    handleDeleteExercise={handleDeleteExerciseSubmit}
+                    toggle={toggleDelete}
+                    modalStyles={modalStyles}
+                />
+            }
+
+            { toggleDeleteSetModal &&
+                <ConfirmDeleteSetModal
+                    handleDeleteSet={handleDeleteSetSubmit}
+                    toggle={toggleDeleteSetModal}
+                    modalStyles={modalStyles}
+                />
+            }
 
             <div className="current-log-container">
                 {

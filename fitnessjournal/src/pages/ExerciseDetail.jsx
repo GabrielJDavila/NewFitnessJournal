@@ -8,12 +8,14 @@ export default function ExerciseDetail() {
         reps: 0,
         weight: 0
     })
-    console.log(params)
 
-    function handleAddSetClick() {
+    function handleAddSetClick(e) {
+        e.preventDefault()
+        if (repsAndWeight.reps > 0) {
             addSetsReps(params.id, repsAndWeight.weight, repsAndWeight.reps, currentWorkoutList)
-            
-        
+        } else {
+            alert("Please enter an amount for reps.")
+        }        
     }
     // handles change of purchaseInfo if user increments/decrements quantity
     function addOrMinusWeight(e) {
@@ -56,7 +58,7 @@ export default function ExerciseDetail() {
     }
 
     return (
-        <div className="set-detail">
+        <form onSubmit={e => handleAddSetClick(e)} className="set-detail">
             {/* <fieldset className="dash-input-fieldset">
                 <label htmlFor="sets">Sets:</label>
                 <input type="text" name="sets"/>
@@ -74,6 +76,7 @@ export default function ExerciseDetail() {
                             onChange={e => handleChange(e.target.name, e.target.value)}
                             value={repsAndWeight.weight}
                             className="weight-input"
+                            required
                         />
                         <p onClick={e => addOrMinusWeight(e)} data-addweight="weight" className="q-btn">+</p>
                         <select className="weight-type">
@@ -97,13 +100,14 @@ export default function ExerciseDetail() {
                             onChange={e => handleChange(e.target.name, e.target.value)}
                             value={repsAndWeight.reps}
                             className="reps-input"
+                            required
                         />
                         <p onClick={e => addOrMinusReps(e)} data-addreps="addreps" className="q-btn">+</p>
                     </div>
                 </div>
             </fieldset>
             
-            <button onClick={handleAddSetClick} className="add-set-btn">Add set</button>
-        </div>
+            <button className="add-set-btn">Add set</button>
+        </form>
     )
 }
