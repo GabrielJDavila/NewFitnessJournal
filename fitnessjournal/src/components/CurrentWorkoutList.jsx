@@ -43,6 +43,6 @@ export default function CurrentWorkoutList(props) {
     })
 
     return (
-        {currentWorkout}
+        currentWorkout
     )
 }
