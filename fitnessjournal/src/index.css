@@ -545,7 +545,26 @@ header {
   background: rgb(220, 104, 75);
 }
 
-/* utility classes */
+/* utility classes / components */
 .hide {
   display: none;
+}
+
+.back-btn {
+  position: absolute;
+  margin: 1rem 0 0 1rem;
+}
+
+.arrow-back {
+  font-size: 2rem
+}
+
+.back-btn-text {
+  margin: 0;
+}
+
+.set-added-modal {
+  background: rgb(220, 104, 75);
+  color: black;
+
 }

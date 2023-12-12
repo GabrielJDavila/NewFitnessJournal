@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
 import { addSetsReps, currentWorkoutList} from "../firebase"
 import BackBtn from "../components/BackBtn"
+import SetAdded from "../components/modals/SetAdded"
 
 export default function ExerciseDetail() {
     const params = useParams()
@@ -9,11 +10,23 @@ export default function ExerciseDetail() {
         reps: 0,
         weight: 0
     })
+    const [showModal, setShowModal] = useState(false)
+
+    useEffect(() => {
+        if(showModal) {
+            const flipModalState = setTimeout(() => {
+                setShowModal(false)
+            }, 4000)
+
+            return () => clearTimeout(flipModalState)
+        }
+    }, [showModal])
 
     function handleAddSetClick(e) {
         e.preventDefault()
         if (repsAndWeight.reps > 0) {
             addSetsReps(params.id, repsAndWeight.weight, repsAndWeight.reps, currentWorkoutList)
+            setShowModal(true)
         } else {
             alert("Please enter an amount for reps.")
         }        
@@ -110,6 +123,8 @@ export default function ExerciseDetail() {
             </fieldset>
             
             <button className="add-set-btn">Add set</button>
+
+            {showModal && <SetAdded />}
         </form>
     )
 }

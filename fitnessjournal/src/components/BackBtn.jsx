@@ -7,7 +7,7 @@ export default function BackBtn() {
             to="/"
             relative="path"
         >
-            <span className="material-symbols-outlined">
+            <span className="material-symbols-outlined arrow-back">
                 arrow_back
             </span>
             <p className="back-btn-text">back</p>
