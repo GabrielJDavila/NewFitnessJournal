@@ -50,15 +50,15 @@ export default function Header() {
                 <i ref={addMenuRef} className="fa-solid fa-plus nav-item" data-add="add" onClick={(e) => toggleMenu(e)}></i>
                 <ul className="user-menu" style={addMenuStyles}>
                     <Link to="/NewEx" className="menu-item-link">
-                        <li className="menu-item">Add Exercise</li>
+                        <li className="menu-item">Create Exercise</li>
                     </Link>
                     
                     <Link to="/NewCat" className="menu-item-link">
-                        <li className="menu-item">Add Category</li>
+                        <li className="menu-item">Create Category</li>
                     </Link>
                     
                     <Link to="/AllCategories" className="menu-item-link">
-                        <li className="menu-item">New Workout</li>
+                        <li className="menu-item">Add Exercise</li>
                     </Link>
                 </ul>
                 
