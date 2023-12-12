@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
 import { addSetsReps, currentWorkoutList} from "../firebase"
+import BackBtn from "../components/BackBtn"
 
 export default function ExerciseDetail() {
     const params = useParams()
@@ -63,6 +64,7 @@ export default function ExerciseDetail() {
                 <label htmlFor="sets">Sets:</label>
                 <input type="text" name="sets"/>
             </fieldset> */}
+            <BackBtn />
             <fieldset className="dash-input-fieldset">
                 {/* <label htmlFor="sets">Weight:</label>
                 <input type="text" name="sets"/> */}
