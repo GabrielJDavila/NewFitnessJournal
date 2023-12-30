@@ -5,6 +5,7 @@ import ConfirmDeleteExModal from "../components/modals/ConfirmDeleteExModal"
 import ConfirmDeleteSetModal from "../components/modals/ConfirmDeleteSetModal"
 import EditSetModal from "../components/modals/EditSetModal"
 import CurrentWorkoutList from "../components/CurrentWorkoutList"
+import { handleDeleteExerciseSubmit } from "../utils"
 
 export default function Dashboard() {
     const [workoutData, setWorkoutData] = useState([])
@@ -35,12 +36,12 @@ export default function Dashboard() {
         }
     }
 
-    function handleDeleteExerciseSubmit(e) {
-        e.preventDefault()
-        deleteCategory(currentWorkoutList, currentItemToDelete.exIdToDelete)
-        loadExerciseList()
-        toggleDelete(e)
-    }
+    // handleDeleteExerciseSubmit(e, deleteCategory, currentWorkoutList, currentItemToDelete, loadExerciseList, toggleDelete)
+        // e.preventDefault()
+        // deleteCategory(currentWorkoutList, currentItemToDelete.exIdToDelete)
+        // loadExerciseList()
+        // toggleDelete(e)
+    
 
     function handleEditSetSubmit(e) {
         e.preventDefault()
@@ -127,7 +128,7 @@ export default function Dashboard() {
 
             { toggleDeleteExModal &&
                 <ConfirmDeleteExModal
-                    handleDeleteExercise={handleDeleteExerciseSubmit}
+                    handleDeleteExercise={e => handleDeleteExerciseSubmit(e, deleteCategory, currentWorkoutList, currentItemToDelete, loadExerciseList, toggleDelete)}
                     toggle={toggleDelete}
                     modalStyles={modalStyles}
                 />
@@ -157,7 +158,7 @@ export default function Dashboard() {
                 <div className="start-new-workout-container">
                     <Link to="AllCategories" className="link-portal-dash">
                         <i className="fa-solid fa-plus"></i>
-                        <p className="link-text">Start New Workout</p>
+                        <p className="link-text">{workoutData.length === 0? "Start New Workout" : "Add Exercise"}</p>
                     </Link>
                 </div>
                 <div className="see-previous-workout-container">
