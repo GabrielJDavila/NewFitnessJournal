@@ -5,7 +5,7 @@ import ConfirmDeleteExModal from "../components/modals/ConfirmDeleteExModal"
 import ConfirmDeleteSetModal from "../components/modals/ConfirmDeleteSetModal"
 import EditSetModal from "../components/modals/EditSetModal"
 import CurrentWorkoutList from "../components/CurrentWorkoutList"
-import { handleDeleteExerciseSubmit } from "../utils"
+import { handleDeleteExerciseSubmit, handleDeleteSetSubmit, handleEditSetSubmit } from "../crudUtils"
 
 export default function Dashboard() {
     const [workoutData, setWorkoutData] = useState([])
@@ -34,27 +34,6 @@ export default function Dashboard() {
         } catch(e) {
             console.log("error fetching exercises list: ", e)
         }
-    }
-
-    // handleDeleteExerciseSubmit(e, deleteCategory, currentWorkoutList, currentItemToDelete, loadExerciseList, toggleDelete)
-        // e.preventDefault()
-        // deleteCategory(currentWorkoutList, currentItemToDelete.exIdToDelete)
-        // loadExerciseList()
-        // toggleDelete(e)
-    
-
-    function handleEditSetSubmit(e) {
-        e.preventDefault()
-        editSingleSet(newSetInfo.exId, newSetInfo.setId, newSetInfo.reps, newSetInfo.weight, currentWorkoutList)
-        loadExerciseList()
-        toggleEdit(e)
-    }
-
-    function handleDeleteSetSubmit(e) {
-        e.preventDefault()
-        deleteSingleSet(currentWorkoutList, currentItemToDelete.exIdToDelete, currentItemToDelete.setIdToDelete)
-        loadExerciseList()
-        toggleDelete(e)
     }
 
     function toggleDelete(e) {
@@ -118,7 +97,7 @@ export default function Dashboard() {
 
             { toggleEditSetModal &&
                 <EditSetModal
-                    handleEditSet={handleEditSetSubmit}
+                    handleEditSet={e => handleEditSetSubmit(e, editSingleSet, newSetInfo.exId, newSetInfo.setId, newSetInfo.reps, newSetInfo.weight, currentWorkoutList, loadExerciseList, toggleEdit)}
                     modalStyles={modalStyles}
                     toggle={toggleEdit}
                     handleChange={handleChange}
@@ -136,7 +115,7 @@ export default function Dashboard() {
 
             { toggleDeleteSetModal &&
                 <ConfirmDeleteSetModal
-                    handleDeleteSet={handleDeleteSetSubmit}
+                    handleDeleteSet={e => handleDeleteSetSubmit(e, deleteSingleSet, currentWorkoutList, currentItemToDelete.exIdToDelete, currentItemToDelete.setIdToDelete, loadExerciseList, toggleDelete)}
                     toggle={toggleDelete}
                     modalStyles={modalStyles}
                 />
