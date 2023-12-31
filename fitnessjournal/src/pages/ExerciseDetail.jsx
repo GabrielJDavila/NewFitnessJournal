@@ -73,15 +73,8 @@ export default function ExerciseDetail() {
 
     return (
         <form onSubmit={e => handleAddSetClick(e)} className="set-detail">
-            {/* <fieldset className="dash-input-fieldset">
-                <label htmlFor="sets">Sets:</label>
-                <input type="text" name="sets"/>
-            </fieldset> */}
             <BackBtn />
-            <fieldset className="dash-input-fieldset">
-                {/* <label htmlFor="sets">Weight:</label>
-                <input type="text" name="sets"/> */}
-                
+            <fieldset className="dash-input-fieldset">   
                 <div className="ex-info-container">
                     <p className="ex-info-text weight">Weight:</p>
                     <div className="ex-info-btns">
@@ -103,9 +96,6 @@ export default function ExerciseDetail() {
             </fieldset>
 
             <fieldset className="dash-input-fieldset">
-                {/* <label htmlFor="sets">Reps:</label>
-                <input type="text" name="sets"/> */}
-
                 <div className="ex-info-container">
                     <p className="ex-info-text reps">Reps:</p>
                     <div className="ex-info-btns">
