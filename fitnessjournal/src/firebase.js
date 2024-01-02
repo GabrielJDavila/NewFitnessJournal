@@ -12,6 +12,7 @@ import {
     query,
     updateDoc
 } from "firebase/firestore"
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth"
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -33,6 +34,15 @@ const db = getFirestore(app)
 export const categoriesCollection = collection(db, "categories")
 export const currentWorkoutList = collection(db, "currentWorkoutList")
 
+// sign in app
+export async function signIn(email, password) {
+    try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password)
+    }
+    catch(e) {
+        alert("error logging in: ", e)
+    }
+}
 
 // add new category
 export async function addNewCategory(category, collectionType) {
