@@ -1,17 +1,16 @@
 import { Outlet } from "react-router-dom"
 import Header from "./Header"
+import Login from "./Login"
 import { useEffect, useState } from "react"
+import { signIn, auth } from "../firebase"
+import { onAuthStateChanged } from "firebase/auth"
 
 export default function Layout() {
     const [loggedIn, setLoggedIn] = useState(false)
-    const [loginInfo, setLoginInfo] = useState({
-        email: "",
-        password: ""
-    })
 
     function handleSignIn(e) {
         e.preventDefault()
-        handleSignIn(loginInfo.email, loginInfo.password)
+        signIn(loginInfo.email, loginInfo.password)
     }
 
     // useEffect(() => {
@@ -23,6 +22,11 @@ export default function Layout() {
     //         })
     //     }
     // }, [])
+    if(!loggedIn) {
+        return (
+            <Login/>
+        )
+    }
     return (
         <div>
             <Header />
