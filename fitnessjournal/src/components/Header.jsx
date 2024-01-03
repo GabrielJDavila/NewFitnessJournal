@@ -1,5 +1,6 @@
 import { useState, useRef } from "react"
 import { Link } from "react-router-dom"
+import { logout } from "../firebase"
 
 export default function Header() {
     const [openMenu, setOpenMenu] = useState(false)
@@ -8,6 +9,10 @@ export default function Header() {
     const menuRef = useRef(null)
     const addMenuRef = useRef(null)
 
+    function signOutUser() {
+        logout()
+        window.location.reload()
+    }
 
     const addMenuStyles = {
         height: openAddMenu ? "160px" : "0",
@@ -15,7 +20,7 @@ export default function Header() {
     }
 
     const settingsMenuStyles = {
-        height: openMenu ? "213px" : "0",
+        height: openMenu ? "265px" : "0",
         transition: openMenu ? ".2s ease-in-out" : ""
     }
 
@@ -76,6 +81,7 @@ export default function Header() {
                     <Link className="menu-item-link">
                         <li className="menu-item">Body Stats</li>
                     </Link>
+                    <li onClick={signOutUser} className="menu-item">Logout</li>
                 </ul>
             </nav>
 

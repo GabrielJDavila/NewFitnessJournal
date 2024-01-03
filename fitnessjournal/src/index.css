@@ -1,3 +1,4 @@
+/* ============= Base/Global styles ==============*/
 
 * {
   box-sizing: border-box;
@@ -21,7 +22,83 @@ button {
   border: none;
   border-radius: 6px;
   font-size: 1.5rem;
+  cursor: pointer;
 }
+
+.login-input-fieldset {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto 2rem;
+  padding: 0;
+  border: none;
+  gap: 2rem;
+}
+
+.sign-up, .switch-to-login {
+  text-decoration: underline;
+  color: rgb(84, 184, 241);
+  cursor: pointer;
+}
+
+.login-cred {
+  height: 3rem;
+  border-radius: 6px;
+  border: none;
+  background-color: rgb(239, 239, 239);
+  font-size: 1.5rem;
+}
+
+.login-button {}
+
+/* ============= Login page ==============*/
+
+.login-page-container {
+  width: 100vw;
+  height: 100vh;
+  background: rgb(191, 76, 48);
+}
+
+.login-page {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  height: 700px;
+  padding: 2rem;
+  font-size: 1.5rem;
+  width: 80%;
+  max-width: 500px;
+  margin: auto;
+  background: white;
+}
+
+.login-form-title {
+  margin: 3rem 0 0;
+}
+
+.login-form-span {
+  margin: 0 0 3rem;
+}
+
+.login-form-span::after {
+  content: "";
+  display: block;
+  width: 10rem;
+  margin: .25rem auto;
+  border-bottom: 5px solid rgb(183, 75, 47);
+}
+
+/* ============= SignUp page ==============*/
+
 
 /* ============= header and nav styles ==============*/
 header {

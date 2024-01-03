@@ -1,49 +1,36 @@
-import { Link } from "react-router-dom";
-import { useEffect, useState } from "react"
-import { signIn, auth } from "../firebase"
-import { onAuthStateChanged } from "firebase/auth"
 
 export default function Login(props) {
-    const [loginInfo, setLoginInfo] = useState({
-        email: "",
-        password: ""
-    })
 
-    console.log(loginInfo)
-
-    function handleChange(e) {
-        const {name, value} = e.target
-        setLoginInfo(prev => ({
-            ...prev,
-            [name]: value
-        }))
-    }
     return (
-        <form onSubmit={props.handleSignIn} className="login-page">
-            <h1 className="login-form-title">The Fitbook</h1>
-            <span className="login-form-span">Your personal fitness helper, right in your pocket.</span>
-            <fieldset className="input-fieldset">
-                <Link className="sign-up">Don't have an account? Sign-up here.</Link>
-                <input
-                    name="email"
-                    type="email"
-                    onChange={handleChange}
-                    value={loginInfo.email}
-                    placeholder="youremail@example.com"
-                    className="login-cred"
-                    required
-                />
-                <input
-                    name="password"
-                    type="password"
-                    onChange={handleChange}
-                    value={loginInfo.password}
-                    placeholder="******"
-                    className="login-cred"
-                    required
-                />
-            </fieldset>
-            <button className="login-button"></button>
-        </form>
+        <div className="login-page-container">
+            <form onSubmit={e => props.handleSignIn(e)} className="login-page" data-signin="true">
+                <h1 className="login-form-title">The Fitbook</h1>
+                <span className="login-form-span">Your personal fitness helper, right in your pocket.</span>
+                <fieldset className="login-input-fieldset">
+                    <p className="sign-up" onClick={e => props.flipShowLogin(e)}>Don't have an account? Sign-up here.</p>
+                    <input
+                        name="email"
+                        type="email"
+                        data-login="login"
+                        onChange={e => props.handleChange(e)}
+                        value={props.email}
+                        placeholder="youremail@example.com"
+                        className="login-cred"
+                        required
+                    />
+                    <input
+                        name="password"
+                        type="password"
+                        data-login="login"
+                        onChange={e => props.handleChange(e)}
+                        value={props.password}
+                        placeholder="******"
+                        className="login-cred"
+                        required
+                    />
+                </fieldset>
+                <button className="login-button">Login</button>
+            </form>
+        </div>
     )
 }

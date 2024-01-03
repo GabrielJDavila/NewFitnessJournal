@@ -12,7 +12,7 @@ import {
     query,
     updateDoc
 } from "firebase/firestore"
-import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from "firebase/auth"
+import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth"
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -36,10 +36,11 @@ export const categoriesCollection = collection(db, "categories")
 export const currentWorkoutList = collection(db, "currentWorkoutList")
 
 // create new user sign up
-export function signUp() {
+export function signUpUser(email, password) {
     createUserWithEmailAndPassword(auth, email, password)
         .then(userCredential => {
             const user = userCredential.user
+            console.log(user)
         })
         .catch(e => {
             console.log("error creating user: ", e)
@@ -54,6 +55,11 @@ export async function signIn(email, password) {
     catch(e) {
         alert("error logging in: ", e)
     }
+}
+
+// sign out user
+export const logout = async () => {
+    await signOut(auth)
 }
 
 // add new category
