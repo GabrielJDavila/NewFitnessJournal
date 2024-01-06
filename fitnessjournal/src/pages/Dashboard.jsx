@@ -6,6 +6,8 @@ import ConfirmDeleteSetModal from "../components/modals/ConfirmDeleteSetModal"
 import EditSetModal from "../components/modals/EditSetModal"
 import CurrentWorkoutList from "../components/CurrentWorkoutList"
 import { handleDeleteExerciseSubmit, handleDeleteSetSubmit, handleEditSetSubmit, toggleEdit, toggleDelete } from "../Utils"
+import Calendar from "react-calendar"
+import "react-calendar/dist/Calendar.css"
 
 export default function Dashboard() {
     const [workoutData, setWorkoutData] = useState([])
@@ -22,6 +24,7 @@ export default function Dashboard() {
         exId: "",
         setId: ""
     })
+    const [value, onChange] = useState(new Date())
 
     useEffect(() => {
         loadExerciseList()
@@ -58,6 +61,7 @@ export default function Dashboard() {
 
     return (
         <main className="dashboard">
+            <Calendar onChange={onChange} value={value}/>
 
             { toggleEditSetModal &&
                 <EditSetModal

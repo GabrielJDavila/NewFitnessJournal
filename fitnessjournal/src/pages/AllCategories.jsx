@@ -109,6 +109,7 @@ export default function AllCategories() {
             />
         )
     })
+    console.log(renderedCategories)
 
     return (
         <div className="all-ex-page-container">

@@ -18,12 +18,22 @@ button {
   font-family: 'Oswald', sans-serif;
   height: 50px;
   background: rgb(191, 76, 48);
-  color: white;
   border: none;
   border-radius: 6px;
   font-size: 1.5rem;
   cursor: pointer;
 }
+
+/* button {
+  font-family: 'Oswald', sans-serif;
+  height: 50px;
+  background: rgb(191, 76, 48);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.5rem;
+  cursor: pointer;
+} */
 
 .login-input-fieldset {
   display: flex;
@@ -203,6 +213,18 @@ header {
   display: flex;
   align-items: center;
   gap: 1rem;
+}
+
+.rendered-ex-list {
+  margin: 10rem auto;
+}
+
+/*============ React Calendar ======================*/
+
+.react-calendar {
+  margin: 0 auto 3rem;
+  text-align: center;
+  max-width: 600px;
 }
 
 /*============ Dashboard styles ======================*/
@@ -445,12 +467,22 @@ header {
 
 /*=============== AllCategories.jsx styles ====================*/
 
-.all-ex-page-container,
-.rendered-ex-list {
+.all-ex-page-container {
   text-align: center;
   width: 90%;
   max-width: 900px;
   margin: 1rem auto 0;
+}
+
+.rendered-ex-container {
+  display: flex;
+}
+
+.rendered-ex-list {
+  text-align: center;
+  width: 90%;
+  max-width: 900px;
+  margin: 5rem auto 0;
 }
 
 .search-ex-form {

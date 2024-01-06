@@ -36,7 +36,7 @@ export default function LoadedExercises() {
     })
 
     return (
-        <div>
+        <div className="rendered-ex-container">
             <Link
                 className="back-btn"
                 to="/AllCategories"

@@ -20,13 +20,7 @@ export default function Exercise(props) {
     }
     return (
         <div className="exercise-container">
-            <Link
-                to={props.id}
-                className="exercise-name-link"
-                data-id={props.id}
-            >
-                <p className="exercise-name">{props.name}</p>
-            </Link>
+            <p className="exercise-name">{props.name}</p>
             <button
                 data-id={props.id}
                 className="add-btn"
