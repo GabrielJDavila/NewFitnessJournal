@@ -6,7 +6,6 @@ import ConfirmDeleteSetModal from "../components/modals/ConfirmDeleteSetModal"
 import EditSetModal from "../components/modals/EditSetModal"
 import CurrentWorkoutList from "../components/CurrentWorkoutList"
 import { handleDeleteExerciseSubmit, handleDeleteSetSubmit, handleEditSetSubmit, toggleEdit, toggleDelete } from "../Utils"
-// import { toggleEdit, toggleDelete } from "../toggleUtils"
 
 export default function Dashboard() {
     const [workoutData, setWorkoutData] = useState([])

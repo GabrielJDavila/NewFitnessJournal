@@ -186,6 +186,7 @@ export async function deleteCategory(collectionType, docId) {
     }
 }
 
+const date = new Date().toISOString().split("T")[0]
 // add or udpdate current workout exercises
 export async function addUpdateWorkoutList(exerciseId, name, scheme, weightUnit, collectionType) {
     
@@ -201,7 +202,8 @@ export async function addUpdateWorkoutList(exerciseId, name, scheme, weightUnit,
                 id: exerciseId,
                 name: name,
                 scheme: scheme,
-                weightUnit: weightUnit
+                weightUnit: weightUnit,
+                date: date
             })
         }
     } catch(e) {
