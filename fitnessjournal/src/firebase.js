@@ -34,6 +34,54 @@ export const auth = getAuth()
 // Initialize firestore references
 export const categoriesCollection = collection(db, "categories")
 export const currentWorkoutList = collection(db, "currentWorkoutList")
+export const usersInDB = collection(db, "users")
+
+
+// try {
+//     // using exerciseId so it's easier to grab params later for use
+//     const docRef = doc(collectionType, exerciseId)
+//     const docSnap = await getDoc(docRef)
+
+//     if(docSnap.exists()) {
+//         alert("exercise already in workout")
+//     } else {
+//         await setDoc(docRef, {
+//             id: exerciseId,
+//             name: name,
+//             scheme: scheme,
+//             weightUnit: weightUnit,
+//             date: date
+//         })
+//     }
+// } catch(e) {
+//     console.log("error adding exercise: ", e)
+// }
+
+// add user to collection
+async function addUserToCollection(collectionType, user) {
+    try {
+        const docRef = doc(collectionType, user)
+        const docSnap = await getDoc(docRef)
+
+        if(docSnap.exists()) {
+            console.log("user exists")
+            return
+            
+        } else {
+            await setDoc(docRef, {
+                userId: user
+            })
+            console.log(`added user: ${user}`)
+        }
+    } catch(e) {
+        console.log("error adding user: ", e)
+    }
+    // try {
+    //     await addDoc(user, {
+    //         userId: user
+    //     })
+    // }
+}
 
 // create new user sign up
 export function signUpUser(email, password) {
@@ -41,6 +89,7 @@ export function signUpUser(email, password) {
         .then(userCredential => {
             const user = userCredential.user
             console.log(user)
+            addUserToCollection(usersInDB, user)
         })
         .catch(e => {
             console.log("error creating user: ", e)
@@ -51,6 +100,11 @@ export function signUpUser(email, password) {
 export async function signIn(email, password) {
     try {
         await signInWithEmailAndPassword(auth, email, password)
+            .then(userCredential => {
+                const user = userCredential.user.uid
+                console.log(user)
+                addUserToCollection(usersInDB, user)
+            })
     }
     catch(e) {
         alert("error logging in: ", e)

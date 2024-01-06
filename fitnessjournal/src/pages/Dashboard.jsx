@@ -24,7 +24,7 @@ export default function Dashboard() {
         exId: "",
         setId: ""
     })
-    const [value, onChange] = useState(new Date())
+    const [date, setDate] = useState(new Date())
 
     useEffect(() => {
         loadExerciseList()
@@ -61,7 +61,11 @@ export default function Dashboard() {
 
     return (
         <main className="dashboard">
-            <Calendar onChange={onChange} value={value}/>
+            <Calendar
+                onChange={setDate}
+                value={date}
+                onClickDay={e => console.log(e)}
+            />
 
             { toggleEditSetModal &&
                 <EditSetModal
