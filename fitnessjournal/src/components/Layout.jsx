@@ -13,7 +13,10 @@ export default function Layout() {
         email: "",
         password: ""
     })
-
+    const [currentUser, setCurrentUser] = useState({
+        uid: ""
+    })
+    console.log(currentUser)
 //     const user = auth.currentUser
 //     const userId = user ? user.uid : null
 // console.log(user)
@@ -21,7 +24,9 @@ export default function Layout() {
         const unsubcribe = onAuthStateChanged(auth, user => {
             if(user) {
                 setLoggedIn(!!user)
-                console.log("user is signed in: ", user)
+                setCurrentUser(user.uid)
+                console.log("user is signed in: ", user.uid)
+                
             }
         })
         return () => unsubcribe()
@@ -74,7 +79,7 @@ export default function Layout() {
     return (
         <div>
             <Header />
-            <Outlet />
+            <Outlet context={{ currentUser }}/>
         </div>
     )
 }

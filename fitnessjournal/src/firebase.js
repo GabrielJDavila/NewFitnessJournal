@@ -35,9 +35,10 @@ export const auth = getAuth()
 export const categoriesCollection = collection(db, "categories")
 export const currentWorkoutList = collection(db, "currentWorkoutList")
 export const usersInDB = collection(db, "users")
-export const user = auth.currentUser
-export const userId = user ? user.uid : null
-console.log(user)
+export const currentUserLoggedIn = collection(db, "currentUser")
+// export const user = auth.currentUser
+// export const userId = user ? user.uid : null
+// console.log(user)
 
 // add user to collection
 async function addUserToCollection(collectionType, user) {
@@ -58,12 +59,14 @@ async function addUserToCollection(collectionType, user) {
     } catch(e) {
         console.log("error adding user: ", e)
     }
-    // try {
-    //     await addDoc(user, {
-    //         userId: user
-    //     })
-    // }
 }
+
+// update currentUser logged in
+// async function updateCurrentUser(currentUser) {
+//     try {
+//         await 
+//     }
+// }
 
 // create new user sign up
 export function signUpUser(email, password) {
@@ -161,6 +164,20 @@ export async function retrieveCurrentExSetsReps(collectionType) {
         console.log("ERROR ERROR ABORT!!!: " , e)
     }
 
+}
+
+export async function addNewCat(userCollection, userId, newCat) {
+    const capitalizedCat = newCat.charAt(0).toUpperCase() + newCat.slice(1)
+    try {
+        const userDocRef = doc(userCollection, userId)
+        const categoriesCollectionRef = collection(userDocRef, "categories")
+        await addDoc(categoriesCollectionRef, {
+            name: capitalizedCat
+        })
+
+    } catch(e) {
+        console.log("error creating new category: ", e)
+    }
 }
 
 // add new exercise to category

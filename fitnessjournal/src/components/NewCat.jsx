@@ -1,15 +1,18 @@
 import { useState } from "react"
-import { addNewCategory, categoriesCollection } from "../firebase"
+import { useOutletContext } from "react-router-dom"
+import { addNewCategory, addNewCat, categoriesCollection, usersInDB } from "../firebase"
 
 export default function NewCat() {
     const [newCatName, setNewCatName] = useState({
         name: ""
     })
+    const { currentUser } = useOutletContext()
 
-    console.log(newCatName.name)
+    console.log(currentUser)
     function handleSubmit(e) {
         e.preventDefault()
-        addNewCategory(newCatName.name, categoriesCollection)
+        // addNewCategory(newCatName.name, categoriesCollection)
+        addNewCat(usersInDB, currentUser, newCatName.name)
     }
 
     function handleChange(name, value, stateSetter) {
