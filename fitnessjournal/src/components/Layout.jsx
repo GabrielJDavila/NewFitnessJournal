@@ -13,16 +13,18 @@ export default function Layout() {
         email: "",
         password: ""
     })
-    console.log(loginInfo)
+
+//     const user = auth.currentUser
+//     const userId = user ? user.uid : null
+// console.log(user)
     useEffect(() => {
-        const monitorAuthState = async () => {
-            onAuthStateChanged(auth, user => {
-                if(user) {
-                    setLoggedIn(!!user)
-                }
-            })
-        }
-        monitorAuthState()
+        const unsubcribe = onAuthStateChanged(auth, user => {
+            if(user) {
+                setLoggedIn(!!user)
+                console.log("user is signed in: ", user)
+            }
+        })
+        return () => unsubcribe()
     }, [])
 
     function handleSignIn(e) {

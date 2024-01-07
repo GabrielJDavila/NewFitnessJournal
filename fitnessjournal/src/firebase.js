@@ -35,27 +35,9 @@ export const auth = getAuth()
 export const categoriesCollection = collection(db, "categories")
 export const currentWorkoutList = collection(db, "currentWorkoutList")
 export const usersInDB = collection(db, "users")
-
-
-// try {
-//     // using exerciseId so it's easier to grab params later for use
-//     const docRef = doc(collectionType, exerciseId)
-//     const docSnap = await getDoc(docRef)
-
-//     if(docSnap.exists()) {
-//         alert("exercise already in workout")
-//     } else {
-//         await setDoc(docRef, {
-//             id: exerciseId,
-//             name: name,
-//             scheme: scheme,
-//             weightUnit: weightUnit,
-//             date: date
-//         })
-//     }
-// } catch(e) {
-//     console.log("error adding exercise: ", e)
-// }
+export const user = auth.currentUser
+export const userId = user ? user.uid : null
+console.log(user)
 
 // add user to collection
 async function addUserToCollection(collectionType, user) {
@@ -88,7 +70,6 @@ export function signUpUser(email, password) {
     createUserWithEmailAndPassword(auth, email, password)
         .then(userCredential => {
             const user = userCredential.user
-            console.log(user)
             addUserToCollection(usersInDB, user)
         })
         .catch(e => {
@@ -102,7 +83,6 @@ export async function signIn(email, password) {
         await signInWithEmailAndPassword(auth, email, password)
             .then(userCredential => {
                 const user = userCredential.user.uid
-                console.log(user)
                 addUserToCollection(usersInDB, user)
             })
     }
@@ -201,6 +181,17 @@ export async function addToCategory(name, scheme, weightUnit, collectionType, ca
 // retrieve categories from firestore
 export async function getCategories(collectionName) {
     const q = query(collectionName)
+    const snapshot = await getDocs(q)
+    const collections = snapshot.docs.map(doc => ({
+        ...doc.data(),
+        id: doc.id
+    }))
+    return collections
+}
+
+// retrieve categories from firestore
+export async function getExCategories(users) {
+    const q = query()
     const snapshot = await getDocs(q)
     const collections = snapshot.docs.map(doc => ({
         ...doc.data(),
