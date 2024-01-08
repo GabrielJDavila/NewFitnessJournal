@@ -1,7 +1,8 @@
 import Category from "../components/Category"
 import { useState, useEffect } from "react"
 import LoadedExercises from "./LoadedExercises"
-import { getCategories, categoriesCollection, editCategoryName, deleteCategory } from "../firebase"
+import { useOutletContext } from "react-router-dom"
+import { getCategories, getAllCategories, categoriesCollection, usersInDB, editCategoryName, deleteCategory } from "../firebase"
 
 export default function AllCategories() {
     const [toggleEditModal, setToggleEditModal] = useState(false)
@@ -11,10 +12,11 @@ export default function AllCategories() {
     const [editCategoryTitle, setEditCategoryTitle] = useState({
         title: ""
     })
+    const { currentUser } = useOutletContext()
 
     async function loadData() {
         try {
-            const data = await getCategories(categoriesCollection)
+            const data = await getAllCategories(usersInDB, currentUser)
             setLoadedCategories(data)
         } catch(e) {
             console.log("error retrieving data: ", e)

@@ -10,7 +10,8 @@ import {
     setDoc,
     doc,
     query,
-    updateDoc
+    updateDoc,
+    where
 } from "firebase/firestore"
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth"
 // TODO: Add SDKs for Firebase products that you want to use
@@ -60,6 +61,19 @@ async function addUserToCollection(collectionType, user) {
         console.log("error adding user: ", e)
     }
 }
+// export async function addNewCat(userCollection, userId, newCat) {
+//     const capitalizedCat = newCat.charAt(0).toUpperCase() + newCat.slice(1)
+//     try {
+//         const userDocRef = doc(userCollection, userId)
+//         const categoriesCollectionRef = collection(userDocRef, "categories")
+//         await addDoc(categoriesCollectionRef, {
+//             name: capitalizedCat
+//         })
+
+//     } catch(e) {
+//         console.log("error creating new category: ", e)
+//     }
+// }
 
 // update currentUser logged in
 // async function updateCurrentUser(currentUser) {
@@ -109,6 +123,73 @@ export async function addNewCategory(category, collectionType) {
     } catch(e) {
         console.log("error adding doc: ", e)
     }
+}
+
+// export async function addNewCat(userCollection, userId, newCat) {
+//     const capitalizedCat = newCat.charAt(0).toUpperCase() + newCat.slice(1)
+//     try {
+//         const userDocRef = doc(userCollection, userId)
+//         const categoriesCollectionRef = collection(userDocRef, "categories")
+//         await addDoc(categoriesCollectionRef, {
+//             name: capitalizedCat
+//         })
+
+//     } catch(e) {
+//         console.log("error creating new category: ", e)
+//     }
+// }
+
+export async function addNewCat(userCollection, userId, newCat) {
+    const capitalizedCat = newCat.charAt(0).toUpperCase() + newCat.slice(1)
+    try {
+        const userDocRef = doc(userCollection, userId)
+        const categoriesCollectionRef = collection(userDocRef, "categories")
+
+        // Query to check if the category already exists
+        const q = query(categoriesCollectionRef, where("name", "==", capitalizedCat))
+        const querySnapshot = await getDocs(q)
+
+        if(querySnapshot.empty) {
+            await addDoc(categoriesCollectionRef, {
+                name: capitalizedCat
+            })
+            console.log(`Category ${capitalizedCat} added successfully.`)
+        } else {
+            console.log(`Category ${capitalizedCat} already exists.`)
+        }
+        
+    } catch(e) {
+        console.log("error creating new category: ", e)
+    }
+}
+
+// Get all categories from firestore
+
+export async function getAllCategories(userCollection, userId) {
+    try {
+        const userDocRef = doc(userCollection, userId)
+        const categoriesCollectionRef = collection(userDocRef, "categories")
+        const q = query(categoriesCollectionRef)
+        const snapshot = await getDocs(q)
+        const collections = snapshot.docs.map(doc => ({
+            ...doc.data(),
+            id: doc.id
+        }))
+        return collections
+    } catch(e) {
+        console.log("error fetching categories: ", e)
+    }
+}
+
+// retrieve categories from firestore
+export async function getCategories(collectionName) {
+    const q = query(collectionName)
+    const snapshot = await getDocs(q)
+    const collections = snapshot.docs.map(doc => ({
+        ...doc.data(),
+        id: doc.id
+    }))
+    return collections
 }
 
 // retrieve exercises from list of total exercises category
@@ -166,20 +247,6 @@ export async function retrieveCurrentExSetsReps(collectionType) {
 
 }
 
-export async function addNewCat(userCollection, userId, newCat) {
-    const capitalizedCat = newCat.charAt(0).toUpperCase() + newCat.slice(1)
-    try {
-        const userDocRef = doc(userCollection, userId)
-        const categoriesCollectionRef = collection(userDocRef, "categories")
-        await addDoc(categoriesCollectionRef, {
-            name: capitalizedCat
-        })
-
-    } catch(e) {
-        console.log("error creating new category: ", e)
-    }
-}
-
 // add new exercise to category
 export async function addToCategory(name, scheme, weightUnit, collectionType, categoryId) {
     try {
@@ -193,17 +260,6 @@ export async function addToCategory(name, scheme, weightUnit, collectionType, ca
     } catch(e) {
         console.log("error adding doc: ", e)
     }
-}
-
-// retrieve categories from firestore
-export async function getCategories(collectionName) {
-    const q = query(collectionName)
-    const snapshot = await getDocs(q)
-    const collections = snapshot.docs.map(doc => ({
-        ...doc.data(),
-        id: doc.id
-    }))
-    return collections
 }
 
 // retrieve categories from firestore
