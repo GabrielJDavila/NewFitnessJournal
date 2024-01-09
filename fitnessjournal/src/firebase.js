@@ -181,6 +181,36 @@ export async function getAllCategories(userCollection, userId) {
     }
 }
 
+// add new exercise to category
+export async function addExToCategory(userCollection, userId, name, categoryId) {
+    try {
+        const userDocRef = doc(userCollection, userId)
+        const categoriesCollectionRef = collection(userDocRef, "categories")
+        const categoryDocRef = doc(categoriesCollectionRef, categoryId)
+        const exercisesCollectionRef = collection(categoryDocRef, "exercises")
+        await addDoc(exercisesCollectionRef, {
+            name: name
+        })
+    } catch(e) {
+        console.log("error adding doc: ", e)
+    }
+}
+
+// add new exercise to category
+export async function addToCategory(name, scheme, weightUnit, collectionType, categoryId) {
+    try {
+        const categoryDocRef = doc(collectionType, categoryId)
+        const exercisesCollectionRef = collection(categoryDocRef, "exercises")
+        await addDoc(exercisesCollectionRef, {
+            name: name,
+            scheme: scheme,
+            weightUnit: weightUnit
+        })
+    } catch(e) {
+        console.log("error adding doc: ", e)
+    }
+}
+
 // retrieve categories from firestore
 export async function getCategories(collectionName) {
     const q = query(collectionName)
@@ -247,20 +277,6 @@ export async function retrieveCurrentExSetsReps(collectionType) {
 
 }
 
-// add new exercise to category
-export async function addToCategory(name, scheme, weightUnit, collectionType, categoryId) {
-    try {
-        const categoryDocRef = doc(collectionType, categoryId)
-        const exercisesCollectionRef = collection(categoryDocRef, "exercises")
-        await addDoc(exercisesCollectionRef, {
-            name: name,
-            scheme: scheme,
-            weightUnit: weightUnit
-        })
-    } catch(e) {
-        console.log("error adding doc: ", e)
-    }
-}
 
 // retrieve categories from firestore
 export async function getExCategories(users) {

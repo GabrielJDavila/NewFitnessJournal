@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
+import { useOutletContext } from "react-router-dom"
 import { doc } from "firebase/firestore"
-import { getCategories, categoriesCollection, addToCategory } from "../firebase"
+import { getAllCategories, usersInDB, addExToCategory } from "../firebase"
 
 export default function NewEx() {
     const [newExFormData, setNewExFormData] = useState({
@@ -11,10 +12,11 @@ export default function NewEx() {
     })
     const [loadedCategories, setLoadedCategories] = useState([])
     const [toggleMessageState, setToggleMessageState] = useState(false)
-
+    const { currentUser } = useOutletContext()
+    console.log(newExFormData)
     async function loadData() {
         try {
-            const data = await getCategories(categoriesCollection)
+            const data = await getAllCategories(usersInDB, currentUser)
             setLoadedCategories(data)
         } catch(e) {
             console.log("error retrieving data: ", e)
@@ -39,7 +41,7 @@ export default function NewEx() {
         e.preventDefault()
         const selectedCategory = loadedCategories.find(cat => cat.name === newExFormData.category)
         if(selectedCategory) {
-            addToCategory(newExFormData.name, newExFormData.scheme, newExFormData.weightUnit, categoriesCollection, selectedCategory.id)
+            addExToCategory(usersInDB, currentUser, newExFormData.name, selectedCategory.id)
             clearForm()
             toggle()
         } else {
