@@ -1,16 +1,17 @@
 import { useState, useEffect } from "react"
-import { Link, useParams } from "react-router-dom"
-import { retreiveFromCategory, categoriesCollection } from "../firebase"
+import { Link, useParams, useOutletContext } from "react-router-dom"
+import { retreiveExFromCategory, usersInDB } from "../firebase"
 import Exercise from "../components/Exercise"
 
 export default function LoadedExercises() {
     const params = useParams()
     const [exercises, setExercises] = useState([])
     const [selectedExId, setSelectedExId] = useState([])
+    const { currentUser } = useOutletContext()
 
     async function loadExercisesData() {
         try {
-            const data = await retreiveFromCategory(categoriesCollection, params.id)
+            const data = await retreiveExFromCategory(usersInDB, currentUser, params.id)
             setExercises(data)
         } catch(e) {
             console.log("error retrieving data: ", e)

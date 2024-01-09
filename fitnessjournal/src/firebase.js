@@ -37,9 +37,6 @@ export const categoriesCollection = collection(db, "categories")
 export const currentWorkoutList = collection(db, "currentWorkoutList")
 export const usersInDB = collection(db, "users")
 export const currentUserLoggedIn = collection(db, "currentUser")
-// export const user = auth.currentUser
-// export const userId = user ? user.uid : null
-// console.log(user)
 
 // add user to collection
 async function addUserToCollection(collectionType, user) {
@@ -61,26 +58,6 @@ async function addUserToCollection(collectionType, user) {
         console.log("error adding user: ", e)
     }
 }
-// export async function addNewCat(userCollection, userId, newCat) {
-//     const capitalizedCat = newCat.charAt(0).toUpperCase() + newCat.slice(1)
-//     try {
-//         const userDocRef = doc(userCollection, userId)
-//         const categoriesCollectionRef = collection(userDocRef, "categories")
-//         await addDoc(categoriesCollectionRef, {
-//             name: capitalizedCat
-//         })
-
-//     } catch(e) {
-//         console.log("error creating new category: ", e)
-//     }
-// }
-
-// update currentUser logged in
-// async function updateCurrentUser(currentUser) {
-//     try {
-//         await 
-//     }
-// }
 
 // create new user sign up
 export function signUpUser(email, password) {
@@ -114,28 +91,14 @@ export const logout = async () => {
 }
 
 // add new category
-export async function addNewCategory(category, collectionType) {
-    const capitalizedCat = category.charAt(0).toUpperCase() + category.slice(1)
-    try {
-        await addDoc(collectionType, {
-            name: capitalizedCat
-        })
-    } catch(e) {
-        console.log("error adding doc: ", e)
-    }
-}
-
-// export async function addNewCat(userCollection, userId, newCat) {
-//     const capitalizedCat = newCat.charAt(0).toUpperCase() + newCat.slice(1)
+// export async function addNewCategory(category, collectionType) {
+//     const capitalizedCat = category.charAt(0).toUpperCase() + category.slice(1)
 //     try {
-//         const userDocRef = doc(userCollection, userId)
-//         const categoriesCollectionRef = collection(userDocRef, "categories")
-//         await addDoc(categoriesCollectionRef, {
+//         await addDoc(collectionType, {
 //             name: capitalizedCat
 //         })
-
 //     } catch(e) {
-//         console.log("error creating new category: ", e)
+//         console.log("error adding doc: ", e)
 //     }
 // }
 
@@ -197,19 +160,19 @@ export async function addExToCategory(userCollection, userId, name, categoryId) 
 }
 
 // add new exercise to category
-export async function addToCategory(name, scheme, weightUnit, collectionType, categoryId) {
-    try {
-        const categoryDocRef = doc(collectionType, categoryId)
-        const exercisesCollectionRef = collection(categoryDocRef, "exercises")
-        await addDoc(exercisesCollectionRef, {
-            name: name,
-            scheme: scheme,
-            weightUnit: weightUnit
-        })
-    } catch(e) {
-        console.log("error adding doc: ", e)
-    }
-}
+// export async function addToCategory(name, scheme, weightUnit, collectionType, categoryId) {
+//     try {
+//         const categoryDocRef = doc(collectionType, categoryId)
+//         const exercisesCollectionRef = collection(categoryDocRef, "exercises")
+//         await addDoc(exercisesCollectionRef, {
+//             name: name,
+//             scheme: scheme,
+//             weightUnit: weightUnit
+//         })
+//     } catch(e) {
+//         console.log("error adding doc: ", e)
+//     }
+// }
 
 // retrieve categories from firestore
 export async function getCategories(collectionName) {
@@ -235,6 +198,23 @@ export async function retreiveFromCategory(collectionType, categoryId) {
         return exercises
     }catch(e) {
         console.log("error retrieving exercises: ", e)
+    }
+}
+
+export async function retreiveExFromCategory(userCollection, userId, categoryId) {
+    try {
+        const userDocRef = doc(userCollection, userId)
+        const categoriesCollectionRef = collection(userDocRef, "categories")
+        const categoryDocRef = doc(categoriesCollectionRef, categoryId)
+        const exercisesCollectionRef = collection(categoryDocRef, "exercises")
+        const snapshot = await getDocs(exercisesCollectionRef)
+        const exercises = snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        }))
+        return exercises
+    } catch(e) {
+        console.log("error getting exercises: ", e)
     }
 }
 
