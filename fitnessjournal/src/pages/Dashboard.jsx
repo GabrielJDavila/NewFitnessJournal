@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
-import { NavLink, Link } from "react-router-dom"
-import { currentWorkoutList, retrieveCurrentExSetsReps, editSingleSet, deleteCategory, deleteSingleSet } from "../firebase"
+import { NavLink, Link, useOutletContext } from "react-router-dom"
+import { usersInDB, retrieveCurrentExSetsReps, editSingleSet, deleteCategory, deleteSingleSet } from "../firebase"
 import ConfirmDeleteExModal from "../components/modals/ConfirmDeleteExModal"
 import ConfirmDeleteSetModal from "../components/modals/ConfirmDeleteSetModal"
 import EditSetModal from "../components/modals/EditSetModal"
@@ -25,6 +25,7 @@ export default function Dashboard() {
         setId: ""
     })
     const [date, setDate] = useState(new Date())
+    const { currentUser } = useOutletContext()
 
     useEffect(() => {
         loadExerciseList()
@@ -32,7 +33,7 @@ export default function Dashboard() {
 
     async function loadExerciseList() {
         try {
-            const setsData = await retrieveCurrentExSetsReps(currentWorkoutList)
+            const setsData = await retrieveCurrentExSetsReps(usersInDB, currentUser)
             setWorkoutData(setsData)
         } catch(e) {
             console.log("error fetching exercises list: ", e)

@@ -219,10 +219,14 @@ export async function retreiveExFromCategory(userCollection, userId, categoryId)
 }
 
 // retrieve sets and reps for current exercise in selection
-export async function retrieveCurrentExSetsReps(collectionType) {
+export async function retrieveCurrentExSetsReps(userCollection, userId) {
     try {
-        const workoutSnapshot = await getDocs(collectionType)
+        const userDocRef = doc(userCollection, userId)
+        const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
+        const exDocRef = doc(currentWorkoutCollectionRef)
+        const workoutSnapshot = await getDocs(currentWorkoutCollectionRef)
         
+        // const workoutSnapshot = await getDocs(collectionType)
         const exercises = []
 
         for(const exDoc of workoutSnapshot.docs) {
