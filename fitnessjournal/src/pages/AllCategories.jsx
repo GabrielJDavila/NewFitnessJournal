@@ -29,14 +29,14 @@ export default function AllCategories() {
 
     function handleEditSubmit(e) {
         e.preventDefault()
-        editCategoryName(categoriesCollection, currentId, editCategoryTitle.title)
+        editCategoryName(usersInDB, currentUser, currentId, editCategoryTitle.title)
         loadData()
         toggleEdit()
     }
 
     function handleDeleteSubmit(e) {
         e.preventDefault()
-        deleteCategory(categoriesCollection, currentId)
+        deleteCategory(usersInDB, currentUser, currentId)
         loadData()
         toggleDelete()
     }
@@ -44,6 +44,7 @@ export default function AllCategories() {
     function toggleDelete(e) {
         setOpenConfirmDeleteModal(prev => !prev)
         const itemId = e.target.dataset.delete
+        console.log(itemId)
         setCurrentId(itemId)
     }
 
@@ -111,7 +112,7 @@ export default function AllCategories() {
             />
         )
     })
-    console.log(renderedCategories)
+    console.log(loadedCategories)
 
     return (
         <div className="all-ex-page-container">

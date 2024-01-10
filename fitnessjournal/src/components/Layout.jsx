@@ -16,10 +16,7 @@ export default function Layout() {
     const [currentUser, setCurrentUser] = useState({
         uid: ""
     })
-    console.log(currentUser)
-//     const user = auth.currentUser
-//     const userId = user ? user.uid : null
-// console.log(user)
+ 
     useEffect(() => {
         const unsubcribe = onAuthStateChanged(auth, user => {
             if(user) {

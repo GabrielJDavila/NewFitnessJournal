@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
-import { Link } from "react-router-dom"
-import { addUpdateWorkoutList, currentWorkoutList } from "../firebase"
+import { Link, useOutletContext } from "react-router-dom"
+import { addUpdateWorkoutList, currentWorkoutList, usersInDB } from "../firebase"
 
 export default function Exercise(props) {
     const [docInfo, setDocInfo] = useState({
@@ -9,11 +9,13 @@ export default function Exercise(props) {
         scheme: props.scheme,
         unit: props.unit
     })
+    const { currentUser } = useOutletContext()
+
     console.log(docInfo.id)
     // function to handle button click of adding exercise
     function handleAddExClick(e) {
         if(e.target.dataset.id === docInfo.id) {
-            addUpdateWorkoutList(docInfo.id, docInfo.name, docInfo.scheme, docInfo.unit, currentWorkoutList)
+            addUpdateWorkoutList(docInfo.id, docInfo.name, usersInDB, currentUser)
             
         }
         

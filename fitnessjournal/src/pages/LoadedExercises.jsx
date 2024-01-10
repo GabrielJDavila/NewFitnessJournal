@@ -47,7 +47,7 @@ export default function LoadedExercises() {
                 <p className="back-btn-text">back</p>
             </Link>
             <div className="rendered-ex-list">
-                {exercises.length >= 1 ? renderedExercises : <p>Add new exercise</p>}
+                {exercises.length >= 1 ? renderedExercises : <Link to="/NewEx">Add new exercise</Link>}
             </div>
         </div>
         
