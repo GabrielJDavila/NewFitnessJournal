@@ -16,12 +16,12 @@ export default function Category(props) {
                 <i
                     data-edit={props.id}
                     className="fa-solid fa-pen-to-square category-edit"
-                    onClick={props.toggleEdit}
+                    onClick={e => props.toggleEdit(e)}
                 ></i>
                 <i
                     data-delete={props.id}
                     className="fa-solid fa-trash category-delete"
-                    onClick={props.toggleDelete}
+                    onClick={e => props.toggleDelete(e)}
                 ></i>
             </div>
         </div>

@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { useOutletContext } from "react-router-dom"
-import { addNewCategory, addNewCat, categoriesCollection, usersInDB } from "../firebase"
+import { addNewCat, usersInDB } from "../firebase"
 
 export default function NewCat() {
     const [newCatName, setNewCatName] = useState({

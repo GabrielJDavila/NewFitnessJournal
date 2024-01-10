@@ -90,18 +90,6 @@ export const logout = async () => {
     await signOut(auth)
 }
 
-// add new category
-// export async function addNewCategory(category, collectionType) {
-//     const capitalizedCat = category.charAt(0).toUpperCase() + category.slice(1)
-//     try {
-//         await addDoc(collectionType, {
-//             name: capitalizedCat
-//         })
-//     } catch(e) {
-//         console.log("error adding doc: ", e)
-//     }
-// }
-
 export async function addNewCat(userCollection, userId, newCat) {
     const capitalizedCat = newCat.charAt(0).toUpperCase() + newCat.slice(1)
     try {
@@ -126,8 +114,35 @@ export async function addNewCat(userCollection, userId, newCat) {
     }
 }
 
-// Get all categories from firestore
+// delete category
+export async function deleteCategory(userCollection, userId, categoryId) {
+    try {
+        const userDocRef = doc(userCollection, userId)
+        const categoriesCollectionRef = collection(userDocRef, "categories")
+        const categoryDocRef = doc(categoriesCollectionRef, categoryId)
+        await deleteDoc(categoryDocRef)
+    } catch(e) {
+        console.log("error performing deletion: ", e)
+        throw e
+    }
+}
 
+// update category name
+export async function editCategoryName(userCollection, userId, categoryId, newName) {
+    try {
+        const userDocRef = doc(userCollection, userId)
+        const categoriesCollectionRef = collection(userDocRef, "categories")
+        const categoryDocRef = doc(categoriesCollectionRef, categoryId)
+        await setDoc(categoryDocRef, {
+            name: newName
+        })
+    } catch(e) {
+        console.log("error performing edit: ", e)
+        throw e
+    }
+}
+
+// Get all categories from firestore
 export async function getAllCategories(userCollection, userId) {
     try {
         const userDocRef = doc(userCollection, userId)
@@ -158,21 +173,6 @@ export async function addExToCategory(userCollection, userId, name, categoryId) 
         console.log("error adding doc: ", e)
     }
 }
-
-// add new exercise to category
-// export async function addToCategory(name, scheme, weightUnit, collectionType, categoryId) {
-//     try {
-//         const categoryDocRef = doc(collectionType, categoryId)
-//         const exercisesCollectionRef = collection(categoryDocRef, "exercises")
-//         await addDoc(exercisesCollectionRef, {
-//             name: name,
-//             scheme: scheme,
-//             weightUnit: weightUnit
-//         })
-//     } catch(e) {
-//         console.log("error adding doc: ", e)
-//     }
-// }
 
 // retrieve categories from firestore
 export async function getCategories(collectionName) {
@@ -276,47 +276,27 @@ export async function retrieveDoc(collectionType, itemId) {
     return docSnap
 }
 
-// update category name
-export async function editCategoryName(collectionType, docId, newName) {
-    try {
-        const docRef = doc(collectionType, docId)
-        await setDoc(docRef, {
-            name: newName
-        })
-    } catch(e) {
-        console.log("error performing edit: ", e)
-        throw e
-    }
-}
-
-// delete category
-export async function deleteCategory(collectionType, docId) {
-    try {
-        const docRef = doc(collectionType, docId)
-        await deleteDoc(docRef)
-    } catch(e) {
-        console.log("error performing edit: ", e)
-        throw e
-    }
-}
-
 const date = new Date().toISOString().split("T")[0]
+
 // add or udpdate current workout exercises
-export async function addUpdateWorkoutList(exerciseId, name, scheme, weightUnit, collectionType) {
+export async function addUpdateWorkoutList(exerciseId, name, userCollection, userId) {
     
     try {
         // using exerciseId so it's easier to grab params later for use
-        const docRef = doc(collectionType, exerciseId)
-        const docSnap = await getDoc(docRef)
+        const userDocRef = doc(userCollection, userId)
+        const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
+        const exDocRef = doc(currentWorkoutCollectionRef, exerciseId)
+        const docSnap = await getDoc(exDocRef)
+
+        // const docRef = doc(collectionType, exerciseId)
+        // const docSnap = await getDoc(docRef)
 
         if(docSnap.exists()) {
             alert("exercise already in workout")
         } else {
-            await setDoc(docRef, {
+            await setDoc(exDocRef, {
                 id: exerciseId,
                 name: name,
-                scheme: scheme,
-                weightUnit: weightUnit,
                 date: date
             })
         }
