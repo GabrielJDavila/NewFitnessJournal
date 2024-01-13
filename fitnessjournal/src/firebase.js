@@ -218,6 +218,19 @@ export async function retreiveExFromCategory(userCollection, userId, categoryId)
     }
 }
 
+// delete category
+export async function deleteEx(userCollection, userId, exerciseId) {
+    try {
+        const userDocRef = doc(userCollection, userId)
+        const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
+        const exDocRef = doc(currentWorkoutCollectionRef, exerciseId)
+        await deleteDoc(exDocRef)
+    } catch(e) {
+        console.log("error performing deletion: ", e)
+        throw e
+    }
+}
+
 // retrieve sets and reps for current exercise in selection
 export async function retrieveCurrentExSetsReps(userCollection, userId) {
     try {
@@ -310,15 +323,24 @@ export async function addUpdateWorkoutList(exerciseId, name, userCollection, use
 }
 
 // add or update sets and reps of current exercises
-export async function addSetsReps( exerciseId, weight, reps, collectionType) {
+export async function addSetsReps( exerciseId, weight, reps, userCollection, userId) {
     try {
         // using exerciseId so it's easier to grab params later for use
-        const exerciseToBeEdited = doc(collectionType, exerciseId)
-        const exerciseDocRef = collection(exerciseToBeEdited, "currentEx")
-        await addDoc(exerciseDocRef, {
+        const userDocRef = doc(userCollection, userId)
+        const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
+        const exDocRef = doc(currentWorkoutCollectionRef, exerciseId)
+        const currentExCollectionRef = collection(exDocRef, "currentEx")
+        await addDoc(currentExCollectionRef, {
             weight: weight,
             reps: reps
         })
+
+        // const exerciseToBeEdited = doc(collectionType, exerciseId)
+        // const exerciseDocRef = collection(exerciseToBeEdited, "currentEx")
+        // await addDoc(exerciseDocRef, {
+        //     weight: weight,
+        //     reps: reps
+        // })
     } catch(e) {
         console.log("error adding exercise: ", e)
         throw e

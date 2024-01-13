@@ -1,8 +1,9 @@
 
 // handles result of user confirming 
 export function handleDeleteExerciseSubmit(e, {
-    deleteCategory,
-    currentWorkoutList,
+    deleteEx,
+    usersInDB,
+    currentUser,
     currentItemToDelete,
     loadExerciseList,
     toggleDelete
@@ -13,7 +14,7 @@ export function handleDeleteExerciseSubmit(e, {
     setToggleDeleteSetModal
 }) {
     e.preventDefault()
-    deleteCategory(currentWorkoutList, currentItemToDelete.exIdToDelete)
+    deleteEx(usersInDB, currentUser, currentItemToDelete.exIdToDelete)
     loadExerciseList(e)
     toggleDelete(e, setCurrentItemToDelete, setToggleDeleteExModal, setToggleDeleteSetModal)
 }

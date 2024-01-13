@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
-import { useParams } from "react-router-dom"
-import { addSetsReps, currentWorkoutList} from "../firebase"
+import { useParams, useOutletContext } from "react-router-dom"
+import { addSetsReps, usersInDB} from "../firebase"
 import BackBtn from "../components/BackBtn"
 import SetAdded from "../components/modals/SetAdded"
 
@@ -11,6 +11,7 @@ export default function ExerciseDetail() {
         weight: 0
     })
     const [showModal, setShowModal] = useState(false)
+    const { currentUser } = useOutletContext()
 
     useEffect(() => {
         if(showModal) {
@@ -25,7 +26,7 @@ export default function ExerciseDetail() {
     function handleAddSetClick(e) {
         e.preventDefault()
         if (repsAndWeight.reps > 0) {
-            addSetsReps(params.id, repsAndWeight.weight, repsAndWeight.reps, currentWorkoutList)
+            addSetsReps(params.id, repsAndWeight.weight, repsAndWeight.reps, usersInDB, currentUser)
             setShowModal(true)
         } else {
             alert("Please enter an amount for reps.")
