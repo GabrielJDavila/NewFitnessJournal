@@ -44,7 +44,6 @@ export default function AllCategories() {
     function toggleDelete(e) {
         setOpenConfirmDeleteModal(prev => !prev)
         const itemId = e.target.dataset.delete
-        console.log(itemId)
         setCurrentId(itemId)
     }
 
@@ -112,7 +111,6 @@ export default function AllCategories() {
             />
         )
     })
-    console.log(loadedCategories)
 
     return (
         <div className="all-ex-page-container">
