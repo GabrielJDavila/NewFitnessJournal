@@ -73,7 +73,8 @@ export default function Dashboard() {
                     handleEditSet={e => handleEditSetSubmit(e, {
                         editSingleSet,
                         newSetInfo,
-                        currentWorkoutList,
+                        usersInDB,
+                        currentUser,
                         loadExerciseList,
                         toggleEdit
                     }, 
@@ -111,7 +112,8 @@ export default function Dashboard() {
                 <ConfirmDeleteSetModal
                     handleDeleteSet={e => handleDeleteSetSubmit(e, {
                         deleteSingleSet,
-                        currentWorkoutList,
+                        usersInDB,
+                        currentUser,
                         currentItemToDelete,
                         loadExerciseList,
                         toggleDelete

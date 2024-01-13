@@ -22,7 +22,8 @@ export function handleDeleteExerciseSubmit(e, {
 export function handleEditSetSubmit(e, {
     editSingleSet,
     newSetInfo,
-    currentWorkoutList,
+    usersInDB,
+    currentUser,
     loadExerciseList,
     toggleEdit
 },
@@ -31,7 +32,7 @@ export function handleEditSetSubmit(e, {
     setToggleEditSetModal
 }) {
     e.preventDefault()
-    editSingleSet(newSetInfo.exId, newSetInfo.setId, newSetInfo.reps, newSetInfo.weight, currentWorkoutList)
+    editSingleSet(newSetInfo.exId, newSetInfo.setId, newSetInfo.reps, newSetInfo.weight, usersInDB, currentUser)
     loadExerciseList(e)
     toggleEdit(e, setNewSetInfo, setToggleEditSetModal)
 }
@@ -39,7 +40,8 @@ export function handleEditSetSubmit(e, {
 // // handles the result of user clicking confirm of ConfirmDeleteSetModal.
 export function handleDeleteSetSubmit(e, { 
     deleteSingleSet,
-    currentWorkoutList,
+    usersInDB,
+    currentUser,
     currentItemToDelete,
     loadExerciseList,
     toggleDelete 
@@ -50,7 +52,7 @@ export function handleDeleteSetSubmit(e, {
     setToggleDeleteSetModal 
 }) {
     e.preventDefault()
-    deleteSingleSet(currentWorkoutList, currentItemToDelete.exIdToDelete, currentItemToDelete.setIdToDelete)
+    deleteSingleSet(usersInDB, currentUser, currentItemToDelete.exIdToDelete, currentItemToDelete.setIdToDelete)
     loadExerciseList(e)
     toggleDelete(e, setCurrentItemToDelete, setToggleDeleteExModal, setToggleDeleteSetModal)
 }

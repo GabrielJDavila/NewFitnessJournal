@@ -325,11 +325,13 @@ export async function addSetsReps( exerciseId, weight, reps, collectionType) {
     }
 }
 
-export async function editSingleSet(exerciseId, setId, newReps, newWeight, collectionType) {
+export async function editSingleSet(exerciseId, setId, newReps, newWeight, userCollection, userId) {
     try {
-        const exerciseRef = doc(collectionType, exerciseId)
-        const setsRef = collection(exerciseRef, "currentEx")
-        const setDocRef = doc(setsRef, setId)
+        const userDocRef = doc(userCollection, userId)
+        const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
+        const exDocRef = doc(currentWorkoutCollectionRef, exerciseId)
+        const currentExRef = collection(exDocRef, "currentEx")
+        const setDocRef = doc(currentExRef, setId)
 
         await updateDoc(setDocRef, {
             reps: newReps,
@@ -341,11 +343,13 @@ export async function editSingleSet(exerciseId, setId, newReps, newWeight, colle
     }
 }
 
-export async function deleteSingleSet(collectionType, exerciseId, setId) {
+export async function deleteSingleSet(userCollection, userId, exerciseId, setId) {
     try {
-        const exRef = doc(collectionType, exerciseId)
-        const allSetsRef = collection(exRef, "currentEx")
-        const setDocRef = doc(allSetsRef, setId)
+        const userDocRef = doc(userCollection, userId)
+        const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
+        const exDocRef = doc(currentWorkoutCollectionRef, exerciseId)
+        const currentExRef = collection(exDocRef, "currentEx")
+        const setDocRef = doc(currentExRef, setId)
 
         await deleteDoc(setDocRef)
     } catch(e) {
