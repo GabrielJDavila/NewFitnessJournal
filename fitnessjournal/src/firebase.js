@@ -305,9 +305,6 @@ export async function addUpdateWorkoutList(exerciseId, name, userCollection, use
         const exDocRef = doc(currentWorkoutCollectionRef, exerciseId)
         const docSnap = await getDoc(exDocRef)
 
-        // const docRef = doc(collectionType, exerciseId)
-        // const docSnap = await getDoc(docRef)
-
         if(docSnap.exists()) {
             alert("exercise already in workout")
         } else {
@@ -335,12 +332,6 @@ export async function addSetsReps( exerciseId, weight, reps, userCollection, use
             reps: reps
         })
 
-        // const exerciseToBeEdited = doc(collectionType, exerciseId)
-        // const exerciseDocRef = collection(exerciseToBeEdited, "currentEx")
-        // await addDoc(exerciseDocRef, {
-        //     weight: weight,
-        //     reps: reps
-        // })
     } catch(e) {
         console.log("error adding exercise: ", e)
         throw e
