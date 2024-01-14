@@ -26,15 +26,14 @@ export default function Dashboard() {
     })
     const [date, setDate] = useState(new Date())
     const { currentUser } = useOutletContext()
-    console.log(date)
-    
-    useEffect(() => {
-        loadExerciseList()
-    }, [])
 
-    async function loadExerciseList() {
+    useEffect(() => {
+        loadExerciseList(date)
+    }, [date])
+
+    async function loadExerciseList(selectedDate) {
         try {
-            const setsData = await retrieveCurrentExSetsReps(usersInDB, currentUser)
+            const setsData = await retrieveCurrentExSetsReps(usersInDB, currentUser, selectedDate)
             setWorkoutData(setsData)
         } catch(e) {
             console.log("error fetching exercises list: ", e)

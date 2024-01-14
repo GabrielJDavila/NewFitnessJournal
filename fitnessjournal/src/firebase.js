@@ -13,7 +13,8 @@ import {
     updateDoc,
     where,
     serverTimestamp,
-    orderBy
+    orderBy,
+    Timestamp
 } from "firebase/firestore"
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth"
 // TODO: Add SDKs for Firebase products that you want to use
@@ -234,12 +235,22 @@ export async function deleteEx(userCollection, userId, exerciseId) {
 }
 
 // retrieve sets and reps for current exercise in selection
-export async function retrieveCurrentExSetsReps(userCollection, userId) {
+export async function retrieveCurrentExSetsReps(userCollection, userId, selectedDate) {
     try {
         const userDocRef = doc(userCollection, userId)
         const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
-        const exDocRef = doc(currentWorkoutCollectionRef)
-        const workoutSnapshot = await getDocs(currentWorkoutCollectionRef)
+
+        // Create start and end timestamps for selected date
+        const startOfDay = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate())
+        const endOfDay = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate() + 1)
+        const startTimestamp = Timestamp.fromDate(startOfDay)
+        const endTimestamp = Timestamp.fromDate(endOfDay)
+
+        const workoutQuery = query(currentWorkoutCollectionRef, where("createdAt", ">=", startTimestamp), where("createdAt", "<", endTimestamp))
+        const workoutSnapshot = await getDocs(workoutQuery)
+
+        // const exDocRef = doc(currentWorkoutCollectionRef)
+        // const workoutSnapshot = await getDocs(currentWorkoutCollectionRef)
         
         // const workoutSnapshot = await getDocs(collectionType)
         const exercises = []
@@ -308,13 +319,17 @@ export async function addUpdateWorkoutList(exerciseId, name, userCollection, use
         const exDocRef = doc(currentWorkoutCollectionRef, exerciseId)
         const docSnap = await getDoc(exDocRef)
 
+        // const workoutListCollectionRef = collection(userDocRef, "currentWorkout")
+        // const currentWorkoutDocRef = doc(workoutListCollectionRef, date)
+        // const exCollec
+
         if(docSnap.exists()) {
             alert("exercise already in workout")
         } else {
             await setDoc(exDocRef, {
                 id: exerciseId,
                 name: name,
-                date: date
+                createdAt: serverTimestamp()
             })
         }
     } catch(e) {
