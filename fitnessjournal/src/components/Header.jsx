@@ -63,7 +63,7 @@ export default function Header() {
                     </Link>
                     
                     <Link to="/AllCategories" className="menu-item-link">
-                        <li className="menu-item">Add Exercise</li>
+                        <li className="menu-item">Add To Workout</li>
                     </Link>
                 </ul>
                 

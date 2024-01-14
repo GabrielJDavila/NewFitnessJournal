@@ -13,7 +13,7 @@ export default function NewEx() {
     const [loadedCategories, setLoadedCategories] = useState([])
     const [toggleMessageState, setToggleMessageState] = useState(false)
     const { currentUser } = useOutletContext()
-    console.log(newExFormData)
+
     async function loadData() {
         try {
             const data = await getAllCategories(usersInDB, currentUser)

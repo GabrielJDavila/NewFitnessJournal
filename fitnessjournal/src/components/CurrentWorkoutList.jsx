@@ -16,7 +16,7 @@ export default function CurrentWorkoutList(props) {
                 <ul className="all-sets-container">
                     {ex.setsReps.map((set, setIndex) => (
                         <li key={setIndex} className="set-container">
-                            <p className="set-weight">lbs: {set.weight}</p>
+                            <p className="set-weight">{set.weightType}: {set.weight}</p>
                             <p className="set-reps">reps: {set.reps}</p>
                             <span
                                 id={ex.id}

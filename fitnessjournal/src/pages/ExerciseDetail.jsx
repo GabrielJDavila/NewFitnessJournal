@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { useParams, useOutletContext, useNavigate } from "react-router-dom"
+import { useParams, useOutletContext } from "react-router-dom"
 import { addSetsReps, usersInDB} from "../firebase"
 import BackBtn from "../components/BackBtn"
 import SetAdded from "../components/modals/SetAdded"
@@ -8,7 +8,8 @@ export default function ExerciseDetail() {
     const params = useParams()
     const [repsAndWeight, setRepsAndWeight] = useState({
         reps: 0,
-        weight: 0
+        weight: 0,
+        weightType: ""
     })
     const [showModal, setShowModal] = useState(false)
     const { currentUser } = useOutletContext()
@@ -22,14 +23,12 @@ export default function ExerciseDetail() {
             return () => clearTimeout(flipModalState)
         }
     }, [showModal])
-    const navigate = useNavigate()
 
     function handleAddSetClick(e) {
         e.preventDefault()
         if (repsAndWeight.reps > 0) {
-            addSetsReps(params.id, repsAndWeight.weight, repsAndWeight.reps, usersInDB, currentUser)
+            addSetsReps(params.id, repsAndWeight.weight, repsAndWeight.reps, repsAndWeight.weightType, usersInDB, currentUser)
             setShowModal(true)
-            navigate("/Dashboard")
         } else {
             alert("Please enter an amount for reps.")
         }        
@@ -67,11 +66,18 @@ export default function ExerciseDetail() {
 
     // handle change of reps and sets
     function handleChange(name, value) {
-        const newVal = parseInt(value, 10) || 0
-        setRepsAndWeight(prev => ({
-            ...prev,
-            [name]: newVal
-        }))
+        if(typeof value === Number) {
+            const newVal = parseInt(value, 10) || 0
+            setRepsAndWeight(prev => ({
+                ...prev,
+                [name]: newVal
+            }))
+        } else {
+            setRepsAndWeight(prev => ({
+                ...prev,
+                [name]: value
+            }))
+        }
     }
 
     return (
@@ -80,21 +86,34 @@ export default function ExerciseDetail() {
             <fieldset className="dash-input-fieldset">   
                 <div className="ex-info-container">
                     <p className="ex-info-text weight">Weight:</p>
-                    <div className="ex-info-btns">
-                        <p onClick={e => addOrMinusWeight(e)} data-minusweight="weight" className="q-btn">-</p>
-                        <input
-                            name="weight"
-                            onChange={e => handleChange(e.target.name, e.target.value)}
-                            value={repsAndWeight.weight}
-                            className="weight-input"
-                            required
-                        />
-                        <p onClick={e => addOrMinusWeight(e)} data-addweight="weight" className="q-btn">+</p>
-                        <select className="weight-type">
-                            <option>lb</option>
-                            <option>kg</option>
-                        </select>
-                    </div>
+                        <div className="ex-info-btns">
+                            <p onClick={e => addOrMinusWeight(e)} data-minusweight="weight" className="q-btn">-</p>
+                            <input
+                                name="weight"
+                                onChange={e => handleChange(e.target.name, e.target.value)}
+                                value={repsAndWeight.weight}
+                                className="weight-input"
+                                required
+                            />
+                            <p onClick={e => addOrMinusWeight(e)} data-addweight="weight" className="q-btn">+</p>
+                        </div>
+                </div>
+            </fieldset>
+
+            <fieldset className="dash-input-fieldset">   
+                <div className="ex-info-container">
+                    <p className="ex-info-text weight">Weight Type:</p>
+                            <select
+                                name="weightType"
+                                value={repsAndWeight.weightType}
+                                onChange={e => handleChange(e.target.name, e.target.value)}
+                                className="weight-type"
+                                required
+                            >
+                                <option value="">-- select --</option>
+                                <option value="lb">lb</option>
+                                <option value="kg">kg</option>
+                            </select>
                 </div>
             </fieldset>
 

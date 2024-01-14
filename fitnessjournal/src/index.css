@@ -440,11 +440,21 @@ header {
   margin: 0;
 }
 
+.ex-info-btns-container {
+  text-align: center;
+}
+
 .ex-info-btns {
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: .5rem;
+}
+
+.ex-info-select-container {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
 }
 
 .q-btn {

@@ -256,12 +256,13 @@ export async function retrieveCurrentExSetsReps(userCollection, userId) {
 
             repsSetsSnapshot.forEach(set => {
                 const setId = set.id
-                const { reps, weight } = set.data()
+                const { reps, weight, weightType } = set.data()
 
                 exerciseData.setsReps.push({
                     setId,
                     reps,
-                    weight
+                    weight,
+                    weightType
                 })
             })
             exercises.push(exerciseData)
@@ -320,7 +321,7 @@ export async function addUpdateWorkoutList(exerciseId, name, userCollection, use
 }
 
 // add or update sets and reps of current exercises
-export async function addSetsReps( exerciseId, weight, reps, userCollection, userId) {
+export async function addSetsReps( exerciseId, weight, reps, weightType, userCollection, userId) {
     try {
         // using exerciseId so it's easier to grab params later for use
         const userDocRef = doc(userCollection, userId)
@@ -329,6 +330,7 @@ export async function addSetsReps( exerciseId, weight, reps, userCollection, use
         const currentExCollectionRef = collection(exDocRef, "currentEx")
         await addDoc(currentExCollectionRef, {
             weight: weight,
+            weightType: weightType,
             reps: reps
         })
 
