@@ -11,7 +11,9 @@ import {
     doc,
     query,
     updateDoc,
-    where
+    where,
+    serverTimestamp,
+    orderBy
 } from "firebase/firestore"
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth"
 // TODO: Add SDKs for Firebase products that you want to use
@@ -245,7 +247,7 @@ export async function retrieveCurrentExSetsReps(userCollection, userId) {
         for(const exDoc of workoutSnapshot.docs) {
             const exId = exDoc.id
             const currentExRef = collection(exDoc.ref, "currentEx")
-            const repsSetsQuery = query(currentExRef)
+            const repsSetsQuery = query(currentExRef, orderBy("createdAt"))
             const repsSetsSnapshot = await getDocs(repsSetsQuery)
 
             const exerciseData = {
@@ -331,7 +333,8 @@ export async function addSetsReps( exerciseId, weight, reps, weightType, userCol
         await addDoc(currentExCollectionRef, {
             weight: weight,
             weightType: weightType,
-            reps: reps
+            reps: reps,
+            createdAt: serverTimestamp()
         })
 
     } catch(e) {

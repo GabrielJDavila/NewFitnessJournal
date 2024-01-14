@@ -35,38 +35,40 @@ export default function ExerciseDetail() {
     }
     // handles change of purchaseInfo if user increments/decrements quantity
     function addOrMinusWeight(e) {
+        let currentWeight = parseInt(repsAndWeight.weight, 10)
         if(e.target.dataset.addweight) {
             setRepsAndWeight(prev => ({
                 ...prev,
-                weight: prev.weight + 1
+                weight: currentWeight + 1
             }))
         }
-        if(e.target.dataset.minusweight && repsAndWeight.weight > 0) {
+        if(e.target.dataset.minusweight && currentWeight > 0) {
             setRepsAndWeight(prev => ({
                 ...prev,
-                weight: prev.weight - 1
+                weight: currentWeight - 1
             }))
         }
     }
 
     function addOrMinusReps(e) {
+        let currentReps = parseInt(repsAndWeight.reps, 10)
         if(e.target.dataset.addreps) {
             setRepsAndWeight(prev => ({
                 ...prev,
-                reps: prev.reps + 1
+                reps: currentReps + 1
             }))
         }
-        if(e.target.dataset.minusreps && repsAndWeight.reps > 0) {
+        if(e.target.dataset.minusreps && currentReps > 0) {
             setRepsAndWeight(prev => ({
                 ...prev,
-                reps: prev.reps - 1
+                reps: currentReps - 1
             }))
         }
     }
 
     // handle change of reps and sets
     function handleChange(name, value) {
-        if(typeof value === Number) {
+        if(typeof value === "number") {
             const newVal = parseInt(value, 10) || 0
             setRepsAndWeight(prev => ({
                 ...prev,
