@@ -234,28 +234,96 @@ export async function deleteEx(userCollection, userId, exerciseId) {
     }
 }
 
+// retrieve categories from firestore
+export async function getExCategories(users) {
+    const q = query()
+    const snapshot = await getDocs(q)
+    const collections = snapshot.docs.map(doc => ({
+        ...doc.data(),
+        id: doc.id
+    }))
+    return collections
+}
+
+// retrieve single doc from firestore
+export async function retrieveDoc(collectionType, itemId) {
+    const docRef = doc(collectionType, itemId)
+    const docSnap = await getDoc(docRef)
+    return docSnap
+}
+
+
+// .toISOString().split("T")[0]
+
+// add or udpdate current workout exercises
+export async function addUpdateWorkoutList(exerciseId, name, userCollection, userId) {
+    try {
+        // using exerciseId so it's easier to grab params later for use
+        const date = new Date().toISOString().split("T")[0]
+        const userDocRef = doc(userCollection, userId)
+        const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
+        const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, date)
+        const selectedExListCollectionRef = collection(dateOfWorkoutDocRef, "exList")
+        const exDocRef = doc(selectedExListCollectionRef, exerciseId)
+        const docSnap = await getDoc(exDocRef)
+
+        // chatGPT solution
+        // const exDocRef = doc(currentWorkoutCollectionRef, exerciseId)
+        // const docSnap = await getDoc(exDocRef)
+
+        // original solution
+        // const workoutListCollectionRef = collection(userDocRef, "currentWorkout")
+        // const currentWorkoutDocRef = doc(workoutListCollectionRef, date)
+        // const exCollec
+
+        if(docSnap.exists()) {
+            alert("exercise already in workout")
+        } else {
+            await setDoc(exDocRef, {
+                id: exerciseId,
+                name: name,
+                createdAt: serverTimestamp()
+            })
+        }
+    } catch(e) {
+        console.log("error adding exercise: ", e)
+    }
+}
+
 // retrieve sets and reps for current exercise in selection
 export async function retrieveCurrentExSetsReps(userCollection, userId, selectedDate) {
     try {
+        const dateString = selectedDate.toISOString().split("T")[0]
+        console.log(dateString)
         const userDocRef = doc(userCollection, userId)
         const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
+        const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, dateString)
+        const dateDocSnap = await getDoc(dateOfWorkoutDocRef)
+
+        if(dateDocSnap.exists()) {
+            console.log("no workout found for this date.")
+            alert("no workout found for this date.")
+        }
 
         // Create start and end timestamps for selected date
-        const startOfDay = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate())
-        const endOfDay = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate() + 1)
-        const startTimestamp = Timestamp.fromDate(startOfDay)
-        const endTimestamp = Timestamp.fromDate(endOfDay)
+        // const startOfDay = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate())
+        // const endOfDay = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate() + 1)
+        // const startTimestamp = Timestamp.fromDate(startOfDay)
+        // const endTimestamp = Timestamp.fromDate(endOfDay)
 
-        const workoutQuery = query(currentWorkoutCollectionRef, where("createdAt", ">=", startTimestamp), where("createdAt", "<", endTimestamp))
-        const workoutSnapshot = await getDocs(workoutQuery)
+        // const workoutQuery = query(currentWorkoutCollectionRef, where("createdAt", ">=", startTimestamp), where("createdAt", "<", endTimestamp))
+        // const workoutSnapshot = await getDocs(workoutQuery)
 
         // const exDocRef = doc(currentWorkoutCollectionRef)
         // const workoutSnapshot = await getDocs(currentWorkoutCollectionRef)
         
         // const workoutSnapshot = await getDocs(collectionType)
+
+        const exercisesCollectionRef = collection(dateOfWorkoutDocRef, "exList")
+        const exerciseSnapshot = await getDocs(exercisesCollectionRef)
         const exercises = []
 
-        for(const exDoc of workoutSnapshot.docs) {
+        for(const exDoc of exerciseSnapshot.docs) {
             const exId = exDoc.id
             const currentExRef = collection(exDoc.ref, "currentEx")
             const repsSetsQuery = query(currentExRef, orderBy("createdAt"))
@@ -286,55 +354,6 @@ export async function retrieveCurrentExSetsReps(userCollection, userId, selected
         console.log("ERROR ERROR ABORT!!!: " , e)
     }
 
-}
-
-
-// retrieve categories from firestore
-export async function getExCategories(users) {
-    const q = query()
-    const snapshot = await getDocs(q)
-    const collections = snapshot.docs.map(doc => ({
-        ...doc.data(),
-        id: doc.id
-    }))
-    return collections
-}
-
-// retrieve single doc from firestore
-export async function retrieveDoc(collectionType, itemId) {
-    const docRef = doc(collectionType, itemId)
-    const docSnap = await getDoc(docRef)
-    return docSnap
-}
-
-const date = new Date().toISOString().split("T")[0]
-
-// add or udpdate current workout exercises
-export async function addUpdateWorkoutList(exerciseId, name, userCollection, userId) {
-    
-    try {
-        // using exerciseId so it's easier to grab params later for use
-        const userDocRef = doc(userCollection, userId)
-        const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
-        const exDocRef = doc(currentWorkoutCollectionRef, exerciseId)
-        const docSnap = await getDoc(exDocRef)
-
-        // const workoutListCollectionRef = collection(userDocRef, "currentWorkout")
-        // const currentWorkoutDocRef = doc(workoutListCollectionRef, date)
-        // const exCollec
-
-        if(docSnap.exists()) {
-            alert("exercise already in workout")
-        } else {
-            await setDoc(exDocRef, {
-                id: exerciseId,
-                name: name,
-                createdAt: serverTimestamp()
-            })
-        }
-    } catch(e) {
-        console.log("error adding exercise: ", e)
-    }
 }
 
 // add or update sets and reps of current exercises
