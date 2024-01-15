@@ -281,8 +281,7 @@ export async function addUpdateWorkoutList(exerciseId, name, userCollection, use
         } else {
             await setDoc(exDocRef, {
                 id: exerciseId,
-                name: name,
-                createdAt: serverTimestamp()
+                name: name
             })
         }
     } catch(e) {
@@ -294,7 +293,6 @@ export async function addUpdateWorkoutList(exerciseId, name, userCollection, use
 export async function retrieveCurrentExSetsReps(userCollection, userId, selectedDate) {
     try {
         const dateString = selectedDate.toISOString().split("T")[0]
-        console.log(dateString)
         const userDocRef = doc(userCollection, userId)
         const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
         const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, dateString)
@@ -338,6 +336,7 @@ export async function retrieveCurrentExSetsReps(userCollection, userId, selected
             repsSetsSnapshot.forEach(set => {
                 const setId = set.id
                 const { reps, weight, weightType } = set.data()
+                console.log(set.data())
 
                 exerciseData.setsReps.push({
                     setId,
@@ -360,10 +359,16 @@ export async function retrieveCurrentExSetsReps(userCollection, userId, selected
 export async function addSetsReps( exerciseId, weight, reps, weightType, userCollection, userId) {
     try {
         // using exerciseId so it's easier to grab params later for use
+        const dateString = new Date().toISOString().split("T")[0]
         const userDocRef = doc(userCollection, userId)
         const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
-        const exDocRef = doc(currentWorkoutCollectionRef, exerciseId)
-        const currentExCollectionRef = collection(exDocRef, "currentEx")
+        const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, dateString)
+
+        const selectedExListCollectionRef = collection(dateOfWorkoutDocRef, "exList")
+        const exDocRef = doc(selectedExListCollectionRef, exerciseId)
+
+        // const exDocRef = doc(currentWorkoutCollectionRef, exerciseId)
+        const currentExCollectionRef = collection(exDocRef, "currenEx")
         await addDoc(currentExCollectionRef, {
             weight: weight,
             weightType: weightType,

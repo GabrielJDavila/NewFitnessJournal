@@ -13,6 +13,7 @@ export default function ExerciseDetail() {
     })
     const [showModal, setShowModal] = useState(false)
     const { currentUser } = useOutletContext()
+    const [date, setDate] = useState(new Date())
 
     useEffect(() => {
         if(showModal) {

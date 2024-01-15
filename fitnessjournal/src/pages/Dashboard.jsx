@@ -26,7 +26,7 @@ export default function Dashboard() {
     })
     const [date, setDate] = useState(new Date())
     const { currentUser } = useOutletContext()
-    console.log(date)
+    console.log(workoutData)
     useEffect(() => {
         loadExerciseList(date)
     }, [date])
