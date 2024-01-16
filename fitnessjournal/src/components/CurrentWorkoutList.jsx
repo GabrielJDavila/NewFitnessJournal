@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 export default function CurrentWorkoutList(props) {
-
+   
     const currentWorkout = props.data.map((ex, index) => {
         return (
             <div key={index} className="rendered-ex-dash-container">
