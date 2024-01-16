@@ -33,7 +33,7 @@ export default function Dashboard() {
 
     async function loadExerciseList(selectedDate) {
         try {
-            const setsData = await retrieveCurrentExSetsReps(usersInDB, currentUser, selectedDate)
+            const setsData = await retrieveCurrentExSetsReps(usersInDB, currentUser, date)
             setWorkoutData(setsData)
         } catch(e) {
             console.log("error fetching exercises list: ", e)

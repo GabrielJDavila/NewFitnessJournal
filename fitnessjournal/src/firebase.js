@@ -354,15 +354,15 @@ export async function retrieveCurrentExSetsReps(userCollection, userId, selected
     }
 
 }
-
+console.log(new Date())
 // add or update sets and reps of current exercises
-export async function addSetsReps( exerciseId, weight, reps, weightType, userCollection, userId) {
+export async function addSetsReps( exerciseId, weight, reps, weightType, userCollection, userId, date) {
     try {
         // using exerciseId so it's easier to grab params later for use
-        const dateString = new Date().toISOString().split("T")[0]
+        // const dateString = new Date().toISOString().split("T")[0]
         const userDocRef = doc(userCollection, userId)
         const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
-        const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, dateString)
+        const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, date)
 
         const selectedExListCollectionRef = collection(dateOfWorkoutDocRef, "exList")
         const exDocRef = doc(selectedExListCollectionRef, exerciseId)
