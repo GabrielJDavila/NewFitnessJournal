@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { NavLink, Link, useOutletContext } from "react-router-dom"
-import { usersInDB, retrieveCurrentExSetsReps, editSingleSet, deleteCategory, deleteEx, deleteSingleSet } from "../firebase"
+import { usersInDB, retrieveCurrentExSetsReps, editSingleSet, deleteCategory, deleteEx, deleteSingleSet, deleteAllEx } from "../firebase"
 import ConfirmDeleteExModal from "../components/modals/ConfirmDeleteExModal"
 import ConfirmDeleteSetModal from "../components/modals/ConfirmDeleteSetModal"
 import EditSetModal from "../components/modals/EditSetModal"
@@ -26,7 +26,7 @@ export default function Dashboard() {
     })
     const [date, setDate] = useState(new Date())
     const { currentUser } = useOutletContext()
-    console.log(workoutData)
+    
     useEffect(() => {
         loadExerciseList(date)
     }, [date])
@@ -45,6 +45,17 @@ export default function Dashboard() {
             ...prev,
             [name]: value
         }))
+    }
+
+    async function deleteAll() {
+        try {
+           await deleteAllEx(usersInDB, currentUser, date)
+           await loadExerciseList(date)
+        } catch(e) {
+            console.log("error deleting doc: ", e)
+        }
+    
+        // location.reload()
     }
 
     const modalStyles = {
@@ -154,6 +165,9 @@ export default function Dashboard() {
                     <p className="link-text">Previous Workout</p>
                     </Link>
                 </div>
+                {
+                    workoutData && <button onClick={deleteAll}>Delete all exercises</button>
+                }
             </section>
         </main>
     )

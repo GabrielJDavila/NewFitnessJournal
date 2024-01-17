@@ -415,3 +415,21 @@ export async function deleteSingleSet(userCollection, userId, exerciseId, setId)
         throw e
     }
 }
+
+export async function deleteAllEx(userCollection, userId, selectedDate) {
+    try {
+        const dateString = selectedDate.toISOString().split("T")[0]
+        const userDocRef = doc(userCollection, userId)
+        const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
+        const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, dateString)
+        const exercisesCollectionRef = collection(dateOfWorkoutDocRef, "exList")
+        const currentExListSnapshot = await getDocs(exercisesCollectionRef)
+
+        for(const exDoc of currentExListSnapshot.docs) {
+            await deleteDoc(exDoc.ref)
+        }
+        // const exDocRef = doc(currentWorkoutCollectionRef, exerciseId)
+    } catch(e) {
+        console.log("error deleting workout: ", e)
+    }
+}
