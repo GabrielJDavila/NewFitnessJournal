@@ -335,11 +335,12 @@ export async function retrieveCurrentExSetsReps(userCollection, userId, selected
 
             repsSetsSnapshot.forEach(set => {
                 const setId = set.id
-                const { reps, weight, weightType } = set.data()
+                const { createdAt, reps, weight, weightType } = set.data()
                 console.log(set.data())
 
                 exerciseData.setsReps.push({
                     setId,
+                    createdAt,
                     reps,
                     weight,
                     weightType
@@ -368,7 +369,7 @@ export async function addSetsReps( exerciseId, weight, reps, weightType, userCol
         const exDocRef = doc(selectedExListCollectionRef, exerciseId)
 
         // const exDocRef = doc(currentWorkoutCollectionRef, exerciseId)
-        const currentExCollectionRef = collection(exDocRef, "currenEx")
+        const currentExCollectionRef = collection(exDocRef, "currentEx")
         await addDoc(currentExCollectionRef, {
             weight: weight,
             weightType: weightType,
@@ -412,5 +413,58 @@ export async function deleteSingleSet(userCollection, userId, exerciseId, setId)
     } catch(e) {
         console.log("error deleting set: ", e)
         throw e
+    }
+}
+
+// delete all exercises and sets within a selected day
+export async function deleteAllEx(userCollection, userId, selectedDate) {
+    try {
+        const dateString = selectedDate.toISOString().split("T")[0]
+        const userDocRef = doc(userCollection, userId)
+        const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
+        const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, dateString)
+        const exercisesCollectionRef = collection(dateOfWorkoutDocRef, "exList")
+        const currentExListSnapshot = await getDocs(exercisesCollectionRef)
+
+        for(const exDoc of currentExListSnapshot.docs) {
+            // const exId = exDoc.id
+            const currentExRef = collection(exDoc.ref, "currentEx")
+            const repsSetsSnapshot = await getDocs(currentExRef)
+            for(const setDoc of repsSetsSnapshot.docs) {
+                await deleteDoc(setDoc.ref)
+            }
+            await deleteDoc(exDoc.ref)
+        }
+
+        // for(const exDoc of exerciseSnapshot.docs) {
+        //     const exId = exDoc.id
+        //     const currentExRef = collection(exDoc.ref, "currentEx")
+        //     const repsSetsQuery = query(currentExRef, orderBy("createdAt"))
+        //     const repsSetsSnapshot = await getDocs(repsSetsQuery)
+
+        //     const exerciseData = {
+        //         id: exId,
+        //         name: exDoc.data().name,
+        //         setsReps: []
+        //     }
+
+        //     repsSetsSnapshot.forEach(set => {
+        //         const setId = set.id
+        //         const { createdAt, reps, weight, weightType } = set.data()
+        //         console.log(set.data())
+
+        //         exerciseData.setsReps.push({
+        //             setId,
+        //             createdAt,
+        //             reps,
+        //             weight,
+        //             weightType
+        //         })
+        //     })
+        //     exercises.push(exerciseData)
+        // }
+        // const exDocRef = doc(currentWorkoutCollectionRef, exerciseId)
+    } catch(e) {
+        console.log("error deleting workout: ", e)
     }
 }
