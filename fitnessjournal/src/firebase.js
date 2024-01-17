@@ -416,6 +416,7 @@ export async function deleteSingleSet(userCollection, userId, exerciseId, setId)
     }
 }
 
+// delete all exercises and sets within a selected day
 export async function deleteAllEx(userCollection, userId, selectedDate) {
     try {
         const dateString = selectedDate.toISOString().split("T")[0]
@@ -426,8 +427,42 @@ export async function deleteAllEx(userCollection, userId, selectedDate) {
         const currentExListSnapshot = await getDocs(exercisesCollectionRef)
 
         for(const exDoc of currentExListSnapshot.docs) {
+            // const exId = exDoc.id
+            const currentExRef = collection(exDoc.ref, "currentEx")
+            const repsSetsSnapshot = await getDocs(currentExRef)
+            for(const setDoc of repsSetsSnapshot.docs) {
+                await deleteDoc(setDoc.ref)
+            }
             await deleteDoc(exDoc.ref)
         }
+
+        // for(const exDoc of exerciseSnapshot.docs) {
+        //     const exId = exDoc.id
+        //     const currentExRef = collection(exDoc.ref, "currentEx")
+        //     const repsSetsQuery = query(currentExRef, orderBy("createdAt"))
+        //     const repsSetsSnapshot = await getDocs(repsSetsQuery)
+
+        //     const exerciseData = {
+        //         id: exId,
+        //         name: exDoc.data().name,
+        //         setsReps: []
+        //     }
+
+        //     repsSetsSnapshot.forEach(set => {
+        //         const setId = set.id
+        //         const { createdAt, reps, weight, weightType } = set.data()
+        //         console.log(set.data())
+
+        //         exerciseData.setsReps.push({
+        //             setId,
+        //             createdAt,
+        //             reps,
+        //             weight,
+        //             weightType
+        //         })
+        //     })
+        //     exercises.push(exerciseData)
+        // }
         // const exDocRef = doc(currentWorkoutCollectionRef, exerciseId)
     } catch(e) {
         console.log("error deleting workout: ", e)

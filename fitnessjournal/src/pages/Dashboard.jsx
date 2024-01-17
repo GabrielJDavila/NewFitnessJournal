@@ -54,8 +54,6 @@ export default function Dashboard() {
         } catch(e) {
             console.log("error deleting doc: ", e)
         }
-    
-        // location.reload()
     }
 
     const modalStyles = {
