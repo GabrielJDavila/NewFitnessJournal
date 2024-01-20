@@ -84,6 +84,7 @@ export default function Dashboard() {
                         newSetInfo,
                         usersInDB,
                         currentUser,
+                        date,
                         loadExerciseList,
                         toggleEdit
                     }, 

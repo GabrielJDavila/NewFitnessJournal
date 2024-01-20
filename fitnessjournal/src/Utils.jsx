@@ -25,6 +25,7 @@ export function handleEditSetSubmit(e, {
     newSetInfo,
     usersInDB,
     currentUser,
+    date,
     loadExerciseList,
     toggleEdit
 },
@@ -33,9 +34,14 @@ export function handleEditSetSubmit(e, {
     setToggleEditSetModal
 }) {
     e.preventDefault()
-    editSingleSet(newSetInfo.exId, newSetInfo.setId, newSetInfo.reps, newSetInfo.weight, usersInDB, currentUser)
-    loadExerciseList(e)
-    toggleEdit(e, setNewSetInfo, setToggleEditSetModal)
+    try {
+        editSingleSet(newSetInfo.exId, newSetInfo.setId, newSetInfo.reps, newSetInfo.weight, usersInDB, currentUser, date)
+        loadExerciseList(e)
+        toggleEdit(e, setNewSetInfo, setToggleEditSetModal)
+    } catch(e) {
+        console.log("error", e)
+    }
+    
 }
 
 // // handles the result of user clicking confirm of ConfirmDeleteSetModal.
