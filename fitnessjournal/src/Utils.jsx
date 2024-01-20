@@ -4,6 +4,7 @@ export function handleDeleteExerciseSubmit(e, {
     deleteEx,
     usersInDB,
     currentUser,
+    date,
     currentItemToDelete,
     loadExerciseList,
     toggleDelete
@@ -14,7 +15,7 @@ export function handleDeleteExerciseSubmit(e, {
     setToggleDeleteSetModal
 }) {
     e.preventDefault()
-    deleteEx(usersInDB, currentUser, currentItemToDelete.exIdToDelete)
+    deleteEx(usersInDB, currentUser, date, currentItemToDelete.exIdToDelete)
     loadExerciseList(e)
     toggleDelete(e, setCurrentItemToDelete, setToggleDeleteExModal, setToggleDeleteSetModal)
 }

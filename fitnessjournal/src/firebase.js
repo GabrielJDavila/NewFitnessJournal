@@ -222,17 +222,38 @@ export async function retreiveExFromCategory(userCollection, userId, categoryId)
 }
 
 // delete category
-export async function deleteEx(userCollection, userId, exerciseId) {
-    try {
-        const userDocRef = doc(userCollection, userId)
-        const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
-        const exDocRef = doc(currentWorkoutCollectionRef, exerciseId)
-        await deleteDoc(exDocRef)
-    } catch(e) {
-        console.log("error performing deletion: ", e)
-        throw e
-    }
-}
+// export async function deleteEx(userCollection, userId, selectedDate, exerciseId) {
+//     try {
+//         // const userDocRef = doc(userCollection, userId)
+//         // const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
+//         // const exDocRef = doc(currentWorkoutCollectionRef, exerciseId)
+//         // await deleteDoc(exDocRef)
+
+//         const dateString = selectedDate.toISOString().split("T")[0]
+//         const userDocRef = doc(userCollection, userId)
+//         const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
+//         const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, dateString)
+//         const exercisesCollectionRef = collection(dateOfWorkoutDocRef, "exList")
+//         const exDocRef = doc(exercisesCollectionRef, exerciseId)
+//         const setsRepsSnapshot = collection(exDocRef, "currentEx")
+        
+//         // const currentExListSnapshot = await getDocs(exercisesCollectionRef)
+
+//         for(const exDoc of currentExListSnapshot.docs) {
+//             // const exId = exDoc.id
+//             const currentExRef = collection(exDoc.ref, "currentEx")
+//             const repsSetsSnapshot = await getDocs(currentExRef)
+//             for(const setDoc of repsSetsSnapshot.docs) {
+//                 await deleteDoc(setDoc.ref)
+//             }
+//             await deleteDoc(exDoc.ref)
+//         }
+//         await deleteDoc(exDocRef)
+//     } catch(e) {
+//         console.log("error performing deletion: ", e)
+//         throw e
+//     }
+// }
 
 // retrieve categories from firestore
 export async function getExCategories(users) {
@@ -438,6 +459,40 @@ export async function deleteSingleSet(userCollection, userId, selectedDate, exer
         await deleteDoc(setDocRef)
     } catch(e) {
         console.log("error deleting set: ", e)
+        throw e
+    }
+}
+
+// delete category
+export async function deleteEx(userCollection, userId, selectedDate, exerciseId) {
+    try {
+        // const userDocRef = doc(userCollection, userId)
+        // const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
+        // const exDocRef = doc(currentWorkoutCollectionRef, exerciseId)
+        // await deleteDoc(exDocRef)
+
+        const dateString = selectedDate.toISOString().split("T")[0]
+        const userDocRef = doc(userCollection, userId)
+        const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
+        const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, dateString)
+        const exercisesCollectionRef = collection(dateOfWorkoutDocRef, "exList")
+        const exDocRef = doc(exercisesCollectionRef, exerciseId)
+        const setsRepsCollectionRef = collection(exDocRef, "currentEx")
+        const setsRepsSnapshot = await getDocs(setsRepsCollectionRef)
+        // const currentExListSnapshot = await getDocs(exercisesCollectionRef)
+
+        for(const exDoc of setsRepsSnapshot.docs) {
+            // const exId = exDoc.id
+            const currentExRef = collection(exDoc.ref, "currentEx")
+            const repsSetsSnapshot = await getDocs(currentExRef)
+            for(const setDoc of repsSetsSnapshot.docs) {
+                await deleteDoc(setDoc.ref)
+            }
+            await deleteDoc(exDoc.ref)
+        }
+        await deleteDoc(exDocRef)
+    } catch(e) {
+        console.log("error performing deletion: ", e)
         throw e
     }
 }
