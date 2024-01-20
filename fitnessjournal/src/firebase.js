@@ -424,11 +424,14 @@ export async function editSingleSet(exerciseId, setId, newReps, newWeight, userC
     }
 }
 
-export async function deleteSingleSet(userCollection, userId, exerciseId, setId) {
+export async function deleteSingleSet(userCollection, userId, selectedDate, exerciseId, setId) {
     try {
+        const dateString = selectedDate.toISOString().split("T")[0]
         const userDocRef = doc(userCollection, userId)
         const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
-        const exDocRef = doc(currentWorkoutCollectionRef, exerciseId)
+        const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, dateString)
+        const exercisesCollectionRef = collection(dateOfWorkoutDocRef, "exList")
+        const exDocRef = doc(exercisesCollectionRef, exerciseId)
         const currentExRef = collection(exDocRef, "currentEx")
         const setDocRef = doc(currentExRef, setId)
 

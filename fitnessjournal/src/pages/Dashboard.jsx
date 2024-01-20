@@ -125,6 +125,7 @@ export default function Dashboard() {
                         deleteSingleSet,
                         usersInDB,
                         currentUser,
+                        date,
                         currentItemToDelete,
                         loadExerciseList,
                         toggleDelete

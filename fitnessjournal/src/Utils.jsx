@@ -49,6 +49,7 @@ export function handleDeleteSetSubmit(e, {
     deleteSingleSet,
     usersInDB,
     currentUser,
+    date,
     currentItemToDelete,
     loadExerciseList,
     toggleDelete 
@@ -59,7 +60,7 @@ export function handleDeleteSetSubmit(e, {
     setToggleDeleteSetModal 
 }) {
     e.preventDefault()
-    deleteSingleSet(usersInDB, currentUser, currentItemToDelete.exIdToDelete, currentItemToDelete.setIdToDelete)
+    deleteSingleSet(usersInDB, currentUser, date, currentItemToDelete.exIdToDelete, currentItemToDelete.setIdToDelete)
     loadExerciseList(e)
     toggleDelete(e, setCurrentItemToDelete, setToggleDeleteExModal, setToggleDeleteSetModal)
 }
