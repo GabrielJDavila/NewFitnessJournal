@@ -36,6 +36,7 @@ const db = getFirestore(app)
 export const auth = getAuth()
 
 // Initialize firestore references
+export const existingCatsAndExCollection = collection(db, "existingCategories")
 export const categoriesCollection = collection(db, "categories")
 export const currentWorkoutList = collection(db, "currentWorkoutList")
 export const usersInDB = collection(db, "users")
@@ -91,6 +92,22 @@ export async function signIn(email, password) {
 // sign out user
 export const logout = async () => {
     await signOut(auth)
+}
+
+export async function getExistingCatsAndEx(existingCatsCollection) {
+    try {
+        const userDocRef = doc(existingCatsCollection, userId)
+        const categoriesCollectionRef = collection(userDocRef, "categories")
+        const q = query(categoriesCollectionRef)
+        const snapshot = await getDocs(q)
+        const collections = snapshot.docs.map(doc => ({
+            ...doc.data(),
+            id: doc.id
+        }))
+        return collections
+    } catch(e) {
+        console.log("error fetching categories: ", e)
+    }
 }
 
 export async function addNewCat(userCollection, userId, newCat) {
