@@ -67,17 +67,16 @@ async function addUserToCollection(collectionType, user) {
 export function signUpUser(email, password) {
     createUserWithEmailAndPassword(auth, email, password)
         .then(userCredential => {
-            const user = userCredential.user
-            console.log(user)
+            const user = userCredential.user.uid
             addUserToCollection(usersInDB, user)
 
-            // getExistingCatsAndEx(uid, existingCatsCollection, usersInDB)
-            //     .then(() => {
-            //         console.log("Default data successfully cloned for user: ", uid)
-            //     })
-            //     .catch(err => {
-            //         console.error("error cloning data: ", err)
-            //     })
+            getExistingCatsAndEx(user, existingCatsCollection, usersInDB)
+                .then(() => {
+                    console.log("Default data successfully cloned for user: ", user)
+                })
+                .catch(err => {
+                    console.error("error cloning data: ", err)
+                })
         })
         .catch(e => {
             console.log("error creating user: ", e)
@@ -105,37 +104,49 @@ export const logout = async () => {
 
 export async function getExistingCatsAndEx(userId, existingCatsCollection, userCollection) {
     try {
-        // const q = query(existingCatsCollection)
-        // const categoriesSnapshot = await getDocs(q)
-        
-        // for(const catDoc of categoriesSnapshot.docs) {
-        //     const categoryName = catDoc.data().category
-        //     const userDocRef = doc(userCollection, userId)
-        //     const categoriesCollectionRef = collection(userDocRef, "categories")
-        //     console.log(catDoc.data().category)
-        //     await addDoc(categoriesCollectionRef, {
-        //         name: categoryName
-        //     })
-        // }
-        const categoriesArr = []
         const q = query(existingCatsCollection)
         const categoriesSnapshot = await getDocs(q)
-
+        
         for(const catDoc of categoriesSnapshot.docs) {
             const categoryName = catDoc.data().category
-            const exercisesArr = []
-            const exRef = collection(catDoc.ref, "exercises")
-            const exercisesSnapshot = await getDocs(exRef)
+            const userDocRef = doc(userCollection, userId)
+            const categoriesCollectionRef = collection(userDocRef, "categories")
             
-            exercisesSnapshot.forEach(exDoc => {
-                const exName = exDoc.data().exercise
-                exercisesArr.push({id: exDoc.id, name: exName})
+            await addDoc(categoriesCollectionRef, {
+                name: categoryName
             })
 
-            categoriesArr.push({id: catDoc.id, category: categoryName, exercises: exercisesArr})
+            // const exCollectionRef = collection(catDoc.ref, "exercises")
+            // const exercisesSnapshot = await getDocs(exCollectionRef)
 
+            // for(const exDoc of exercisesSnapshot.docs) {
+            //     const exName = exDoc.data().exercise
+            //     const userExRef = doc(categoriesCollectionRef, "exercises", exDoc.id)
+            //     await setDoc(userExRef, {
+            //         exercise: exName
+            //     })
+            // }
         }
-        return categoriesArr
+
+        // const categoriesArr = []
+        // const q = query(existingCatsCollection)
+        // const categoriesSnapshot = await getDocs(q)
+
+        // for(const catDoc of categoriesSnapshot.docs) {
+        //     const categoryName = catDoc.data().category
+        //     const exercisesArr = []
+        //     const exRef = collection(catDoc.ref, "exercises")
+        //     const exercisesSnapshot = await getDocs(exRef)
+            
+        //     exercisesSnapshot.forEach(exDoc => {
+        //         const exName = exDoc.data().exercise
+        //         exercisesArr.push({id: exDoc.id, name: exName})
+        //     })
+
+        //     categoriesArr.push({id: catDoc.id, category: categoryName, exercises: exercisesArr})
+
+        // }
+        // console.log(categoriesArr)
     } catch(e) {
         console.log("error fetching categories: ", e)
     }
