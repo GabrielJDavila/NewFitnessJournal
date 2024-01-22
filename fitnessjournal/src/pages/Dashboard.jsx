@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { NavLink, Link, useOutletContext } from "react-router-dom"
-import { usersInDB, retrieveCurrentExSetsReps, editSingleSet, deleteCategory, deleteEx, deleteSingleSet, deleteAllEx } from "../firebase"
+import { usersInDB, retrieveCurrentExSetsReps, editSingleSet, deleteCategory, deleteEx, deleteSingleSet, deleteAllEx, getExistingCatsAndEx, existingCatsCollection } from "../firebase"
 import ConfirmDeleteExModal from "../components/modals/ConfirmDeleteExModal"
 import ConfirmDeleteSetModal from "../components/modals/ConfirmDeleteSetModal"
 import EditSetModal from "../components/modals/EditSetModal"
@@ -28,6 +28,7 @@ export default function Dashboard() {
     const { currentUser } = useOutletContext()
     
     useEffect(() => {
+        getExistingCatsAndEx(existingCatsCollection)
         loadExerciseList(date)
     }, [date])
 

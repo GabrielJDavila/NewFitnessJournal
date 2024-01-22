@@ -36,7 +36,7 @@ const db = getFirestore(app)
 export const auth = getAuth()
 
 // Initialize firestore references
-export const existingCatsAndExCollection = collection(db, "existingCategories")
+export const existingCatsCollection = collection(db, "existingCategories")
 export const categoriesCollection = collection(db, "categories")
 export const currentWorkoutList = collection(db, "currentWorkoutList")
 export const usersInDB = collection(db, "users")
@@ -68,7 +68,16 @@ export function signUpUser(email, password) {
     createUserWithEmailAndPassword(auth, email, password)
         .then(userCredential => {
             const user = userCredential.user
+            console.log(user)
             addUserToCollection(usersInDB, user)
+
+            // getExistingCatsAndEx(uid, existingCatsCollection, usersInDB)
+            //     .then(() => {
+            //         console.log("Default data successfully cloned for user: ", uid)
+            //     })
+            //     .catch(err => {
+            //         console.error("error cloning data: ", err)
+            //     })
         })
         .catch(e => {
             console.log("error creating user: ", e)
@@ -94,17 +103,39 @@ export const logout = async () => {
     await signOut(auth)
 }
 
-export async function getExistingCatsAndEx(existingCatsCollection) {
+export async function getExistingCatsAndEx(userId, existingCatsCollection, userCollection) {
     try {
-        const userDocRef = doc(existingCatsCollection, userId)
-        const categoriesCollectionRef = collection(userDocRef, "categories")
-        const q = query(categoriesCollectionRef)
-        const snapshot = await getDocs(q)
-        const collections = snapshot.docs.map(doc => ({
-            ...doc.data(),
-            id: doc.id
-        }))
-        return collections
+        // const q = query(existingCatsCollection)
+        // const categoriesSnapshot = await getDocs(q)
+        
+        // for(const catDoc of categoriesSnapshot.docs) {
+        //     const categoryName = catDoc.data().category
+        //     const userDocRef = doc(userCollection, userId)
+        //     const categoriesCollectionRef = collection(userDocRef, "categories")
+        //     console.log(catDoc.data().category)
+        //     await addDoc(categoriesCollectionRef, {
+        //         name: categoryName
+        //     })
+        // }
+        const categoriesArr = []
+        const q = query(existingCatsCollection)
+        const categoriesSnapshot = await getDocs(q)
+
+        for(const catDoc of categoriesSnapshot.docs) {
+            const categoryName = catDoc.data().category
+            const exercisesArr = []
+            const exRef = collection(catDoc.ref, "exercises")
+            const exercisesSnapshot = await getDocs(exRef)
+            
+            exercisesSnapshot.forEach(exDoc => {
+                const exName = exDoc.data().exercise
+                exercisesArr.push({id: exDoc.id, name: exName})
+            })
+
+            categoriesArr.push({id: catDoc.id, category: categoryName, exercises: exercisesArr})
+
+        }
+        return categoriesArr
     } catch(e) {
         console.log("error fetching categories: ", e)
     }
@@ -238,40 +269,6 @@ export async function retreiveExFromCategory(userCollection, userId, categoryId)
     }
 }
 
-// delete category
-// export async function deleteEx(userCollection, userId, selectedDate, exerciseId) {
-//     try {
-//         // const userDocRef = doc(userCollection, userId)
-//         // const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
-//         // const exDocRef = doc(currentWorkoutCollectionRef, exerciseId)
-//         // await deleteDoc(exDocRef)
-
-//         const dateString = selectedDate.toISOString().split("T")[0]
-//         const userDocRef = doc(userCollection, userId)
-//         const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
-//         const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, dateString)
-//         const exercisesCollectionRef = collection(dateOfWorkoutDocRef, "exList")
-//         const exDocRef = doc(exercisesCollectionRef, exerciseId)
-//         const setsRepsSnapshot = collection(exDocRef, "currentEx")
-        
-//         // const currentExListSnapshot = await getDocs(exercisesCollectionRef)
-
-//         for(const exDoc of currentExListSnapshot.docs) {
-//             // const exId = exDoc.id
-//             const currentExRef = collection(exDoc.ref, "currentEx")
-//             const repsSetsSnapshot = await getDocs(currentExRef)
-//             for(const setDoc of repsSetsSnapshot.docs) {
-//                 await deleteDoc(setDoc.ref)
-//             }
-//             await deleteDoc(exDoc.ref)
-//         }
-//         await deleteDoc(exDocRef)
-//     } catch(e) {
-//         console.log("error performing deletion: ", e)
-//         throw e
-//     }
-// }
-
 // retrieve categories from firestore
 export async function getExCategories(users) {
     const q = query()
@@ -290,9 +287,6 @@ export async function retrieveDoc(collectionType, itemId) {
     return docSnap
 }
 
-
-// .toISOString().split("T")[0]
-
 // add or udpdate current workout exercises
 export async function addUpdateWorkoutList(exerciseId, name, userCollection, userId) {
     try {
@@ -304,15 +298,6 @@ export async function addUpdateWorkoutList(exerciseId, name, userCollection, use
         const selectedExListCollectionRef = collection(dateOfWorkoutDocRef, "exList")
         const exDocRef = doc(selectedExListCollectionRef, exerciseId)
         const docSnap = await getDoc(exDocRef)
-
-        // chatGPT solution
-        // const exDocRef = doc(currentWorkoutCollectionRef, exerciseId)
-        // const docSnap = await getDoc(exDocRef)
-
-        // original solution
-        // const workoutListCollectionRef = collection(userDocRef, "currentWorkout")
-        // const currentWorkoutDocRef = doc(workoutListCollectionRef, date)
-        // const exCollec
 
         if(docSnap.exists()) {
             alert("exercise already in workout")
