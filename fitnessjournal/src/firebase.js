@@ -221,14 +221,14 @@ export async function getExistingCatsAndEx(userId, existingCatsCollection, userC
             
             for(const exDoc of exercisesSnapshot.docs) {
                 const exName = exDoc.data().exercise
-                const categoriesCollectionRef2 = collection(userDocRef, "categories")
-                const userCatDocRef = doc(categoriesCollectionRef2, customCatDocRef)
-                const exCollectionRef = (userCatDocRef, "exercises")
-                await addDoc(exCollectionRef, {
-                    exercise: exName
+                // const categoriesCollectionRef2 = collection(userDocRef, "categories")
+                // const userCatDocRef = doc(categoriesCollectionRef2, catDocId)
+                const exCollectionRef = collection(customCatDocRef, "exercises")
+                const userExDocRef = doc(exCollectionRef, exDoc.id)
+                await setDoc(userExDocRef, {
+                    name: exName
                 })
-                
-                console.log([catDoc.id, exName])
+                // console.log(userCatDocRef)
             }
             // exercisesSnapshot.forEach(exDoc => {
             //     const exName = exDoc.data().exercise
@@ -255,15 +255,15 @@ export async function getExistingCatsAndEx(userId, existingCatsCollection, userC
     }
 }
 
-export async function cloneDataForNewUser(userId, userCollection, clonedData) {
-    try {
-        const userDocRef = doc(userCollection, userId)
-        const categoriesCollectionRef = collection(userDocRef, "categories")
-        console.log(clonedData)
-    } catch(e) {
-        console.log("error cloning data: ", e)
-    }
-}
+// export async function cloneDataForNewUser(userId, userCollection, clonedData) {
+//     try {
+//         const userDocRef = doc(userCollection, userId)
+//         const categoriesCollectionRef = collection(userDocRef, "categories")
+//         console.log(clonedData)
+//     } catch(e) {
+//         console.log("error cloning data: ", e)
+//     }
+// }
 
 export async function addNewCat(userCollection, userId, newCat) {
     const capitalizedCat = newCat.charAt(0).toUpperCase() + newCat.slice(1)
