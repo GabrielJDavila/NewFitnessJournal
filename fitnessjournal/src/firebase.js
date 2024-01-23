@@ -103,52 +103,153 @@ export const logout = async () => {
 }
 
 export async function getExistingCatsAndEx(userId, existingCatsCollection, userCollection) {
+    // const existingCatsRef = collection(db, "existingCategories")
+
     try {
-        // const q = query(existingCatsCollection)
-        // const categoriesSnapshot = await getDocs(q)
+    //     const q = query(existingCatsCollection)
+    //     const categoriesSnapshot = await getDocs(q)
+
+    //     for(const categoryDoc of categoriesSnapshot.docs) {
+    //         const catName = categoryDoc.data().category
+    //         const userDocRef = doc(userCollection, userId)
+    //         const userCategoryRef = collection(userDocRef, "categories")
+
+    //         await setDoc(userCategoryRef, { category: catName })
+
+    //         const exercisesRef = collection(categoryDoc.ref, "exercises")
+    //         const exercisesSnapshot = await getDocs(exercisesRef)
+
+    //         for(const exerciseDoc of exercisesSnapshot.docs) {
+    //             const exName = exerciseDoc.data().name
+    //             const userExerciseRef = collection(userCategoryRef, categoryDoc.id, "exercises")
+
+    //             await setDoc(userExerciseRef, { name: exName })
+    //         }
+    //     }
+    // } catch(error) {
+    //     console.error("Error populating user data: ", error)
+    // }
+    // try {
+    //     const q = query(existingCatsCollection)
+    //     const categoriesSnapshot = await getDocs(q)
         
-        // for(const catDoc of categoriesSnapshot.docs) {
-        //     const categoryName = catDoc.data().category
+    //     for(const catDoc of categoriesSnapshot.docs) {
+    //         try {
+    //             console.log(catDoc.id)
+    //             const categoryName = catDoc.data().category
+    //             const userDocRef = doc(userCollection, userId)
+    //             const categoriesCollectionRef = collection(userDocRef, "categories")
+                
+    //             const newCatDocRef = await addDoc(categoriesCollectionRef, {
+    //                 name: categoryName
+    //             })
+    //             console.log(`added cat: ${categoryName}`)
+
+    //             const exCollectionRef = collection(catDoc.ref, "exercises")
+    //             const exercisesSnapshot = await getDocs(exCollectionRef)
+
+
+    //             // exercisesSnapshot.forEach(exDoc => {
+    //             //     const exName = exDoc.data().exercise
+    //             //     const 
+    //             //     exercisesArr.push({id: exDoc.id, name: exName})
+    //             // })
+
+    //             for(const exDoc of exercisesSnapshot.docs) {
+    //                 try {
+    //                     const exName = exDoc.data().exercise
+    //                     const secondUserDocRef = doc(userCollection, userId)
+    //                     const catsInUserCollectionRef = collection(secondUserDocRef, "categories")
+    //                     const categoryDocRef = doc(catsInUserCollectionRef, catDoc.id)
+    //                     const userExRef = collection(categoryDocRef, "exercises")
+    //                     await addDoc(userExRef, {
+    //                         exercise: exName
+    //                     })
+    //                 } catch(exError) {
+    //                     console.log(`error adding ex: ${exName} to cat: ${categoryName}`)
+    //                 }
+    //             }
+    //         } catch(catError) {
+    //             console.log(`error processing cat: ${catDoc.id}`, catError)
+    //         }
+
         //     const userDocRef = doc(userCollection, userId)
-        //     const categoriesCollectionRef = collection(userDocRef, "categories")
-            
-        //     const newCatDocRef = await addDoc(categoriesCollectionRef, {
-        //         name: categoryName
-        //     })
+        // const categoriesCollectionRef = collection(userDocRef, "categories")
+        // const categoryDocRef = doc(categoriesCollectionRef, categoryId)
+        // const exercisesCollectionRef = collection(categoryDocRef, "exercises")
+        // await addDoc(exercisesCollectionRef, {
+        //     name: name
+        // })
 
-        //     const exCollectionRef = collection(catDoc.ref, "exercises")
-        //     const exercisesSnapshot = await getDocs(exCollectionRef)
+            // const exCollectionRef = collection(catDoc.ref, "exercises")
+            // const exercisesSnapshot = await getDocs(exCollectionRef)
 
-        //     for(const exDoc of exercisesSnapshot.docs) {
-        //         console.log(exDoc.data().exercise)
-        //         const exName = exDoc.data().exercise
-        //         const userExRef = collection(newCatDocRef, "exercises")
-        //         await addDoc(userExRef, {
-        //             exercise: exName
-        //         })
-        //     }
+
+            // exercisesSnapshot.forEach(exDoc => {
+            //     const exName = exDoc.data().exercise
+            //     const 
+            //     exercisesArr.push({id: exDoc.id, name: exName})
+            // })
+
+            // for(const exDoc of exercisesSnapshot.docs) {
+            //     console.log(exDoc.data().exercise)
+            //     const exName = exDoc.data().exercise
+            //     const userExRef = collection(newCatDocRef, "exercises")
+            //     await addDoc(userExRef, {
+            //         exercise: exName
+            //     })
+            // }
         // }
 
         const categoriesArr = []
+
         const q = query(existingCatsCollection)
         const categoriesSnapshot = await getDocs(q)
 
         for(const catDoc of categoriesSnapshot.docs) {
             const categoryName = catDoc.data().category
+            const userDocRef = doc(userCollection, userId)
+            const categoriesCollectionRef = collection(userDocRef, "categories")
+            const catDocId = catDoc.id
+            const customCatDocRef = doc(categoriesCollectionRef, catDocId)
+            const newCatDocRef = await setDoc(customCatDocRef, {
+                name: categoryName
+            })
             const exercisesArr = []
             const exRef = collection(catDoc.ref, "exercises")
             const exercisesSnapshot = await getDocs(exRef)
             
-            exercisesSnapshot.forEach(exDoc => {
+            for(const exDoc of exercisesSnapshot.docs) {
                 const exName = exDoc.data().exercise
-                exercisesArr.push({id: exDoc.id, name: exName})
-            })
+                const categoriesCollectionRef2 = collection(userDocRef, "categories")
+                const userCatDocRef = doc(categoriesCollectionRef2, customCatDocRef)
+                const exCollectionRef = (userCatDocRef, "exercises")
+                await addDoc(exCollectionRef, {
+                    exercise: exName
+                })
+                
+                console.log([catDoc.id, exName])
+            }
+            // exercisesSnapshot.forEach(exDoc => {
+            //     const exName = exDoc.data().exercise
+            //     console.log([catDoc.ref, exName])
+            //     const newExDocRefPromise = addDoc(exRef, {
+            //         exercise: exName
+            //     })
+            //     exercisesArr.push(newExDocRefPromise)
+            //     // exercisesArr.push({id: exDoc.id, name: exName})
+            // })
+            // try {
+            //     await Promise.all(exercisesArr)
+            // } catch(err) {
+            //     console.error("error adding docs: ", err)
+            // }
 
-            categoriesArr.push({id: catDoc.id, category: categoryName, exercises: exercisesArr})
+            // categoriesArr.push({id: catDoc.id, category: categoryName, exercises: exercisesArr})
 
         }
         
-        cloneDataForNewUser(userId, userCollection, categoriesArr)
+        // cloneDataForNewUser(userId, userCollection, categoriesArr)
     } catch(e) {
         console.log("error fetching categories: ", e)
     }

@@ -3,7 +3,7 @@ import Header from "./Header"
 import Login from "./Login"
 import SignUp from "./SignUp"
 import { useEffect, useState } from "react"
-import { signIn, signUpUser, auth, existingCatsCollection, usersInDB } from "../firebase"
+import { signIn, signUpUser, auth } from "../firebase"
 import { onAuthStateChanged } from "firebase/auth"
 
 export default function Layout() {
