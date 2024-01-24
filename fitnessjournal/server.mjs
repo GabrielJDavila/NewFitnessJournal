@@ -1,15 +1,45 @@
-import express from 'express';
-import mongoose from 'mongoose';
+// import express from 'express';
+// import { MongoClient } from "mongodb"
+// import cors from "cors"
 
-const app = express();
-app.use(express.json());
+// const app = express();
 
-mongoose.connect('mongodb://localhost:27017/exercise')
-    .then(() => console.log('Connected to MongoDB...'))
-    .catch(err => console.error('Could not connect to MongoDB...', err));
+// app.use(cors())
 
-const port = process.env.PORT || 3000;
-app.listen(port, () => console.log(`Listening on port ${port}...`));
+// const port = 3001
+// const url = "mongodb://localhost:27017/fitbookdb"
+
+// MongoClient.connect(url, async (err, db) => {
+//     if(err) throw err
+//     console.log("Database connected!")
+//     db.close()
+// })
+
+// app.get("/", async (req, res) => {
+//     try {
+//     res.send("Hello World!")
+//     // const db = client.db()
+//     // const collection = db.collection("existingCategories")
+//     // const data = await collection.find({}).toArray()
+//     // res.json(data)
+    
+//     } catch(err) {
+//         console.error("error fetching data: ", err)
+//         res.status(500).json({ error: "Interal server error" })
+//     }
+// })
+
+// app.listen(port, () => {
+//     console.log(`Server running at http://localhost:${port}`)
+// })
+// app.use(express.json());
+
+// mongoose.connect('mongodb://localhost:27017/exercise')
+//     .then(() => console.log('Connected to MongoDB...'))
+//     .catch(err => console.error('Could not connect to MongoDB...', err));
+
+// const port = process.env.PORT || 3000;
+// app.listen(port, () => console.log(`Listening on port ${port}...`));
 
 // import express from "express"
 // import mongoose from "mongoose"

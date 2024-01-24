@@ -7,6 +7,7 @@ import { getCategories, getAllCategories, categoriesCollection, usersInDB, editC
 export default function AllCategories() {
     const [toggleEditModal, setToggleEditModal] = useState(false)
     const [openConfirmDeleteModal, setOpenConfirmDeleteModal] = useState(false)
+    const [loadingCats, setLoadingCats] = useState()
     const [loadedCategories, setLoadedCategories] = useState([])
     const [currentId, setCurrentId] = useState(null)
     const [editCategoryTitle, setEditCategoryTitle] = useState({

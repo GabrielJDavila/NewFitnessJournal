@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom"
+import { Outlet, useNavigate } from "react-router-dom"
 import Header from "./Header"
 import Login from "./Login"
 import SignUp from "./SignUp"
@@ -16,6 +16,7 @@ export default function Layout() {
     const [currentUser, setCurrentUser] = useState({
         uid: ""
     })
+    const navigate = useNavigate()
  
     useEffect(() => {
         const unsubcribe = onAuthStateChanged(auth, user => {
@@ -37,6 +38,7 @@ export default function Layout() {
     function handleSignUp(e) {
         e.preventDefault()
         signUpUser(loginInfo.email, loginInfo.password)
+        navigate("/")
     }
 
     function flipShowLogin() {

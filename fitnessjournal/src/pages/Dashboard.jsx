@@ -26,11 +26,19 @@ export default function Dashboard() {
     })
     const [date, setDate] = useState(new Date())
     const { currentUser } = useOutletContext()
-    
+    // const [DBdata, setDBData] = useState([])
     useEffect(() => {
-        // getExistingCatsAndEx(existingCatsCollection)
         loadExerciseList(date)
     }, [date])
+
+    // useEffect(() => {
+    //     fetch("http://localhost:3001/api/data")
+    //         .then(res => res.json())
+    //         .then(data => setDBData(data))
+    //         .catch(err => {
+    //             console.error("error fetching data: ", err)
+    //         })
+    // })
 
     async function loadExerciseList(selectedDate) {
         try {
@@ -162,9 +170,9 @@ export default function Dashboard() {
                     </Link>
                 </div>
                 <div className="see-previous-workout-container">
-                    <Link className="link-portal-dash">
+                    <Link to="TemplateWorkout" className="link-portal-dash">
                     <i className="fa-regular fa-note-sticky"></i>
-                    <p className="link-text">Previous Workout</p>
+                    <p className="link-text">Template Workout</p>
                     </Link>
                 </div>
                 {

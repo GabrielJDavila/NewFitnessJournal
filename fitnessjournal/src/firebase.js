@@ -103,105 +103,8 @@ export const logout = async () => {
 }
 
 export async function getExistingCatsAndEx(userId, existingCatsCollection, userCollection) {
-    // const existingCatsRef = collection(db, "existingCategories")
 
     try {
-    //     const q = query(existingCatsCollection)
-    //     const categoriesSnapshot = await getDocs(q)
-
-    //     for(const categoryDoc of categoriesSnapshot.docs) {
-    //         const catName = categoryDoc.data().category
-    //         const userDocRef = doc(userCollection, userId)
-    //         const userCategoryRef = collection(userDocRef, "categories")
-
-    //         await setDoc(userCategoryRef, { category: catName })
-
-    //         const exercisesRef = collection(categoryDoc.ref, "exercises")
-    //         const exercisesSnapshot = await getDocs(exercisesRef)
-
-    //         for(const exerciseDoc of exercisesSnapshot.docs) {
-    //             const exName = exerciseDoc.data().name
-    //             const userExerciseRef = collection(userCategoryRef, categoryDoc.id, "exercises")
-
-    //             await setDoc(userExerciseRef, { name: exName })
-    //         }
-    //     }
-    // } catch(error) {
-    //     console.error("Error populating user data: ", error)
-    // }
-    // try {
-    //     const q = query(existingCatsCollection)
-    //     const categoriesSnapshot = await getDocs(q)
-        
-    //     for(const catDoc of categoriesSnapshot.docs) {
-    //         try {
-    //             console.log(catDoc.id)
-    //             const categoryName = catDoc.data().category
-    //             const userDocRef = doc(userCollection, userId)
-    //             const categoriesCollectionRef = collection(userDocRef, "categories")
-                
-    //             const newCatDocRef = await addDoc(categoriesCollectionRef, {
-    //                 name: categoryName
-    //             })
-    //             console.log(`added cat: ${categoryName}`)
-
-    //             const exCollectionRef = collection(catDoc.ref, "exercises")
-    //             const exercisesSnapshot = await getDocs(exCollectionRef)
-
-
-    //             // exercisesSnapshot.forEach(exDoc => {
-    //             //     const exName = exDoc.data().exercise
-    //             //     const 
-    //             //     exercisesArr.push({id: exDoc.id, name: exName})
-    //             // })
-
-    //             for(const exDoc of exercisesSnapshot.docs) {
-    //                 try {
-    //                     const exName = exDoc.data().exercise
-    //                     const secondUserDocRef = doc(userCollection, userId)
-    //                     const catsInUserCollectionRef = collection(secondUserDocRef, "categories")
-    //                     const categoryDocRef = doc(catsInUserCollectionRef, catDoc.id)
-    //                     const userExRef = collection(categoryDocRef, "exercises")
-    //                     await addDoc(userExRef, {
-    //                         exercise: exName
-    //                     })
-    //                 } catch(exError) {
-    //                     console.log(`error adding ex: ${exName} to cat: ${categoryName}`)
-    //                 }
-    //             }
-    //         } catch(catError) {
-    //             console.log(`error processing cat: ${catDoc.id}`, catError)
-    //         }
-
-        //     const userDocRef = doc(userCollection, userId)
-        // const categoriesCollectionRef = collection(userDocRef, "categories")
-        // const categoryDocRef = doc(categoriesCollectionRef, categoryId)
-        // const exercisesCollectionRef = collection(categoryDocRef, "exercises")
-        // await addDoc(exercisesCollectionRef, {
-        //     name: name
-        // })
-
-            // const exCollectionRef = collection(catDoc.ref, "exercises")
-            // const exercisesSnapshot = await getDocs(exCollectionRef)
-
-
-            // exercisesSnapshot.forEach(exDoc => {
-            //     const exName = exDoc.data().exercise
-            //     const 
-            //     exercisesArr.push({id: exDoc.id, name: exName})
-            // })
-
-            // for(const exDoc of exercisesSnapshot.docs) {
-            //     console.log(exDoc.data().exercise)
-            //     const exName = exDoc.data().exercise
-            //     const userExRef = collection(newCatDocRef, "exercises")
-            //     await addDoc(userExRef, {
-            //         exercise: exName
-            //     })
-            // }
-        // }
-
-        const categoriesArr = []
 
         const q = query(existingCatsCollection)
         const categoriesSnapshot = await getDocs(q)
@@ -221,6 +124,7 @@ export async function getExistingCatsAndEx(userId, existingCatsCollection, userC
             
             for(const exDoc of exercisesSnapshot.docs) {
                 const exName = exDoc.data().exercise
+<<<<<<< Updated upstream
                 const categoriesCollectionRef2 = collection(userDocRef, "categories")
                 const userCatDocRef = doc(categoriesCollectionRef2, customCatDocRef)
                 const exCollectionRef = (userCatDocRef, "exercises")
@@ -229,32 +133,22 @@ export async function getExistingCatsAndEx(userId, existingCatsCollection, userC
                 })
                 
                 console.log([catDoc.id, exName])
+=======
+                const exCollectionRef = collection(customCatDocRef, "exercises")
+                const userExDocRef = doc(exCollectionRef, exDoc.id)
+                await setDoc(userExDocRef, {
+                    name: exName
+                })
+>>>>>>> Stashed changes
             }
-            // exercisesSnapshot.forEach(exDoc => {
-            //     const exName = exDoc.data().exercise
-            //     console.log([catDoc.ref, exName])
-            //     const newExDocRefPromise = addDoc(exRef, {
-            //         exercise: exName
-            //     })
-            //     exercisesArr.push(newExDocRefPromise)
-            //     // exercisesArr.push({id: exDoc.id, name: exName})
-            // })
-            // try {
-            //     await Promise.all(exercisesArr)
-            // } catch(err) {
-            //     console.error("error adding docs: ", err)
-            // }
-
-            // categoriesArr.push({id: catDoc.id, category: categoryName, exercises: exercisesArr})
 
         }
-        
-        // cloneDataForNewUser(userId, userCollection, categoriesArr)
     } catch(e) {
         console.log("error fetching categories: ", e)
     }
 }
 
+<<<<<<< Updated upstream
 export async function cloneDataForNewUser(userId, userCollection, clonedData) {
     try {
         const userDocRef = doc(userCollection, userId)
@@ -264,6 +158,8 @@ export async function cloneDataForNewUser(userId, userCollection, clonedData) {
         console.log("error cloning data: ", e)
     }
 }
+=======
+>>>>>>> Stashed changes
 
 export async function addNewCat(userCollection, userId, newCat) {
     const capitalizedCat = newCat.charAt(0).toUpperCase() + newCat.slice(1)

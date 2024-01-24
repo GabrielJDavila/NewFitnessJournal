@@ -7,6 +7,7 @@ import NewEx from './pages/NewEx'
 import NewCat from './components/NewCat'
 import LoadedExercises from './pages/LoadedExercises'
 import ExerciseDetail from './pages/ExerciseDetail'
+import TemplateWorkout from "./pages/TemplateWorkout"
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
           <Route path="NewCat" element={<NewCat />} />
           <Route path="AllCategories" element={<AllCategories />} />
           <Route path="AllCategories/:id" element={<LoadedExercises />}/>
+          <Route path="TemplateWorkout" element={<TemplateWorkout />}/>
         </Route>
       </Routes>
     </BrowserRouter>
