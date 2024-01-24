@@ -49,7 +49,7 @@ async function addUserToCollection(collectionType, user) {
         const docSnap = await getDoc(docRef)
 
         if(docSnap.exists()) {
-            console.log("user exists")
+            console.log("user exists!")
             return
             
         } else {
