@@ -1,5 +1,6 @@
 import { Outlet, useNavigate } from "react-router-dom"
 import Header from "./Header"
+import Footer from "./Footer"
 import Login from "./Login"
 import SignUp from "./SignUp"
 import { useEffect, useState } from "react"
@@ -80,6 +81,7 @@ export default function Layout() {
         <div>
             <Header />
             <Outlet context={{ currentUser }}/>
+            <Footer />
         </div>
     )
 }

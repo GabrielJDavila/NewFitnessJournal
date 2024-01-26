@@ -167,10 +167,10 @@ export default function Dashboard() {
                     <p className="link-text">Previous Workout</p>
                     </Link>
                 </div>
-                {
-                    workoutData && <button onClick={deleteAll}>Delete all exercises</button>
-                }
             </section>
+            {
+                workoutData && <button onClick={deleteAll}>Delete all exercises</button>
+            }
         </main>
     )
 }
