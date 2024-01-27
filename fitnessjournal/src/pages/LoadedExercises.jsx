@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import { Link, useParams, useOutletContext } from "react-router-dom"
 import { retreiveExFromCategory, usersInDB } from "../firebase"
 import Exercise from "../components/Exercise"
+import BackBtn from "../components/BackBtn"
 
 export default function LoadedExercises() {
     const params = useParams()
@@ -38,14 +39,7 @@ export default function LoadedExercises() {
 
     return (
         <div className="rendered-ex-container">
-            <Link
-                className="back-btn"
-                to="/AllCategories"
-                relative="path"
-            >
-                <i className="fa-solid fa-arrow-left"></i>
-                <p className="back-btn-text">back</p>
-            </Link>
+            <BackBtn />
             <div className="rendered-ex-list">
                 {exercises.length >= 1 ? renderedExercises : <Link to="/NewEx">Add new exercise</Link>}
             </div>

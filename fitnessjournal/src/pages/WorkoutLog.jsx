@@ -75,7 +75,7 @@ export default function WorkoutLog() {
     }
     return (
         <div className="workout-log">
-            <section className="dash-links-container">
+            {/* <section className="dash-links-container">
                 <div className="start-new-workout-container">
                     <Link to="/AllCategories" className="link-portal-dash">
                         <span className="material-symbols-outlined">
@@ -85,14 +85,12 @@ export default function WorkoutLog() {
                     </Link>
                 </div>
                 <div className="see-previous-workout-container">
-                    {/* <Link className="link-portal-dash"> */}
                         <span onClick={handleToggleCalendar} className="material-symbols-outlined">
                             calendar_month
                         </span>
                         <p className="link-text">Date</p>
-                    {/* </Link> */}
                 </div>
-            </section>
+            </section> */}
             { toggleCalendar &&
                 <Calendar
                     onChange={setDate}

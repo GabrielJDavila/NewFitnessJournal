@@ -506,24 +506,29 @@ header {
   text-align: center;
   width: 90%;
   max-width: 900px;
-  margin: 1rem auto 0;
+  margin: 5rem auto 0;
 }
 
 .rendered-ex-container {
   display: flex;
+  margin-top: 5rem;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .rendered-ex-list {
   text-align: center;
   width: 90%;
   max-width: 900px;
-  margin: 5rem auto 0;
+  margin: 0;
 }
 
 .search-ex-form {
   width: 100%;
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 .fa-magnifying-glass {
@@ -532,7 +537,7 @@ header {
 }
 
 .search-ex-input {
-  width: 90%;
+  width: 80%;
   margin: 0 auto;
   height: 2rem;
   border: none;
@@ -725,8 +730,7 @@ footer {
 }
 
 .back-btn {
-  position: absolute;
-  margin: 1rem 0 0 1rem;
+  margin-right: auto;
 }
 
 .arrow-back {
