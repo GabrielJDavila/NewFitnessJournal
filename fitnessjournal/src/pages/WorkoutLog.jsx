@@ -14,6 +14,7 @@ export default function WorkoutLog() {
     const [toggleEditSetModal, setToggleEditSetModal] = useState(false)
     const [toggleDeleteExModal, setToggleDeleteExModal] = useState(false)
     const [toggleDeleteSetModal, setToggleDeleteSetModal] = useState(false)
+    const [toggleCalendar, setToggleCalendar] = useState(false)
     const [currentItemToDelete, setCurrentItemToDelete] = useState({
         exIdToDelete: "",
         setIdToDelete: "",
@@ -28,7 +29,6 @@ export default function WorkoutLog() {
     const { currentUser } = useOutletContext()
     
     useEffect(() => {
-        // getExistingCatsAndEx(existingCatsCollection)
         loadExerciseList(date)
     }, [date])
 
@@ -46,6 +46,10 @@ export default function WorkoutLog() {
             ...prev,
             [name]: value
         }))
+    }
+
+    function handleToggleCalendar() {
+        setToggleCalendar(prev => !prev)
     }
 
     async function deleteAll() {
@@ -71,11 +75,31 @@ export default function WorkoutLog() {
     }
     return (
         <div className="workout-log">
-            <Calendar
-                onChange={setDate}
-                value={date}
-                onClickDay={e => console.log(e)}
-            />
+            <section className="dash-links-container">
+                <div className="start-new-workout-container">
+                    <Link to="/AllCategories" className="link-portal-dash">
+                        <span className="material-symbols-outlined">
+                            add
+                        </span>
+                        <p className="link-text">Add To Log</p>
+                    </Link>
+                </div>
+                <div className="see-previous-workout-container">
+                    {/* <Link className="link-portal-dash"> */}
+                        <span onClick={handleToggleCalendar} className="material-symbols-outlined">
+                            calendar_month
+                        </span>
+                        <p className="link-text">Date</p>
+                    {/* </Link> */}
+                </div>
+            </section>
+            { toggleCalendar &&
+                <Calendar
+                    onChange={setDate}
+                    value={date}
+                    onClickDay={e => console.log(e)}
+                />
+            }
 
             { toggleEditSetModal &&
                 <EditSetModal
@@ -152,23 +176,8 @@ export default function WorkoutLog() {
                     <h1 className="current-log-title">Workout Log Empty</h1>
                 }
             </div>
-
-            <section className="dash-links-container">
-                <div className="start-new-workout-container">
-                    <Link to="/AllCategories" className="link-portal-dash">
-                        <i className="fa-solid fa-plus"></i>
-                        <p className="link-text">{workoutData.length === 0? "Start New Workout" : "Add Exercise"}</p>
-                    </Link>
-                </div>
-                <div className="see-previous-workout-container">
-                    <Link className="link-portal-dash">
-                    <i className="fa-regular fa-note-sticky"></i>
-                    <p className="link-text">Previous Workout</p>
-                    </Link>
-                </div>
-            </section>
             {
-                workoutData && <button onClick={deleteAll}>Delete all exercises</button>
+                workoutData.length > 0 && <button onClick={deleteAll}>Delete all exercises</button>
             }
         </div>
     )
