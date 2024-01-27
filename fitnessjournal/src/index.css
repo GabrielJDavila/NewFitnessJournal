@@ -119,6 +119,10 @@ header {
   flex-direction: row;
   align-items: center;
   padding: 0 1rem;
+  z-index: 100;
+  position: fixed;
+  top: 0;
+  width: 100%;
 }
 
 .app-title {
@@ -153,12 +157,12 @@ header {
 
 .main-nav-link {
   color: white;
-}
+} */
 
 .user-menu {
   position: absolute;
-  z-index: 2;
-  top: 38px;
+  z-index: 5;
+  top: 52.5px;
   right: -15px;
   display: flex;
   flex-direction: column;
@@ -191,7 +195,7 @@ header {
 
 .menu-item:hover {
   background: rgb(183, 75, 47);
-} */
+}
 
 /* ============ Category.jsx styles ===================*/
 
