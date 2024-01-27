@@ -59,7 +59,7 @@ export default function Footer() {
                         </span>
                         <p className="footer-nav-item-text">Dashboard</p>
                     </Link>
-                    <Link className="footer-menu-item-link">
+                    <Link to="WorkoutLog" className="footer-menu-item-link">
                         <span className="material-symbols-outlined">
                             fitness_center
                         </span>

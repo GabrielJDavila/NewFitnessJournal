@@ -126,7 +126,12 @@ header {
   margin: .5rem 0;
 }
 
-.nav {
+.account-icon {
+  margin-left: auto;
+  color: rgb(220, 104, 75);
+}
+
+/* .nav {
   position: relative;
   display: flex;
   flex-direction: row;
@@ -186,7 +191,7 @@ header {
 
 .menu-item:hover {
   background: rgb(183, 75, 47);
-}
+} */
 
 /* ============ Category.jsx styles ===================*/
 
