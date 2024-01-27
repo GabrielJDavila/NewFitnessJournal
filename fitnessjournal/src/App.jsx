@@ -7,6 +7,7 @@ import NewEx from './pages/NewEx'
 import NewCat from './components/NewCat'
 import LoadedExercises from './pages/LoadedExercises'
 import ExerciseDetail from './pages/ExerciseDetail'
+import WorkoutLog from "./pages/WorkoutLog"
 
 function App() {
 
@@ -15,6 +16,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Dashboard />} />
+          <Route path="WorkoutLog" element={<WorkoutLog />} />
           <Route path="ExerciseDetail/:id" element={<ExerciseDetail />} />
           <Route path="NewEx" element={<NewEx />} />
           <Route path="NewCat" element={<NewCat />} />

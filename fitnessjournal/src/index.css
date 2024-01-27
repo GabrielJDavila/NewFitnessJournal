@@ -279,6 +279,8 @@ header {
   margin: 3rem 0;
   display: flex;
   flex-direction: row;
+  justify-content: center;
+  gap: 3rem;
 }
 
 .link-portal-dash {
@@ -294,6 +296,7 @@ header {
 
 .link-text {
   margin-top: .5rem;
+  font-size: 1rem;
 }
 /* rendered workout styles */
 
@@ -676,6 +679,13 @@ header {
   background: rgb(220, 104, 75);
 }
 /* ======= Footer Styles ======== */
+
+footer {
+  position: sticky;
+  bottom: 0;
+  margin-top: auto;
+  width: 100%;
+}
 
 .footer-nav {
   background: rgb(220, 104, 75);

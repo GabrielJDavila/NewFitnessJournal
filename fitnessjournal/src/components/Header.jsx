@@ -51,7 +51,7 @@ export default function Header() {
     return (
         <header>
             <h2 className="app-title">The Fitbook</h2>
-            <span ref={menuRef} class="material-symbols-outlined account-icon" data-settings="settings" onClick={(e) => toggleMenu(e)}>
+            <span ref={menuRef} className="material-symbols-outlined account-icon" data-settings="settings" onClick={(e) => toggleMenu(e)}>
                 account_circle
             </span>
                 <ul className="user-menu" style={settingsMenuStyles}>
