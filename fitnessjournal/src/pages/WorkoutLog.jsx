@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { NavLink, Link, useOutletContext } from "react-router-dom"
 import { usersInDB, retrieveCurrentExSetsReps, editSingleSet, deleteCategory, deleteEx, deleteSingleSet, deleteAllEx } from "../firebase"
 import ConfirmDeleteExModal from "../components/modals/ConfirmDeleteExModal"
@@ -14,7 +14,7 @@ export default function WorkoutLog() {
     const [toggleEditSetModal, setToggleEditSetModal] = useState(false)
     const [toggleDeleteExModal, setToggleDeleteExModal] = useState(false)
     const [toggleDeleteSetModal, setToggleDeleteSetModal] = useState(false)
-    // const [toggleCalendar, setToggleCalendar] = useState(false)
+    const [toggleCalendar, setToggleCalendar] = useState(false)
     const [currentItemToDelete, setCurrentItemToDelete] = useState({
         exIdToDelete: "",
         setIdToDelete: "",
@@ -25,14 +25,14 @@ export default function WorkoutLog() {
         exId: "",
         setId: ""
     })
-    // const [date, setDate] = useState(new Date())
-    const { currentUser, toggleCalendar, date, setDate } = useOutletContext()
+    const [date, setDate] = useState(new Date())
+    const { currentUser } = useOutletContext()
     
     useEffect(() => {
         loadExerciseList(date)
     }, [date])
 
-    async function loadExerciseList(selectedDate) {
+    async function loadExerciseList() {
         try {
             const setsData = await retrieveCurrentExSetsReps(usersInDB, currentUser, date)
             setWorkoutData(setsData)
@@ -48,18 +48,18 @@ export default function WorkoutLog() {
         }))
     }
 
-    // function handleToggleCalendar() {
-    //     setToggleCalendar(prev => !prev)
-    // }
+    function handleToggleCalendar() {
+        setToggleCalendar(prev => !prev)
+    }
 
-    // async function deleteAll() {
-    //     try {
-    //        await deleteAllEx(usersInDB, currentUser, date)
-    //        await loadExerciseList(date)
-    //     } catch(e) {
-    //         console.log("error deleting doc: ", e)
-    //     }
-    // }
+    async function deleteAll() {
+        try {
+           await deleteAllEx(usersInDB, currentUser, date)
+           await loadExerciseList(date)
+        } catch(e) {
+            console.log("error deleting doc: ", e)
+        }
+    }
 
     const modalStyles = {
         position: "sticky",
@@ -75,28 +75,40 @@ export default function WorkoutLog() {
     }
     return (
         <div className="workout-log">
-            {/* <section className="dash-links-container">
-                <div className="start-new-workout-container">
-                    <Link to="/AllCategories" className="link-portal-dash">
-                        <span className="material-symbols-outlined">
-                            add
-                        </span>
-                        <p className="link-text">Add To Log</p>
-                    </Link>
+            <section className="hero-section log-hero">
+                <h2>Log</h2>
+            </section>
+            <section className="dash-links-container">
+                <Link to="AllCategories" className="date-dash link-portal-dash">
+                    <span className="material-symbols-outlined">
+                        add
+                    </span>
+                    <p className="link-text">Add To Log</p>
+                </Link>
+                <div className="date-dash">
+                    <span className="material-symbols-outlined" onClick={deleteAll}>
+                        delete
+                    </span>
+                    <p className="link-text">Delete</p>
                 </div>
-                <div className="see-previous-workout-container">
-                        <span onClick={handleToggleCalendar} className="material-symbols-outlined">
-                            calendar_month
-                        </span>
-                        <p className="link-text">Date</p>
+                <div className="date-dash">
+                    <span onClick={handleToggleCalendar} className="material-symbols-outlined calendar-icon">
+                         calendar_month
+                    </span>
+                    <p className="link-text">Date</p>
                 </div>
-            </section> */}
+            </section>
             { toggleCalendar &&
-                <Calendar
-                    onChange={setDate}
-                    value={date}
-                    onClickDay={e => console.log(e)}
-                />
+                <div className="calendar-container">
+                    <span onClick={handleToggleCalendar} className="material-symbols-outlined close-btn">
+                        close
+                    </span>
+                    <Calendar
+                        onChange={setDate}
+                        value={date}
+                        onClickDay={e => console.log(e)}
+                    />
+                </div>
             }
             { toggleEditSetModal &&
                 <EditSetModal
@@ -164,12 +176,15 @@ export default function WorkoutLog() {
 
             <div className="current-log-container">
                 {
-                    workoutData ?
-                    <CurrentWorkoutList
-                        data={workoutData}
-                        toggleDel={e => toggleDelete(e, setCurrentItemToDelete, setToggleDeleteExModal, setToggleDeleteSetModal)}
-                        toggleEdit={e => toggleEdit(e, setNewSetInfo, setToggleEditSetModal)}
-                    /> : 
+                    workoutData.length > 0 ?
+                    <div className="current-log-inner-container">
+                        <h2>Current Workout</h2>
+                        <CurrentWorkoutList
+                            data={workoutData}
+                            toggleDel={e => toggleDelete(e, setCurrentItemToDelete, setToggleDeleteExModal, setToggleDeleteSetModal)}
+                            toggleEdit={e => toggleEdit(e, setNewSetInfo, setToggleEditSetModal)}
+                        />
+                    </div> : 
                     <h1 className="current-log-title">Workout Log Empty</h1>
                 }
             </div>

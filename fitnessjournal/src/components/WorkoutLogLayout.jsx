@@ -1,27 +1,43 @@
 import { useState, useEffect } from "react"
 import { Link, Outlet, useOutletContext } from "react-router-dom"
-import { deleteAllEx, usersInDB } from "../firebase"
+import { deleteAllEx, usersInDB, retrieveCurrentExSetsReps } from "../firebase"
 
 export default function WorkoutLogLayout() {
-    const [toggleCalendar, setToggleCalendar] = useState(false)
-    const [date, setDate] = useState(new Date())
+    // const [toggleCalendar, setToggleCalendar] = useState(false)
+    // const [date, setDate] = useState(new Date())
+    // const [workoutData, setWorkoutData] = useState()
     const { currentUser } = useOutletContext()
-    function handleToggleCalendar() {
-        setToggleCalendar(prev => !prev)
-    }
 
-    async function deleteAll() {
-        try {
-           await deleteAllEx(usersInDB, currentUser, date)
-        //    await loadExerciseList(date)
-        } catch(e) {
-            console.log("error deleting doc: ", e)
-        }
-    }
+
+    // function handleToggleCalendar() {
+    //     setToggleCalendar(prev => !prev)
+    // }
+
+    // useEffect(() => {
+    //     loadExerciseList(date)
+    // }, [date])
+
+    // async function loadExerciseList() {
+    //     try {
+    //         const setsData = await retrieveCurrentExSetsReps(usersInDB, currentUser, date)
+    //         setWorkoutData(setsData)
+    //     } catch(e) {
+    //         console.log("error fetching exercises list: ", e)
+    //     }
+    // }
+
+    // async function deleteAll() {
+    //     try {
+    //        await deleteAllEx(usersInDB, currentUser, date)
+    //     //    await loadExerciseList(date)
+    //     } catch(e) {
+    //         console.log("error deleting doc: ", e)
+    //     }
+    // }
 
     return (
         <div className="workout-log-layout">
-            <section className="hero-section log-hero">
+            {/* <section className="hero-section log-hero">
                 <h2>Log</h2>
             </section>
             <section className="dash-links-container">
@@ -43,8 +59,8 @@ export default function WorkoutLogLayout() {
                     </span>
                     <p className="link-text">Date</p>
                 </div>
-            </section>
-            <Outlet context={{ currentUser, toggleCalendar, date, setDate }}/>
+            </section> */}
+            <Outlet context={{ currentUser }}/>
         </div>
     )
 }
