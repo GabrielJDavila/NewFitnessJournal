@@ -1,11 +1,12 @@
 import { useState, useEffect, useRef } from "react"
 import { NavLink, Link, useOutletContext } from "react-router-dom"
 import { usersInDB, retrieveCurrentExSetsReps, editSingleSet, deleteCategory, deleteEx, deleteSingleSet, deleteAllEx } from "../firebase"
+import ConfirmDeleteAllExModal from "../components/modals/ConfirmDeleteAllEx"
 import ConfirmDeleteExModal from "../components/modals/ConfirmDeleteExModal"
 import ConfirmDeleteSetModal from "../components/modals/ConfirmDeleteSetModal"
 import EditSetModal from "../components/modals/EditSetModal"
 import CurrentWorkoutList from "../components/CurrentWorkoutList"
-import { handleDeleteExerciseSubmit, handleDeleteSetSubmit, handleEditSetSubmit, toggleEdit, toggleDelete } from "../Utils"
+import { handleDeleteExerciseSubmit, handleDeleteSetSubmit, handleEditSetSubmit, handleDeleteAllExSubmit, toggleEdit, toggleDelete } from "../Utils"
 import Calendar from "react-calendar"
 import "react-calendar/dist/Calendar.css"
 
@@ -14,7 +15,10 @@ export default function WorkoutLog() {
     const [toggleEditSetModal, setToggleEditSetModal] = useState(false)
     const [toggleDeleteExModal, setToggleDeleteExModal] = useState(false)
     const [toggleDeleteSetModal, setToggleDeleteSetModal] = useState(false)
+    const [toggleDeleteAllExercisesModal, setToggleDeleteAllExercisesModal] = useState(false)
     const [toggleCalendar, setToggleCalendar] = useState(false)
+    const [date, setDate] = useState(new Date())
+    const { currentUser } = useOutletContext()
     const [currentItemToDelete, setCurrentItemToDelete] = useState({
         exIdToDelete: "",
         setIdToDelete: "",
@@ -25,8 +29,6 @@ export default function WorkoutLog() {
         exId: "",
         setId: ""
     })
-    const [date, setDate] = useState(new Date())
-    const { currentUser } = useOutletContext()
     
     useEffect(() => {
         loadExerciseList(date)
@@ -109,6 +111,22 @@ export default function WorkoutLog() {
                         onClickDay={e => console.log(e)}
                     />
                 </div>
+            }
+            { toggleDeleteAllExercisesModal &&
+                <ConfirmDeleteAllExModal
+                    handleDeleteAllEx={e => handleDeleteAllExSubmit(e, {
+                        deleteAllEx,
+                        usersInDB,
+                        currentUser,
+                        date,
+                        loadExerciseList,
+                        toggleDelete
+                    },
+                    {
+                        setToggleDeleteAllExercisesModal
+                    })}
+                    toggle={e => toggleDelete()}
+                />
             }
             { toggleEditSetModal &&
                 <EditSetModal

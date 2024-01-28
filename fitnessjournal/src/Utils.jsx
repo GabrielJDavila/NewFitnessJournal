@@ -1,4 +1,32 @@
 
+// handles result of user clicking Delete Log
+export function handleDeleteAllExSubmit(e, {
+    deleteAllEx,
+    usersInDB,
+    currentUser,
+    date,
+    loadExerciseList
+},
+{
+
+}) {
+    e.preventDefault()
+    try {
+        deleteAllEx(usersInDB, currentUser, date)
+        loadExerciseList(date)
+    } catch(err) {
+        console.error("error deleting log: ", err)
+    }
+}
+// async function deleteAll() {
+//     try {
+//        await deleteAllEx(usersInDB, currentUser, date)
+//        await loadExerciseList(date)
+//     } catch(e) {
+//         console.log("error deleting doc: ", e)
+//     }
+// }
+
 // handles result of user confirming 
 export function handleDeleteExerciseSubmit(e, {
     deleteEx,
