@@ -3,6 +3,7 @@ import { useState, useEffect } from "react"
 import LoadedExercises from "./LoadedExercises"
 import { Link, useOutletContext } from "react-router-dom"
 import { getCategories, getAllCategories, categoriesCollection, usersInDB, editCategoryName, deleteCategory } from "../firebase"
+import BackBtn from "../components/BackBtn"
 
 export default function AllCategories() {
     const [toggleEditModal, setToggleEditModal] = useState(false)
@@ -115,12 +116,13 @@ export default function AllCategories() {
     return (
         <div className="all-ex-page-container">
             <form className="search-ex-form">
-                <i className="fa-solid fa-magnifying-glass"></i>
+                <BackBtn />
                 <input
                     type="search"
                     placeholder="search exercise"
                     className="search-ex-input"
                 />
+                <i className="fa-solid fa-magnifying-glass"></i>
             </form>
             {toggleEditModal && editModal}
             {openConfirmDeleteModal && confirmDeleteModal}

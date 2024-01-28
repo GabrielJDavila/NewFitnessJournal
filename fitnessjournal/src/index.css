@@ -4,10 +4,26 @@
   box-sizing: border-box;
 }
 
+html {
+  margin: 0;
+}
+
 body {
   margin: 0;
-  padding: 0;
+  padding: 4rem 0 0 0;
   font-family: 'Oswald', sans-serif;
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  min-height: 100vh;
+  /* flex-grow: 1;
+  overflow-y: auto; */
 }
 
 h2, h3, label, p {
@@ -23,17 +39,6 @@ button {
   font-size: 1.5rem;
   cursor: pointer;
 }
-
-/* button {
-  font-family: 'Oswald', sans-serif;
-  height: 50px;
-  background: rgb(191, 76, 48);
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 1.5rem;
-  cursor: pointer;
-} */
 
 .login-input-fieldset {
   display: flex;
@@ -64,6 +69,14 @@ button {
 }
 
 .login-button {}
+
+.hero-section {
+  height: 30vh;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 /* ============= Login page ==============*/
 
@@ -122,6 +135,7 @@ header {
   z-index: 100;
   position: fixed;
   top: 0;
+  height: 65px;
   width: 100%;
 }
 
@@ -135,34 +149,10 @@ header {
   color: rgb(220, 104, 75);
 }
 
-/* .nav {
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  margin-left: auto;
-  gap: 20px;
-  align-items: center;
-}
-
-.nav-item {
-  font-size: 1.5em;
-  transition: .2s ease-in-out;
-  cursor: pointer;
-}
-
-.nav-item:hover,
-.main-nav-link {
-  color: rgb(220, 104, 75);
-}
-
-.main-nav-link {
-  color: white;
-} */
-
 .user-menu {
   position: absolute;
   z-index: 5;
-  top: 52.5px;
+  top: 65px;
   right: -15px;
   display: flex;
   flex-direction: column;
@@ -235,6 +225,9 @@ header {
   margin: 0 auto 3rem;
   text-align: center;
   max-width: 600px;
+  border: 2px solid rgb(240, 240, 240);
+  border-radius: 6px;
+  box-shadow: 0 0 10px 5px rgb(240, 240, 240);
 }
 
 /*============ Dashboard styles ======================*/
@@ -242,13 +235,20 @@ header {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin: 4rem 0 0;
+  margin: 0 0;
   position: relative;
+  /* height: 100vh; */
+  text-align: center;
+}
+
+.dash-hero {
+  background: url("./assets/lifting1.png");
+  color: white;
 }
 
 .current-log-container,
 .start-new-workout-container,
-.see-previous-workout-container {
+.date-dash {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -276,25 +276,57 @@ header {
 }
 
 .dash-links-container {
-  margin: 3rem 0;
+  margin: 0;
   display: flex;
   flex-direction: row;
+  justify-content: center;
+  height: 100px;
 }
 
-.link-portal-dash {
+.start-new-workout-container, .date-dash {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   font-size: 1.5rem;
+  color: white;
+  background: rgb(220, 104, 75);
+  margin: 0;
+  width: 100%;
+  cursor: pointer;
+}
+
+.start-new-workout-container:hover, .date-dash:hover {
+  background: rgb(193, 91, 66);
+}
+
+.link-portal-dash {
   text-decoration: none;
-  color: rgb(220, 104, 75);
-  margin: 2rem 0;
+  color: white;
 }
 
 .link-text {
   margin-top: .5rem;
+  font-size: 1rem;
 }
+
+/* ======= WorkoutLogLayout Styles ========= */
+
+.workout-log-layout {
+  text-align: center;
+}
+
+.log-hero {
+  background: url("./assets/dumbbell.png");
+  color: white;
+}
+
+/* ======= WorkoutLog Page Styles ========= */
+
+.workout-log {
+  margin-top: 5rem;
+}
+
 /* rendered workout styles */
 
 .ex-name-container {
@@ -304,10 +336,6 @@ header {
   align-items: center;
   justify-content: center;
   position: relative;
-}
-
-.current-ex-name {
-  
 }
 
 .curr-ex-delete {
@@ -336,9 +364,6 @@ header {
   
 }
 
-.set-number {
-  
-}
 .set-reps {
   text-align: left;
   margin-left: auto;
@@ -493,24 +518,29 @@ header {
   text-align: center;
   width: 90%;
   max-width: 900px;
-  margin: 1rem auto 0;
+  margin: 5rem auto 0;
 }
 
 .rendered-ex-container {
   display: flex;
+  margin-top: 5rem;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .rendered-ex-list {
   text-align: center;
   width: 90%;
   max-width: 900px;
-  margin: 5rem auto 0;
+  margin: 0;
 }
 
 .search-ex-form {
   width: 100%;
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 .fa-magnifying-glass {
@@ -519,7 +549,7 @@ header {
 }
 
 .search-ex-input {
-  width: 90%;
+  width: 80%;
   margin: 0 auto;
   height: 2rem;
   border: none;
@@ -677,6 +707,13 @@ header {
 }
 /* ======= Footer Styles ======== */
 
+footer {
+  position: sticky;
+  margin-top: auto;
+  width: 100%;
+  bottom: 0;
+}
+
 .footer-nav {
   background: rgb(220, 104, 75);
   display: flex;
@@ -705,8 +742,7 @@ header {
 }
 
 .back-btn {
-  position: absolute;
-  margin: 1rem 0 0 1rem;
+  margin-right: auto;
 }
 
 .arrow-back {

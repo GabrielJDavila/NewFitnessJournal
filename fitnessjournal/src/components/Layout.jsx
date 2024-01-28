@@ -78,9 +78,11 @@ export default function Layout() {
         )
     }
     return (
-        <div>
+        <div className="first-layout">
             <Header />
-            <Outlet context={{ currentUser }}/>
+            <div className="main-content">
+                <Outlet context={{ currentUser }}/>
+            </div>
             <Footer />
         </div>
     )
