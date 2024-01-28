@@ -14,7 +14,7 @@ export default function WorkoutLog() {
     const [toggleEditSetModal, setToggleEditSetModal] = useState(false)
     const [toggleDeleteExModal, setToggleDeleteExModal] = useState(false)
     const [toggleDeleteSetModal, setToggleDeleteSetModal] = useState(false)
-    const [toggleCalendar, setToggleCalendar] = useState(false)
+    // const [toggleCalendar, setToggleCalendar] = useState(false)
     const [currentItemToDelete, setCurrentItemToDelete] = useState({
         exIdToDelete: "",
         setIdToDelete: "",
@@ -25,8 +25,8 @@ export default function WorkoutLog() {
         exId: "",
         setId: ""
     })
-    const [date, setDate] = useState(new Date())
-    const { currentUser } = useOutletContext()
+    // const [date, setDate] = useState(new Date())
+    const { currentUser, toggleCalendar, date, setDate } = useOutletContext()
     
     useEffect(() => {
         loadExerciseList(date)
@@ -48,18 +48,18 @@ export default function WorkoutLog() {
         }))
     }
 
-    function handleToggleCalendar() {
-        setToggleCalendar(prev => !prev)
-    }
+    // function handleToggleCalendar() {
+    //     setToggleCalendar(prev => !prev)
+    // }
 
-    async function deleteAll() {
-        try {
-           await deleteAllEx(usersInDB, currentUser, date)
-           await loadExerciseList(date)
-        } catch(e) {
-            console.log("error deleting doc: ", e)
-        }
-    }
+    // async function deleteAll() {
+    //     try {
+    //        await deleteAllEx(usersInDB, currentUser, date)
+    //        await loadExerciseList(date)
+    //     } catch(e) {
+    //         console.log("error deleting doc: ", e)
+    //     }
+    // }
 
     const modalStyles = {
         position: "sticky",
@@ -98,7 +98,6 @@ export default function WorkoutLog() {
                     onClickDay={e => console.log(e)}
                 />
             }
-
             { toggleEditSetModal &&
                 <EditSetModal
                     handleEditSet={e => handleEditSetSubmit(e, {
@@ -174,9 +173,7 @@ export default function WorkoutLog() {
                     <h1 className="current-log-title">Workout Log Empty</h1>
                 }
             </div>
-            {
-                workoutData.length > 0 && <button onClick={deleteAll}>Delete all exercises</button>
-            }
+                {/* workoutData.length > 0 && <button onClick={deleteAll}>Delete all exercises</button> */}
         </div>
     )
 }

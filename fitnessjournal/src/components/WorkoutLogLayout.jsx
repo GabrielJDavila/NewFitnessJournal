@@ -1,11 +1,22 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Link, Outlet, useOutletContext } from "react-router-dom"
+import { deleteAllEx, usersInDB } from "../firebase"
 
 export default function WorkoutLogLayout() {
     const [toggleCalendar, setToggleCalendar] = useState(false)
+    const [date, setDate] = useState(new Date())
     const { currentUser } = useOutletContext()
     function handleToggleCalendar() {
         setToggleCalendar(prev => !prev)
+    }
+
+    async function deleteAll() {
+        try {
+           await deleteAllEx(usersInDB, currentUser, date)
+        //    await loadExerciseList(date)
+        } catch(e) {
+            console.log("error deleting doc: ", e)
+        }
     }
 
     return (
@@ -23,13 +34,19 @@ export default function WorkoutLogLayout() {
                     </Link>
                 </div>
                 <div className="date-dash">
-                        <span onClick={handleToggleCalendar} className="material-symbols-outlined calendar-icon">
-                            calendar_month
-                        </span>
-                        <p className="link-text">Date</p>
+                    <span className="material-symbols-outlined" onClick={deleteAll}>
+                        delete
+                    </span>
+                    <p className="link-text">Delete</p>
+                </div>
+                <div className="date-dash">
+                    <span onClick={handleToggleCalendar} className="material-symbols-outlined calendar-icon">
+                         calendar_month
+                    </span>
+                    <p className="link-text">Date</p>
                 </div>
             </section>
-            <Outlet context={{ currentUser }}/>
+            <Outlet context={{ currentUser, toggleCalendar, date, setDate }}/>
         </div>
     )
 }
