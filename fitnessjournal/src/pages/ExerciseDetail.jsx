@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { useParams, useOutletContext } from "react-router-dom"
 import { addSetsReps, usersInDB} from "../firebase"
-import BackBtn from "../components/BackBtn"
+import ExDetailBackBtn from "../components/ExDetailBackBtn"
 import SetAdded from "../components/modals/SetAdded"
 
 export default function ExerciseDetail() {
@@ -85,7 +85,7 @@ export default function ExerciseDetail() {
 
     return (
         <form onSubmit={e => handleAddSetClick(e)} className="set-detail">
-            <BackBtn />
+            <ExDetailBackBtn />
             <fieldset className="dash-input-fieldset">   
                 <div className="ex-info-container">
                     <p className="ex-info-text weight">Weight:</p>

@@ -174,9 +174,7 @@ export default function WorkoutLog() {
                     <h1 className="current-log-title">Workout Log Empty</h1>
                 }
             </div>
-            {
-                workoutData.length > 0 && <button onClick={deleteAll}>Delete all exercises</button>
-            }
+                {/* workoutData.length > 0 && <button onClick={deleteAll}>Delete all exercises</button> */}
         </div>
     )
 }
