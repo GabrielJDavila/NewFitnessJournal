@@ -14,26 +14,28 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Dashboard />} />
+      <div className="app">
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Dashboard />} />
 
-          <Route path="WorkoutLog" element={<WorkoutLogLayout />}>
-            <Route index element={<WorkoutLog />} />
+            <Route path="WorkoutLog" element={<WorkoutLogLayout />}>
+              <Route index element={<WorkoutLog />} />
+              <Route path="AllCategories" element={<AllCategories />} />
+              <Route path="AllCategories/:id" element={<LoadedExercises />}/>
+              <Route path="ExerciseDetail/:id" element={<ExerciseDetail />} />
+              <Route path="NewEx" element={<NewEx />} />
+              <Route path="NewCat" element={<NewCat />} />
+            </Route>
+            {/* <Route path="WorkoutLog" element={<WorkoutLog />} />
             <Route path="AllCategories" element={<AllCategories />} />
             <Route path="AllCategories/:id" element={<LoadedExercises />}/>
             <Route path="ExerciseDetail/:id" element={<ExerciseDetail />} />
             <Route path="NewEx" element={<NewEx />} />
-            <Route path="NewCat" element={<NewCat />} />
+            <Route path="NewCat" element={<NewCat />} /> */}
           </Route>
-          {/* <Route path="WorkoutLog" element={<WorkoutLog />} />
-          <Route path="AllCategories" element={<AllCategories />} />
-          <Route path="AllCategories/:id" element={<LoadedExercises />}/>
-          <Route path="ExerciseDetail/:id" element={<ExerciseDetail />} />
-          <Route path="NewEx" element={<NewEx />} />
-          <Route path="NewCat" element={<NewCat />} /> */}
-        </Route>
-      </Routes>
+        </Routes>
+      </div>
     </BrowserRouter>
   )
 }

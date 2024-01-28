@@ -10,6 +10,9 @@ export default function WorkoutLogLayout() {
 
     return (
         <div className="workout-log-layout">
+            <section className="hero-section log-hero">
+                <h2>Log</h2>
+            </section>
             <section className="dash-links-container">
                 <div className="start-new-workout-container">
                     <Link to="AllCategories" className="link-portal-dash">
@@ -19,8 +22,8 @@ export default function WorkoutLogLayout() {
                         <p className="link-text">Add To Log</p>
                     </Link>
                 </div>
-                <div className="see-previous-workout-container">
-                        <span onClick={handleToggleCalendar} className="material-symbols-outlined">
+                <div className="date-dash">
+                        <span onClick={handleToggleCalendar} className="material-symbols-outlined calendar-icon">
                             calendar_month
                         </span>
                         <p className="link-text">Date</p>

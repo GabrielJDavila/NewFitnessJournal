@@ -4,7 +4,7 @@ export default function BackBtn() {
     return (
         <Link
             className="back-btn"
-            to="/"
+            to=".."
             relative="path"
         >
             <span className="material-symbols-outlined arrow-back">

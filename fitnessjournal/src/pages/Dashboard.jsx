@@ -12,6 +12,9 @@ import "react-calendar/dist/Calendar.css"
 export default function Dashboard() {
     return (
         <main className="dashboard">
+            <section className="hero-section dash-hero">
+                <h2>Dashboard</h2>
+            </section>
             <h1>Nothing to Show</h1>
         </main>
     )
