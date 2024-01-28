@@ -46,7 +46,7 @@ export default function WorkoutLogLayout() {
                     <p className="link-text">Date</p>
                 </div>
             </section>
-            <Outlet context={{ currentUser }}/>
+            <Outlet context={{ currentUser, toggleCalendar, date, setDate }}/>
         </div>
     )
 }

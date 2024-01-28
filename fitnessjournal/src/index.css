@@ -224,6 +224,7 @@ header {
 .react-calendar {
   margin: 0 auto 3rem;
   text-align: center;
+  min-width: 100%;
   max-width: 600px;
   border: 2px solid rgb(240, 240, 240);
   border-radius: 6px;
@@ -235,7 +236,7 @@ header {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin: 0 0;
+  margin: 0;
   position: relative;
   /* height: 100vh; */
   text-align: center;
@@ -324,7 +325,11 @@ header {
 /* ======= WorkoutLog Page Styles ========= */
 
 .workout-log {
-  margin-top: 5rem;
+  margin-top: 0;
+}
+
+.current-log-container {
+  margin-top: 1rem;
 }
 
 /* rendered workout styles */
