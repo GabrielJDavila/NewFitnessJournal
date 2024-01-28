@@ -25,14 +25,12 @@ export default function WorkoutLogLayout() {
                 <h2>Log</h2>
             </section>
             <section className="dash-links-container">
-                <div className="start-new-workout-container">
-                    <Link to="AllCategories" className="link-portal-dash">
-                        <span className="material-symbols-outlined">
-                            add
-                        </span>
-                        <p className="link-text">Add To Log</p>
-                    </Link>
-                </div>
+                <Link to="AllCategories" className="date-dash link-portal-dash">
+                    <span className="material-symbols-outlined">
+                        add
+                    </span>
+                    <p className="link-text">Add To Log</p>
+                </Link>
                 <div className="date-dash">
                     <span className="material-symbols-outlined" onClick={deleteAll}>
                         delete
