@@ -1,6 +1,6 @@
 
 // handles result of user clicking Delete Log
-export function handleDeleteAllExSubmit(e, {
+export async function handleDeleteAllExSubmit(e, {
     deleteAllEx,
     usersInDB,
     currentUser,
@@ -13,8 +13,8 @@ export function handleDeleteAllExSubmit(e, {
 }) {
     e.preventDefault()
     try {
-        deleteAllEx(usersInDB, currentUser, date)
-        loadExerciseList(date)
+        await deleteAllEx(usersInDB, currentUser, date)
+        await loadExerciseList(date)
         toggleDeleteAllEx(e, setToggleDeleteAllExercisesModal)
     } catch(err) {
         console.error("error deleting log: ", err)
@@ -30,7 +30,7 @@ export function handleDeleteAllExSubmit(e, {
 // }
 
 // handles result of user confirming 
-export function handleDeleteExerciseSubmit(e, {
+export async function handleDeleteExerciseSubmit(e, {
     deleteEx,
     usersInDB,
     currentUser,
@@ -45,13 +45,13 @@ export function handleDeleteExerciseSubmit(e, {
     setToggleDeleteSetModal
 }) {
     e.preventDefault()
-    deleteEx(usersInDB, currentUser, date, currentItemToDelete.exIdToDelete)
-    loadExerciseList(e)
+    await deleteEx(usersInDB, currentUser, date, currentItemToDelete.exIdToDelete)
+    await loadExerciseList(e)
     toggleDelete(e, setCurrentItemToDelete, setToggleDeleteExModal, setToggleDeleteSetModal)
 }
 
 // handles the result of user clicking confirm of EditSetModal.
-export function handleEditSetSubmit(e, {
+export async function handleEditSetSubmit(e, {
     editSingleSet,
     newSetInfo,
     usersInDB,
@@ -66,8 +66,8 @@ export function handleEditSetSubmit(e, {
 }) {
     e.preventDefault()
     try {
-        editSingleSet(newSetInfo.exId, newSetInfo.setId, newSetInfo.reps, newSetInfo.weight, usersInDB, currentUser, date)
-        loadExerciseList(e)
+        await editSingleSet(newSetInfo.exId, newSetInfo.setId, newSetInfo.reps, newSetInfo.weight, usersInDB, currentUser, date)
+        await loadExerciseList(e)
         toggleEdit(e, setNewSetInfo, setToggleEditSetModal)
     } catch(e) {
         console.log("error", e)
@@ -76,7 +76,7 @@ export function handleEditSetSubmit(e, {
 }
 
 // // handles the result of user clicking confirm of ConfirmDeleteSetModal.
-export function handleDeleteSetSubmit(e, { 
+export async function handleDeleteSetSubmit(e, { 
     deleteSingleSet,
     usersInDB,
     currentUser,
@@ -91,8 +91,8 @@ export function handleDeleteSetSubmit(e, {
     setToggleDeleteSetModal 
 }) {
     e.preventDefault()
-    deleteSingleSet(usersInDB, currentUser, date, currentItemToDelete.exIdToDelete, currentItemToDelete.setIdToDelete)
-    loadExerciseList(e)
+    await deleteSingleSet(usersInDB, currentUser, date, currentItemToDelete.exIdToDelete, currentItemToDelete.setIdToDelete)
+    await loadExerciseList(e)
     toggleDelete(e, setCurrentItemToDelete, setToggleDeleteExModal, setToggleDeleteSetModal)
 }
 

@@ -54,18 +54,18 @@ export default function WorkoutLog() {
         setToggleCalendar(prev => !prev)
     }
 
-    async function deleteAll() {
-        try {
-           await deleteAllEx(usersInDB, currentUser, date)
-           await loadExerciseList(date)
-        } catch(e) {
-            console.log("error deleting doc: ", e)
-        }
-    }
+    // async function deleteAll() {
+    //     try {
+    //        await deleteAllEx(usersInDB, currentUser, date)
+    //        await loadExerciseList(date)
+    //     } catch(e) {
+    //         console.log("error deleting doc: ", e)
+    //     }
+    // }
+
     function ToggleDeleteAll() {
         setToggleDeleteAllExercisesModal(prev => !prev)
     }
-    console.log(toggleDeleteAllExercisesModal)
 
     const modalStyles = {
         position: "sticky",
