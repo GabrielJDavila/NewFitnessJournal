@@ -6,7 +6,7 @@ import ConfirmDeleteExModal from "../components/modals/ConfirmDeleteExModal"
 import ConfirmDeleteSetModal from "../components/modals/ConfirmDeleteSetModal"
 import EditSetModal from "../components/modals/EditSetModal"
 import CurrentWorkoutList from "../components/CurrentWorkoutList"
-import { handleDeleteExerciseSubmit, handleDeleteSetSubmit, handleEditSetSubmit, handleDeleteAllExSubmit, toggleEdit, toggleDelete } from "../Utils"
+import { handleDeleteExerciseSubmit, handleDeleteSetSubmit, handleEditSetSubmit, handleDeleteAllExSubmit, toggleEdit, toggleDelete, toggleDeleteAllEx } from "../Utils"
 import Calendar from "react-calendar"
 import "react-calendar/dist/Calendar.css"
 
@@ -62,6 +62,10 @@ export default function WorkoutLog() {
             console.log("error deleting doc: ", e)
         }
     }
+    function ToggleDeleteAll() {
+        setToggleDeleteAllExercisesModal(prev => !prev)
+    }
+    console.log(toggleDeleteAllExercisesModal)
 
     const modalStyles = {
         position: "sticky",
@@ -88,7 +92,7 @@ export default function WorkoutLog() {
                     <p className="link-text">Add To Log</p>
                 </Link>
                 <div className="date-dash">
-                    <span className="material-symbols-outlined" onClick={deleteAll}>
+                    <span className="material-symbols-outlined" onClick={ToggleDeleteAll}>
                         delete
                     </span>
                     <p className="link-text">Delete</p>
@@ -120,12 +124,12 @@ export default function WorkoutLog() {
                         currentUser,
                         date,
                         loadExerciseList,
-                        toggleDelete
+                        toggleDeleteAllEx
                     },
                     {
                         setToggleDeleteAllExercisesModal
                     })}
-                    toggle={e => toggleDelete()}
+                    toggle={e => toggleDeleteAllEx(e, setToggleDeleteAllExercisesModal)}
                 />
             }
             { toggleEditSetModal &&

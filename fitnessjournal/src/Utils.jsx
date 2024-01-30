@@ -5,15 +5,17 @@ export function handleDeleteAllExSubmit(e, {
     usersInDB,
     currentUser,
     date,
-    loadExerciseList
+    loadExerciseList,
+    toggleDeleteAllEx
 },
 {
-
+    setToggleDeleteAllExercisesModal
 }) {
     e.preventDefault()
     try {
         deleteAllEx(usersInDB, currentUser, date)
         loadExerciseList(date)
+        toggleDeleteAllEx(e, setToggleDeleteAllExercisesModal)
     } catch(err) {
         console.error("error deleting log: ", err)
     }
@@ -92,6 +94,11 @@ export function handleDeleteSetSubmit(e, {
     deleteSingleSet(usersInDB, currentUser, date, currentItemToDelete.exIdToDelete, currentItemToDelete.setIdToDelete)
     loadExerciseList(e)
     toggleDelete(e, setCurrentItemToDelete, setToggleDeleteExModal, setToggleDeleteSetModal)
+}
+
+// Toggles deleteAllEx modal
+export function toggleDeleteAllEx(e, setToggleDeleteAllExercisesModal) {
+    setToggleDeleteAllExercisesModal(prev => !prev)
 }
 
 // Toggles delete set or delete exercise modal
