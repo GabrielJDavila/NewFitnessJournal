@@ -123,6 +123,16 @@ button {
 
 /* ============= SignUp page ==============*/
 
+.password-error {
+  display: flex;
+  flex-direction: column;
+}
+
+.password-error-text {
+  margin: 0;
+  font-size: small;
+  color: red;
+}
 
 /* ============= header and nav styles ==============*/
 header {

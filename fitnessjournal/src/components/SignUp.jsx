@@ -1,3 +1,4 @@
+import PasswordError from "./modals/PasswordError"
 
 export default function SignUp(props) {
     
@@ -17,6 +18,7 @@ export default function SignUp(props) {
                         className="login-cred"
                         required
                     />
+                    {props.loginError && <PasswordError />}
                     <input
                         name="password"
                         type="password"

@@ -10,6 +10,7 @@ import { onAuthStateChanged } from "firebase/auth"
 export default function Layout() {
     const [loggedIn, setLoggedIn] = useState(false)
     const [showLogin, setShowLogin] = useState(true)
+    const [loginError, setLoginError] = useState(false)
     const [loginInfo, setLoginInfo] = useState({
         email: "",
         password: ""
@@ -39,12 +40,27 @@ export default function Layout() {
 
     function handleSignUp(e) {
         e.preventDefault()
-        signUpUser(loginInfo.email, loginInfo.password)
-        navigate("/")
+        if(/[A-Z]/.test(loginInfo.password) &&
+            /[a-z]/.test(loginInfo.password) &&
+            /\W/.test(loginInfo.password) &&
+            /\d/.test(loginInfo.password)
+        ) {
+            console.log(`check works, pass is: ${loginInfo.password}`)
+            signUpUser(loginInfo.email, loginInfo.password)
+            navigate("/")
+        } else {
+            flipShowPasswordError()
+            console.log(`check fails. attempted password: ${loginInfo.password}`)
+        }
     }
 
     function flipShowLogin() {
         setShowLogin(prev => !prev)
+        setLoginError(false)
+    }
+
+    function flipShowPasswordError() {
+        setLoginError(prev => !prev)
     }
 
     function handleChange(e) {
@@ -74,6 +90,8 @@ export default function Layout() {
                 email={loginInfo.email}
                 password={loginInfo.password}
                 flipShowLogin={flipShowLogin}
+                flipShowPasswordError={flipShowPasswordError}
+                loginError={loginError}
             />
         )
     }
