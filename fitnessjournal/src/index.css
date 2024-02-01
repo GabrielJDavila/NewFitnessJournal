@@ -10,7 +10,7 @@ html {
 
 body {
   margin: 0;
-  padding: 4rem 0 0 0;
+  padding: 0;
   font-family: 'Oswald', sans-serif;
 }
 
@@ -53,12 +53,6 @@ button {
   gap: 2rem;
 }
 
-.sign-up, .switch-to-login {
-  text-decoration: underline;
-  color: rgb(84, 184, 241);
-  cursor: pointer;
-}
-
 .login-cred {
   width: 100%;
   height: 3rem;
@@ -80,7 +74,8 @@ button {
 
 /* ============= Login page ==============*/
 
-.login-page-container {
+.login-page-container,
+.signup-page-container {
   width: 100vw;
   height: 100vh;
   background: rgb(191, 76, 48);
@@ -96,7 +91,7 @@ button {
   flex-direction: column;
   justify-content: center;
   text-align: center;
-  height: 750px;
+  height: 600px;
   padding: 2rem;
   font-size: 1.5rem;
   width: 80%;
@@ -122,6 +117,12 @@ button {
 }
 
 /* ============= SignUp page ==============*/
+
+.sign-up, .switch-to-login {
+  text-decoration: underline;
+  color: rgb(84, 184, 241);
+  cursor: pointer;
+}
 
 .password-error {
   display: flex;
@@ -377,6 +378,7 @@ header {
 
 .workout-log {
   margin-top: 0;
+  overflow: scroll;
 }
 
 .current-log-container {
@@ -452,17 +454,11 @@ header {
 /*=============== EditSetModal.jsx styles ====================*/
 
 .edit-set-modal {
-  position: sticky;
-  top: 4rem;
-  bottom: 0;
-  right: 0;
-  left: 0;
   text-align: center;
   box-shadow: 0 0 10px 2px rgb(176, 176, 176);
   border-radius: 6px;
   width: 95%;
   height: 95vh;
-  max-height: 600px;
   max-width: 600px;
   margin: auto;
   background: white;

@@ -69,12 +69,12 @@ export default function WorkoutLog() {
 
     const modalStyles = {
         position: "sticky",
-        top: "2rem",
+        top: "0",
         bottom: "0",
         right: "0",
         left: "0",
         width: "95%",
-        height: "90vh",
+        height: "500px",
         margin: "auto",
         background: "white",
         zIndex: "12"
