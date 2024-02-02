@@ -69,7 +69,7 @@ export default function WorkoutLog() {
 
     const modalStyles = {
         position: "sticky",
-        top: "0",
+        top: "100px",
         bottom: "0",
         right: "0",
         left: "0",

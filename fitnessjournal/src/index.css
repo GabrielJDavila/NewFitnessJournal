@@ -23,7 +23,7 @@ body {
 .main-content {
   min-height: 100vh;
   flex-grow: 1;
-  overflow-y: auto;
+ 
 }
 
 h2, h3, label, p {
@@ -235,9 +235,6 @@ header {
 .calendar-container {
   position: relative;
   padding-top: 1rem;
-  /* border: 2px solid rgb(240, 240, 240);
-  border-radius: 6px;
-  padding: 1rem; */
 }
 
 .calendar-container::after {
@@ -378,7 +375,7 @@ header {
 
 .workout-log {
   margin-top: 0;
-  overflow: scroll;
+ 
 }
 
 .current-log-container {
@@ -457,12 +454,11 @@ header {
   text-align: center;
   box-shadow: 0 0 10px 2px rgb(176, 176, 176);
   border-radius: 6px;
-  width: 95%;
+  /* width: 95%;
   height: 95vh;
-  max-width: 600px;
+  max-width: 600px; */
   margin: auto;
   background: white;
-  z-index: 10;
   padding: 1rem;
   display: flex;
   flex-direction: column;
@@ -714,10 +710,6 @@ header {
   margin: 0 auto;
   background: white;
   box-shadow: 0 0 10px 1px rgb(131, 131, 131);
-}
-
-.new-cat-title {
-  
 }
 
 .new-cat {
