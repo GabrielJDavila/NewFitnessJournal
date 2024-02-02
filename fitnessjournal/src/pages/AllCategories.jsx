@@ -1,8 +1,7 @@
 import Category from "../components/Category"
 import { useState, useEffect } from "react"
-import LoadedExercises from "./LoadedExercises"
 import { Link, useOutletContext } from "react-router-dom"
-import { getCategories, getAllCategories, categoriesCollection, usersInDB, editCategoryName, deleteCategory } from "../firebase"
+import { getAllCategories, usersInDB, editCategoryName, deleteCategory } from "../firebase"
 import BackBtn from "../components/BackBtn"
 
 export default function AllCategories() {
@@ -127,7 +126,7 @@ export default function AllCategories() {
             {toggleEditModal && editModal}
             {openConfirmDeleteModal && confirmDeleteModal}
             {loadedCategories && renderedCategories}
-            <Link to="/NewCat">Create Some Workout Categories!</Link>
+            <Link to="NewCat">Create Some Workout Categories!</Link>
         </div>
     )
 }

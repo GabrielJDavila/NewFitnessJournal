@@ -20,16 +20,7 @@ export async function handleDeleteAllExSubmit(e, {
         console.error("error deleting log: ", err)
     }
 }
-// async function deleteAll() {
-//     try {
-//        await deleteAllEx(usersInDB, currentUser, date)
-//        await loadExerciseList(date)
-//     } catch(e) {
-//         console.log("error deleting doc: ", e)
-//     }
-// }
 
-// handles result of user confirming 
 export async function handleDeleteExerciseSubmit(e, {
     deleteEx,
     usersInDB,
@@ -138,36 +129,3 @@ export function toggleEdit(e, setNewSetInfo, setToggleEditSetModal) {
     }
     setToggleEditSetModal(prev => !prev)
 }
-
-// function to load current exercise/workout list
-// export async function loadExerciseList(retrieveCurrentExSetsReps, currentWorkoutList, setWorkoutData) {
-//     try {
-//         const setsData = await retrieveCurrentExSetsReps(currentWorkoutList)
-//         setWorkoutData(setsData)
-//     } catch(e) {
-//         console.log("error fetching exercises list: ", e)
-//     }
-// }
-
-
-// functions below were from dashboard.jsx. Keeping for now 
-// handleDeleteExerciseSubmit(e, deleteCategory, currentWorkoutList, currentItemToDelete, loadExerciseList, toggleDelete)
-        // e.preventDefault()
-        // deleteCategory(currentWorkoutList, currentItemToDelete.exIdToDelete)
-        // loadExerciseList()
-        // toggleDelete(e)
-    
-
-    // handleEditSetSubmit(e, editSingleSet, newSetInfo.exId, newSetInfo.setId, newSetInfo.reps, newSetInfo.weight, currentWorkoutList, loadExerciseList, toggleEdit) {
-    //     e.preventDefault()
-    //     editSingleSet(newSetInfo.exId, newSetInfo.setId, newSetInfo.reps, newSetInfo.weight, currentWorkoutList)
-    //     loadExerciseList()
-    //     toggleEdit(e)
-    // }
-
-    // handleDeleteSetSubmit(e, deleteSingleSet, currentWorkoutList, currentItemToDelete.exIdToDelete, currentItemToDelete.setIdToDelete, loadExerciseList, toggleDelete) {
-    //     e.preventDefault()
-    //     deleteSingleSet(currentWorkoutList, currentItemToDelete.exIdToDelete, currentItemToDelete.setIdToDelete)
-    //     loadExerciseList()
-    //     toggleDelete(e)
-    // }

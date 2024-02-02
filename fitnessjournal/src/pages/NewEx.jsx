@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
 import { useOutletContext } from "react-router-dom"
-import { doc } from "firebase/firestore"
 import { getAllCategories, usersInDB, addExToCategory } from "../firebase"
 
 export default function NewEx() {

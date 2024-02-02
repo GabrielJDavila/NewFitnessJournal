@@ -11,7 +11,6 @@ export default function NewCat() {
     console.log(currentUser)
     function handleSubmit(e) {
         e.preventDefault()
-        // addNewCategory(newCatName.name, categoriesCollection)
         addNewCat(usersInDB, currentUser, newCatName.name)
     }
 

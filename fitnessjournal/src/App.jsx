@@ -28,12 +28,6 @@ function App() {
               <Route path="NewCat" element={<NewCat />} />
             </Route>
             
-            {/* <Route path="WorkoutLog" element={<WorkoutLog />} />
-            <Route path="AllCategories" element={<AllCategories />} />
-            <Route path="AllCategories/:id" element={<LoadedExercises />}/>
-            <Route path="ExerciseDetail/:id" element={<ExerciseDetail />} />
-            <Route path="NewEx" element={<NewEx />} />
-            <Route path="NewCat" element={<NewCat />} /> */}
           </Route>
         </Routes>
       </div>

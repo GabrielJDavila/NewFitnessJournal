@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef } from "react"
-import { NavLink, Link, useOutletContext } from "react-router-dom"
-import { usersInDB, retrieveCurrentExSetsReps, editSingleSet, deleteCategory, deleteEx, deleteSingleSet, deleteAllEx } from "../firebase"
+import { useState, useEffect } from "react"
+import { Link, useOutletContext } from "react-router-dom"
+import { usersInDB, retrieveCurrentExSetsReps, editSingleSet, deleteEx, deleteSingleSet, deleteAllEx } from "../firebase"
 import ConfirmDeleteAllExModal from "../components/modals/ConfirmDeleteAllEx"
 import ConfirmDeleteExModal from "../components/modals/ConfirmDeleteExModal"
 import ConfirmDeleteSetModal from "../components/modals/ConfirmDeleteSetModal"
@@ -54,14 +54,6 @@ export default function WorkoutLog() {
         setToggleCalendar(prev => !prev)
     }
 
-    // async function deleteAll() {
-    //     try {
-    //        await deleteAllEx(usersInDB, currentUser, date)
-    //        await loadExerciseList(date)
-    //     } catch(e) {
-    //         console.log("error deleting doc: ", e)
-    //     }
-    // }
 
     function ToggleDeleteAll() {
         setToggleDeleteAllExercisesModal(prev => !prev)
@@ -210,7 +202,6 @@ export default function WorkoutLog() {
                     <h1 className="current-log-title">Workout Log Empty</h1>
                 }
             </div>
-                {/* workoutData.length > 0 && <button onClick={deleteAll}>Delete all exercises</button> */}
         </div>
     )
 }
