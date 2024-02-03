@@ -33,12 +33,13 @@ h2, h3, label, p {
 button {
   font-family: 'Oswald', sans-serif;
   height: 50px;
-  background: rgb(191, 76, 48);
+  background: rgb(220, 104, 75);
   border: none;
   border-radius: 6px;
   font-size: 1.5rem;
   cursor: pointer;
 }
+
 
 .login-input-fieldset {
   display: flex;
@@ -71,6 +72,14 @@ button {
   justify-content: center;
   align-items: center;
 }
+
+.start-new-workout-container:hover,
+.date-dash:hover,
+.cat-interface-btn-container:hover,
+.category-interface-btn:hover {
+  background: rgb(193, 91, 66);
+}
+
 
 /* ============= Login page ==============*/
 
@@ -346,10 +355,6 @@ header {
   cursor: pointer;
 }
 
-.start-new-workout-container:hover, .date-dash:hover {
-  background: rgb(193, 91, 66);
-}
-
 .link-portal-dash {
   text-decoration: none;
   color: white;
@@ -471,8 +476,6 @@ header {
   align-items: center;
 }
 
-.edit-set-title {}
-
 .edit-set-close {
   font-size: 1.5rem;
   position: absolute;
@@ -562,11 +565,42 @@ header {
 
 /*=============== AllCategories.jsx styles ====================*/
 
+/* CategoryBtns Styles start */
+
+.category-interface-btns-outer-container {
+  display: flex;
+  margin-top: 4rem;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.cat-interface-btn-container {
+  width: 25%;
+  background: rgb(220, 104, 75);
+  padding: .5rem 0 1rem;
+}
+
+.category-interface-btn {
+  width: 100%;
+  color: white;
+  border-radius: 0;
+  background: none;
+}
+
+.category-interface-btn-text {
+  margin: 0;
+  font-size: 1rem;
+  color: white;
+}
+
+/* CategoryBtns end */
+
 .all-ex-page-container {
   text-align: center;
   width: 90%;
   max-width: 900px;
-  margin: 5rem auto 0;
+  margin: 4rem auto 0;
 }
 
 .rendered-ex-container {
@@ -789,9 +823,9 @@ footer {
   margin-right: auto;
 }
 
-.arrow-back {
+/* .arrow-back {
   font-size: 2rem
-}
+} */
 
 .back-btn-text {
   margin: 0;

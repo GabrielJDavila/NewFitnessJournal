@@ -122,6 +122,7 @@ export default function WorkoutLog() {
                         setToggleDeleteAllExercisesModal
                     })}
                     toggle={e => toggleDeleteAllEx(e, setToggleDeleteAllExercisesModal)}
+                    modalStyles={modalStyles}
                 />
             }
             { toggleEditSetModal &&

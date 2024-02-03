@@ -3,6 +3,7 @@ import { useState, useEffect } from "react"
 import { Link, useOutletContext } from "react-router-dom"
 import { getAllCategories, usersInDB, editCategoryName, deleteCategory } from "../firebase"
 import BackBtn from "../components/BackBtn"
+import CategoryNav from "../components/CaregoryNav"
 
 export default function AllCategories() {
     const [toggleEditModal, setToggleEditModal] = useState(false)
@@ -113,20 +114,23 @@ export default function AllCategories() {
     })
 
     return (
-        <div className="all-ex-page-container">
-            <form className="search-ex-form">
-                <BackBtn />
-                <input
-                    type="search"
-                    placeholder="search exercise"
-                    className="search-ex-input"
-                />
-                <i className="fa-solid fa-magnifying-glass"></i>
-            </form>
-            {toggleEditModal && editModal}
-            {openConfirmDeleteModal && confirmDeleteModal}
-            {loadedCategories && renderedCategories}
-            <Link to="NewCat">Create Some Workout Categories!</Link>
+        <div className="all-cats-container">
+            <CategoryNav />
+            <div className="all-ex-page-container">
+                {/* <form className="search-ex-form">
+                    <BackBtn />
+                    <input
+                        type="search"
+                        placeholder="search exercise"
+                        className="search-ex-input"
+                    />
+                    <i className="fa-solid fa-magnifying-glass"></i>
+                </form> */}
+                {toggleEditModal && editModal}
+                {openConfirmDeleteModal && confirmDeleteModal}
+                {loadedCategories && renderedCategories}
+                <Link to="NewCat">Create Some Workout Categories!</Link>
+            </div>
         </div>
     )
 }
