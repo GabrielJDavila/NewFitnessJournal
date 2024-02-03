@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { useOutletContext } from "react-router-dom"
 import { getAllCategories, usersInDB, addExToCategory } from "../firebase"
 
-export default function NewEx() {
+export default function NewEx(props) {
     const [newExFormData, setNewExFormData] = useState({
         name: "",
         category: "",
@@ -79,6 +79,9 @@ export default function NewEx() {
 
     return (
         <form onSubmit={handleSubmit} className="add-ex-form">
+            <span onClick={props.toggleModal} className="material-symbols-outlined close-add-ex" data-addex>
+                cancel
+            </span>
             <label htmlFor="new-ex-name">Name</label>
             <input
                 type="text"

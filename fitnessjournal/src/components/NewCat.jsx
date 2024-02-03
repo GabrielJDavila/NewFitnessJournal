@@ -2,7 +2,7 @@ import { useState } from "react"
 import { useOutletContext } from "react-router-dom"
 import { addNewCat, usersInDB } from "../firebase"
 
-export default function NewCat() {
+export default function NewCat(props) {
     const [newCatName, setNewCatName] = useState({
         name: ""
     })
@@ -32,7 +32,7 @@ export default function NewCat() {
                 required
             />
             <div className="new-cat-btns-container">
-                <p className="cancel-btn">cancel</p>
+                <p onClick={props.toggleModal} data-newcat className="cancel-btn">cancel</p>
                 <button className="confirm-btn">save</button>
             </div>
         </form>

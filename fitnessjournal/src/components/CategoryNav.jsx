@@ -1,7 +1,7 @@
 import BackBtn from "./BackBtn";
 import { Link } from "react-router-dom"
 
-export default function CategoryNav() {
+export default function CategoryNav(props) {
     return (
         <div className="category-interface-btns-outer-container">
             
@@ -23,7 +23,7 @@ export default function CategoryNav() {
 
             <div className="cat-interface-btn-container">
                 <button className="category-interface-btn">
-                    <span class="material-symbols-outlined">
+                    <span className="material-symbols-outlined">
                         search
                     </span>
                 </button>
@@ -31,8 +31,8 @@ export default function CategoryNav() {
             </div>
 
             <div className="cat-interface-btn-container">
-                <button className="category-interface-btn">
-                    <span class="material-symbols-outlined">
+                <button onClick={props.toggleModal} data-newcat className="category-interface-btn">
+                    <span className="material-symbols-outlined">
                         create_new_folder
                     </span>
                 </button>
@@ -40,7 +40,7 @@ export default function CategoryNav() {
             </div>
 
             <div className="cat-interface-btn-container">
-                <button className="category-interface-btn">
+                <button onClick={props.toggleModal} data-addex className="category-interface-btn">
                     <span className="material-symbols-outlined">
                         add
                     </span>

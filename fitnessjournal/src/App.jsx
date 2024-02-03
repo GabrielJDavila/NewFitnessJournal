@@ -24,8 +24,8 @@ function App() {
               <Route path="AllCategories" element={<AllCategories />} />
               <Route path="AllCategories/:id" element={<LoadedExercises />}/>
               <Route path="ExerciseDetail/:id" element={<ExerciseDetail />} />
-              <Route path="NewEx" element={<NewEx />} />
-              <Route path="NewCat" element={<NewCat />} />
+              {/* <Route path="AllCategories/NewEx" element={<NewEx />} />
+              <Route path="AllCategories/NewCat" element={<NewCat />} /> */}
             </Route>
             
           </Route>

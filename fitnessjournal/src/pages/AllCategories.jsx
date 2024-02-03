@@ -2,18 +2,22 @@ import Category from "../components/Category"
 import { useState, useEffect } from "react"
 import { Link, useOutletContext } from "react-router-dom"
 import { getAllCategories, usersInDB, editCategoryName, deleteCategory } from "../firebase"
-import BackBtn from "../components/BackBtn"
-import CategoryNav from "../components/CaregoryNav"
+import CategoryNav from "../components/CategoryNav"
+import NewCat from "../components/NewCat"
+import NewEx from "./NewEx"
 
 export default function AllCategories() {
     const [toggleEditModal, setToggleEditModal] = useState(false)
     const [openConfirmDeleteModal, setOpenConfirmDeleteModal] = useState(false)
+    const [toggleNewCatModal, setToggleNewCatModal] = useState(false)
+    const [toggleNewExModal, setToggleNewExModal] = useState(false)
     const [loadedCategories, setLoadedCategories] = useState([])
     const [currentId, setCurrentId] = useState(null)
     const [editCategoryTitle, setEditCategoryTitle] = useState({
         title: ""
     })
     const { currentUser } = useOutletContext()
+    console.log(toggleNewCatModal, toggleNewExModal)
 
     async function loadData() {
         try {
@@ -40,6 +44,14 @@ export default function AllCategories() {
         deleteCategory(usersInDB, currentUser, currentId)
         loadData()
         toggleDelete()
+    }
+
+    function toggleModal(e) {
+        if(e.target.dataset.newcat) {
+            setToggleNewCatModal(prev => !prev)
+        } else if(e.target.dataset.addex) {
+            setToggleNewExModal(prev => !prev)
+        }
     }
 
     function toggleDelete(e) {
@@ -69,9 +81,11 @@ export default function AllCategories() {
     }
 
     const modalStyles = {
-        position: "absolute",
+        position: "sticky",
+        top: "100px",
         right: "50px",
         left: "50px",
+        padding: "2rem",
         background: "white"
     }
 
@@ -115,7 +129,11 @@ export default function AllCategories() {
 
     return (
         <div className="all-cats-container">
-            <CategoryNav />
+            <CategoryNav
+                toggleModal={e => toggleModal(e)}
+            />
+            {toggleNewCatModal && <NewCat toggleModal={e => toggleModal(e)}/>}
+            {toggleNewExModal && <NewEx toggleModal={e => toggleModal(e)}/>}
             <div className="all-ex-page-container">
                 {/* <form className="search-ex-form">
                     <BackBtn />

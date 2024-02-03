@@ -600,7 +600,7 @@ header {
   text-align: center;
   width: 90%;
   max-width: 900px;
-  margin: 4rem auto 0;
+  margin: 2rem auto 0;
 }
 
 .rendered-ex-container {
@@ -705,11 +705,18 @@ header {
 .add-ex-form {
   display: flex;
   flex-direction: column;
-  justify-content: left;
+  justify-content: center;
+  text-align: center;
   width: 90%;
   max-width: 600px;
-  margin: 0 auto;
+  margin: 1rem auto 0;
   font-size: 1.5rem;
+}
+
+.close-add-ex {
+  margin-left: auto;
+  font-size: 2.5rem;
+  color: rgb(220, 104, 75);
 }
 
 .new-ex-name, select {
