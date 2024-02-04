@@ -510,6 +510,10 @@ header {
 
 /*=============== ExerciseDetail.jsx styles ====================*/
 
+.set-detail {
+  margin-top: 80px;
+}
+
 .dash-input-fieldset {
   padding: 0;
   border: none;

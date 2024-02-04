@@ -31,8 +31,8 @@ export default function CategoryNav(props) {
             </div>
 
             <div className="cat-interface-btn-container">
-                <button onClick={props.toggleModal} data-newcat className="category-interface-btn">
-                    <span className="material-symbols-outlined">
+                <button className="category-interface-btn">
+                    <span onClick={props.toggleModal} data-newcat className="material-symbols-outlined">
                         create_new_folder
                     </span>
                 </button>
@@ -40,8 +40,8 @@ export default function CategoryNav(props) {
             </div>
 
             <div className="cat-interface-btn-container">
-                <button onClick={props.toggleModal} data-addex className="category-interface-btn">
-                    <span className="material-symbols-outlined">
+                <button className="category-interface-btn">
+                    <span onClick={props.toggleModal} data-addex className="material-symbols-outlined">
                         add
                     </span>
                 </button>
