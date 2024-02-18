@@ -87,7 +87,7 @@ button {
 .signup-page-container {
   width: 100vw;
   height: 100vh;
-  background: rgb(191, 76, 48);
+  background: white;
 }
 
 .login-page {
@@ -100,11 +100,10 @@ button {
   flex-direction: column;
   justify-content: center;
   text-align: center;
-  height: 600px;
   padding: 2rem;
   font-size: 1.5rem;
-  width: 80%;
-  max-width: 500px;
+  width: 100%;
+  max-width: 600px;
   margin: auto;
   background: white;
 }
