@@ -124,12 +124,21 @@ button {
   border-bottom: 5px solid rgb(183, 75, 47);
 }
 
+.login-input-fieldset {
+  display: flex;
+  gap: 1rem;
+}
+
 /* ============= SignUp page ==============*/
 
 .sign-up, .switch-to-login {
   text-decoration: underline;
   color: rgb(84, 184, 241);
   cursor: pointer;
+}
+
+.sign-up-label {
+  text-align: left;
 }
 
 .password-error {
@@ -142,6 +151,36 @@ button {
   font-size: small;
   color: red;
 }
+
+/* ============= Profile Creation Page ============== */
+
+.profile-creation {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5rem;
+}
+
+.profile-creation-fieldset {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 1rem;
+  border: none;
+}
+
+.body-measurements-container {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  justify-content: left;
+  text-align: left;
+  margin: 0 auto;
+  width: 100%;
+}
+
+
 
 /* ============= header and nav styles ==============*/
 header {

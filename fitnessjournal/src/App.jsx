@@ -9,6 +9,7 @@ import LoadedExercises from './pages/LoadedExercises'
 import ExerciseDetail from './pages/ExerciseDetail'
 import WorkoutLog from "./pages/WorkoutLog"
 import WorkoutLogLayout from "./components/WorkoutLogLayout"
+import ProfileCreation from "./pages/ProfileCreation"
 
 function App() {
 
@@ -18,7 +19,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Dashboard />} />
-
+            <Route path="profilecreation" element={<ProfileCreation />}/>
             <Route path="WorkoutLog" element={<WorkoutLogLayout />}>
               <Route index element={<WorkoutLog />} />
               <Route path="AllCategories" element={<AllCategories />} />

@@ -7,10 +7,12 @@ import { useEffect, useState } from "react"
 import { signIn, signUpUser, auth } from "../firebase"
 import { onAuthStateChanged } from "firebase/auth"
 
+
 export default function Layout() {
     const [loggedIn, setLoggedIn] = useState(false)
     const [showLogin, setShowLogin] = useState(true)
     const [loginError, setLoginError] = useState(false)
+    const [showModal, setShowModal] = useState(false)
     const [loginInfo, setLoginInfo] = useState({
         email: "",
         password: ""
@@ -47,7 +49,7 @@ export default function Layout() {
         ) {
             console.log(`check works, pass is: ${loginInfo.password}`)
             signUpUser(loginInfo.email, loginInfo.password)
-            navigate("/")
+            navigate("profilecreation")
         } else {
             flipShowPasswordError()
             console.log(`check fails. attempted password: ${loginInfo.password}`)
@@ -95,6 +97,7 @@ export default function Layout() {
             />
         )
     }
+   
     return (
         <div className="first-layout">
             <Header />
