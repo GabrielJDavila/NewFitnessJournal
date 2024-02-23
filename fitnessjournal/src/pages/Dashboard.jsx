@@ -10,6 +10,12 @@ import Calendar from "react-calendar"
 import "react-calendar/dist/Calendar.css"
 
 export default function Dashboard() {
+
+    // useEffect(() => {
+    //     const timer = setTimeout(() => {
+
+    //     }, 3000)
+    // })
     return (
         <main className="dashboard">
             <section className="hero-section dash-hero">

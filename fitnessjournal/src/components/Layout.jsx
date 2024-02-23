@@ -6,13 +6,15 @@ import SignUp from "./SignUp"
 import { useEffect, useState } from "react"
 import { signIn, signUpUser, auth } from "../firebase"
 import { onAuthStateChanged } from "firebase/auth"
+import ProfileCreation from "../pages/ProfileCreation"
 
 
 export default function Layout() {
     const [loggedIn, setLoggedIn] = useState(false)
     const [showLogin, setShowLogin] = useState(true)
+    const [renderProfileCreation, setRenderProfileCreation] = useState(false)
+    const [renderProfileForm, setRenderProfileForm] = useState(false)
     const [loginError, setLoginError] = useState(false)
-    const [showModal, setShowModal] = useState(false)
     const [loginInfo, setLoginInfo] = useState({
         email: "",
         password: ""
@@ -73,6 +75,14 @@ export default function Layout() {
         }))
     }
 
+    function skipProfileCreation() {
+        setRenderProfileCreation(true)
+    }
+
+    function continueWithProfileCreation() {
+        setRenderProfileForm(prev => !prev)
+    }
+
     if(!loggedIn && showLogin) {
         return (
             <Login
@@ -94,6 +104,17 @@ export default function Layout() {
                 flipShowLogin={flipShowLogin}
                 flipShowPasswordError={flipShowPasswordError}
                 loginError={loginError}
+                // flipCreateProfile={() => pr}
+            />
+        )
+    }
+
+    if (!renderProfileCreation && loggedIn) {
+        return (
+            <ProfileCreation
+                skipProfileCreation={skipProfileCreation}
+                continueWithProfileCreation={continueWithProfileCreation}
+                renderProfileForm={renderProfileForm}
             />
         )
     }
