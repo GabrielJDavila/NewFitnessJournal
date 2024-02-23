@@ -14,7 +14,7 @@ export default function ProfileCreation(props) {
     })
 
     return (
-        <div>
+        <div className="profile-creation-container">
             <h1 className="profile-creation-title">Profile</h1>
             <p>Creating your profile is recommended for an optimized experience. To skip, click on the dashboard button.</p>
             <div className="render-form-btns-container">

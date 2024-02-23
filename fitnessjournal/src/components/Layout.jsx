@@ -51,7 +51,6 @@ export default function Layout() {
         ) {
             console.log(`check works, pass is: ${loginInfo.password}`)
             signUpUser(loginInfo.email, loginInfo.password)
-            navigate("profilecreation")
         } else {
             flipShowPasswordError()
             console.log(`check fails. attempted password: ${loginInfo.password}`)
