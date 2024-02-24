@@ -43,7 +43,7 @@ export const usersInDB = collection(db, "users")
 export const currentUserLoggedIn = collection(db, "currentUser")
 
 // add user to collection
-async function addUserToCollection(collectionType, user) {
+async function addUserToCollection(collectionType, user, { name, age, gender, weight, weightType, height1, heightType1, height2, heightType2 }) {
     try {
         const docRef = doc(collectionType, user)
         const docSnap = await getDoc(docRef)
@@ -54,7 +54,16 @@ async function addUserToCollection(collectionType, user) {
             
         } else {
             await setDoc(docRef, {
-                userId: user
+                userId: user,
+                name: name,
+                age: age,
+                gender: gender,
+                weight: weight,
+                weightType: weightType,
+                height1: height1,
+                heightType1,
+                height2: height2,
+                heightType2: heightType2
             })
             console.log(`added user: ${user}`)
         }
@@ -64,11 +73,11 @@ async function addUserToCollection(collectionType, user) {
 }
 
 // create new user sign up
-export function signUpUser(email, password) {
-    createUserWithEmailAndPassword(auth, email, password)
+export function signUpUser(loginInfo) {
+    createUserWithEmailAndPassword(auth, loginInfo.email, loginInfo.password)
         .then(userCredential => {
             const user = userCredential.user.uid
-            addUserToCollection(usersInDB, user)
+            addUserToCollection(usersInDB, user, loginInfo)
 
             getExistingCatsAndEx(user, existingCatsCollection, usersInDB)
                 .then(() => {

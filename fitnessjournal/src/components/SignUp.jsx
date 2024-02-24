@@ -40,6 +40,8 @@ export default function SignUp(props) {
                             <input
                                 name="name"
                                 id="name"
+                                onChange={e => props.handleChange(e)}
+                                value={props.name}
                                 type="text"
                                 placeholder="name"
                                 className="login-cred"
@@ -52,6 +54,8 @@ export default function SignUp(props) {
                             <input
                                 name="age"
                                 id="age"
+                                onChange={e => props.handleChange(e)}
+                                value={props.age}
                                 type="text"
                                 placeholder="age"
                                 className="login-cred"
@@ -64,6 +68,8 @@ export default function SignUp(props) {
                             <input
                                 name="gender"
                                 id="gender"
+                                onChange={e => props.handleChange(e)}
+                                value={props.gender}
                                 type="text"
                                 placeholder="gender(optional)"
                                 className="login-cred"
@@ -76,11 +82,19 @@ export default function SignUp(props) {
                                 <input
                                     name="weight"
                                     id="weight"
+                                    onChange={e => props.handleChange(e)}
+                                    value={props.weight}
                                     type="text"
                                     placeholder="weight"
                                     className="login-cred weight"
                                 />
-                                <select className="profile-select">
+                                <select
+                                    name="weightType"
+                                    onChange={e => props.handleChange(e)}
+                                    value={props.weightType}
+                                    className="profile-select"
+                                >
+                                    <option value="">-- select --</option>
                                     <option value="kg">kg</option>
                                     <option value="lb">lb</option>
                                 </select>    
@@ -96,10 +110,18 @@ export default function SignUp(props) {
                                 <input
                                     name="height1"
                                     id="height1"
+                                    onChange={e => props.handleChange(e)}
+                                    value={props.height1}
                                     type="text"
                                     className="login-cred height"
                                 />
-                                <select className="profile-select">
+                                <select
+                                    name="heightType1"
+                                    onChange={e => props.handleChange(e)}
+                                    value={props.heightType1}
+                                    className="profile-select"
+                                >
+                                    <option value="">-- select --</option>
                                     <option value="ft">ft</option>
                                     <option value="m">m</option>
                                 </select>
@@ -108,10 +130,18 @@ export default function SignUp(props) {
                             <div className="height-second-measurement-container">
                                 <input
                                     name="height2"
+                                    onChange={e => props.handleChange(e)}
+                                    value={props.height2}
                                     type="text"
                                     className="login-cred height"
                                 />
-                                <select className="profile-select">
+                                <select
+                                    name="heightType2"
+                                    onChange={e => props.handleChange(e)}
+                                    value={props.heightType2}
+                                    className="profile-select"
+                                >
+                                    <option value="">-- select --</option>
                                     <option value="in">in</option>
                                     <option value="cm">cm</option>
                                 </select>

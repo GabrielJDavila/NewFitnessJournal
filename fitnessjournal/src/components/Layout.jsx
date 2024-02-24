@@ -12,8 +12,6 @@ import ProfileCreation from "../pages/ProfileCreation"
 export default function Layout() {
     const [loggedIn, setLoggedIn] = useState(false)
     const [showLogin, setShowLogin] = useState(true)
-    const [renderProfileCreation, setRenderProfileCreation] = useState(false)
-    const [renderProfileForm, setRenderProfileForm] = useState(false)
     const [loginError, setLoginError] = useState(false)
     const [loginInfo, setLoginInfo] = useState({
         email: "",
@@ -23,9 +21,12 @@ export default function Layout() {
         gender: "",
         weight: "",
         weightType: "",
+        height1: "",
         heightType1: "",
+        height2: "",
         heightType2: ""
     })
+    console.log(loginInfo)
     
     const [currentUser, setCurrentUser] = useState({
         uid: ""
@@ -56,7 +57,7 @@ export default function Layout() {
             /\d/.test(loginInfo.password)
         ) {
             console.log(`check works, pass is: ${loginInfo.password}`)
-            signUpUser(loginInfo.email, loginInfo.password)
+            signUpUser(loginInfo)
         } else {
             flipShowPasswordError()
             console.log(`check fails. attempted password: ${loginInfo.password}`)
@@ -80,7 +81,7 @@ export default function Layout() {
         }))
     }
 
-    if(!loggedIn && showLogin && !renderProfileCreation) {
+    if(!loggedIn && showLogin) {
         return (
             <Login
                 handleSignIn={handleSignIn}
@@ -102,7 +103,9 @@ export default function Layout() {
                 gender={loginInfo.gender}
                 weight={loginInfo.weight}
                 weightType={loginInfo.weightType}
+                height1={loginInfo.height1}
                 heightType1={loginInfo.heightType1}
+                height2={loginInfo.height2}
                 heightType2={loginInfo.heightType2}
                 flipShowLogin={flipShowLogin}
                 flipShowPasswordError={flipShowPasswordError}
