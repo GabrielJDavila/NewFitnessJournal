@@ -17,13 +17,19 @@ export default function Layout() {
     const [loginError, setLoginError] = useState(false)
     const [loginInfo, setLoginInfo] = useState({
         email: "",
-        password: ""
+        password: "",
+        name: "",
+        age: "",
+        gender: "",
+        weight: "",
+        weightType: "",
+        heightType1: "",
+        heightType2: ""
     })
+    
     const [currentUser, setCurrentUser] = useState({
         uid: ""
     })
-
-    const navigate = useNavigate()
  
     useEffect(() => {
         const unsubcribe = onAuthStateChanged(auth, user => {
@@ -74,15 +80,7 @@ export default function Layout() {
         }))
     }
 
-    function skipProfileCreation() {
-        setRenderProfileCreation(true)
-    }
-
-    function continueWithProfileCreation() {
-        setRenderProfileForm(prev => !prev)
-    }
-
-    if(!loggedIn && showLogin) {
+    if(!loggedIn && showLogin && !renderProfileCreation) {
         return (
             <Login
                 handleSignIn={handleSignIn}
@@ -100,23 +98,29 @@ export default function Layout() {
                 handleChange={handleChange}
                 email={loginInfo.email}
                 password={loginInfo.password}
+                name={loginInfo.name}
+                gender={loginInfo.gender}
+                weight={loginInfo.weight}
+                weightType={loginInfo.weightType}
+                heightType1={loginInfo.heightType1}
+                heightType2={loginInfo.heightType2}
                 flipShowLogin={flipShowLogin}
                 flipShowPasswordError={flipShowPasswordError}
                 loginError={loginError}
-                // flipCreateProfile={() => pr}
+                
             />
         )
     }
 
-    if (!renderProfileCreation && loggedIn) {
-        return (
-            <ProfileCreation
-                skipProfileCreation={skipProfileCreation}
-                continueWithProfileCreation={continueWithProfileCreation}
-                renderProfileForm={renderProfileForm}
-            />
-        )
-    }
+    // if (renderProfileCreation && !loggedIn) {
+    //     return (
+    //         <ProfileCreation
+    //             handleSignUp={handleSignUp}
+    //             continueWithProfileCreation={continueWithProfileCreation}
+    //             renderProfileForm={renderProfileForm}
+    //         />
+    //     )
+    // }
    
     return (
         <div className="first-layout">

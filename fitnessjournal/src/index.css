@@ -27,7 +27,7 @@ body {
 }
 
 h2, h3, label, p {
-  font-size: 1.5rem;
+  font-size: 1rem;
 }
 
 button {
@@ -36,7 +36,7 @@ button {
   background: rgb(220, 104, 75);
   border: none;
   border-radius: 6px;
-  font-size: 1.5rem;
+  font-size: 1rem;
   cursor: pointer;
 }
 
@@ -60,10 +60,14 @@ button {
   border-radius: 6px;
   border: none;
   background-color: rgb(239, 239, 239);
-  font-size: 1.5rem;
+  font-size: 1rem;
 }
 
-.login-button {}
+.optional-tag {
+  font-style: italic;
+  color: rgb(173, 173, 173);
+  font-size: 1rem;
+}
 
 .hero-section {
   height: 30vh;
@@ -80,7 +84,6 @@ button {
   background: rgb(193, 91, 66);
 }
 
-
 /* ============= Login page ==============*/
 
 .login-page-container,
@@ -90,12 +93,8 @@ button {
   background: white;
 }
 
-.login-page {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  left: 0;
+.login-page, .signup-page {
+  
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -104,7 +103,7 @@ button {
   font-size: 1.5rem;
   width: 100%;
   max-width: 600px;
-  margin: auto;
+  margin: 5rem auto 0;
   background: white;
 }
 
@@ -152,9 +151,53 @@ button {
   color: red;
 }
 
+.profile-creation-fieldset {
+  border: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  margin: 0 0 2rem;
+}
+
+.profile-creation-container {
+  margin-bottom: 2rem;
+}
+
+.name-and-age-container, .gender-and-weight-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+.gender-container, .weight-container {
+  width: 100%;
+}
+
+.weight-input-container, .height-container {
+  display: flex;
+  width: 100%;
+  gap: 1rem;
+  align-items: center;
+}
+
+.height-first-measurement-container, .height-second-measurement-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+}
+
+.profile-select {
+  font-size: 1rem;
+  margin: 0;
+  height: 2rem;
+}
+
 /* ============= Profile Creation Page ============== */
 
-.profile-creation-container {}
+/* .profile-creation-container {}
 
 .profile-creation-container, .profile-creation {
   display: flex;
@@ -187,7 +230,7 @@ button {
 
 .weight-container, .height-container {
   width: 100%;
-}
+} */
 
 
 

@@ -18,12 +18,12 @@ export default function ProfileCreation(props) {
             <h1 className="profile-creation-title">Profile</h1>
             <p>Creating your profile is recommended for an optimized experience. To skip, click on the dashboard button.</p>
             <div className="render-form-btns-container">
-                <button onClick={e => props.skipProfileCreation(e)}>skip for now</button>
+                <button onClick={e => props.handleSignUp(e)}>skip for now</button>
                 <button onClick={e => props.continueWithProfileCreation(e)}>create profile</button>
             </div>
 
             {props.renderProfileForm &&
-            <form className="profile-creation">
+            <form onSubmit={e => props.handleSignUp(e)} className="profile-creation">
                 <fieldset className="profile-creation-fieldset">
                     <label htmlFor="name">Name</label>
                     <input
