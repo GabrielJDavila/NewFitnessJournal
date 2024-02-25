@@ -9,6 +9,11 @@ export default function SignUp(props) {
                 <p onClick={e => props.flipShowLogin(e)} className="switch-to-login">Already have an account? Log in here.</p>
                 <fieldset className="login-input-fieldset">
                     <label htmlFor="email" className="sign-up-label">Email</label>
+                    {props.signUpErrorMessage &&
+                        <div className="password-error">
+                            <p className="password-error-text">* Email is already in use.</p>
+                        </div>
+                    }
                     <input
                         name="email"
                         type="email"
@@ -20,6 +25,7 @@ export default function SignUp(props) {
                         required
                     />
                     <label htmlFor="email" className="sign-up-label">password</label>
+                    {props.loginError && <PasswordError />}
                     <input
                         name="password"
                         type="password"
@@ -30,7 +36,6 @@ export default function SignUp(props) {
                         className="login-cred"
                         required
                     />
-                    {props.loginError && <PasswordError />}
                 </fieldset>
 
                 <fieldset className="profile-creation-fieldset">

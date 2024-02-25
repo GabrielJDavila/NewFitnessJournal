@@ -16,7 +16,7 @@ import {
     orderBy,
     Timestamp
 } from "firebase/firestore"
-import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth"
+import { createUserWithEmailAndPassword, fetchSignInMethodsForEmail, getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth"
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -43,7 +43,7 @@ export const usersInDB = collection(db, "users")
 export const currentUserLoggedIn = collection(db, "currentUser")
 
 // add user to collection
-async function addUserToCollection(collectionType, user, { name, age, gender, weight, weightType, height1, heightType1, height2, heightType2 }) {
+async function addUserToCollection(collectionType, user, { email, name, age, gender, weight, weightType, height1, heightType1, height2, heightType2 }) {
     try {
         const docRef = doc(collectionType, user)
         const docSnap = await getDoc(docRef)
@@ -55,6 +55,7 @@ async function addUserToCollection(collectionType, user, { name, age, gender, we
         } else {
             await setDoc(docRef, {
                 userId: user,
+                email: email,
                 name: name,
                 age: age,
                 gender: gender,
@@ -72,24 +73,72 @@ async function addUserToCollection(collectionType, user, { name, age, gender, we
     }
 }
 
-// create new user sign up
-export function signUpUser(loginInfo) {
-    createUserWithEmailAndPassword(auth, loginInfo.email, loginInfo.password)
-        .then(userCredential => {
-            const user = userCredential.user.uid
-            addUserToCollection(usersInDB, user, loginInfo)
+// function to check if email for sign up is available
+// export function fetchExis(email) {
+//     fetchSignInMethodsForEmail(email)
+//         .then()
+// }
 
-            getExistingCatsAndEx(user, existingCatsCollection, usersInDB)
-                .then(() => {
-                    console.log("Default data successfully cloned for user: ", user)
-                })
-                .catch(err => {
-                    console.error("error cloning data: ", err)
-                })
-        })
-        .catch(e => {
-            console.log("error creating user: ", e)
-        })
+// create new user sign up
+export async function signUpUser(loginInfo) {
+    const email = loginInfo.email
+    const password = loginInfo.password
+    // const docRef = doc(usersInDB, user)
+    // const docSnap = await getDoc(docRef)
+
+    // if(docSnap.exists()) {
+    //     console.log("user exists!")
+    //      return
+            
+    // }
+    try {
+        const q = query(usersInDB, where("email", "==", email))
+        const querySnapshot = await getDocs(q)
+        console.log(querySnapshot)
+
+        if(querySnapshot.empty) {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+            const user = userCredential.user.uid
+            await addUserToCollection(usersInDB, user, loginInfo)
+            await getExistingCatsAndEx(user, existingCatsCollection, usersInDB)
+            console.log("User created and default data successfully cloned for user: ", user)
+            return false
+        } else {
+            console.log(`user already exists: ${email}`)
+            alert("Email already exists. Please use another email.")
+            return true
+        }
+    } catch(e) {
+        console.log("error creating user: ", e)
+    }
+    
+    // createUserWithEmailAndPassword(auth, loginInfo.email, loginInfo.password)
+    //     .then(userCredential => {
+    //         const user = userCredential.user.uid
+    //         const q = query(usersInDB, where("userId", "==", user))
+    //         const querySnapshot = await getDocs(q)
+
+    //     if(querySnapshot.empty) {
+    //         await addDoc(categoriesCollectionRef, {
+    //             name: capitalizedCat
+    //         })
+    //         console.log(`Category ${capitalizedCat} added successfully.`)
+    //     } else {
+    //         console.log(`Category ${capitalizedCat} already exists.`)
+    //     }
+    //         addUserToCollection(usersInDB, user, loginInfo)
+
+    //         getExistingCatsAndEx(user, existingCatsCollection, usersInDB)
+    //             .then(() => {
+    //                 console.log("Default data successfully cloned for user: ", user)
+    //             })
+    //             .catch(err => {
+    //                 console.error("error cloning data: ", err)
+    //             })
+    //     })
+    //     .catch(e => {
+    //         console.log("error creating user: ", e)
+    //     })
 }
 
 // sign in app

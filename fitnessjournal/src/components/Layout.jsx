@@ -26,11 +26,11 @@ export default function Layout() {
         height2: "",
         heightType2: ""
     })
-    console.log(loginInfo)
-    
+    const [signUpErrorMessage, setSignUpErrorMessage] = useState(false)
     const [currentUser, setCurrentUser] = useState({
         uid: ""
     })
+    console.log(signUpErrorMessage)
  
     useEffect(() => {
         const unsubcribe = onAuthStateChanged(auth, user => {
@@ -49,7 +49,7 @@ export default function Layout() {
         signIn(loginInfo.email, loginInfo.password)
     }
 
-    function handleSignUp(e) {
+    async function handleSignUp(e) {
         e.preventDefault()
         if(/[A-Z]/.test(loginInfo.password) &&
             /[a-z]/.test(loginInfo.password) &&
@@ -57,7 +57,8 @@ export default function Layout() {
             /\d/.test(loginInfo.password)
         ) {
             console.log(`check works, pass is: ${loginInfo.password}`)
-            signUpUser(loginInfo)
+            const signUpSuccess = await signUpUser(loginInfo)
+            setSignUpErrorMessage(signUpSuccess)
         } else {
             flipShowPasswordError()
             console.log(`check fails. attempted password: ${loginInfo.password}`)
@@ -110,6 +111,7 @@ export default function Layout() {
                 flipShowLogin={flipShowLogin}
                 flipShowPasswordError={flipShowPasswordError}
                 loginError={loginError}
+                signUpErrorMessage={signUpErrorMessage}
                 
             />
         )

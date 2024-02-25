@@ -143,6 +143,7 @@ button {
 .password-error {
   display: flex;
   flex-direction: column;
+  text-align: left;
 }
 
 .password-error-text {
