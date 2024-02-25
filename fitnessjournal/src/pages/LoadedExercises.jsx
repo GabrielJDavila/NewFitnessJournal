@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react"
 import { Link, useParams, useOutletContext } from "react-router-dom"
 import { retreiveExFromCategory, retrieveSelectedCatName, usersInDB } from "../firebase"
+import CategoryNav from "../components/CategoryNav"
 import Exercise from "../components/Exercise"
 import BackBtn from "../components/BackBtn"
+import NewEx from "./NewEx"
 
 export default function LoadedExercises() {
     const params = useParams()
@@ -11,7 +13,7 @@ export default function LoadedExercises() {
         name: ""
     })
     const { currentUser } = useOutletContext()
-
+    
     async function loadExercisesData() {
         try {
             const catNameData = await retrieveSelectedCatName(usersInDB, currentUser, params.id)
@@ -29,9 +31,8 @@ export default function LoadedExercises() {
     
     useEffect(() => {
         loadExercisesData()
-    }, [params.id])
+    }, [])
 
-    console.log(selectedCat)
     const renderedExercises = exercises.map(exercise => {
         return (
             <Exercise
@@ -48,13 +49,25 @@ export default function LoadedExercises() {
 
     return (
         <div className="rendered-ex-container">
-            <div className="back-btn-container">
-                <BackBtn />
-                <p className="back-to-cats-text">back to categories</p>
+            <CategoryNav reloadExData={loadExercisesData}/>
+            <div className="rendered-ex-header">
+                <div className="back-btn-container">
+                    <BackBtn />
+                    <p className="back-to-cats-text">back to categories</p>
+                </div>
+                <h2 className="selected-cat-title">{selectedCat.name}</h2>
             </div>
-            <h2>{selectedCat.name}</h2>
+            {/* {showNewExModal &&
+                <NewEx
+                    // toggleModal={() => setShowNewExModal(prev => !prev)}
+                    testProp="test"
+                    reloadExData={() => loadExercisesData()}
+                />} */}
             <div className="rendered-ex-list">
-                {exercises.length >= 1 ? renderedExercises : <Link to="/NewEx">Add new exercise</Link>}
+                {
+                    exercises.length >= 1 ? renderedExercises : <button>No exercises exist in category!</button>
+                }
+                {/* {exercises.length >= 1 ? renderedExercises : <button onClick={() => setShowNewExModal(prev => !prev)}>Add new exercise</button>} */}
             </div>
         </div>
         

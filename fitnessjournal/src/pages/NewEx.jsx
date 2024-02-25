@@ -12,7 +12,6 @@ export default function NewEx(props) {
     const [loadedCategories, setLoadedCategories] = useState([])
     const [toggleMessageState, setToggleMessageState] = useState(false)
     const { currentUser } = useOutletContext()
-
     async function loadData() {
         try {
             const data = await getAllCategories(usersInDB, currentUser)
@@ -43,6 +42,7 @@ export default function NewEx(props) {
             addExToCategory(usersInDB, currentUser, newExFormData.name, selectedCategory.id)
             clearForm()
             toggle()
+            props.reloadExData()
         } else {
             console.log("invalid category selected")
         }

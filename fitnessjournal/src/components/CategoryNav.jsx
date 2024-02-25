@@ -1,7 +1,20 @@
+import { useState } from "react"; 
 import BackBtn from "./BackBtn";
 import { Link } from "react-router-dom"
+import NewCat from "./NewCat";
+import NewEx from "../pages/NewEx";
 
 export default function CategoryNav(props) {
+    const [toggleNewCatModal, setToggleNewCatModal] = useState(false)
+    const [toggleNewExModal, setToggleNewExModal] = useState(false)
+
+    function toggleModal(e) {
+        if(e.target.dataset.newcat) {
+            setToggleNewCatModal(prev => !prev)
+        } else if(e.target.dataset.addex) {
+            setToggleNewExModal(prev => !prev)
+        }
+    }
     return (
         <div className="category-interface-btns-outer-container">
             
@@ -32,7 +45,7 @@ export default function CategoryNav(props) {
 
             <div className="cat-interface-btn-container">
                 <button className="category-interface-btn">
-                    <span onClick={props.toggleModal} data-newcat className="material-symbols-outlined">
+                    <span onClick={toggleModal} data-newcat className="material-symbols-outlined">
                         create_new_folder
                     </span>
                 </button>
@@ -41,12 +54,15 @@ export default function CategoryNav(props) {
 
             <div className="cat-interface-btn-container">
                 <button className="category-interface-btn">
-                    <span onClick={props.toggleModal} data-addex className="material-symbols-outlined">
+                    <span onClick={toggleModal} data-addex className="material-symbols-outlined">
                         add
                     </span>
                 </button>
                 <p className="category-interface-btn-text">new exercise</p>
             </div>
+
+            {toggleNewCatModal && <NewCat toggleModal={toggleModal}/>}
+            {toggleNewExModal && <NewEx reloadExData={props.reloadExData} toggleModal={toggleModal}/>}
 
         </div>
     )

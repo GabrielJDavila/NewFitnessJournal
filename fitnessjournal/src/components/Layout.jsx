@@ -30,15 +30,13 @@ export default function Layout() {
     const [currentUser, setCurrentUser] = useState({
         uid: ""
     })
-    console.log(signUpErrorMessage)
  
     useEffect(() => {
         const unsubcribe = onAuthStateChanged(auth, user => {
             if(user) {
                 setLoggedIn(!!user)
                 setCurrentUser(user.uid)
-                console.log("user is signed in: ", user.uid)
-                
+                // console.log("user is signed in: ", user.uid)
             }
         })
         return () => unsubcribe()
@@ -56,12 +54,12 @@ export default function Layout() {
             /\W/.test(loginInfo.password) &&
             /\d/.test(loginInfo.password)
         ) {
-            console.log(`check works, pass is: ${loginInfo.password}`)
+            // console.log(`check works, pass is: ${loginInfo.password}`)
             const signUpSuccess = await signUpUser(loginInfo)
             setSignUpErrorMessage(signUpSuccess)
         } else {
             flipShowPasswordError()
-            console.log(`check fails. attempted password: ${loginInfo.password}`)
+            // console.log(`check fails. attempted password: ${loginInfo.password}`)
         }
     }
 
