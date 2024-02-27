@@ -24,22 +24,27 @@ export default function Dashboard() {
             <div className="dashboard-top-content-container">
 
                 <div className="log-container">
-                    <div className="log-text-container">
-                        <p className="log-text">4 Sessions This Week</p>
-                        {/* <p className="log-text">3 PRs</p> */}
+                    <div className="log-title-container">
+                        <span className="material-symbols-outlined dash-icon">
+                            fitness_center
+                        </span>
+                        <p className="log-title">Workouts</p>
                     </div>
-                    <Link className="workout-log-link">
-                        <button>Go to workout log</button>
-                    </Link>
+                    <div className="log-text-container">
+                        <p className="log-text">4 /<small>7</small></p>
+                    </div>
                 </div>
 
                 <div className="log-container">
-                    <div className="log-text-container">
-                        <p className="log-text">1500/2300cal</p>
+                     <div className="log-title-container">
+                        <span className="material-symbols-outlined dash-icon">
+                            nutrition
+                        </span>
+                        <p className="log-title">Nutrition</p>
                     </div>
-                    <Link className="workout-log-link">
-                        <button>Go to food log</button>
-                    </Link>
+                    <div className="log-text-container">
+                        <p className="log-text">1500/<small>2300cal</small></p>
+                    </div>
                 </div>
 
             </div>

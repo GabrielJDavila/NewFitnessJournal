@@ -9,6 +9,7 @@ import CurrentWorkoutList from "../components/CurrentWorkoutList"
 import { handleDeleteExerciseSubmit, handleDeleteSetSubmit, handleEditSetSubmit, handleDeleteAllExSubmit, toggleEdit, toggleDelete, toggleDeleteAllEx } from "../Utils"
 import Calendar from "react-calendar"
 import "react-calendar/dist/Calendar.css"
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
 
 export default function WorkoutLog() {
     const [workoutData, setWorkoutData] = useState([])
@@ -193,17 +194,25 @@ export default function WorkoutLog() {
                 />
             }
 
+            
             <div className="current-log-container">
                 {
                     workoutData.length > 0 ?
-                    <div className="current-log-inner-container">
-                        <h2>Current Workout</h2>
-                        <CurrentWorkoutList
-                            data={workoutData}
-                            toggleDel={e => toggleDelete(e, setCurrentItemToDelete, setToggleDeleteExModal, setToggleDeleteSetModal)}
-                            toggleEdit={e => toggleEdit(e, setNewSetInfo, setToggleEditSetModal)}
-                        />
-                    </div> : 
+                    <DragDropContext >
+                        <Droppable droppableId="workoutData">
+                            {(provided) => (
+                                <div {...provided.droppableProps} ref={provided.innerRef} className="current-log-inner-container">
+                                    <h2>Current Workout</h2>
+                                    <CurrentWorkoutList
+                                        data={workoutData}
+                                        toggleDel={e => toggleDelete(e, setCurrentItemToDelete, setToggleDeleteExModal, setToggleDeleteSetModal)}
+                                        toggleEdit={e => toggleEdit(e, setNewSetInfo, setToggleEditSetModal)}
+                                    />
+                                    {provided.placeholder}
+                                </div>
+                            )}
+                        </Droppable>
+                    </DragDropContext> : 
                     <h1 className="current-log-title">Workout Log Empty</h1>
                 }
             </div>
