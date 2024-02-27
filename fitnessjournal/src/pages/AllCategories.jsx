@@ -32,6 +32,10 @@ export default function AllCategories() {
         loadData()
     }, [])
 
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    })
+
     function handleEditSubmit(e) {
         e.preventDefault()
         editCategoryName(usersInDB, currentUser, currentId, editCategoryTitle.title)

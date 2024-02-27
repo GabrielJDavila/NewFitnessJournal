@@ -326,9 +326,6 @@ header {
   gap: 1rem;
 }
 
-.rendered-ex-list {
-  margin: 10rem auto;
-}
 
 /*============ React Calendar ======================*/
 
@@ -383,6 +380,42 @@ header {
 .dash-hero {
   background: url("./assets/lifting1.png");
   color: white;
+}
+
+.dashboard-top-content-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.log-container {
+  box-shadow: 0 0 5px 2px rgb(220, 220, 220);
+  border-radius: 4px;
+  padding: 1rem;
+  width: 50%;
+}
+
+.log-text-container {}
+
+.log-text {}
+
+.workout-log-link {}
+
+.dashboard-bottom-container {
+  padding: 1rem;
+}
+
+.graph-container {
+  padding: 1rem;
+  box-shadow: 0 0 5px 2px rgb(220, 220, 220);
+  border-radius: 4px;
+}
+
+.graph {
+  width: 100%;
 }
 
 .current-log-container,
@@ -891,22 +924,31 @@ header {
   text-align: left;
 }
 
+.exercise-container {
+  padding: 1rem;
+}
+
 .back-btn-container {
   display: flex;
   align-items: center;
   gap: .5rem;
 }
 
-.back-to-cats-text {
+/* .back-to-cats-text {
   margin: 0;
-}
+} */
 
 .rendered-ex-list {
   text-align: center;
   width: 100%;
   max-width: 900px;
   margin: 0;
-  padding-top: 2rem;
+}
+
+.no-exercise-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* ======= Footer Styles ======== */
@@ -944,14 +986,6 @@ footer {
 .hide {
   display: none;
 }
-
-/* .back-btn {
-  margin-right: auto;
-} */
-
-/* .arrow-back {
-  font-size: 2rem
-} */
 
 .back-btn-text {
   margin: 0;

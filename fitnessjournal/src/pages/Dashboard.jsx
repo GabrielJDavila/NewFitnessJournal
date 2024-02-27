@@ -11,17 +11,46 @@ import "react-calendar/dist/Calendar.css"
 
 export default function Dashboard() {
 
-    // useEffect(() => {
-    //     const timer = setTimeout(() => {
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    })
 
-    //     }, 3000)
-    // })
     return (
         <main className="dashboard">
             <section className="hero-section dash-hero">
-                <h2>Dashboard</h2>
+                <h1>Dashboard</h1>
             </section>
-            <h1>Nothing to Show</h1>
+            {/* <h1 className="current-log-title">Nothing to Show</h1> */}
+            <div className="dashboard-top-content-container">
+
+                <div className="log-container">
+                    <div className="log-text-container">
+                        <p className="log-text">4 Sessions This Week</p>
+                        {/* <p className="log-text">3 PRs</p> */}
+                    </div>
+                    <Link className="workout-log-link">
+                        <button>Go to workout log</button>
+                    </Link>
+                </div>
+
+                <div className="log-container">
+                    <div className="log-text-container">
+                        <p className="log-text">1500/2300cal</p>
+                    </div>
+                    <Link className="workout-log-link">
+                        <button>Go to food log</button>
+                    </Link>
+                </div>
+
+            </div>
+
+            <div className="dashboard-bottom-container">
+                <p>Progress</p>
+                <div className="graph-container">
+                    <img src="./src/assets/graph.svg" className="graph"/>
+                </div>
+            </div>
+
         </main>
     )
 }

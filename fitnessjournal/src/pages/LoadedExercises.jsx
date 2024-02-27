@@ -33,6 +33,10 @@ export default function LoadedExercises() {
         loadExercisesData()
     }, [])
 
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    })
+
     const renderedExercises = exercises.map(exercise => {
         return (
             <Exercise
@@ -51,10 +55,10 @@ export default function LoadedExercises() {
         <div className="rendered-ex-container">
             <CategoryNav reloadExData={loadExercisesData}/>
             <div className="rendered-ex-header">
-                <div className="back-btn-container">
+                {/* <div className="back-btn-container">
                     <BackBtn />
                     <p className="back-to-cats-text">back to categories</p>
-                </div>
+                </div> */}
                 <h2 className="selected-cat-title">{selectedCat.name}</h2>
             </div>
             {/* {showNewExModal &&
@@ -65,7 +69,7 @@ export default function LoadedExercises() {
                 />} */}
             <div className="rendered-ex-list">
                 {
-                    exercises.length >= 1 ? renderedExercises : <button>No exercises exist in category!</button>
+                    exercises.length >= 1 ? renderedExercises : <div className="no-exercise-container"><h1 className="current-log-title">No Exercises Exist in Category!</h1></div>
                 }
                 {/* {exercises.length >= 1 ? renderedExercises : <button onClick={() => setShowNewExModal(prev => !prev)}>Add new exercise</button>} */}
             </div>

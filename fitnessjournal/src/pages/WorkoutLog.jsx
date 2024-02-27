@@ -34,6 +34,10 @@ export default function WorkoutLog() {
         loadExerciseList(date)
     }, [date])
 
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    })
+
     async function loadExerciseList() {
         try {
             const setsData = await retrieveCurrentExSetsReps(usersInDB, currentUser, date)
@@ -74,7 +78,7 @@ export default function WorkoutLog() {
     return (
         <div className="workout-log">
             <section className="hero-section log-hero">
-                <h2>Log</h2>
+                <h1>Log</h1>
             </section>
             <section className="dash-links-container">
                 <Link to="AllCategories" className="date-dash link-portal-dash">
