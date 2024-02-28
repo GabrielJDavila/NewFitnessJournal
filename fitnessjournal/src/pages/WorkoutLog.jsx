@@ -30,9 +30,40 @@ export default function WorkoutLog() {
         exId: "",
         setId: ""
     })
+
+    // const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
+    // const formattedDate = date.toLocaleDateString("en-US", {
+    //     timeZone: userTimeZone
+    // })
+    // console.log(formattedDate)
+
+    // useEffect(() => {
+    //     // Function to get user's current time zone
+    //     const getUserTimeZone = () => {
+    //         return Intl.DateTimeFormat().resolvedOptions().timeZone
+    //     }
+
+    //     // Update userDate state with the current date in the user's time zone
+    //     const updateUserDate = () => {
+    //         const userTimeZone = getUserTimeZone()
+    //         const currentDate = new Date().toLocaleString("en-US", {timeZone: userTimeZone})
+    //         setDate(new Date(currentDate))
+    //     }
+
+    //     // Call updateUserDate when the component mounts
+    //     updateUserDate()
+
+    //     // update userDate every second to relfect the current time
+    //     const intervalId = setInterval(updateUserDate, 1000)
+
+    //     // Clean up interval when the component unmounts
+    //     return () => clearInterval(intervalId)
+    // }, [])
     
     useEffect(() => {
-        loadExerciseList(date)
+        if(date) {
+            loadExerciseList(date)
+        }
     }, [date])
 
     useEffect(() => {
