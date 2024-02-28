@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Link, useOutletContext } from "react-router-dom"
 import { usersInDB, retrieveCurrentExSetsReps, editSingleSet, deleteEx, deleteSingleSet, deleteAllEx } from "../firebase"
 import ConfirmDeleteAllExModal from "../components/modals/ConfirmDeleteAllEx"
@@ -12,6 +12,7 @@ import "react-calendar/dist/Calendar.css"
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
 
 export default function WorkoutLog() {
+
     const [workoutData, setWorkoutData] = useState([])
     const [toggleEditSetModal, setToggleEditSetModal] = useState(false)
     const [toggleDeleteExModal, setToggleDeleteExModal] = useState(false)
@@ -30,35 +31,22 @@ export default function WorkoutLog() {
         exId: "",
         setId: ""
     })
+    const calendarRef = useRef(null)
 
-    // const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
-    // const formattedDate = date.toLocaleDateString("en-US", {
-    //     timeZone: userTimeZone
-    // })
-    // console.log(formattedDate)
+    // const currentDate = new Date();
+    // const offset = currentDate.getTimezoneOffset();
+    // const adjustedDate = new Date(currentDate.getTime() - (offset * 60 * 1000)); // Adjust for timezone offset
+    // const newFormattedDate = adjustedDate.toISOString().split('T')[0];
 
-    // useEffect(() => {
-    //     // Function to get user's current time zone
-    //     const getUserTimeZone = () => {
-    //         return Intl.DateTimeFormat().resolvedOptions().timeZone
-    //     }
+    // console.log(date.toISOString().split('T')[0])
+    // console.log(newFormattedDate)
 
-    //     // Update userDate state with the current date in the user's time zone
-    //     const updateUserDate = () => {
-    //         const userTimeZone = getUserTimeZone()
-    //         const currentDate = new Date().toLocaleString("en-US", {timeZone: userTimeZone})
-    //         setDate(new Date(currentDate))
-    //     }
+    const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
+    const currentDate = new Date()
+    const adjustedDate = new Date(currentDate.toLocaleString("en-US", {timeZone: userTimeZone}))
 
-    //     // Call updateUserDate when the component mounts
-    //     updateUserDate()
-
-    //     // update userDate every second to relfect the current time
-    //     const intervalId = setInterval(updateUserDate, 1000)
-
-    //     // Clean up interval when the component unmounts
-    //     return () => clearInterval(intervalId)
-    // }, [])
+    console.log(date)
+    console.log(adjustedDate)
     
     useEffect(() => {
         if(date) {
@@ -124,6 +112,15 @@ export default function WorkoutLog() {
         background: "white",
         zIndex: "12"
     }
+
+    const handleClickOutside = (e) => {
+        if(calendarRef.current && !calendarRef.current.contains(e.target)) {
+            setToggleCalendar(false)
+        }
+    }
+
+    document.addEventListener("click", handleClickOutside)
+
     return (
         <div className="workout-log">
             <section className="hero-section log-hero">
@@ -143,7 +140,7 @@ export default function WorkoutLog() {
                     <p className="link-text">Delete</p>
                 </div>
                 <div className="date-dash">
-                    <span onClick={handleToggleCalendar} className="material-symbols-outlined calendar-icon">
+                    <span ref={calendarRef} onClick={e => handleToggleCalendar(e)} className="material-symbols-outlined calendar-icon">
                          calendar_month
                     </span>
                     <p className="link-text">Date</p>

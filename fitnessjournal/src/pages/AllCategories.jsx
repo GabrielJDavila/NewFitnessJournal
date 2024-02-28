@@ -17,7 +17,6 @@ export default function AllCategories() {
         title: ""
     })
     const { currentUser } = useOutletContext()
-    console.log(toggleNewCatModal, toggleNewExModal)
 
     async function loadData() {
         try {

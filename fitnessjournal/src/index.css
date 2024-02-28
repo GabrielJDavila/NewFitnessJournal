@@ -664,7 +664,25 @@ header {
 /*=============== ExerciseDetail.jsx styles ====================*/
 
 .set-detail {
-  margin-top: 80px;
+  margin-top: 100px;
+  padding: 0 1rem;
+  position: fixed;
+  width: 100%;
+}
+
+.ex-detail-back-btn {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 1rem;
+  background: #DC684B;
+  padding: .5rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  text-decoration: none;
+  color: white;
 }
 
 .dash-input-fieldset {
@@ -718,6 +736,10 @@ header {
 
 .weight-type {
   margin: 0;
+}
+
+.add-set-btn {
+  color: white;
 }
 
 /*=============== AllCategories.jsx styles ====================*/

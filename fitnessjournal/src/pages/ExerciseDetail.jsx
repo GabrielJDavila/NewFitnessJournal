@@ -25,6 +25,10 @@ export default function ExerciseDetail() {
         }
     }, [showModal])
 
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    })
+
     function handleAddSetClick(e) {
         e.preventDefault()
         if (repsAndWeight.reps > 0) {

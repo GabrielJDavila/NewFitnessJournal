@@ -363,6 +363,11 @@ export async function addUpdateWorkoutList(exerciseId, name, userCollection, use
     try {
         // using exerciseId so it's easier to grab params later for use
         const date = new Date().toISOString().split("T")[0]
+        // const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
+        // const formattedDate = new Date().toLocaleDateString("en-US", {
+        //     timeZone: userTimeZone
+        // })
+        // console.log(formattedDate)
         const userDocRef = doc(userCollection, userId)
         const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
         const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, date)
@@ -387,6 +392,7 @@ export async function addUpdateWorkoutList(exerciseId, name, userCollection, use
 export async function retrieveCurrentExSetsReps(userCollection, userId, selectedDate) {
     try {
         const dateString = selectedDate.toISOString().split("T")[0]
+        console.log(dateString)
         const userDocRef = doc(userCollection, userId)
         const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
         const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, dateString)
@@ -396,20 +402,6 @@ export async function retrieveCurrentExSetsReps(userCollection, userId, selected
             console.log("no workout found for this date.")
             alert("no workout found for this date.")
         }
-
-        // Create start and end timestamps for selected date
-        // const startOfDay = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate())
-        // const endOfDay = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate() + 1)
-        // const startTimestamp = Timestamp.fromDate(startOfDay)
-        // const endTimestamp = Timestamp.fromDate(endOfDay)
-
-        // const workoutQuery = query(currentWorkoutCollectionRef, where("createdAt", ">=", startTimestamp), where("createdAt", "<", endTimestamp))
-        // const workoutSnapshot = await getDocs(workoutQuery)
-
-        // const exDocRef = doc(currentWorkoutCollectionRef)
-        // const workoutSnapshot = await getDocs(currentWorkoutCollectionRef)
-        
-        // const workoutSnapshot = await getDocs(collectionType)
 
         const exercisesCollectionRef = collection(dateOfWorkoutDocRef, "exList")
         const exerciseSnapshot = await getDocs(exercisesCollectionRef)
@@ -449,7 +441,7 @@ export async function retrieveCurrentExSetsReps(userCollection, userId, selected
     }
 
 }
-console.log(new Date())
+
 // add or update sets and reps of current exercises
 export async function addSetsReps( exerciseId, weight, reps, weightType, userCollection, userId, date) {
     try {
