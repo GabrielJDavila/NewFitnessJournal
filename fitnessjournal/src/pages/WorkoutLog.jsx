@@ -64,6 +64,23 @@ export default function WorkoutLog() {
         setToggleDeleteAllExercisesModal(prev => !prev)
     }
 
+    function handleDragEnd(result) {
+        const { source, destination } = result
+        
+        if(!destination) {
+            return
+        }
+
+        if(source.droppableId === destination.droppableId && source.index === destination.index) {
+            return
+        }
+
+        const newWorkoutData = Array.from(workoutData)
+        const [draggedItem] = newWorkoutData.splice(source.index, 1)
+        newWorkoutData.splice(destination.index, 0, draggedItem)
+        setWorkoutData(newWorkoutData)
+    }
+
     const modalStyles = {
         position: "sticky",
         top: "100px",
@@ -198,7 +215,7 @@ export default function WorkoutLog() {
             <div className="current-log-container">
                 {
                     workoutData.length > 0 ?
-                    <DragDropContext >
+                    <DragDropContext onDragEnd={handleDragEnd}>
                         <Droppable droppableId="workoutData">
                             {(provided) => (
                                 <div {...provided.droppableProps} ref={provided.innerRef} className="current-log-inner-container">
