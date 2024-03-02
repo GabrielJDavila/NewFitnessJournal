@@ -390,10 +390,12 @@ export async function addUpdateWorkoutList(exerciseId, name, userCollection, use
 }
 
 export async function reOrderWorkoutList(exerciseId, index, userCollection, userId, date) {
+    console.log(exerciseId, index, userCollection, userId, date)
+    const adjustedDate = date.toISOString().split("T")[0]
     try {
         const userDocRef = doc(userCollection, userId)
         const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
-        const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, date)
+        const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, adjustedDate)
         const selectedExListCollectionRef = collection(dateOfWorkoutDocRef, "exList")
         const exDocRef = doc(selectedExListCollectionRef, exerciseId)
         const docSnap = await getDoc(exDocRef)
@@ -402,9 +404,8 @@ export async function reOrderWorkoutList(exerciseId, index, userCollection, user
             await setDoc(exDocRef, {
                 // id: exerciseId,
                 // name: name,
-                index: index,
                 createdAt: serverTimestamp()
-            })
+            }, {merge: true})
         } else {
             alert("exercise doesn't exist")
         }

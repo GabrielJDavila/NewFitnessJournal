@@ -66,8 +66,8 @@ export default function WorkoutLog() {
 
     async function reOrderList(exerciseId, index, userCollection, userId, date) {
         try {
-            const newList = await reOrderWorkoutList(exerciseId, index, userCollection, userId, date)
-            setWorkoutData(newList)
+            await reOrderWorkoutList(exerciseId, index, userCollection, userId, date)
+            loadExerciseList()
         } catch(e) {
             console.log("error re-ordering list: ", e)
         }
@@ -91,7 +91,7 @@ export default function WorkoutLog() {
 
     async function handleDragEnd(result) {
         const { source, destination } = result
-        
+        console.log(result.draggableId)
         if(!destination) {
             return
         }
@@ -103,8 +103,9 @@ export default function WorkoutLog() {
         const newWorkoutData = Array.from(workoutData)
         const [draggedItem] = newWorkoutData.splice(source.index, 1)
         newWorkoutData.splice(destination.index, 0, draggedItem)
-        setWorkoutData(newWorkoutData)
-        await reOrderList(destination.draggableId, destination.index, usersInDB, currentUser, date)
+        // setWorkoutData(newWorkoutData)
+        console.log(result.destination.index)
+        await reOrderList(result.draggableId, result.destination.index, usersInDB, currentUser, date)
         // loadExerciseList(date)
     }
 
@@ -267,6 +268,7 @@ export default function WorkoutLog() {
                                     />
                                     {provided.placeholder}
                                 </div>
+                            
                             )}
                         </Droppable>
                     </DragDropContext> : 
