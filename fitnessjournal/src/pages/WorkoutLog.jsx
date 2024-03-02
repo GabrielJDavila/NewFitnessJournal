@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react"
 import { Link, useOutletContext } from "react-router-dom"
-import { usersInDB, retrieveCurrentExSetsReps, editSingleSet, deleteEx, deleteSingleSet, deleteAllEx } from "../firebase"
+import { usersInDB, retrieveCurrentExSetsReps, editSingleSet, deleteEx, deleteSingleSet, deleteAllEx, reOrderWorkoutList } from "../firebase"
 import ConfirmDeleteAllExModal from "../components/modals/ConfirmDeleteAllEx"
 import ConfirmDeleteExModal from "../components/modals/ConfirmDeleteExModal"
 import ConfirmDeleteSetModal from "../components/modals/ConfirmDeleteSetModal"
@@ -41,13 +41,10 @@ export default function WorkoutLog() {
     // console.log(date.toISOString().split('T')[0])
     // console.log(newFormattedDate)
 
-    const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
-    const currentDate = new Date()
-    const adjustedDate = new Date(currentDate.toLocaleString("en-US", {timeZone: userTimeZone}))
+    // const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
+    // const currentDate = new Date()
+    // const adjustedDate = new Date(currentDate.toLocaleString("en-US", {timeZone: userTimeZone}))
 
-    console.log(date)
-    console.log(adjustedDate)
-    
     useEffect(() => {
         if(date) {
             loadExerciseList(date)
@@ -64,6 +61,15 @@ export default function WorkoutLog() {
             setWorkoutData(setsData)
         } catch(e) {
             console.log("error fetching exercises list: ", e)
+        }
+    }
+
+    async function reOrderList(exerciseId, index, userCollection, userId, date) {
+        try {
+            const newList = await reOrderWorkoutList(exerciseId, index, userCollection, userId, date)
+            setWorkoutData(newList)
+        } catch(e) {
+            console.log("error re-ordering list: ", e)
         }
     }
 
@@ -98,6 +104,7 @@ export default function WorkoutLog() {
         const [draggedItem] = newWorkoutData.splice(source.index, 1)
         newWorkoutData.splice(destination.index, 0, draggedItem)
         setWorkoutData(newWorkoutData)
+        reOrderList(destination.draggableId, destination.index, usersInDB, currentUser, date)
     }
 
     const modalStyles = {
@@ -250,6 +257,10 @@ export default function WorkoutLog() {
                                     <h2>Current Workout</h2>
                                     <CurrentWorkoutList
                                         data={workoutData}
+                                        usersInDB={usersInDB}
+                                        currentUser={currentUser}
+                                        date={date}
+                                        
                                         toggleDel={e => toggleDelete(e, setCurrentItemToDelete, setToggleDeleteExModal, setToggleDeleteSetModal)}
                                         toggleEdit={e => toggleEdit(e, setNewSetInfo, setToggleEditSetModal)}
                                     />

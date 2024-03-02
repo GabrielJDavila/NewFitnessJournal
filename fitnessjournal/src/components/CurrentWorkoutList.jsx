@@ -1,7 +1,9 @@
-import { Link } from "react-router-dom"
+import { Link, useOutletContext } from "react-router-dom"
 import { Draggable } from "react-beautiful-dnd"
+import { reOrderWorkoutList } from "../firebase"
 export default function CurrentWorkoutList(props) {
    const { data, toggleDel, toggleEdit } = props
+   const { currentUser } = useOutletContext()
    
 
     const currentWorkout = props.data.map((ex, index) => {

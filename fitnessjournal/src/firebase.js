@@ -380,8 +380,33 @@ export async function addUpdateWorkoutList(exerciseId, name, userCollection, use
         } else {
             await setDoc(exDocRef, {
                 id: exerciseId,
-                name: name
+                name: name,
+                createdAt: serverTimestamp()
             })
+        }
+    } catch(e) {
+        console.log("error adding exercise: ", e)
+    }
+}
+
+export async function reOrderWorkoutList(exerciseId, index, userCollection, userId, date) {
+    try {
+        const userDocRef = doc(userCollection, userId)
+        const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
+        const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, date)
+        const selectedExListCollectionRef = collection(dateOfWorkoutDocRef, "exList")
+        const exDocRef = doc(selectedExListCollectionRef, exerciseId)
+        const docSnap = await getDoc(exDocRef)
+
+        if(docSnap.exists()) {
+            await setDoc(exDocRef, {
+                // id: exerciseId,
+                // name: name,
+                index: index,
+                createdAt: serverTimestamp()
+            })
+        } else {
+            alert("exercise doesn't exist")
         }
     } catch(e) {
         console.log("error adding exercise: ", e)
@@ -404,7 +429,8 @@ export async function retrieveCurrentExSetsReps(userCollection, userId, selected
         }
 
         const exercisesCollectionRef = collection(dateOfWorkoutDocRef, "exList")
-        const exerciseSnapshot = await getDocs(exercisesCollectionRef)
+        const exListQuery = query(exercisesCollectionRef, orderBy("createdAt"))
+        const exerciseSnapshot = await getDocs(exListQuery)
         const exercises = []
 
         for(const exDoc of exerciseSnapshot.docs) {
