@@ -89,7 +89,7 @@ export default function WorkoutLog() {
         setToggleDeleteAllExercisesModal(prev => !prev)
     }
 
-    function handleDragEnd(result) {
+    async function handleDragEnd(result) {
         const { source, destination } = result
         
         if(!destination) {
@@ -104,7 +104,8 @@ export default function WorkoutLog() {
         const [draggedItem] = newWorkoutData.splice(source.index, 1)
         newWorkoutData.splice(destination.index, 0, draggedItem)
         setWorkoutData(newWorkoutData)
-        reOrderList(destination.draggableId, destination.index, usersInDB, currentUser, date)
+        await reOrderList(destination.draggableId, destination.index, usersInDB, currentUser, date)
+        // loadExerciseList(date)
     }
 
     const modalStyles = {
