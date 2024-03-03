@@ -12,7 +12,8 @@ export default function NewEx(props) {
     const [loadedCategories, setLoadedCategories] = useState([])
     const [toggleMessageState, setToggleMessageState] = useState(false)
     const { currentUser } = useOutletContext()
-    
+    const { categoryId } = useParams()
+
     async function loadData() {
         try {
             const data = await getAllCategories(usersInDB, currentUser)
@@ -103,7 +104,7 @@ export default function NewEx(props) {
                 className="categories-dropdown"
                 defaultValue={newExFormData.category}
             >
-                <option value={props.currentCatId}>{props.currentCatId ? props.currentCatId : "-- select --"}</option>
+                <option value={props.currentCatId ? props.currentCatId : ""}>{props.currentCatId ? props.currentCatId : "-- select --"}</option>
                 {loadedCategories && renderedCategories}
             </select>
 

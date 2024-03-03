@@ -88,44 +88,14 @@ export async function signUpUser(loginInfo) {
             const user = userCredential.user.uid
             await addUserToCollection(usersInDB, user, loginInfo)
             await getExistingCatsAndEx(user, existingCatsCollection, usersInDB)
-            // console.log("User created and default data successfully cloned for user: ", user)
             return false
         } else {
-            // console.log(`user already exists: ${email}`)
-            // alert("Email already exists. Please use another email.")
             return true
         }
     } catch(e) {
         console.error("error creating user: ", e)
     }
     
-    // createUserWithEmailAndPassword(auth, loginInfo.email, loginInfo.password)
-    //     .then(userCredential => {
-    //         const user = userCredential.user.uid
-    //         const q = query(usersInDB, where("userId", "==", user))
-    //         const querySnapshot = await getDocs(q)
-
-    //     if(querySnapshot.empty) {
-    //         await addDoc(categoriesCollectionRef, {
-    //             name: capitalizedCat
-    //         })
-    //         console.log(`Category ${capitalizedCat} added successfully.`)
-    //     } else {
-    //         console.log(`Category ${capitalizedCat} already exists.`)
-    //     }
-    //         addUserToCollection(usersInDB, user, loginInfo)
-
-    //         getExistingCatsAndEx(user, existingCatsCollection, usersInDB)
-    //             .then(() => {
-    //                 console.log("Default data successfully cloned for user: ", user)
-    //             })
-    //             .catch(err => {
-    //                 console.error("error cloning data: ", err)
-    //             })
-    //     })
-    //     .catch(e => {
-    //         console.log("error creating user: ", e)
-    //     })
 }
 
 // sign in app
@@ -186,6 +156,20 @@ export async function getExistingCatsAndEx(userId, existingCatsCollection, userC
     } catch(e) {
         console.log("error fetching categories: ", e)
     }
+}
+
+export function previousModay() {
+    const today = new Date()
+    return new Timestamp(today.getFullYear(), today.getMonth(), today.getDate() - (today.getDay() + 6) % 7, 0, 0, 0)
+}
+export async function queryWorkoutLogs(userCollection, userId, previousModay, onSuccess) {
+    const userDocRef = doc(userCollection, userId)
+    const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
+
+    const q = query(collection(db, `users/${userId}/currentWorkout`), where("createdAt", ">=", previousModay), orderBy("createdAt", "desc"), limit(7))
+    return onSnapshot(q, snapshot => {
+        onSuccess(snapshot.size)
+    })
 }
 
 export async function addNewCat(userCollection, userId, newCat) {
@@ -361,6 +345,11 @@ export async function addUpdateWorkoutList(exerciseId, name, userCollection, use
         const userDocRef = doc(userCollection, userId)
         const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
         const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, date)
+
+        await setDoc(dateOfWorkoutDocRef, {
+            createdAt: serverTimestamp()
+        })
+
         const selectedExListCollectionRef = collection(dateOfWorkoutDocRef, "exList")
         const exDocRef = doc(selectedExListCollectionRef, exerciseId)
         const docSnap = await getDoc(exDocRef)
@@ -395,29 +384,21 @@ export async function reOrderWorkoutList(exerciseId, newindex, userCollection, u
 
         // get all docs in collection
         const snapshot = await getDocs(selectedExListCollectionRef)
-
         // store all docs in array
         const documents = snapshot.docs.map(doc => doc)
-       
-
         // find doc that corresponds to dragged exerciseId
         const draggedDoc = documents.find(doc => doc.id === exerciseId)
-
         // calculate the old index of dragged doc
         const oldIndex = documents.indexOf(draggedDoc)
-
         // remove dragged doc from array
         documents.splice(oldIndex, 1)
-
         // insert dragged doc at new index
         documents.splice(newindex, 0, draggedDoc)
-
         // update the indices of all docs in array
         for(let i = 0; i < documents.length; i++) {
             const doc = documents[i]
             await updateDoc(doc.ref, {index: i})
         }
-
     } catch(e) {
         console.log("error adding exercise: ", e)
     }
@@ -433,7 +414,7 @@ export async function retrieveCurrentExSetsReps(userCollection, userId, selected
         const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, dateString)
         const dateDocSnap = await getDoc(dateOfWorkoutDocRef)
 
-        if(dateDocSnap.exists()) {
+        if(!dateDocSnap.exists()) {
             console.log("no workout found for this date.")
             alert("no workout found for this date.")
         }

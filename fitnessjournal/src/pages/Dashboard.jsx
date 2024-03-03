@@ -8,12 +8,26 @@ import CurrentWorkoutList from "../components/CurrentWorkoutList"
 import { handleDeleteExerciseSubmit, handleDeleteSetSubmit, handleEditSetSubmit, toggleEdit, toggleDelete } from "../Utils"
 import Calendar from "react-calendar"
 import "react-calendar/dist/Calendar.css"
+import { queryWorkoutLogs, previousModay } from "../firebase"
 
 export default function Dashboard() {
+    const [totalWorkouts, setTotalWorkouts] = useState(0)
+    const { currentUser } = useOutletContext()
 
     useEffect(() => {
         window.scrollTo(0, 0)
     })
+
+    useEffect(() => {
+        previousModay()
+
+        const unsubcribe = queryWorkoutLogs()
+    }, [])
+
+    // const newWeekArr = new Array(7)
+    // const today = new Date()
+    // console.log(newWeekArr)
+    // console.log(today.getMonth(), today.getDate())
 
     return (
         <main className="dashboard">
