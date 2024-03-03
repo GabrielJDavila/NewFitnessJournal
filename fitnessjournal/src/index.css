@@ -547,14 +547,18 @@ header {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   position: relative;
 }
 
+.ex-number {
+ 
+}
+
 .curr-ex-delete {
-  position: absolute;
+  /* position: absolute;
   top: 24px;
-  right: 0;
+  right: 0; */
   font-size: 1.5rem;
 }
 

@@ -62,7 +62,7 @@ export default function CategoryNav(props) {
             </div>
 
             {toggleNewCatModal && <NewCat toggleModal={toggleModal}/>}
-            {toggleNewExModal && <NewEx reloadExData={props.reloadExData} toggleModal={toggleModal}/>}
+            {toggleNewExModal && <NewEx reloadExData={props.reloadExData} toggleModal={toggleModal} currentCatId={props.currentCatId}/>}
 
         </div>
     )

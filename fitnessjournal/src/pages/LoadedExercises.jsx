@@ -13,6 +13,7 @@ export default function LoadedExercises() {
         name: ""
     })
     const { currentUser } = useOutletContext()
+    console.log(params)
     
     async function loadExercisesData() {
         try {
@@ -53,7 +54,10 @@ export default function LoadedExercises() {
 
     return (
         <div className="rendered-ex-container">
-            <CategoryNav reloadExData={loadExercisesData}/>
+            <CategoryNav
+                reloadExData={loadExercisesData}
+                currentCatId={selectedCat.name}
+            />
             <div className="rendered-ex-header">
                 {/* <div className="back-btn-container">
                     <BackBtn />

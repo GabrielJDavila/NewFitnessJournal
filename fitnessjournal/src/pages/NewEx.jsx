@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useOutletContext } from "react-router-dom"
+import { useOutletContext, useParams } from "react-router-dom"
 import { getAllCategories, usersInDB, addExToCategory } from "../firebase"
 
 export default function NewEx(props) {
@@ -12,6 +12,7 @@ export default function NewEx(props) {
     const [loadedCategories, setLoadedCategories] = useState([])
     const [toggleMessageState, setToggleMessageState] = useState(false)
     const { currentUser } = useOutletContext()
+    
     async function loadData() {
         try {
             const data = await getAllCategories(usersInDB, currentUser)
@@ -102,7 +103,7 @@ export default function NewEx(props) {
                 className="categories-dropdown"
                 defaultValue={newExFormData.category}
             >
-                <option value="">-- select --</option>
+                <option value={props.currentCatId}>{props.currentCatId ? props.currentCatId : "-- select --"}</option>
                 {loadedCategories && renderedCategories}
             </select>
 

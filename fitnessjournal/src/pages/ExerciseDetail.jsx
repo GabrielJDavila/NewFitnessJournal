@@ -44,13 +44,13 @@ export default function ExerciseDetail() {
         if(e.target.dataset.addweight) {
             setRepsAndWeight(prev => ({
                 ...prev,
-                weight: currentWeight + 1
+                weight: currentWeight + 5
             }))
         }
         if(e.target.dataset.minusweight && currentWeight > 0) {
             setRepsAndWeight(prev => ({
                 ...prev,
-                weight: currentWeight - 1
+                weight: currentWeight - 5
             }))
         }
     }
@@ -60,13 +60,13 @@ export default function ExerciseDetail() {
         if(e.target.dataset.addreps) {
             setRepsAndWeight(prev => ({
                 ...prev,
-                reps: currentReps + 1
+                reps: currentReps + 5
             }))
         }
         if(e.target.dataset.minusreps && currentReps > 0) {
             setRepsAndWeight(prev => ({
                 ...prev,
-                reps: currentReps - 1
+                reps: currentReps - 5
             }))
         }
     }
@@ -92,7 +92,7 @@ export default function ExerciseDetail() {
             <ExDetailBackBtn />
             <fieldset className="dash-input-fieldset">   
                 <div className="ex-info-container">
-                    <p className="ex-info-text weight">Weight:</p>
+                    <p className="ex-info-text weight">Weight (lbs):</p>
                         <div className="ex-info-btns">
                             <p onClick={e => addOrMinusWeight(e)} data-minusweight="weight" className="q-btn">-</p>
                             <input
@@ -107,7 +107,7 @@ export default function ExerciseDetail() {
                 </div>
             </fieldset>
 
-            <fieldset className="dash-input-fieldset">   
+            {/* <fieldset className="dash-input-fieldset">   
                 <div className="ex-info-container">
                     <p className="ex-info-text weight">Weight Type:</p>
                             <select
@@ -122,7 +122,7 @@ export default function ExerciseDetail() {
                                 <option value="kg">kg</option>
                             </select>
                 </div>
-            </fieldset>
+            </fieldset> */}
 
             <fieldset className="dash-input-fieldset">
                 <div className="ex-info-container">

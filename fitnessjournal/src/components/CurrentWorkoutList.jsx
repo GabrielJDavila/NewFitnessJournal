@@ -8,6 +8,7 @@ export default function CurrentWorkoutList(props) {
                 {(provided) => (
                     <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} key={index} className="rendered-ex-dash-container">
                         <div className="ex-name-container">
+                            <p className="ex-number">{index + 1}</p>
                             <p className="current-ex-name">{ex.name}</p>
                             <i
                                 onClick={e => props.toggleDel(e)}
@@ -19,7 +20,7 @@ export default function CurrentWorkoutList(props) {
                         <ul className="all-sets-container">
                             {ex.setsReps.map((set, setIndex) => (
                                 <li key={setIndex} className="set-container">
-                                    <p className="set-weight">{set.weightType}: {set.weight}</p>
+                                    <p className="set-weight">lbs: {set.weight}</p>
                                     <p className="set-reps">reps: {set.reps}</p>
                                     <span
                                         id={ex.id}
