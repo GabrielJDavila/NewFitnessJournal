@@ -33,6 +33,8 @@ export default function WorkoutLog() {
     })
     const calendarRef = useRef(null)
 
+    console.log(workoutData)
+
     // const currentDate = new Date();
     // const offset = currentDate.getTimezoneOffset();
     // const adjustedDate = new Date(currentDate.getTime() - (offset * 60 * 1000)); // Adjust for timezone offset
@@ -64,10 +66,10 @@ export default function WorkoutLog() {
         }
     }
 
-    async function reOrderList(exerciseId, index, userCollection, userId, date) {
+    async function reOrderList(exerciseId, newIndex, userCollection, userId, date) {
         try {
-            await reOrderWorkoutList(exerciseId, index, userCollection, userId, date)
-            loadExerciseList()
+            await reOrderWorkoutList(exerciseId, newIndex, userCollection, userId, date)
+            // loadExerciseList()
         } catch(e) {
             console.log("error re-ordering list: ", e)
         }
@@ -91,7 +93,7 @@ export default function WorkoutLog() {
 
     async function handleDragEnd(result) {
         const { source, destination } = result
-        console.log(result.draggableId)
+       
         if(!destination) {
             return
         }
@@ -100,12 +102,25 @@ export default function WorkoutLog() {
             return
         }
 
-        const newWorkoutData = Array.from(workoutData)
-        const [draggedItem] = newWorkoutData.splice(source.index, 1)
-        newWorkoutData.splice(destination.index, 0, draggedItem)
+        // const newWorkoutData = Array.from(workoutData)
+        // const [draggedItem] = newWorkoutData.splice(source.index, 1)
+        // newWorkoutData.splice(destination.index, 0, draggedItem)
         // setWorkoutData(newWorkoutData)
-        console.log(result.destination.index)
-        await reOrderList(result.draggableId, result.destination.index, usersInDB, currentUser, date)
+        const draggedItemId = workoutData[source.index].id
+        const newIndex = destination.index
+        const updatedWorkoutData = Array.from(workoutData)
+
+        const [draggedItem] = updatedWorkoutData.splice(source.index, 1)
+
+        updatedWorkoutData.splice(destination.index, 0, draggedItem)
+
+        updatedWorkoutData.forEach((item, index) => {
+            item.index = index
+        })
+
+        setWorkoutData(updatedWorkoutData)
+        
+        await reOrderList(draggedItemId, newIndex, usersInDB, currentUser, date)
         // loadExerciseList(date)
     }
 

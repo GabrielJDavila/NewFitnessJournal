@@ -378,10 +378,15 @@ export async function addUpdateWorkoutList(exerciseId, name, userCollection, use
         if(docSnap.exists()) {
             alert("exercise already in workout")
         } else {
+
+            const snapshot = await getDocs(selectedExListCollectionRef)
+            const currentIndex = snapshot.docs.length
+
             await setDoc(exDocRef, {
                 id: exerciseId,
                 name: name,
-                createdAt: serverTimestamp()
+                createdAt: serverTimestamp(),
+                index: currentIndex
             })
         }
     } catch(e) {
@@ -389,26 +394,53 @@ export async function addUpdateWorkoutList(exerciseId, name, userCollection, use
     }
 }
 
-export async function reOrderWorkoutList(exerciseId, index, userCollection, userId, date) {
-    console.log(exerciseId, index, userCollection, userId, date)
+export async function reOrderWorkoutList(exerciseId, newindex, userCollection, userId, date) {
+    
     const adjustedDate = date.toISOString().split("T")[0]
     try {
         const userDocRef = doc(userCollection, userId)
         const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
         const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, adjustedDate)
         const selectedExListCollectionRef = collection(dateOfWorkoutDocRef, "exList")
-        const exDocRef = doc(selectedExListCollectionRef, exerciseId)
-        const docSnap = await getDoc(exDocRef)
 
-        if(docSnap.exists()) {
-            await setDoc(exDocRef, {
-                // id: exerciseId,
-                // name: name,
-                createdAt: serverTimestamp()
-            }, {merge: true})
-        } else {
-            alert("exercise doesn't exist")
+        // get all docs in collection
+        const snapshot = await getDocs(selectedExListCollectionRef)
+
+        // store all docs in array
+        const documents = snapshot.docs.map(doc => doc)
+       
+
+        // find doc that corresponds to dragged exerciseId
+        const draggedDoc = documents.find(doc => doc.id === exerciseId)
+
+        // calculate the old index of dragged doc
+        const oldIndex = documents.indexOf(draggedDoc)
+
+        // remove dragged doc from array
+        documents.splice(oldIndex, 1)
+
+        // insert dragged doc at new index
+        documents.splice(newindex, 0, draggedDoc)
+
+        // update the indices of all docs in array
+        for(let i = 0; i < documents.length; i++) {
+            const doc = documents[i]
+            await updateDoc(doc.ref, {index: i})
         }
+
+        // const exDocRef = doc(selectedExListCollectionRef, exerciseId)
+        // const docSnap = await getDoc(exDocRef)
+
+        // if(docSnap.exists()) {
+        //     await setDoc(exDocRef, {
+        //         // id: exerciseId,
+        //         // name: name,
+        //         index: index,
+        //         createdAt: serverTimestamp()
+        //     }, {merge: true})
+        // } else {
+        //     alert("exercise doesn't exist")
+        // }
     } catch(e) {
         console.log("error adding exercise: ", e)
     }
@@ -418,7 +450,7 @@ export async function reOrderWorkoutList(exerciseId, index, userCollection, user
 export async function retrieveCurrentExSetsReps(userCollection, userId, selectedDate) {
     try {
         const dateString = selectedDate.toISOString().split("T")[0]
-        console.log(dateString)
+        
         const userDocRef = doc(userCollection, userId)
         const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
         const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, dateString)
@@ -430,9 +462,12 @@ export async function retrieveCurrentExSetsReps(userCollection, userId, selected
         }
 
         const exercisesCollectionRef = collection(dateOfWorkoutDocRef, "exList")
-        const exListQuery = query(exercisesCollectionRef, orderBy("createdAt"))
+        const exListQuery = query(exercisesCollectionRef, orderBy("index", "asc"))
         const exerciseSnapshot = await getDocs(exListQuery)
         const exercises = []
+        // exerciseSnapshot.forEach(doc => {
+        //     console.log(doc.data())
+        // })
 
         for(const exDoc of exerciseSnapshot.docs) {
             const exId = exDoc.id
