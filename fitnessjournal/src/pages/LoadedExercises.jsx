@@ -13,7 +13,7 @@ export default function LoadedExercises() {
         name: ""
     })
     const { currentUser } = useOutletContext()
-    console.log(params)
+    console.log(selectedCat.name)
     
     async function loadExercisesData() {
         try {

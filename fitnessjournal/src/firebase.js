@@ -117,6 +117,26 @@ export const logout = async () => {
     await signOut(auth)
 }
 
+export function previousModay() {
+    const today = new Date()
+    return new Timestamp(today.getFullYear(), today.getMonth(), today.getDate() - (today.getDay() + 6) % 7, 0, 0, 0)
+}
+export async function queryWorkoutLogs(userCollection, userId, previousModay, onSuccess) {
+    const userDocRef = doc(userCollection, userId)
+    const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
+
+    const q = query(collection(db, `users/${userId}/currentWorkout`), where("createdAt", ">=", previousModay), orderBy("createdAt", "desc"), limit(7))
+    return onSnapshot(q, snapshot => {
+        onSuccess(snapshot.size)
+    })
+}
+
+// search all exercises using the search tool. reference the user's categories collection, then loop through
+// all docs and all exercises. Return names that match the input of user as they type.
+export async function searchAllExercises() {
+
+}
+
 export async function getExistingCatsAndEx(userId, existingCatsCollection, userCollection) {
     // const existingCatsRef = collection(db, "existingCategories")
 
@@ -156,20 +176,6 @@ export async function getExistingCatsAndEx(userId, existingCatsCollection, userC
     } catch(e) {
         console.log("error fetching categories: ", e)
     }
-}
-
-export function previousModay() {
-    const today = new Date()
-    return new Timestamp(today.getFullYear(), today.getMonth(), today.getDate() - (today.getDay() + 6) % 7, 0, 0, 0)
-}
-export async function queryWorkoutLogs(userCollection, userId, previousModay, onSuccess) {
-    const userDocRef = doc(userCollection, userId)
-    const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
-
-    const q = query(collection(db, `users/${userId}/currentWorkout`), where("createdAt", ">=", previousModay), orderBy("createdAt", "desc"), limit(7))
-    return onSnapshot(q, snapshot => {
-        onSuccess(snapshot.size)
-    })
 }
 
 export async function addNewCat(userCollection, userId, newCat) {

@@ -5,7 +5,7 @@ import { getAllCategories, usersInDB, addExToCategory } from "../firebase"
 export default function NewEx(props) {
     const [newExFormData, setNewExFormData] = useState({
         name: "",
-        category: "",
+        category: props.currentCatId? props.currentCatId : "",
         scheme: "",
         weightUnit: ""
     })
