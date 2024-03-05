@@ -134,7 +134,7 @@ export async function queryWorkoutLogs(userCollection, userId, previousModay, on
 // search all exercises using the search tool. reference the user's categories collection, then loop through
 // all docs and all exercises. Return names that match the input of user as they type.
 export async function searchAllExercises() {
-
+    
 }
 
 export async function getExistingCatsAndEx(userId, existingCatsCollection, userCollection) {

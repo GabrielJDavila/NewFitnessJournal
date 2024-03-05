@@ -756,6 +756,7 @@ header {
   justify-content: center;
   align-items: center;
   width: 100%;
+  position: relative;
 }
 
 .cat-interface-btn-container {
@@ -783,7 +784,7 @@ header {
   text-align: center;
   width: 90%;
   max-width: 900px;
-  margin: 2rem auto 0;
+  margin: 3rem auto 0;
 }
 
 .search-ex-form {
@@ -866,6 +867,21 @@ header {
 .edit-modal-btns-container,
 .confirm-delete-modal-btns-container {
   display: flex;
+}
+
+/*========== SearchTool.jsx ============*/
+
+.search-tool {
+  position: absolute;
+  top: 6.5rem;
+  width: 100%;
+  padding: 0 1rem;
+  transition: .3s all ease;
+}
+
+.search-ex-input {
+  border: 2px solid lightgray;
+  width: 100%;
 }
 
 /*=================== NewEx.jsx styles ====================*/

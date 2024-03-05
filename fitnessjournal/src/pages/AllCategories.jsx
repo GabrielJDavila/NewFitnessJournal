@@ -96,6 +96,7 @@ export default function AllCategories() {
         <form onSubmit={(e) => handleEditSubmit(e)} className="edit-modal" style={modalStyles}>
             <h2>Edit Category</h2>
             <input
+                type="text"
                 name="title"
                 onChange={e => handleChange(e.target.name, e.target.value)}
                 value={editCategoryTitle.title}
