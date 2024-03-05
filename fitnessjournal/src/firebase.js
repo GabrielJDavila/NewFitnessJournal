@@ -152,6 +152,7 @@ export async function searchAllExercises(userCollection, userId) {
     }
 
     console.log(exList)
+    return exList
     // const collections = snapshot.docs.map(doc => ({
     //     ...doc.data(),
     //     id: doc.id
