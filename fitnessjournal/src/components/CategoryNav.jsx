@@ -19,12 +19,7 @@ export default function CategoryNav(props) {
             setToggleSearch(prev => !prev)
         }
     }
-    console.log(toggleSearch)
 
-    const searchStyles = {
-        height: toggleSearch ? "50px" : "0px",
-        transition: toggleSearch ? ".2s ease-in-out" : ""
-    }
     return (
         <div className="category-interface-btns-outer-container">
             
@@ -70,8 +65,8 @@ export default function CategoryNav(props) {
                 </button>
                 <p className="category-interface-btn-text">new exercise</p>
             </div>
-            <SearchTool toggleModal={toggleModal} searchStyles={searchStyles}/>
-            {toggleNewCatModal && <NewCat toggleModal={toggleModal}/>}
+            <SearchTool toggleModal={toggleModal} toggleSearchBar={toggleSearch}/>
+            {toggleNewCatModal && <NewCat toggleModal={toggleModal} />}
             {toggleNewExModal && <NewEx reloadExData={props.reloadExData} toggleModal={toggleModal} currentCatId={props.currentCatId}/>}
 
         </div>

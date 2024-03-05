@@ -17,7 +17,7 @@ export default function AllCategories() {
         title: ""
     })
     const { currentUser } = useOutletContext()
-    console.log(loadedCategories)
+    
     async function loadData() {
         try {
             const data = await getAllCategories(usersInDB, currentUser)
