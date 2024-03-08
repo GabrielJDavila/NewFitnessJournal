@@ -870,7 +870,7 @@ header {
 
 .search-tool {
   transition: .2s all ease;
-  border: 2px solid lightgray;
+  /* border: 2px solid lightgray; */
   overflow: hidden;
   border-radius: 8px;
 }
@@ -883,11 +883,14 @@ header {
   font-family: 'Oswald', sans-serif;
   font-size: 1.5rem;
   transition: .2s all ease;
+  overflow: hidden;
+  width: 100%;
+  border: 2px solid lightgray;
 }
 
 .search-query-list {
   background: white;
-  box-shadow: 0 0 8px 2px rgb(197, 197, 197);
+  /* box-shadow: 0 0 8px 2px rgb(197, 197, 197); */
   padding: 0;
   height: 65vh;
   list-style: none;

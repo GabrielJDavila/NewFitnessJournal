@@ -9,9 +9,15 @@ export default function SearchTool(props) {
     })
     const { currentUser } = useOutletContext()
     console.log(searchData)
+
     const searchStyles = {
         height: props.toggleSearchBar ? "50px" : "0px",
-        width: props.toggleSearchBar ? "100%" : "0px"
+        // width: props.toggleSearchBar ? "100%" : "0px"
+    }
+
+    const searchListStyles = {
+        boxShadow: props.toggleSearchBar ? "0 0 8px 2px rgb(197, 197, 197)" : "0 0 0 0",
+        width: props.toggleSearchBar ? "100%" : "0"
     }
 
     useEffect(() => {
@@ -34,13 +40,15 @@ export default function SearchTool(props) {
         }))
     }
 
+    // addUpdateWorkoutList(docInfo.id, docInfo.name, usersInDB, currentUser)
+
     const renderedSearchItems = searchData ? searchData.map((exercise, index) => {
         return (
             <div key={index} className="search-item-container">
                 <li className="search-query-list-item">
-                    {exercise}
+                    {exercise.name}
                 </li>
-                <button>Add exercise</button>
+                <button data-id={exercise.id} >Add exercise</button>
             </div>
         )
     }) : ""
@@ -58,9 +66,13 @@ export default function SearchTool(props) {
                 style={searchStyles}
             />
         </div>
-        <ul className="search-query-list">
-            {renderedSearchItems}
-        </ul>
+        {   searchQuery.name.length > 0 ?
+            <ul className="search-query-list" style={searchListStyles}>
+                {renderedSearchItems}
+            </ul>
+            :
+            ""
+        }   
         </div>
     )
 }

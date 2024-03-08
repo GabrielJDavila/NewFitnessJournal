@@ -149,7 +149,13 @@ export async function searchAllExercises(userCollection, userId, searchQuery) {
         for(const exDoc of exercisesSnapshot.docs) {
             // console.log(exDoc.data().name.toLowerCase())
             if(exDoc.data().name.toLowerCase().includes(searchQuery.toLowerCase())) {
-                exList.push(exDoc.data().name)
+                
+                const exerciseData = {
+                    id: exDoc.id,
+                    name: exDoc.data().name
+                }
+
+                exList.push(exerciseData)
             }
         }
     }
