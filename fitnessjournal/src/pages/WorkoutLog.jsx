@@ -5,6 +5,7 @@ import ConfirmDeleteAllExModal from "../components/modals/ConfirmDeleteAllEx"
 import ConfirmDeleteExModal from "../components/modals/ConfirmDeleteExModal"
 import ConfirmDeleteSetModal from "../components/modals/ConfirmDeleteSetModal"
 import EditSetModal from "../components/modals/EditSetModal"
+import TimerModal from "../components/modals/timerModal"
 import CurrentWorkoutList from "../components/CurrentWorkoutList"
 import { handleDeleteExerciseSubmit, handleDeleteSetSubmit, handleEditSetSubmit, handleDeleteAllExSubmit, toggleEdit, toggleDelete, toggleDeleteAllEx } from "../Utils"
 import Calendar from "react-calendar"
@@ -18,6 +19,7 @@ export default function WorkoutLog() {
     const [toggleDeleteExModal, setToggleDeleteExModal] = useState(false)
     const [toggleDeleteSetModal, setToggleDeleteSetModal] = useState(false)
     const [toggleDeleteAllExercisesModal, setToggleDeleteAllExercisesModal] = useState(false)
+    const [toggleTimerModal, setToggleTimerModal] = useState(false)
     const [toggleCalendar, setToggleCalendar] = useState(false)
     const [date, setDate] = useState(new Date())
     const { currentUser } = useOutletContext()
@@ -32,8 +34,6 @@ export default function WorkoutLog() {
         setId: ""
     })
     const calendarRef = useRef(null)
-
-    console.log(workoutData)
 
     // const currentDate = new Date();
     // const offset = currentDate.getTimezoneOffset();
@@ -86,6 +86,9 @@ export default function WorkoutLog() {
         setToggleCalendar(prev => !prev)
     }
 
+    function handleToggleTimerModal() {
+        setToggleTimerModal(prev => !prev)
+    }
 
     function ToggleDeleteAll() {
         setToggleDeleteAllExercisesModal(prev => !prev)
@@ -163,6 +166,12 @@ export default function WorkoutLog() {
                     </span>
                     <p className="link-text">Delete</p>
                 </div>
+                <div onClick={handleToggleTimerModal} className="workout-timer-container date-dash">
+                    <span className="material-symbols-outlined">
+                        timer
+                    </span>
+                    <p className="link-text">Timer</p>
+                </div>
                 <div className="date-dash">
                     <span ref={calendarRef} onClick={e => handleToggleCalendar(e)} className="material-symbols-outlined calendar-icon">
                          calendar_month
@@ -181,6 +190,9 @@ export default function WorkoutLog() {
                         onClickDay={e => console.log(e)}
                     />
                 </div>
+            }
+            { toggleTimerModal &&
+                <TimerModal />
             }
             { toggleDeleteAllExercisesModal &&
                 <ConfirmDeleteAllExModal

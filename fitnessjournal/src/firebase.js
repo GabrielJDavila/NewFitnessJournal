@@ -134,7 +134,7 @@ export async function queryWorkoutLogs(userCollection, userId, previousModay, on
 // search all exercises using the search tool. reference the user's categories collection, then loop through
 // all docs and all exercises. Return names that match the input of user as they type.
 export async function searchAllExercises(userCollection, userId, searchQuery) {
-    // console.log(searchQuery.toLowerCase())
+   
     const userDocRef = doc(userCollection, userId)
     const categoriesCollectionRef = collection(userDocRef, "categories")
     const categoriesQuery = query(categoriesCollectionRef)
@@ -147,7 +147,7 @@ export async function searchAllExercises(userCollection, userId, searchQuery) {
         const exercisesSnapshot = await getDocs(exQuery)
 
         for(const exDoc of exercisesSnapshot.docs) {
-            // console.log(exDoc.data().name.toLowerCase())
+            
             if(exDoc.data().name.toLowerCase().includes(searchQuery.toLowerCase())) {
                 
                 const exerciseData = {
@@ -160,14 +160,6 @@ export async function searchAllExercises(userCollection, userId, searchQuery) {
         }
     }
     return exList
-        // const filteredExList = exList.filter(ex => ex.toLowerCase().includes(searchQuery))
-        // console.log(filteredExList)
-        // return filteredExList
-    // const collections = snapshot.docs.map(doc => ({
-    //     ...doc.data(),
-    //     id: doc.id
-    // }))
-    // console.log(collections)
 }
 
 export async function getExistingCatsAndEx(userId, existingCatsCollection, userCollection) {

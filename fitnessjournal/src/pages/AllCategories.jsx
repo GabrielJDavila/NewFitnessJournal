@@ -84,17 +84,18 @@ export default function AllCategories() {
     }
 
     const modalStyles = {
-        position: "sticky",
+        position: "fixed",
         top: "100px",
-        right: "50px",
-        left: "50px",
-        padding: "2rem",
+        right: "0px",
+        left: "0px",
+        bottom: "100px",
+        padding: "0 2rem",
         background: "white"
     }
 
     const editModal =
         <form onSubmit={(e) => handleEditSubmit(e)} className="edit-modal" style={modalStyles}>
-            <h2>Edit Category</h2>
+            <h2 className="modal-title">Edit Category</h2>
             <input
                 type="text"
                 name="title"
@@ -111,7 +112,7 @@ export default function AllCategories() {
     
     const confirmDeleteModal =
         <form onSubmit={(e) => handleDeleteSubmit(e)} className="confirm-delete-modal" style={modalStyles}>
-            <h2>Delete Category</h2>
+            <h2 className="modal-title">Delete Category</h2>
             <p>Are you sure you want to delete Cat. Name?</p>
             <div className="confirm-delete-modal-btns-container">
                 <p onClick={(e) => toggleDelete(e)} className="cancel-btn">cancel</p>
