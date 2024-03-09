@@ -35,18 +35,6 @@ export default function WorkoutLog() {
     })
     const calendarRef = useRef(null)
 
-    // const currentDate = new Date();
-    // const offset = currentDate.getTimezoneOffset();
-    // const adjustedDate = new Date(currentDate.getTime() - (offset * 60 * 1000)); // Adjust for timezone offset
-    // const newFormattedDate = adjustedDate.toISOString().split('T')[0];
-
-    // console.log(date.toISOString().split('T')[0])
-    // console.log(newFormattedDate)
-
-    // const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
-    // const currentDate = new Date()
-    // const adjustedDate = new Date(currentDate.toLocaleString("en-US", {timeZone: userTimeZone}))
-
     useEffect(() => {
         if(date) {
             loadExerciseList(date)
@@ -192,7 +180,9 @@ export default function WorkoutLog() {
                 </div>
             }
             { toggleTimerModal &&
-                <TimerModal />
+                <TimerModal
+                    toggleTimer={handleToggleTimerModal}
+                />
             }
             { toggleDeleteAllExercisesModal &&
                 <ConfirmDeleteAllExModal
