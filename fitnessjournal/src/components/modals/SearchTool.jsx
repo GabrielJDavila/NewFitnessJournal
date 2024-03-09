@@ -1,14 +1,18 @@
 import { useEffect, useState } from "react"
 import { useOutletContext } from "react-router-dom"
-import { searchAllExercises, usersInDB } from "../../firebase"
+import { searchAllExercises, addUpdateWorkoutList, usersInDB } from "../../firebase"
+import ExAdded from "./ExAdded"
 
 export default function SearchTool(props) {
     const [searchData, setSearchData] = useState()
     const [searchQuery, setSearchQuery] = useState({
         name: ""
     })
+    const [exNameMessage, setExNameMessage] = useState({
+        name: ""
+    })
+    const [toggleNewExModal, setToggleNewExModal] = useState(false)
     const { currentUser } = useOutletContext()
-    console.log(searchData)
 
     const searchStyles = {
         height: props.toggleSearchBar ? "50px" : "0px",
@@ -23,6 +27,16 @@ export default function SearchTool(props) {
     useEffect(() => {
         loadSearchData()
     }, [searchQuery])
+
+    useEffect(() => {
+        if(toggleNewExModal) {
+            const flipModalState = setTimeout(() => {
+                setToggleNewExModal(false)
+            }, 3000)
+
+            return () => clearTimeout(flipModalState)
+        }
+    }, [toggleNewExModal])
 
     async function loadSearchData() {
         try {
@@ -40,6 +54,16 @@ export default function SearchTool(props) {
         }))
     }
 
+    function handleAddClick(e) {
+        const exId = e.target.dataset.id
+        const exName = e.target.dataset.name
+        
+        if(exId) {
+            addUpdateWorkoutList(exId, exName, usersInDB, currentUser)
+            setExNameMessage(prev => ({...prev, name: exName}))
+            setToggleNewExModal(true)
+        }
+    }
     // addUpdateWorkoutList(docInfo.id, docInfo.name, usersInDB, currentUser)
 
     const renderedSearchItems = searchData ? searchData.map((exercise, index) => {
@@ -48,7 +72,7 @@ export default function SearchTool(props) {
                 <li className="search-query-list-item">
                     {exercise.name}
                 </li>
-                <button data-id={exercise.id} >Add exercise</button>
+                <button onClick={handleAddClick} data-id={exercise.id} data-name={exercise.name}>Add exercise</button>
             </div>
         )
     }) : ""
@@ -65,7 +89,11 @@ export default function SearchTool(props) {
                 placeholder="search exercise"
                 style={searchStyles}
             />
+            <span className="material-symbols-outlined close-search">
+                cancel
+            </span>
         </div>
+        {toggleNewExModal && <ExAdded exName={exNameMessage.name}/>}
         {   searchQuery.name.length > 0 ?
             <ul className="search-query-list" style={searchListStyles}>
                 {renderedSearchItems}
