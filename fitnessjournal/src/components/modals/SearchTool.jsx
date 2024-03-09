@@ -89,8 +89,8 @@ export default function SearchTool(props) {
                 placeholder="search exercise"
                 style={searchStyles}
             />
-            <span className="material-symbols-outlined close-search">
-                cancel
+            <span onClick={props.toggleModal} data-close className="material-symbols-outlined close-search">
+                close
             </span>
         </div>
         {toggleNewExModal && <ExAdded exName={exNameMessage.name}/>}

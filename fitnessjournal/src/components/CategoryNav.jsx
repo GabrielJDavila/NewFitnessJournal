@@ -15,7 +15,7 @@ export default function CategoryNav(props) {
             setToggleNewCatModal(prev => !prev)
         } else if(e.target.dataset.addex) {
             setToggleNewExModal(prev => !prev)
-        } else if(e.target.dataset.search) {
+        } else if(e.target.dataset.search || e.target.dataset.close) {
             setToggleSearch(prev => !prev)
         }
     }

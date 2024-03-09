@@ -894,10 +894,12 @@ header {
 
 .close-search {
   width: 10%;
-  font-size: 2.5rem;
+  font-size: 1.5rem;
   background: #DC684B;
   height: 50px;
   border-radius: 0 6px 6px 0;
+  color: white;
+  padding-top: .75rem;
 }
 
 .search-query-list {
