@@ -182,6 +182,8 @@ export default function WorkoutLog() {
             { toggleTimerModal &&
                 <TimerModal
                     toggleTimer={handleToggleTimerModal}
+                    date={date}
+                    userId={currentUser}
                 />
             }
             { toggleDeleteAllExercisesModal &&

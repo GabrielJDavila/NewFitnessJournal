@@ -453,6 +453,7 @@ header {
 
 .current-log-title {
   color: lightgray;
+  margin-top: 10rem;
 }
 
 .current-log-container {
@@ -515,6 +516,58 @@ header {
 .link-text {
   margin-top: .5rem;
   font-size: 1rem;
+}
+
+/* timer styles */
+
+.timer-modal {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  padding: 0 1rem;
+  margin-top: 1rem;
+  position: absolute;
+  gap: .5rem;
+}
+
+.timer-modal-title {}
+
+.timer-modal-btns-container {
+  width: 30%;
+  display: flex;
+  gap: .25rem;
+}
+
+.timer-btn {
+  width: 50%;
+}
+
+.clock-container {
+  width: 40%;
+  border: 2px solid rgb(192, 192, 192);
+  height: 50px;
+  border-radius: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.time-clock {
+  font-family: "Micro 5", sans-serif;
+  font-size: 2rem;
+  margin: 0;
+  text-align: center;
+}
+
+.timer-save-clear-container {
+  width: 30%;
+  display: flex;
+  gap: .25rem;
+}
+
+.timer-clear, .timer-save {
+  width: 50%;
 }
 
 /* ======= WorkoutLogLayout Styles ========= */

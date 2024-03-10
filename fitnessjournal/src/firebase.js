@@ -404,6 +404,21 @@ export async function addUpdateWorkoutList(exerciseId, name, userCollection, use
     }
 }
 
+export async function saveTimerWorkout(userCollection, userId, date, workoutTime) {
+    const adjustedDate = date.toISOString().split("T")[0]
+    try {
+        const userDocRef = doc(userCollection, userId)
+        const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
+        const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, adjustedDate)
+
+        await updateDoc(dateOfWorkoutDocRef, {
+            workoutTime: workoutTime
+        })
+    } catch(e) {
+        console.error("error adding workout time: ", e)
+    }
+}
+
 export async function reOrderWorkoutList(exerciseId, newindex, userCollection, userId, date) {
     
     const adjustedDate = date.toISOString().split("T")[0]

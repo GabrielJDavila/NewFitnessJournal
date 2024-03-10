@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react"
+import { saveTimerWorkout, usersInDB } from "../../firebase"
+import { useOutletContext } from "react-router-dom"
 
 export default function TimerModal(props) {
     const [startTime, setStartTime] = useState(false)
@@ -7,48 +9,17 @@ export default function TimerModal(props) {
         minutes: 0,
         seconds: 0
     })
-    const date = new Date()
-    const currentMins = date.getMinutes() >= 10 ? date.getMinutes() : `0${date.getMinutes()}`
-    const currentSec = date.getSeconds() >= 10 ? date.getSeconds() : `0${date.getSeconds()}`
-
-    console.log(startTime)
-    // function timerInterval() {
-    //     const timer = setInterval(() => {
-    //         if(timer.seconds < 60) {
-    //             setTimer(prev => ({
-    //                 ...prev,
-    //                 seconds: prev.seconds + 1
-    //             }))
-    //         } else if(timer.seconds >= 60) {
-    //             setTimer(prev => ({
-    //                 ...prev,
-    //                 minutes: prev.minutes + 1,
-    //                 seconds: 0
-    //             }))
-    //         } else if(timer.minutes >= 60) {
-    //             setTimer(prev => ({
-    //                 hours: prev.hours + 1,
-    //                 minutes: 0,
-    //                 seconds: 0
-    //             }))
-    //         }
-
-    //     }, 1000)
-
-    //     return timer
-    // }
-
-    // const timerId = timerInterval()
+    const { currentUser } = useOutletContext()
+   
     useEffect(() => {
-        let interval
         if(startTime) {
-            interval = setInterval(() => {
-                if(timer.seconds < 60) {
+            const interval = setInterval(() => {
+                if(timer.seconds < 59) {
                     setTimer(prev => ({
                         ...prev,
                         seconds: prev.seconds + 1
                     }))
-                } else if(timer.seconds >= 60) {
+                } else if(timer.seconds >= 59) {
                     setTimer(prev => ({
                         ...prev,
                         minutes: prev.minutes + 1,
@@ -63,21 +34,62 @@ export default function TimerModal(props) {
                 }
 
             }, 1000)
+            return () => clearInterval(interval)
+            
         }
 
-        return () => clearInterval(interval)
-    }, [timer])
+    }, [startTime, timer])
+
+    useEffect(() => {
+
+    }, [])
 
     function flipTimer() {
         setStartTime(prev => !prev)
     }
 
+    function clearTimer() {
+        setTimer(prev => ({
+            hours: 0,
+            minutes: 0,
+            seconds: 0
+        }))
+        setStartTime(false)
+    }
+
+    function saveTimer() {
+        saveTimerWorkout(usersInDB, props.userId, props.date, timer)
+    }
+
+    const timerHours = timer.hours >= 10 ? timer.hours : `0${timer.hours}`
+    const timerMinutes = timer.minutes >= 10 ? timer.minutes : `0${timer.minutes}`
+    const timerSeconds = timer.seconds >= 10 ? timer.seconds : `0${timer.seconds}`
+    
     return (
-        <div className="timer-container">
-            <h2 className="timer-modal-title">Workout Timer</h2>
-            <div className="timer-modal-btns-container">
-                <button onClick={props.toggleTimer}>Close</button>
-                <button onClick={flipTimer}>Start timer</button>
+        <div className="timer-outer-container">
+            {/* <h2 className="timer-modal-title">Workout Timer</h2> */}
+            <div className="timer-modal">
+                <div className="timer-modal-btns-container">
+                    <button onClick={props.toggleTimer} className="timer-btn timer-close">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                    <button onClick={flipTimer} className="timer-btn">
+                        {!startTime ? <i class="fa-solid fa-hourglass-start"></i> : <i class="fa-solid fa-hourglass-end"></i>}
+                    </button>
+                </div>
+                <div className="clock-container">
+                    <p className="time-clock">{timerHours}: {timerMinutes}: {timerSeconds}</p>
+                    {/* <p className="minutes">{timerMinutes}:</p>
+                    <p className="seconds">{timerSeconds}:</p> */}
+                </div>
+                <div className="timer-save-clear-container">
+                    <button onClick={clearTimer} className="timer-clear">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                    <button onClick={saveTimer} className="timer-save">
+                        Save
+                    </button>
+                </div>
             </div>
         </div>
     )
