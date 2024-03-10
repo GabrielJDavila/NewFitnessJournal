@@ -71,7 +71,7 @@ export default function TimerModal(props) {
             <div className="timer-modal">
                 <div className="timer-modal-btns-container">
                     <button onClick={props.toggleTimer} className="timer-btn timer-close">
-                        <i class="fa-solid fa-xmark"></i>
+                        <i className="fa-solid fa-xmark"></i>
                     </button>
                     <button onClick={flipTimer} className="timer-btn">
                         {!startTime ? <i class="fa-solid fa-hourglass-start"></i> : <i class="fa-solid fa-hourglass-end"></i>}
