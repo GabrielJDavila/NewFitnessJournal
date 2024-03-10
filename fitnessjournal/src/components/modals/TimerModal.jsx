@@ -62,7 +62,10 @@ export default function TimerModal(props) {
     }
 
     function saveTimer() {
-        // saveTimerWorkout(usersInDB, props.userId, props.date, timer)
+        if(timer.seconds > 0) {
+            saveTimerWorkout(usersInDB, props.userId, props.date, timer)
+            setStartTime(false)
+        }
         setShowSavedText(prev => !prev)
     }
 
@@ -102,7 +105,9 @@ export default function TimerModal(props) {
                     </button>
                 </div>
             </div>
-            <p className="saved-time-text" style={savedTextStyles}>time was saved!</p>
+            <p className="saved-time-text" style={savedTextStyles}>
+                {timer.seconds > 0 ? `${timer.hours}:${timer.minutes}:${timer.seconds} recorded!` : "no time saved"}
+            </p>
         </div>
     )
 }
