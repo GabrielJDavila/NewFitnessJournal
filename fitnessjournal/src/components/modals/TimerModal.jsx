@@ -9,7 +9,7 @@ export default function TimerModal(props) {
         minutes: 0,
         seconds: 0
     })
-    const { currentUser } = useOutletContext()
+    const [showSavedText, setShowSavedText] = useState(false)
    
     useEffect(() => {
         if(startTime) {
@@ -41,8 +41,12 @@ export default function TimerModal(props) {
     }, [startTime, timer])
 
     useEffect(() => {
+        const showModal = setTimeout(() => {
+            setShowSavedText(false)
+        }, 3000)
 
-    }, [])
+        return () => clearTimeout(showModal)
+    }, [showSavedText])    
 
     function flipTimer() {
         setStartTime(prev => !prev)
@@ -58,12 +62,19 @@ export default function TimerModal(props) {
     }
 
     function saveTimer() {
-        saveTimerWorkout(usersInDB, props.userId, props.date, timer)
+        // saveTimerWorkout(usersInDB, props.userId, props.date, timer)
+        setShowSavedText(prev => !prev)
     }
 
     const timerHours = timer.hours >= 10 ? timer.hours : `0${timer.hours}`
     const timerMinutes = timer.minutes >= 10 ? timer.minutes : `0${timer.minutes}`
     const timerSeconds = timer.seconds >= 10 ? timer.seconds : `0${timer.seconds}`
+
+    const savedTextStyles = {
+        height: showSavedText ? "40px" : "0px",
+        padding: showSavedText ? ".5rem" : "0px",
+        background: showSavedText ? "#DC684B" : ""
+    }
     
     return (
         <div className="timer-outer-container">
@@ -74,7 +85,7 @@ export default function TimerModal(props) {
                         <i className="fa-solid fa-xmark"></i>
                     </button>
                     <button onClick={flipTimer} className="timer-btn">
-                        {!startTime ? <i class="fa-solid fa-hourglass-start"></i> : <i class="fa-solid fa-hourglass-end"></i>}
+                        {!startTime ? <i className="fa-solid fa-hourglass-start"></i> : <i className="fa-solid fa-hourglass-end"></i>}
                     </button>
                 </div>
                 <div className="clock-container">
@@ -91,6 +102,7 @@ export default function TimerModal(props) {
                     </button>
                 </div>
             </div>
+            <p className="saved-time-text" style={savedTextStyles}>time was saved!</p>
         </div>
     )
 }

@@ -569,6 +569,20 @@ header {
   width: 50%;
 }
 
+.saved-time-text {
+  position: absolute;
+  transition: .2s ease all;
+  overflow: hidden;
+  margin: 1rem auto;
+  right: 0;
+  left: 0;
+  max-width: 200px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  border-radius: 50px;
+}
+
 /* ======= WorkoutLogLayout Styles ========= */
 
 .workout-log-layout {
