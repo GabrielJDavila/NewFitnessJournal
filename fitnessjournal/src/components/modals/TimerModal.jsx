@@ -84,7 +84,7 @@ export default function TimerModal(props) {
                 </div>
                 <div className="timer-save-clear-container">
                     <button onClick={clearTimer} className="timer-clear">
-                        <i class="fa-solid fa-trash"></i>
+                        <i className="fa-solid fa-trash"></i>
                     </button>
                     <button onClick={saveTimer} className="timer-save">
                         Save
