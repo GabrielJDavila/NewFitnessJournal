@@ -132,14 +132,28 @@ export function previousModay() {
     const getPastMonday = new Date()
     getPastMonday.setDate(today.getDate() - daysToSubtract)
     const timstampToCompare = Timestamp.fromDate(getPastMonday)
-    console.log(timstampToCompare, getPastMonday)
-    return newDateString
+    
+    return timstampToCompare
 }
 export async function queryWorkoutLogs(userCollection, userId) {
+    const today = new Date()
+    const numMonth = today.getMonth() + 1
+
+    const stringMonth = numMonth <= 9 ? `0${numMonth}` : `${numMonth}`
+    const stringDay = today.getDate() <= 9 ? `0${today.getDate()}` : `${today.getDate()}`
+   
+    const newDateString = `${today.getFullYear()}-${stringMonth}-${stringDay}`
+
+    const currentDayOfWeek = today.getDay()
+    const daysToSubtract = currentDayOfWeek === 0 ? 6 : currentDayOfWeek - 1
+    const getPastMonday = new Date()
+    getPastMonday.setDate(today.getDate() - daysToSubtract)
+    const timstampToCompare = Timestamp.fromDate(getPastMonday)
+
     const userDocRef = doc(userCollection, userId)
     const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
 
-    const q = query(currentWorkoutCollectionRef, orderBy("createdAt", "desc"), limit(1))
+    const q = query(currentWorkoutCollectionRef, where("createdAt", ">", timstampToCompare), orderBy("createdAt", "desc"), limit(7))
     const workoutsSnapshot = await getDocs(q)
     for(const dateDoc of workoutsSnapshot.docs) {
         console.log(dateDoc.data().createdAt)
