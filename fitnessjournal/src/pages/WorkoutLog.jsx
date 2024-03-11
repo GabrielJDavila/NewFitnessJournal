@@ -34,7 +34,7 @@ export default function WorkoutLog() {
         setId: ""
     })
     const calendarRef = useRef(null)
-
+    console.log(workoutData)
     useEffect(() => {
         if(date) {
             loadExerciseList(date)
@@ -194,7 +194,8 @@ export default function WorkoutLog() {
                         currentUser,
                         date,
                         loadExerciseList,
-                        toggleDeleteAllEx
+                        toggleDeleteAllEx,
+                        setWorkoutData
                     },
                     {
                         setToggleDeleteAllExercisesModal

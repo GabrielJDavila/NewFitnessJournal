@@ -6,7 +6,8 @@ export async function handleDeleteAllExSubmit(e, {
     currentUser,
     date,
     loadExerciseList,
-    toggleDeleteAllEx
+    toggleDeleteAllEx,
+    setWorkoutData
 },
 {
     setToggleDeleteAllExercisesModal
@@ -15,6 +16,7 @@ export async function handleDeleteAllExSubmit(e, {
     try {
         await deleteAllEx(usersInDB, currentUser, date)
         await loadExerciseList(date)
+        // setWorkoutData([])
         toggleDeleteAllEx(e, setToggleDeleteAllExercisesModal)
     } catch(err) {
         console.error("error deleting log: ", err)

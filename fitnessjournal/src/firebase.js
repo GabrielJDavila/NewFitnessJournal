@@ -660,6 +660,7 @@ export async function deleteAllEx(userCollection, userId, selectedDate) {
         const userDocRef = doc(userCollection, userId)
         const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
         const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, dateString)
+
         const exercisesCollectionRef = collection(dateOfWorkoutDocRef, "exList")
         const currentExListSnapshot = await getDocs(exercisesCollectionRef)
 
@@ -672,6 +673,8 @@ export async function deleteAllEx(userCollection, userId, selectedDate) {
             }
             await deleteDoc(exDoc.ref)
         }
+
+        await deleteDoc(dateOfWorkoutDocRef)
 
     } catch(e) {
         console.log("error deleting workout: ", e)
