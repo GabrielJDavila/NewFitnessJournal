@@ -14,7 +14,8 @@ import {
     where,
     serverTimestamp,
     orderBy,
-    Timestamp
+    Timestamp,
+    limit
 } from "firebase/firestore"
 import { createUserWithEmailAndPassword, fetchSignInMethodsForEmail, getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth"
 // TODO: Add SDKs for Firebase products that you want to use
@@ -119,16 +120,33 @@ export const logout = async () => {
 
 export function previousModay() {
     const today = new Date()
-    return new Timestamp(today.getFullYear(), today.getMonth(), today.getDate() - (today.getDay() + 6) % 7, 0, 0, 0)
+    const numMonth = today.getMonth() + 1
+
+    const stringMonth = numMonth <= 9 ? `0${numMonth}` : `${numMonth}`
+    const stringDay = today.getDate() <= 9 ? `0${today.getDate()}` : `${today.getDate()}`
+   
+    const newDateString = `${today.getFullYear()}-${stringMonth}-${stringDay}`
+
+    const currentDayOfWeek = today.getDay()
+    const daysToSubtract = currentDayOfWeek === 0 ? 6 : currentDayOfWeek - 1
+    const getPastMonday = new Date()
+    getPastMonday.setDate(today.getDate() - daysToSubtract)
+    const timstampToCompare = Timestamp.fromDate(getPastMonday)
+    console.log(timstampToCompare, getPastMonday)
+    return newDateString
 }
-export async function queryWorkoutLogs(userCollection, userId, previousModay, onSuccess) {
+export async function queryWorkoutLogs(userCollection, userId) {
     const userDocRef = doc(userCollection, userId)
     const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
 
-    const q = query(collection(db, `users/${userId}/currentWorkout`), where("createdAt", ">=", previousModay), orderBy("createdAt", "desc"), limit(7))
-    return onSnapshot(q, snapshot => {
-        onSuccess(snapshot.size)
-    })
+    const q = query(currentWorkoutCollectionRef, orderBy("createdAt", "desc"), limit(1))
+    const workoutsSnapshot = await getDocs(q)
+    for(const dateDoc of workoutsSnapshot.docs) {
+        console.log(dateDoc.data().createdAt)
+    }
+    // return onSnapshot(q, snapshot => {
+    //     onSuccess(snapshot.size)
+    // })
 }
 
 // search all exercises using the search tool. reference the user's categories collection, then loop through
@@ -485,7 +503,6 @@ export async function retrieveCurrentExSetsReps(userCollection, userId, selected
             repsSetsSnapshot.forEach(set => {
                 const setId = set.id
                 const { createdAt, reps, weight, weightType } = set.data()
-                console.log(set.data())
 
                 exerciseData.setsReps.push({
                     setId,

@@ -21,7 +21,7 @@ export default function Dashboard() {
     useEffect(() => {
         previousModay()
 
-        const unsubcribe = queryWorkoutLogs()
+        const unsubcribe = queryWorkoutLogs(usersInDB, currentUser)
     }, [])
 
     // const newWeekArr = new Array(7)
