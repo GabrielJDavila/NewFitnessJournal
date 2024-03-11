@@ -136,28 +136,47 @@ export function previousModay() {
     return timstampToCompare
 }
 export async function queryWorkoutLogs(userCollection, userId) {
-    const today = new Date()
-    const numMonth = today.getMonth() + 1
+        const today = new Date()
+        // const numMonth = today.getMonth() + 1
 
-    const stringMonth = numMonth <= 9 ? `0${numMonth}` : `${numMonth}`
-    const stringDay = today.getDate() <= 9 ? `0${today.getDate()}` : `${today.getDate()}`
-   
-    const newDateString = `${today.getFullYear()}-${stringMonth}-${stringDay}`
+        // const stringMonth = numMonth <= 9 ? `0${numMonth}` : `${numMonth}`
+        // const stringDay = today.getDate() <= 9 ? `0${today.getDate()}` : `${today.getDate()}`
+    
+        // const newDateString = `${today.getFullYear()}-${stringMonth}-${stringDay}`
 
-    const currentDayOfWeek = today.getDay()
-    const daysToSubtract = currentDayOfWeek === 0 ? 6 : currentDayOfWeek - 1
-    const getPastMonday = new Date()
-    getPastMonday.setDate(today.getDate() - daysToSubtract)
-    const timstampToCompare = Timestamp.fromDate(getPastMonday)
+        const currentDayOfWeek = today.getDay()
+        const daysToSubtract = currentDayOfWeek
+        const getPastSunday = new Date()
+        getPastSunday.setDate(today.getDate() - daysToSubtract)
+        getPastSunday.setHours(0, 0, 0, 0)
+        const timstampToCompare = Timestamp.fromDate(getPastSunday)
 
-    const userDocRef = doc(userCollection, userId)
-    const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
+        const userDocRef = doc(userCollection, userId)
+        const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
 
-    const q = query(currentWorkoutCollectionRef, where("createdAt", ">", timstampToCompare), orderBy("createdAt", "desc"), limit(7))
-    const workoutsSnapshot = await getDocs(q)
-    for(const dateDoc of workoutsSnapshot.docs) {
-        console.log(dateDoc.data().createdAt)
-    }
+        const q = query(currentWorkoutCollectionRef, where("createdAt", ">", timstampToCompare), orderBy("createdAt", "desc"), limit(7))
+        const workoutsSnapshot = await getDocs(q)
+
+        const workoutsArr = []
+        for(const dateDoc of workoutsSnapshot.docs) {
+
+            if(dateDoc.data().workoutTime) {
+                const loggedWorkout = {
+                    id: dateDoc.id,
+                    date: dateDoc.data().createdAt.toDate(),
+                    workoutTime: dateDoc.data().workoutTime
+                }
+                workoutsArr.push(loggedWorkout)
+            } else {
+                const loggedWorkout = {
+                    id: dateDoc.id,
+                    date: dateDoc.data().createdAt.toDate(),
+                }
+                workoutsArr.push(loggedWorkout)
+            }
+        }
+       
+        return workoutsArr
     // return onSnapshot(q, snapshot => {
     //     onSuccess(snapshot.size)
     // })

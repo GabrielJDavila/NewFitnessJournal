@@ -11,19 +11,25 @@ import "react-calendar/dist/Calendar.css"
 import { queryWorkoutLogs, previousModay } from "../firebase"
 
 export default function Dashboard() {
-    const [totalWorkouts, setTotalWorkouts] = useState(0)
+    const [totalWorkouts, setTotalWorkouts] = useState()
     const { currentUser } = useOutletContext()
-
+    console.log(totalWorkouts)
     useEffect(() => {
         window.scrollTo(0, 0)
     })
 
     useEffect(() => {
-        previousModay()
-
-        const unsubcribe = queryWorkoutLogs(usersInDB, currentUser)
+        loadDashboardWorkoutData()
     }, [])
 
+    async function loadDashboardWorkoutData() {
+        try {
+            const data = await queryWorkoutLogs(usersInDB, currentUser)
+            setTotalWorkouts(data)
+        } catch(e) {
+            console.error("error fetching logged workouts: ", e)
+        }
+    }
     // const newWeekArr = new Array(7)
     // const today = new Date()
     // console.log(newWeekArr)
@@ -42,10 +48,10 @@ export default function Dashboard() {
                         <span className="material-symbols-outlined dash-icon">
                             fitness_center
                         </span>
-                        <p className="log-title">Workouts</p>
+                        <p className="log-title">workouts this week</p>
                     </div>
                     <div className="log-text-container">
-                        <p className="log-text">4 /<small>7</small></p>
+                        <p className="log-text">{totalWorkouts.length} /<small>7</small></p>
                     </div>
                 </div>
 
