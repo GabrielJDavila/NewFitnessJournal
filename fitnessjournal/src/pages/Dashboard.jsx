@@ -51,7 +51,7 @@ export default function Dashboard() {
                         <p className="log-title">workouts this week</p>
                     </div>
                     <div className="log-text-container">
-                        <p className="log-text">{totalWorkouts.length} /<small>7</small></p>
+                        <p className="log-text">{totalWorkouts ? totalWorkouts.length : "0"} /<small>7</small></p>
                     </div>
                 </div>
 
