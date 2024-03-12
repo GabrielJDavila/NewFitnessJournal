@@ -118,31 +118,25 @@ export const logout = async () => {
     await signOut(auth)
 }
 
-export function previousModay() {
-    const today = new Date()
-    const numMonth = today.getMonth() + 1
+// export function previousModay() {
+//     const today = new Date()
+//     const numMonth = today.getMonth() + 1
 
-    const stringMonth = numMonth <= 9 ? `0${numMonth}` : `${numMonth}`
-    const stringDay = today.getDate() <= 9 ? `0${today.getDate()}` : `${today.getDate()}`
+//     const stringMonth = numMonth <= 9 ? `0${numMonth}` : `${numMonth}`
+//     const stringDay = today.getDate() <= 9 ? `0${today.getDate()}` : `${today.getDate()}`
    
-    const newDateString = `${today.getFullYear()}-${stringMonth}-${stringDay}`
+//     const newDateString = `${today.getFullYear()}-${stringMonth}-${stringDay}`
 
-    const currentDayOfWeek = today.getDay()
-    const daysToSubtract = currentDayOfWeek === 0 ? 6 : currentDayOfWeek - 1
-    const getPastMonday = new Date()
-    getPastMonday.setDate(today.getDate() - daysToSubtract)
-    const timstampToCompare = Timestamp.fromDate(getPastMonday)
+//     const currentDayOfWeek = today.getDay()
+//     const daysToSubtract = currentDayOfWeek === 0 ? 6 : currentDayOfWeek - 1
+//     const getPastMonday = new Date()
+//     getPastMonday.setDate(today.getDate() - daysToSubtract)
+//     const timstampToCompare = Timestamp.fromDate(getPastMonday)
     
-    return timstampToCompare
-}
+//     return timstampToCompare
+// }
 export async function queryWorkoutLogs(userCollection, userId) {
         const today = new Date()
-        // const numMonth = today.getMonth() + 1
-
-        // const stringMonth = numMonth <= 9 ? `0${numMonth}` : `${numMonth}`
-        // const stringDay = today.getDate() <= 9 ? `0${today.getDate()}` : `${today.getDate()}`
-    
-        // const newDateString = `${today.getFullYear()}-${stringMonth}-${stringDay}`
 
         const currentDayOfWeek = today.getDay()
         const daysToSubtract = currentDayOfWeek

@@ -8,7 +8,7 @@ import CurrentWorkoutList from "../components/CurrentWorkoutList"
 import { handleDeleteExerciseSubmit, handleDeleteSetSubmit, handleEditSetSubmit, toggleEdit, toggleDelete } from "../Utils"
 import Calendar from "react-calendar"
 import "react-calendar/dist/Calendar.css"
-import { queryWorkoutLogs, previousModay } from "../firebase"
+import { queryWorkoutLogs } from "../firebase"
 
 export default function Dashboard() {
     const [totalWorkouts, setTotalWorkouts] = useState()
@@ -30,10 +30,34 @@ export default function Dashboard() {
             console.error("error fetching logged workouts: ", e)
         }
     }
-    // const newWeekArr = new Array(7)
-    // const today = new Date()
-    // console.log(newWeekArr)
-    // console.log(today.getMonth(), today.getDate())
+    
+    function renderedWorkoutTime() {
+        let averageTime = 0
+        let totalTime = 0
+        if(totalWorkouts) {
+            totalWorkouts.forEach(workoutObj => {
+                if(workoutObj.workoutTime) {
+                    const hrs = (workoutObj.workoutTime.hours * 60) * 60
+                    const mins = workoutObj.workoutTime.minutes * 60
+                    const secs = workoutObj.workoutTime.seconds
+                    totalTime += (hrs + mins + secs)
+                    console.log(totalTime)
+                } else {
+                    console.log("picklyberry")
+                }
+            })
+        }
+        averageTime = totalTime / totalWorkouts.length
+        const date = new Date(null)
+        date.setSeconds(averageTime)
+        const result = date.toISOString().slice(11, 19)
+        console.log(result)
+        // let averageHour = Math.floor((totalTime / totalWorkouts.length) / 3600)
+        // let averageMin = Math.floor((totalTime / totalWorkouts.length) % 3600)
+        // console.log(averageHour)
+    }
+
+    renderedWorkoutTime()
 
     return (
         <main className="dashboard">
