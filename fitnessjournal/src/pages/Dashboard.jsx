@@ -12,8 +12,9 @@ import { queryWorkoutLogs } from "../firebase"
 
 export default function Dashboard() {
     const [totalWorkouts, setTotalWorkouts] = useState()
+    const [averageLoggedTime, setAverageLoggedTime] = useState()
     const { currentUser } = useOutletContext()
-    console.log(totalWorkouts)
+
     useEffect(() => {
         window.scrollTo(0, 0)
     })
@@ -21,6 +22,10 @@ export default function Dashboard() {
     useEffect(() => {
         loadDashboardWorkoutData()
     }, [])
+
+    useEffect(() => {
+        renderedWorkoutTime()
+    }, [totalWorkouts])
 
     async function loadDashboardWorkoutData() {
         try {
@@ -34,7 +39,7 @@ export default function Dashboard() {
     function renderedWorkoutTime() {
         let averageTime = 0
         let totalTime = 0
-        if(totalWorkouts) {
+        if(totalWorkouts && totalWorkouts.length > 0) {
             totalWorkouts.forEach(workoutObj => {
                 if(workoutObj.workoutTime) {
                     const hrs = (workoutObj.workoutTime.hours * 60) * 60
@@ -46,18 +51,15 @@ export default function Dashboard() {
                     console.log("picklyberry")
                 }
             })
+            averageTime = totalTime / totalWorkouts.length
+            const date = new Date(null)
+            date.setSeconds(averageTime)
+            const result = date.toISOString().slice(11, 19)
+            setAverageLoggedTime(result)
+        } else {
+            console.log("total workouts is undefined or empty")
         }
-        averageTime = totalTime / totalWorkouts.length
-        const date = new Date(null)
-        date.setSeconds(averageTime)
-        const result = date.toISOString().slice(11, 19)
-        console.log(result)
-        // let averageHour = Math.floor((totalTime / totalWorkouts.length) / 3600)
-        // let averageMin = Math.floor((totalTime / totalWorkouts.length) % 3600)
-        // console.log(averageHour)
     }
-
-    renderedWorkoutTime()
 
     return (
         <main className="dashboard">
@@ -94,6 +96,19 @@ export default function Dashboard() {
             </div>
 
             <div className="dashboard-bottom-container">
+
+                <div className="log-container">
+                    <div className="log-title-container">
+                        <span className="material-symbols-outlined dash-icon">
+                            nutrition
+                        </span>
+                        <p className="log-title">Average time</p>
+                    </div>
+                    <div className="log-text-container">
+                        <p className="log-text">{averageLoggedTime ? averageLoggedTime : "00:00:00"}</p>
+                    </div>
+                </div>
+
                 <p>Progress</p>
                 <div className="graph-container">
                     <img src="./src/assets/graph.svg" className="graph"/>
