@@ -33,7 +33,7 @@ export default function AllCategories() {
     useEffect(() => {
         setTimeout(() => {
             loadData()
-        }, 5000)
+        }, 1000)
         
     }, [])
 
@@ -141,8 +141,8 @@ export default function AllCategories() {
     const renderedSkelCategories = skeletonArr.map((_, index) => {
         return (
             <div key={index} className="skeleton-cat-container">
-                <Skeleton width="50%" height={30}/>
-                <Skeleton width={75} height={30}/>
+                <Skeleton width="50%" height={50}/>
+                <Skeleton width={75} height={50}/>
             </div>
         )
     }

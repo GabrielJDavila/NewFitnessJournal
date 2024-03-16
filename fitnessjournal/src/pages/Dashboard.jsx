@@ -23,11 +23,17 @@ export default function Dashboard() {
     })
 
     useEffect(() => {
-        loadDashboardWorkoutData()
+        setTimeout(() => {
+            loadDashboardWorkoutData()
+        }, 1000)
+        
     }, [])
 
     useEffect(() => {
-        renderedWorkoutTime()
+        setTimeout(() => {
+            renderedWorkoutTime()
+        }, 1000)
+        
     }, [totalWorkouts])
 
     async function loadDashboardWorkoutData() {

@@ -862,14 +862,12 @@ header {
 }
 
 .skeleton-cat-container {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  align-items: center;
+  padding: 1rem 0;
 }
 
 .category-container,
-.exercise-container {
+.exercise-container,
+.skeleton-cat-container {
   display: flex;
   flex-direction: row;
   align-items: center;

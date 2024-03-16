@@ -507,7 +507,7 @@ export async function retrieveCurrentExSetsReps(userCollection, userId, selected
 
         if(!dateDocSnap.exists()) {
             console.log("no workout found for this date.")
-            alert("no workout found for this date.")
+            // alert("no workout found for this date.")
         }
 
         const exercisesCollectionRef = collection(dateOfWorkoutDocRef, "exList")
