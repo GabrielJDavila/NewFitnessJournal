@@ -382,7 +382,7 @@ header {
   color: white;
 }
 
-.dashboard-top-content-container {
+.dashboard-top-content-container, .dashboard-bottom-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -405,6 +405,7 @@ header {
   text-align: left;
   justify-content: left;
   padding: 1rem 0rem;
+  align-items: center;
 }
 
 .dash-icon {
