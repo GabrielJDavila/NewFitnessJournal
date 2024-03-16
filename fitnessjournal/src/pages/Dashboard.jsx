@@ -78,7 +78,7 @@ export default function Dashboard() {
                             <span className="material-symbols-outlined dash-icon">
                                 fitness_center
                             </span>
-                            <p className="log-title">workouts this week</p>
+                            <p className="log-title">Workouts this week</p>
                     </div> :
                     <div className="log-title-container">
                         <Skeleton variant="circular" width={25} height={25}/>
@@ -118,14 +118,14 @@ export default function Dashboard() {
                 </div>
                 }
 
-            </div>
+            {/* </div>
 
-            <div className="dashboard-bottom-container">
+            <div className="dashboard-bottom-container"> */}
                 { averageLoggedTime ?
                     <div className="log-container">
                         <div className="log-title-container">
                             <span className="material-symbols-outlined dash-icon">
-                                nutrition
+                                timer
                             </span>
                             <p className="log-title">Average time</p>
                         </div>
@@ -147,9 +147,9 @@ export default function Dashboard() {
                     <div className="log-container">
                         <div className="log-title-container">
                             <span className="material-symbols-outlined dash-icon">
-                                nutrition
+                                trophy
                             </span>
-                            <p className="log-title">Average time</p>
+                            <p className="log-title">Recent PRs</p>
                         </div>
                         <div className="log-text-container">
                             <p className="log-text">{averageLoggedTime ? averageLoggedTime : "00:00:00"}</p>

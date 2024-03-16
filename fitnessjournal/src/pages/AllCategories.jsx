@@ -5,6 +5,7 @@ import { getAllCategories, usersInDB, editCategoryName, deleteCategory } from ".
 import CategoryNav from "../components/CategoryNav"
 import NewCat from "../components/NewCat"
 import NewEx from "./NewEx"
+import { Skeleton } from "@mui/material"
 
 export default function AllCategories() {
     const [toggleEditModal, setToggleEditModal] = useState(false)
@@ -17,7 +18,9 @@ export default function AllCategories() {
         title: ""
     })
     const { currentUser } = useOutletContext()
-    
+    const skeletonArr = Array.from({length: 7}, (_, index) => index)
+
+    console.log(typeof(loadedCategories))
     async function loadData() {
         try {
             const data = await getAllCategories(usersInDB, currentUser)
@@ -28,7 +31,10 @@ export default function AllCategories() {
     }
 
     useEffect(() => {
-        loadData()
+        setTimeout(() => {
+            loadData()
+        }, 5000)
+        
     }, [])
 
     useEffect(() => {
@@ -132,6 +138,17 @@ export default function AllCategories() {
         )
     })
 
+    const renderedSkelCategories = skeletonArr.map((_, index) => {
+        return (
+            <div key={index} className="skeleton-cat-container">
+                <Skeleton width="50%" height={30}/>
+                <Skeleton width={75} height={30}/>
+            </div>
+        )
+    }
+    )
+    console.log(renderedSkelCategories)
+
     return (
         <div className="all-cats-container">
             <CategoryNav
@@ -151,7 +168,11 @@ export default function AllCategories() {
                 </form> */}
                 {toggleEditModal && editModal}
                 {openConfirmDeleteModal && confirmDeleteModal}
-                {loadedCategories && renderedCategories}
+                {loadedCategories.length === 0 ?
+                    renderedSkelCategories
+                    :
+                    renderedCategories
+                }
                 <Link to="NewCat">Create Some Workout Categories!</Link>
             </div>
         </div>
