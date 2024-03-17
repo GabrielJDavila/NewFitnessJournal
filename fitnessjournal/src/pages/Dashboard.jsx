@@ -64,9 +64,10 @@ export default function Dashboard() {
             const date = new Date(null)
             date.setSeconds(averageTime)
             const result = date.toISOString().slice(11, 19)
+            console.log(result)
             setAverageLoggedTime(result)
         } else {
-            console.log("total workouts is undefined or empty")
+            setAverageLoggedTime("00:00:00")
         }
     }
 
