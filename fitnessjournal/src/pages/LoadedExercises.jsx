@@ -3,18 +3,27 @@ import { Link, useParams, useOutletContext } from "react-router-dom"
 import { retreiveExFromCategory, retrieveSelectedCatName, usersInDB } from "../firebase"
 import CategoryNav from "../components/CategoryNav"
 import Exercise from "../components/Exercise"
-import BackBtn from "../components/BackBtn"
-import NewEx from "./NewEx"
+import { Skeleton } from "@mui/material"
 
 export default function LoadedExercises() {
     const params = useParams()
     const [exercises, setExercises] = useState([])
+    const [hideSkeleton, setHideSkeleton] = useState(false)
     const [selectedCat, setSelectedCat] = useState({
         name: ""
     })
     const { currentUser } = useOutletContext()
-    console.log(selectedCat.name)
-    
+    const skeletonArr = Array.from({length: 7}, (_, index) => index)
+
+    const renderedSkelCategories = skeletonArr.map((_, index) => {
+        return (
+            <div key={index} className="skeleton-cat-container">
+                <Skeleton width="50%" height={50}/>
+                <Skeleton width={75} height={50}/>
+            </div>
+        )
+    })
+
     async function loadExercisesData() {
         try {
             const catNameData = await retrieveSelectedCatName(usersInDB, currentUser, params.id)
@@ -25,13 +34,16 @@ export default function LoadedExercises() {
 
             const data = await retreiveExFromCategory(usersInDB, currentUser, params.id)
             setExercises(data)
+            setHideSkeleton(prev => !prev)
         } catch(e) {
             console.log("error retrieving data: ", e)
         }
     }
     
     useEffect(() => {
-        loadExercisesData()
+        setTimeout(() => {
+            loadExercisesData()
+        }, 5000)
     }, [])
 
     useEffect(() => {
@@ -40,6 +52,7 @@ export default function LoadedExercises() {
 
     const renderedExercises = exercises.map(exercise => {
         return (
+            exercises.length >= 1 ?
             <Exercise
                 key={exercise.id}
                 id={exercise.id}
@@ -48,8 +61,10 @@ export default function LoadedExercises() {
                 unit={exercise.weightUnit}
                 toggleEdit={(e) => toggleEdit(e)}
                 toggleDelete={(e) => toggleDelete(e)}
-            />
+            /> :
+            <h1 className="current-log-title">No Exercises Exist in Category!</h1>
         )
+
     })
 
     return (
@@ -59,23 +74,16 @@ export default function LoadedExercises() {
                 currentCatId={selectedCat.name}
             />
             <div className="rendered-ex-header">
-                {/* <div className="back-btn-container">
-                    <BackBtn />
-                    <p className="back-to-cats-text">back to categories</p>
-                </div> */}
-                <h2 className="selected-cat-title">{selectedCat.name}</h2>
+                <h2 className="selected-cat-title">
+                {
+                    !hideSkeleton ? <Skeleton width={100}/> : selectedCat.name
+                }
+                </h2>
             </div>
-            {/* {showNewExModal &&
-                <NewEx
-                    // toggleModal={() => setShowNewExModal(prev => !prev)}
-                    testProp="test"
-                    reloadExData={() => loadExercisesData()}
-                />} */}
             <div className="rendered-ex-list">
                 {
-                    exercises.length >= 1 ? renderedExercises : <div className="no-exercise-container"><h1 className="current-log-title">No Exercises Exist in Category!</h1></div>
+                    !hideSkeleton ? renderedSkelCategories : renderedExercises
                 }
-                {/* {exercises.length >= 1 ? renderedExercises : <button onClick={() => setShowNewExModal(prev => !prev)}>Add new exercise</button>} */}
             </div>
         </div>
         

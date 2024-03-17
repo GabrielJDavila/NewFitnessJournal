@@ -20,7 +20,6 @@ export default function AllCategories() {
     const { currentUser } = useOutletContext()
     const skeletonArr = Array.from({length: 7}, (_, index) => index)
 
-    console.log(typeof(loadedCategories))
     async function loadData() {
         try {
             const data = await getAllCategories(usersInDB, currentUser)
@@ -145,9 +144,7 @@ export default function AllCategories() {
                 <Skeleton width={75} height={50}/>
             </div>
         )
-    }
-    )
-    console.log(renderedSkelCategories)
+    })
 
     return (
         <div className="all-cats-container">

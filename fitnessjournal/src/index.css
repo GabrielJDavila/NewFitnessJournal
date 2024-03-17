@@ -383,12 +383,12 @@ header {
 }
 
 .dashboard-top-content-container, .dashboard-bottom-container {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 50% 50%;
   justify-content: center;
   align-items: center;
-  gap: 2rem;
-  padding: 1rem;
+  gap: 1.5rem;
+  padding: 2rem;
   margin-top: 1rem;
 }
 
@@ -396,6 +396,7 @@ header {
   box-shadow: 0 0 5px 2px rgb(220, 220, 220);
   border-radius: 6px;
   width: 100%;
+  height: 175px;
   max-width: 325px;
   padding: 0 .5rem .5rem;
   background: rgb(246, 246, 246);
@@ -872,7 +873,7 @@ header {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 2px solid grey;
+  border-bottom: 1px solid rgb(205, 205, 205);
   font-size: 1.5rem;
   width: 100%;
 }
@@ -1105,7 +1106,7 @@ header {
 }
 
 .exercise-container {
-  padding: 1rem;
+  padding: 1rem 0;
 }
 
 .back-btn-container {
@@ -1123,6 +1124,7 @@ header {
   width: 100%;
   max-width: 900px;
   margin: 0;
+  padding: 0 1rem;
 }
 
 .no-exercise-container {

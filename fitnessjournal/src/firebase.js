@@ -495,6 +495,51 @@ export async function reOrderWorkoutList(exerciseId, newindex, userCollection, u
     }
 }
 
+// compare PRs of weight and reps
+export async function findPRs(userCollection, userId) {
+    try {
+        const userDocRef = doc(userCollection, userId)
+        const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
+        const currWorkoutQuery = query(currentWorkoutCollectionRef)
+        const currWorkoutSnapshot = await getDocs(currWorkoutQuery)
+
+        let exercisePRs = {}
+
+        for(const workout of currWorkoutSnapshot.docs) {
+            const workoutId = workout.id
+            // console.log(workoutId)
+            const exercisesCollectionRef = collection(workout.ref, "exList")
+            const exListQuery = query(exercisesCollectionRef)
+            const exListSnapshot = await getDocs(exListQuery)
+
+            for(const exercise of exListSnapshot.docs) {
+                const repsAndSetsRef = collection(exercise.ref, "currentEx")
+                const currentExQuery = query(repsAndSetsRef)
+                const currentExSnapshot = await getDocs(currentExQuery)
+                // console.log(exercise.id)
+                currentExSnapshot.forEach(doc => {
+                    const weight = doc.data().weight
+                    const reps = doc.data().reps
+
+                    if(!exercisePRs[exercise.id]) {
+                        exercisePRs[exercise.id] = {maxWeight: weight, maxReps: reps}
+                    } else {
+                        if(weight > exercisePRs[exercise.id].maxWeight) {
+                            exercisePRs[exercise.id].maxWeight = weight
+                        }
+                        if(reps > exercisePRs[exercise.id].maxReps) {
+                            exercisePRs[exercise.id].maxReps = reps
+                        }
+                    }
+                })
+            }
+        }
+        console.log(exercisePRs)
+    } catch(e) {
+        console.error("error finding PRs: ", e)
+    }
+}
+
 // retrieve sets and reps for current exercise in selection
 export async function retrieveCurrentExSetsReps(userCollection, userId, selectedDate) {
     try {
@@ -525,12 +570,13 @@ export async function retrieveCurrentExSetsReps(userCollection, userId, selected
                 id: exId,
                 name: exDoc.data().name,
                 setsReps: []
+
             }
 
             repsSetsSnapshot.forEach(set => {
                 const setId = set.id
                 const { createdAt, reps, weight, weightType } = set.data()
-
+                // console.log(weight)
                 exerciseData.setsReps.push({
                     setId,
                     createdAt,

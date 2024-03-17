@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react"
 import { Link, useOutletContext } from "react-router-dom"
-import { usersInDB, retrieveCurrentExSetsReps, editSingleSet, deleteEx, deleteSingleSet, deleteAllEx, reOrderWorkoutList } from "../firebase"
+import { usersInDB, retrieveCurrentExSetsReps, editSingleSet, deleteEx, deleteSingleSet, deleteAllEx, reOrderWorkoutList, findPRs } from "../firebase"
 import ConfirmDeleteAllExModal from "../components/modals/ConfirmDeleteAllEx"
 import ConfirmDeleteExModal from "../components/modals/ConfirmDeleteExModal"
 import ConfirmDeleteSetModal from "../components/modals/ConfirmDeleteSetModal"
@@ -53,6 +53,8 @@ export default function WorkoutLog() {
             console.log("error fetching exercises list: ", e)
         }
     }
+
+    findPRs(usersInDB, currentUser)
 
     async function reOrderList(exerciseId, newIndex, userCollection, userId, date) {
         try {
