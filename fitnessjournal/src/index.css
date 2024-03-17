@@ -643,12 +643,21 @@ header {
   
 }
 
+.hidden-el {
+  width: 24px;
+  visibility: hidden;
+}
+
+.pr-icon {
+  color: #DC684B;
+}
+
 .set-reps {
   text-align: left;
-  margin-left: auto;
 }
 .set-weight {
   width: 100px;
+  margin-left: auto;
 }
 
 .edit-ex {

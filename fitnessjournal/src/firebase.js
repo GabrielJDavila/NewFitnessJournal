@@ -503,7 +503,7 @@ export async function findPRs(userCollection, userId) {
         const currWorkoutQuery = query(currentWorkoutCollectionRef)
         const currWorkoutSnapshot = await getDocs(currWorkoutQuery)
 
-        let exercisePRs = {}
+        let exercisePRs = []
 
         for(const workout of currWorkoutSnapshot.docs) {
             const workoutId = workout.id
@@ -521,20 +521,29 @@ export async function findPRs(userCollection, userId) {
                     const weight = doc.data().weight
                     const reps = doc.data().reps
 
-                    if(!exercisePRs[exercise.id]) {
-                        exercisePRs[exercise.id] = {maxWeight: weight, maxReps: reps}
+                    const PRsDataObject = {
+                        id: exercise.id,
+                        maxWeight: weight,
+                        maxReps: reps
+                    }
+
+                    const existingExerciseIndex = exercisePRs.findIndex(item => item.id === exercise.id)
+
+                    if(existingExerciseIndex === -1) {
+                        exercisePRs.push(PRsDataObject)
                     } else {
-                        if(weight > exercisePRs[exercise.id].maxWeight) {
-                            exercisePRs[exercise.id].maxWeight = weight
+                        if(weight > exercisePRs[existingExerciseIndex].maxWeight) {
+                            exercisePRs[existingExerciseIndex].maxWeight = weight
                         }
-                        if(reps > exercisePRs[exercise.id].maxReps) {
-                            exercisePRs[exercise.id].maxReps = reps
+                        if(reps > exercisePRs[existingExerciseIndex].maxReps) {
+                            exercisePRs[existingExerciseIndex].maxReps = reps
                         }
                     }
                 })
             }
         }
-        console.log(exercisePRs)
+        // console.log(exercisePRs)
+        return exercisePRs
     } catch(e) {
         console.error("error finding PRs: ", e)
     }
@@ -544,7 +553,7 @@ export async function findPRs(userCollection, userId) {
 export async function retrieveCurrentExSetsReps(userCollection, userId, selectedDate) {
     try {
         const dateString = selectedDate.toISOString().split("T")[0]
-        
+        const data = []
         const userDocRef = doc(userCollection, userId)
         const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
         const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, dateString)
@@ -587,8 +596,77 @@ export async function retrieveCurrentExSetsReps(userCollection, userId, selected
             })
             exercises.push(exerciseData)
         }
-        return exercises
 
+        // const userDocRef = doc(userCollection, userId)
+        // const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
+        const currWorkoutQuery = query(currentWorkoutCollectionRef)
+        const currWorkoutSnapshot = await getDocs(currWorkoutQuery)
+
+        let exercisePRs = []
+
+        for(const workout of currWorkoutSnapshot.docs) {
+            const workoutId = workout.id
+            // console.log(workoutId)
+            const exercisesCollectionRef = collection(workout.ref, "exList")
+            const exListQuery = query(exercisesCollectionRef)
+            const exListSnapshot = await getDocs(exListQuery)
+
+            for(const exercise of exListSnapshot.docs) {
+                const repsAndSetsRef = collection(exercise.ref, "currentEx")
+                const currentExQuery = query(repsAndSetsRef)
+                const currentExSnapshot = await getDocs(currentExQuery)
+                // console.log(exercise.id)
+                currentExSnapshot.forEach(doc => {
+                    const weight = doc.data().weight
+                    const reps = doc.data().reps
+
+                    const PRsDataObject = {
+                        id: exercise.id,
+                        maxWeight: weight,
+                        maxReps: reps
+                    }
+
+                    const existingExerciseIndex = exercisePRs.findIndex(item => item.id === exercise.id)
+
+                    if(existingExerciseIndex === -1) {
+                        exercisePRs.push(PRsDataObject)
+                    } else {
+                        if(weight > exercisePRs[existingExerciseIndex].maxWeight) {
+                            exercisePRs[existingExerciseIndex].maxWeight = weight
+                        }
+                        if(reps > exercisePRs[existingExerciseIndex].maxReps) {
+                            exercisePRs[existingExerciseIndex].maxReps = reps
+                        }
+                    }
+                })
+            }
+        }
+        
+        for(const item of exercises) {
+    
+            for(const pr of exercisePRs) {
+                if(item.id === pr.id) {
+                    // console.log("matches", item.id, pr.id)
+                    
+                    for(const set of item.setsReps) {
+                        if(set.weight === pr.maxWeight || set.reps === pr.maxReps) {
+                            // console.log(set.weight, pr.maxWeight)
+                            set.isPR = true
+                            // console.log(set)
+                        } else {
+                            set.isPR = false
+                        }
+                    }
+                } else {
+                    console.log("doesn't match", item.id, pr.id)
+                        
+                }
+            }
+        }
+    
+        data.push(exercisePRs, exercises)
+        console.log(exercises)
+        return exercises
     } catch(e) {
         console.log("ERROR ERROR ABORT!!!: " , e)
     }

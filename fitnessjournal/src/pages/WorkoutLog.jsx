@@ -15,6 +15,7 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
 export default function WorkoutLog() {
 
     const [workoutData, setWorkoutData] = useState([])
+    const [PRData, setPRData] = useState([])
     const [toggleEditSetModal, setToggleEditSetModal] = useState(false)
     const [toggleDeleteExModal, setToggleDeleteExModal] = useState(false)
     const [toggleDeleteSetModal, setToggleDeleteSetModal] = useState(false)
@@ -34,7 +35,8 @@ export default function WorkoutLog() {
         setId: ""
     })
     const calendarRef = useRef(null)
-    console.log(workoutData)
+    // console.log(workoutData)
+    // console.log(PRData)
     useEffect(() => {
         if(date) {
             loadExerciseList(date)
@@ -49,12 +51,12 @@ export default function WorkoutLog() {
         try {
             const setsData = await retrieveCurrentExSetsReps(usersInDB, currentUser, date)
             setWorkoutData(setsData)
+            // const PRsData = await findPRs(usersInDB, currentUser)
+            // setPRData(setsData[0])
         } catch(e) {
             console.log("error fetching exercises list: ", e)
         }
     }
-
-    findPRs(usersInDB, currentUser)
 
     async function reOrderList(exerciseId, newIndex, userCollection, userId, date) {
         try {
@@ -281,6 +283,7 @@ export default function WorkoutLog() {
                                     <h2>Current Workout</h2>
                                     <CurrentWorkoutList
                                         data={workoutData}
+                                        // prs={PRData}
                                         usersInDB={usersInDB}
                                         currentUser={currentUser}
                                         date={date}

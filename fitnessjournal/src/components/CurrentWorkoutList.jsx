@@ -2,6 +2,24 @@ import { Link, useOutletContext } from "react-router-dom"
 import { Draggable } from "react-beautiful-dnd"
 export default function CurrentWorkoutList(props) {
 
+    // console.log(props.prs)
+    // console.log(props.data)
+    // function compare() {
+    //     for(const item of props.data) {
+
+    //         for(const pr of props.prs) {
+    //             if(item.id === pr.id) {
+    //                 console.log("matches", item.id, pr.id)
+                    
+    //             } else {
+    //                 console.log("doesn't match", item.id, pr.id)
+                    
+    //             }
+    //         }
+    //     }
+    // }
+
+    // compare()
     const currentWorkout = props.data.map((ex, index) => {
         return (
             <Draggable key={ex.id} draggableId={ex.id} index={index}>
@@ -20,6 +38,12 @@ export default function CurrentWorkoutList(props) {
                         <ul className="all-sets-container">
                             {ex.setsReps.map((set, setIndex) => (
                                 <li key={setIndex} className="set-container">
+                                    {set.isPR ?
+                                    <span className="material-symbols-outlined pr-icon">
+                                        trophy
+                                    </span> :
+                                    <p className="hidden-el">h</p>
+                                    }
                                     <p className="set-weight">lbs: {set.weight}</p>
                                     <p className="set-reps">reps: {set.reps}</p>
                                     <span
