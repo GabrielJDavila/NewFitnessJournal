@@ -11,10 +11,13 @@ import { handleDeleteExerciseSubmit, handleDeleteSetSubmit, handleEditSetSubmit,
 import Calendar from "react-calendar"
 import "react-calendar/dist/Calendar.css"
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
+import { Skeleton } from "@mui/material"
 
 export default function WorkoutLog() {
 
     const [workoutData, setWorkoutData] = useState([])
+    const [workoutMessage, setWorkoutMessage] = useState()
+    const [showSkel, setShowSkel] = useState(true)
     const [PRData, setPRData] = useState([])
     const [toggleEditSetModal, setToggleEditSetModal] = useState(false)
     const [toggleDeleteExModal, setToggleDeleteExModal] = useState(false)
@@ -35,12 +38,14 @@ export default function WorkoutLog() {
         setId: ""
     })
     const calendarRef = useRef(null)
-    console.log(workoutData)
-    // console.log(PRData)
+    console.log(workoutMessage)
     useEffect(() => {
-        if(date) {
-            loadExerciseList(date)
-        }
+        setTimeout(() => {
+            if(date) {
+                loadExerciseList(date)
+            }
+        }, 100000)
+        
     }, [date])
 
     useEffect(() => {
@@ -49,10 +54,13 @@ export default function WorkoutLog() {
 
     async function loadExerciseList() {
         try {
-            const setsData = await retrieveCurrentExSetsReps(usersInDB, currentUser, date)
-            setWorkoutData(setsData)
-            // const PRsData = await findPRs(usersInDB, currentUser)
-            // setPRData(setsData[0])
+            const data = await retrieveCurrentExSetsReps(usersInDB, currentUser, date)
+            if(data === "Workout Log Empty") {
+                setWorkoutMessage(data)
+            } else {
+                setWorkoutData(data)
+            }
+            setShowSkel(prev => !prev)
         } catch(e) {
             console.log("error fetching exercises list: ", e)
         }
@@ -61,7 +69,6 @@ export default function WorkoutLog() {
     async function reOrderList(exerciseId, newIndex, userCollection, userId, date) {
         try {
             await reOrderWorkoutList(exerciseId, newIndex, userCollection, userId, date)
-            // loadExerciseList()
         } catch(e) {
             console.log("error re-ordering list: ", e)
         }
@@ -137,6 +144,31 @@ export default function WorkoutLog() {
             setToggleCalendar(false)
         }
     }
+
+    const currentWorkoutSkel =
+    <div className="current-workout-skel-container">
+        <div className="exercise-skel">
+            <Skeleton width={50} height={25} className="ex-skel-title"/>
+            <div className="skel-reps-weight-container">
+                <Skeleton width={50} height={25} className="weight-skel" />
+                <Skeleton width={100} height={25} className="reps-skel" />
+            </div>
+        </div>
+        <div className="exercise-skel">
+            <Skeleton width={50} height={25} className="ex-skel-title"/>
+            <div className="skel-reps-weight-container">
+                <Skeleton width={50} height={25} className="weight-skel" />
+                <Skeleton width={100} height={25} className="reps-skel" />
+            </div>
+        </div>
+        <div className="exercise-skel">
+            <Skeleton width={50} height={25} className="ex-skel-title"/>
+            <div className="skel-reps-weight-container">
+                <Skeleton width={50} height={25} className="weight-skel" />
+                <Skeleton width={100} height={25} className="reps-skel" />
+            </div>
+        </div>
+    </div>
 
     document.addEventListener("click", handleClickOutside)
 
@@ -274,8 +306,8 @@ export default function WorkoutLog() {
 
             
             <div className="current-log-container">
-                {
-                    workoutData.length > 0 ?
+                {showSkel && currentWorkoutSkel}
+                { workoutData.length > 0 ?
                     <DragDropContext onDragEnd={handleDragEnd}>
                         <Droppable droppableId="workoutData">
                             {(provided) => (
@@ -296,8 +328,8 @@ export default function WorkoutLog() {
                             
                             )}
                         </Droppable>
-                    </DragDropContext> : 
-                    <h1 className="current-log-title">Workout Log Empty</h1>
+                    </DragDropContext> :
+                    <h1 className="current-log-title">{workoutMessage}</h1>
                 }
             </div>
         </div>

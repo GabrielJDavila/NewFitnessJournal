@@ -529,7 +529,7 @@ async function sendPRtoDash(userCollection, userId, name, setId, weight, reps, c
         const exSetDocRef = doc(latestPRref, setId)
         const docSnap = await getDoc(exSetDocRef)
         if(docSnap.exists()) {
-            alert("PR already added")
+            
         } else {
 
             // const snapshot = await getDocs(selectedExListCollectionRef)
@@ -565,9 +565,9 @@ export async function retrieveCurrentExSetsReps(userCollection, userId, selected
         const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
         const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, dateString)
         const dateDocSnap = await getDoc(dateOfWorkoutDocRef)
-
+        const noWorkoutMessage = "Workout Log Empty"
         if(!dateDocSnap.exists()) {
-            console.log("no workout found for this date.")
+            return noWorkoutMessage
             // alert("no workout found for this date.")
         }
 

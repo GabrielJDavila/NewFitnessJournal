@@ -18,7 +18,7 @@ export default function Dashboard() {
     const [averageLoggedTime, setAverageLoggedTime] = useState()
     const [newPR, setNewPR] = useState()
     const { currentUser } = useOutletContext()
-    console.log(newPR)
+    
     useEffect(() => {
         window.scrollTo(0, 0)
     })
@@ -58,16 +58,15 @@ export default function Dashboard() {
                     const mins = workoutObj.workoutTime.minutes * 60
                     const secs = workoutObj.workoutTime.seconds
                     totalTime += (hrs + mins + secs)
-                    console.log(totalTime)
+                    
                 } else {
-                    console.log("picklyberry")
+                    totalTime = 0
                 }
             })
             averageTime = totalTime / totalWorkouts.length
             const date = new Date(null)
             date.setSeconds(averageTime)
             const result = date.toISOString().slice(11, 19)
-            console.log(result)
             setAverageLoggedTime(result)
         } else {
             setAverageLoggedTime("00:00:00")
@@ -163,11 +162,14 @@ export default function Dashboard() {
                         </div>
                         <div className="log-text-container">
                             {/* <p className="log-text">{averageLoggedTime ? averageLoggedTime : "00:00:00"}</p> */}
-                            <p className="log-text">
-                                ⭐{newPR.name}⭐
-                                <br></br>
-                                {newPR.weight} x {newPR.reps}
-                            </p>
+                            {newPR ?
+                                <p className="log-text">
+                                    ⭐{newPR.name}⭐
+                                    <br></br>
+                                    {newPR.weight} x {newPR.reps}
+                                </p> :
+                                <p className="log-text">no PRs logged</p>
+                            }
                             {/* <p className="log-text">188 x 10</p> */}
                         </div>
                     </div> :

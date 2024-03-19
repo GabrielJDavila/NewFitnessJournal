@@ -610,6 +610,29 @@ header {
   margin-top: 1rem;
 }
 
+.current-workout-skel-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  margin: auto;
+}
+
+.exercise-skel {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.skel-reps-weight-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
 /* rendered workout styles */
 
 .ex-name-container {
