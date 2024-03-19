@@ -495,57 +495,64 @@ export async function reOrderWorkoutList(exerciseId, newindex, userCollection, u
     }
 }
 
-// compare PRs of weight and reps
-export async function findPRs(userCollection, userId) {
+// retrieve latestPR set data from firestore to showcase in dashboard
+export async function grabLatestPR(userCollection, userId) {
     try {
         const userDocRef = doc(userCollection, userId)
-        const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
-        const currWorkoutQuery = query(currentWorkoutCollectionRef)
-        const currWorkoutSnapshot = await getDocs(currWorkoutQuery)
-
-        let exercisePRs = []
-
-        for(const workout of currWorkoutSnapshot.docs) {
-            const workoutId = workout.id
-            // console.log(workoutId)
-            const exercisesCollectionRef = collection(workout.ref, "exList")
-            const exListQuery = query(exercisesCollectionRef)
-            const exListSnapshot = await getDocs(exListQuery)
-
-            for(const exercise of exListSnapshot.docs) {
-                const repsAndSetsRef = collection(exercise.ref, "currentEx")
-                const currentExQuery = query(repsAndSetsRef)
-                const currentExSnapshot = await getDocs(currentExQuery)
-                // console.log(exercise.id)
-                currentExSnapshot.forEach(doc => {
-                    const weight = doc.data().weight
-                    const reps = doc.data().reps
-
-                    const PRsDataObject = {
-                        id: exercise.id,
-                        maxWeight: weight,
-                        maxReps: reps
-                    }
-
-                    const existingExerciseIndex = exercisePRs.findIndex(item => item.id === exercise.id)
-
-                    if(existingExerciseIndex === -1) {
-                        exercisePRs.push(PRsDataObject)
-                    } else {
-                        if(weight > exercisePRs[existingExerciseIndex].maxWeight) {
-                            exercisePRs[existingExerciseIndex].maxWeight = weight
-                        }
-                        if(reps > exercisePRs[existingExerciseIndex].maxReps) {
-                            exercisePRs[existingExerciseIndex].maxReps = reps
-                        }
-                    }
-                })
+        const latestPRref = collection(userDocRef, "latestPR")
+        const prDocsQuery = query(latestPRref, orderBy("createdAt", "desc"), limit(1))
+        const prDocsSnapshot = await getDocs(prDocsQuery)
+        let prData = {}
+        for(const pr of prDocsSnapshot.docs) {
+            // console.log(pr.data().createdAt.toDate())
+            prData = {
+                id: pr.data().setId,
+                name: pr.data().exName,
+                weight: pr.data().weight,
+                reps: pr.data().reps
             }
+
+            // prArray.push(prData)
         }
-        // console.log(exercisePRs)
-        return exercisePRs
+        return prData
     } catch(e) {
-        console.error("error finding PRs: ", e)
+        console.error("error retrieving PR data: ", e)
+    }
+}
+
+// collect set data if user got a PR, and then send to firestore for later use
+async function sendPRtoDash(userCollection, userId, name, setId, weight, reps, createdAt) {
+   
+    try {
+        const userDocRef = doc(userCollection, userId)
+        const latestPRref = collection(userDocRef, "latestPR")
+        const exSetDocRef = doc(latestPRref, setId)
+        const docSnap = await getDoc(exSetDocRef)
+        if(docSnap.exists()) {
+            alert("PR already added")
+        } else {
+
+            // const snapshot = await getDocs(selectedExListCollectionRef)
+            // const currentIndex = snapshot.docs.length
+
+            await setDoc(exSetDocRef, {
+                exName: name,
+                setId: setId,
+                weight: weight,
+                reps: reps,
+                createdAt: createdAt
+            })
+        }
+
+        // await addDoc(latestPRref, {
+        //     exName: name,
+        //     setId: setId,
+        //     weight: weight,
+        //     reps: reps,
+        //     createdAt: createdAt
+        // })
+    } catch(e) {
+        console.error("error sending ", e)
     }
 }
 
@@ -597,16 +604,13 @@ export async function retrieveCurrentExSetsReps(userCollection, userId, selected
             exercises.push(exerciseData)
         }
 
-        // const userDocRef = doc(userCollection, userId)
-        // const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
+        // check for PRs in sets and reps
         const currWorkoutQuery = query(currentWorkoutCollectionRef)
         const currWorkoutSnapshot = await getDocs(currWorkoutQuery)
 
         let exercisePRs = []
 
         for(const workout of currWorkoutSnapshot.docs) {
-            const workoutId = workout.id
-            // console.log(workoutId)
             const exercisesCollectionRef = collection(workout.ref, "exList")
             const exListQuery = query(exercisesCollectionRef)
             const exListSnapshot = await getDocs(exListQuery)
@@ -615,7 +619,6 @@ export async function retrieveCurrentExSetsReps(userCollection, userId, selected
                 const repsAndSetsRef = collection(exercise.ref, "currentEx")
                 const currentExQuery = query(repsAndSetsRef)
                 const currentExSnapshot = await getDocs(currentExQuery)
-                // console.log(exercise.id)
                 currentExSnapshot.forEach(doc => {
                     const weight = doc.data().weight
                     const reps = doc.data().reps
@@ -643,7 +646,7 @@ export async function retrieveCurrentExSetsReps(userCollection, userId, selected
         }
         
         for(const item of exercises) {
-    
+        
             for(const pr of exercisePRs) {
                 if(item.id === pr.id) {
                     // console.log("matches", item.id, pr.id)
@@ -652,7 +655,9 @@ export async function retrieveCurrentExSetsReps(userCollection, userId, selected
                         if(set.weight === pr.maxWeight || set.reps === pr.maxReps) {
                             // console.log(set.weight, pr.maxWeight)
                             set.isPR = true
-                            // console.log(set)
+                            if(set.isPR) {
+                                sendPRtoDash(userCollection, userId, item.name, set.setId, set.weight, set.reps, set.createdAt)
+                            }
                         } else {
                             set.isPR = false
                         }
@@ -665,7 +670,7 @@ export async function retrieveCurrentExSetsReps(userCollection, userId, selected
         }
     
         data.push(exercisePRs, exercises)
-        console.log(exercises)
+        // console.log(exercises)
         return exercises
     } catch(e) {
         console.log("ERROR ERROR ABORT!!!: " , e)

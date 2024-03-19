@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { NavLink, Link, useOutletContext } from "react-router-dom"
-import { usersInDB, retrieveCurrentExSetsReps, editSingleSet, deleteCategory, deleteEx, deleteSingleSet, deleteAllEx } from "../firebase"
+import { usersInDB, retrieveCurrentExSetsReps, editSingleSet, deleteCategory, deleteEx, deleteSingleSet, deleteAllEx, grabLatestPR } from "../firebase"
 import ConfirmDeleteExModal from "../components/modals/ConfirmDeleteExModal"
 import ConfirmDeleteSetModal from "../components/modals/ConfirmDeleteSetModal"
 import EditSetModal from "../components/modals/EditSetModal"
@@ -16,8 +16,9 @@ import { Skeleton } from "@mui/material"
 export default function Dashboard() {
     const [totalWorkouts, setTotalWorkouts] = useState()
     const [averageLoggedTime, setAverageLoggedTime] = useState()
+    const [newPR, setNewPR] = useState()
     const { currentUser } = useOutletContext()
-
+    console.log(newPR)
     useEffect(() => {
         window.scrollTo(0, 0)
     })
@@ -40,6 +41,8 @@ export default function Dashboard() {
         try {
             const data = await queryWorkoutLogs(usersInDB, currentUser)
             setTotalWorkouts(data)
+            const prData = await grabLatestPR(usersInDB, currentUser)
+            setNewPR(prData)
         } catch(e) {
             console.error("error fetching logged workouts: ", e)
         }
@@ -94,7 +97,7 @@ export default function Dashboard() {
                     }
                     { totalWorkouts ?
                     <div className="log-text-container">
-                        <p className="log-text">{totalWorkouts ? totalWorkouts.length : "0"} /<small>7</small></p>
+                        <p className="log-text">{totalWorkouts ? totalWorkouts.length : "0"} / 7</p>
                     </div> :
                     <div className="log-text-container">
                         <Skeleton variant="rounded" width="100%" height={75}/>
@@ -111,7 +114,7 @@ export default function Dashboard() {
                         <p className="log-title">Nutrition</p>
                     </div>
                     <div className="log-text-container">
-                        <p className="log-text">1500/<small>2300cal</small></p>
+                        <p className="log-text">1500 / 2300cal</p>
                     </div>
                 </div> :
                 <div className="log-container">
@@ -150,7 +153,7 @@ export default function Dashboard() {
                         </div>
                     </div>
                 }
-                { averageLoggedTime ?
+                { newPR ?
                     <div className="log-container">
                         <div className="log-title-container">
                             <span className="material-symbols-outlined dash-icon">
@@ -159,7 +162,13 @@ export default function Dashboard() {
                             <p className="log-title">Recent PRs</p>
                         </div>
                         <div className="log-text-container">
-                            <p className="log-text">{averageLoggedTime ? averageLoggedTime : "00:00:00"}</p>
+                            {/* <p className="log-text">{averageLoggedTime ? averageLoggedTime : "00:00:00"}</p> */}
+                            <p className="log-text">
+                                ⭐{newPR.name}⭐
+                                <br></br>
+                                {newPR.weight} x {newPR.reps}
+                            </p>
+                            {/* <p className="log-text">188 x 10</p> */}
                         </div>
                     </div> :
                     <div className="log-container">

@@ -170,7 +170,7 @@ export default function AllCategories() {
                     :
                     renderedCategories
                 }
-                <Link to="NewCat">Create Some Workout Categories!</Link>
+                {/* <Link to="NewCat">Create Some Workout Categories!</Link> */}
             </div>
         </div>
     )

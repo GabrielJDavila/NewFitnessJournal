@@ -43,7 +43,7 @@ export default function LoadedExercises() {
     useEffect(() => {
         setTimeout(() => {
             loadExercisesData()
-        }, 5000)
+        }, 1000)
     }, [])
 
     useEffect(() => {

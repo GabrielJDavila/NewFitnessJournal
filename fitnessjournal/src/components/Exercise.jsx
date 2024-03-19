@@ -17,7 +17,7 @@ export default function Exercise(props) {
         if(toggleModal) {
             const flipModalState = setTimeout(() => {
                 setToggleModal(false)
-            }, 4000)
+            }, 2000)
 
             return () => clearTimeout(flipModalState)
         }
