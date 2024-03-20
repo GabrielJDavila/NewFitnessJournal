@@ -412,7 +412,11 @@ export async function retrieveDoc(collectionType, itemId) {
 export async function addUpdateWorkoutList(exerciseId, name, userCollection, userId) {
     try {
         // using exerciseId so it's easier to grab params later for use
+        // const now = new Date()
+        // const formattedDate = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
+        // const date = formattedDate.toISOString().split("T")[0]
         const date = new Date().toISOString().split("T")[0]
+       
         // const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
         // const formattedDate = new Date().toLocaleDateString("en-US", {
         //     timeZone: userTimeZone
@@ -431,7 +435,8 @@ export async function addUpdateWorkoutList(exerciseId, name, userCollection, use
         const docSnap = await getDoc(exDocRef)
 
         if(docSnap.exists()) {
-            alert("exercise already in workout")
+            // alert("exercise already in workout")
+            return "exercise already added to workout!"
         } else {
 
             const snapshot = await getDocs(selectedExListCollectionRef)
@@ -504,7 +509,7 @@ export async function grabLatestPR(userCollection, userId) {
         const prDocsSnapshot = await getDocs(prDocsQuery)
         let prData = {}
         for(const pr of prDocsSnapshot.docs) {
-            // console.log(pr.data().createdAt.toDate())
+   
             prData = {
                 id: pr.data().setId,
                 name: pr.data().exName,
@@ -512,7 +517,6 @@ export async function grabLatestPR(userCollection, userId) {
                 reps: pr.data().reps
             }
 
-            // prArray.push(prData)
         }
         return prData
     } catch(e) {
@@ -532,9 +536,6 @@ async function sendPRtoDash(userCollection, userId, name, setId, weight, reps, c
             
         } else {
 
-            // const snapshot = await getDocs(selectedExListCollectionRef)
-            // const currentIndex = snapshot.docs.length
-
             await setDoc(exSetDocRef, {
                 exName: name,
                 setId: setId,
@@ -544,13 +545,6 @@ async function sendPRtoDash(userCollection, userId, name, setId, weight, reps, c
             })
         }
 
-        // await addDoc(latestPRref, {
-        //     exName: name,
-        //     setId: setId,
-        //     weight: weight,
-        //     reps: reps,
-        //     createdAt: createdAt
-        // })
     } catch(e) {
         console.error("error sending ", e)
     }
@@ -565,10 +559,11 @@ export async function retrieveCurrentExSetsReps(userCollection, userId, selected
         const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
         const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, dateString)
         const dateDocSnap = await getDoc(dateOfWorkoutDocRef)
-        const noWorkoutMessage = "Workout Log Empty"
+        // const noWorkoutMessage = "Workout Log Empty"
         if(!dateDocSnap.exists()) {
-            return noWorkoutMessage
+            // return noWorkoutMessage
             // alert("no workout found for this date.")
+            console.log("no workout for this date.")
         }
 
         const exercisesCollectionRef = collection(dateOfWorkoutDocRef, "exList")

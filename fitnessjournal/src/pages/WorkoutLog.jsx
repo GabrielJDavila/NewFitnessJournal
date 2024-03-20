@@ -11,14 +11,9 @@ import { handleDeleteExerciseSubmit, handleDeleteSetSubmit, handleEditSetSubmit,
 import Calendar from "react-calendar"
 import "react-calendar/dist/Calendar.css"
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
-import { Skeleton } from "@mui/material"
 
 export default function WorkoutLog() {
-
     const [workoutData, setWorkoutData] = useState([])
-    const [workoutMessage, setWorkoutMessage] = useState()
-    const [showSkel, setShowSkel] = useState(true)
-    const [PRData, setPRData] = useState([])
     const [toggleEditSetModal, setToggleEditSetModal] = useState(false)
     const [toggleDeleteExModal, setToggleDeleteExModal] = useState(false)
     const [toggleDeleteSetModal, setToggleDeleteSetModal] = useState(false)
@@ -38,13 +33,13 @@ export default function WorkoutLog() {
         setId: ""
     })
     const calendarRef = useRef(null)
-    console.log(workoutMessage)
+    console.log(date)
     useEffect(() => {
         setTimeout(() => {
             if(date) {
                 loadExerciseList(date)
             }
-        }, 100000)
+        }, 1000)
         
     }, [date])
 
@@ -55,12 +50,7 @@ export default function WorkoutLog() {
     async function loadExerciseList() {
         try {
             const data = await retrieveCurrentExSetsReps(usersInDB, currentUser, date)
-            if(data === "Workout Log Empty") {
-                setWorkoutMessage(data)
-            } else {
-                setWorkoutData(data)
-            }
-            setShowSkel(prev => !prev)
+            setWorkoutData(data)
         } catch(e) {
             console.log("error fetching exercises list: ", e)
         }
@@ -104,14 +94,9 @@ export default function WorkoutLog() {
             return
         }
 
-        // const newWorkoutData = Array.from(workoutData)
-        // const [draggedItem] = newWorkoutData.splice(source.index, 1)
-        // newWorkoutData.splice(destination.index, 0, draggedItem)
-        // setWorkoutData(newWorkoutData)
         const draggedItemId = workoutData[source.index].id
         const newIndex = destination.index
         const updatedWorkoutData = Array.from(workoutData)
-
         const [draggedItem] = updatedWorkoutData.splice(source.index, 1)
 
         updatedWorkoutData.splice(destination.index, 0, draggedItem)
@@ -123,7 +108,6 @@ export default function WorkoutLog() {
         setWorkoutData(updatedWorkoutData)
         
         await reOrderList(draggedItemId, newIndex, usersInDB, currentUser, date)
-        // loadExerciseList(date)
     }
 
     const modalStyles = {
@@ -144,31 +128,6 @@ export default function WorkoutLog() {
             setToggleCalendar(false)
         }
     }
-
-    const currentWorkoutSkel =
-    <div className="current-workout-skel-container">
-        <div className="exercise-skel">
-            <Skeleton width={50} height={25} className="ex-skel-title"/>
-            <div className="skel-reps-weight-container">
-                <Skeleton width={50} height={25} className="weight-skel" />
-                <Skeleton width={100} height={25} className="reps-skel" />
-            </div>
-        </div>
-        <div className="exercise-skel">
-            <Skeleton width={50} height={25} className="ex-skel-title"/>
-            <div className="skel-reps-weight-container">
-                <Skeleton width={50} height={25} className="weight-skel" />
-                <Skeleton width={100} height={25} className="reps-skel" />
-            </div>
-        </div>
-        <div className="exercise-skel">
-            <Skeleton width={50} height={25} className="ex-skel-title"/>
-            <div className="skel-reps-weight-container">
-                <Skeleton width={50} height={25} className="weight-skel" />
-                <Skeleton width={100} height={25} className="reps-skel" />
-            </div>
-        </div>
-    </div>
 
     document.addEventListener("click", handleClickOutside)
 
@@ -306,7 +265,7 @@ export default function WorkoutLog() {
 
             
             <div className="current-log-container">
-                {showSkel && currentWorkoutSkel}
+                {/* {showSkel && currentWorkoutSkel} */}
                 { workoutData.length > 0 ?
                     <DragDropContext onDragEnd={handleDragEnd}>
                         <Droppable droppableId="workoutData">
@@ -329,7 +288,7 @@ export default function WorkoutLog() {
                             )}
                         </Droppable>
                     </DragDropContext> :
-                    <h1 className="current-log-title">{workoutMessage}</h1>
+                    <h1 className="current-log-title">Workout Log Empty</h1>
                 }
             </div>
         </div>

@@ -4,7 +4,7 @@ import { addUpdateWorkoutList, currentWorkoutList, usersInDB } from "../firebase
 import ExAdded from "./modals/ExAdded"
 
 export default function Exercise(props) {
-    const [ toggleModal, setToggleModal ] = useState(false)
+    // const [ toggleModal, setToggleModal ] = useState(false)
     const [docInfo, setDocInfo] = useState({
         id: props.id,
         name: props.name,
@@ -14,20 +14,31 @@ export default function Exercise(props) {
     const { currentUser } = useOutletContext()
 
     useEffect(() => {
-        if(toggleModal) {
+        if(props.toggleModal) {
             const flipModalState = setTimeout(() => {
-                setToggleModal(false)
+                props.setToggleModal(false)
             }, 2000)
 
             return () => clearTimeout(flipModalState)
         }
-    }, [toggleModal])
+    }, [props.toggleModal])
 
     // function to handle button click of adding exercise
-    function handleAddExClick(e) {
+    async function handleAddExClick(e) {
         if(e.target.dataset.id === docInfo.id) {
-            addUpdateWorkoutList(docInfo.id, docInfo.name, usersInDB, currentUser)
-            setToggleModal(true)
+            try {
+                const data = await addUpdateWorkoutList(docInfo.id, docInfo.name, usersInDB, currentUser)
+                if(data === "exercise already added to workout!" && typeof data === "string") {
+                    props.setToggleModal(true)
+                    props.setClickedEx(data)
+                } else {
+                    addUpdateWorkoutList(docInfo.id, docInfo.name, usersInDB, currentUser)
+                    props.setToggleModal(true)
+                    props.setClickedEx(`${docInfo.name} added to workout`)
+                }
+            } catch {
+
+            }
         }
         
     }
@@ -43,7 +54,6 @@ export default function Exercise(props) {
                     Add exercise
                 </button>
             </div>
-            { toggleModal && <ExAdded /> }
         </div>
     )
 }

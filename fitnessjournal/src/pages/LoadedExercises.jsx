@@ -4,6 +4,7 @@ import { retreiveExFromCategory, retrieveSelectedCatName, usersInDB } from "../f
 import CategoryNav from "../components/CategoryNav"
 import Exercise from "../components/Exercise"
 import { Skeleton } from "@mui/material"
+import ExAdded from "../components/modals/ExAdded"
 
 export default function LoadedExercises() {
     const params = useParams()
@@ -12,7 +13,20 @@ export default function LoadedExercises() {
     const [selectedCat, setSelectedCat] = useState({
         name: ""
     })
+    const [clickedEx, setClickedEx] = useState("")
     const { currentUser } = useOutletContext()
+    const [toggleModal, setToggleModal] = useState(false)
+    
+    useEffect(() => {
+        setTimeout(() => {
+            loadExercisesData()
+        }, 1000)
+    }, [])
+
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    })
+
     const skeletonArr = Array.from({length: 7}, (_, index) => index)
 
     const renderedSkelCategories = skeletonArr.map((_, index) => {
@@ -39,16 +53,6 @@ export default function LoadedExercises() {
             console.log("error retrieving data: ", e)
         }
     }
-    
-    useEffect(() => {
-        setTimeout(() => {
-            loadExercisesData()
-        }, 1000)
-    }, [])
-
-    useEffect(() => {
-        window.scrollTo(0, 0)
-    })
 
     const renderedExercises = exercises.map(exercise => {
         return (
@@ -61,6 +65,9 @@ export default function LoadedExercises() {
                 unit={exercise.weightUnit}
                 toggleEdit={(e) => toggleEdit(e)}
                 toggleDelete={(e) => toggleDelete(e)}
+                toggleModal={toggleModal}
+                setToggleModal={setToggleModal}
+                setClickedEx={setClickedEx}
             /> :
             <h1 className="current-log-title">No Exercises Exist in Category!</h1>
         )
@@ -85,6 +92,7 @@ export default function LoadedExercises() {
                     !hideSkeleton ? renderedSkelCategories : renderedExercises
                 }
             </div>
+            { toggleModal && <ExAdded text={clickedEx}/> }
         </div>
         
     )
