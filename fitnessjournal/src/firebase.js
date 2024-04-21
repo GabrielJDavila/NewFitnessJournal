@@ -411,17 +411,7 @@ export async function retrieveDoc(collectionType, itemId) {
 // add or udpdate current workout exercises
 export async function addUpdateWorkoutList(exerciseId, name, userCollection, userId) {
     try {
-        // using exerciseId so it's easier to grab params later for use
-        // const now = new Date()
-        // const formattedDate = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
-        // const date = formattedDate.toISOString().split("T")[0]
         const date = new Date().toISOString().split("T")[0]
-       
-        // const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
-        // const formattedDate = new Date().toLocaleDateString("en-US", {
-        //     timeZone: userTimeZone
-        // })
-        // console.log(formattedDate)
         const userDocRef = doc(userCollection, userId)
         const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
         const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, date)
@@ -564,6 +554,7 @@ export async function retrieveCurrentExSetsReps(userCollection, userId, selected
             // return noWorkoutMessage
             // alert("no workout found for this date.")
             console.log("no workout for this date.")
+            
         }
 
         const exercisesCollectionRef = collection(dateOfWorkoutDocRef, "exList")
@@ -599,72 +590,73 @@ export async function retrieveCurrentExSetsReps(userCollection, userId, selected
             exercises.push(exerciseData)
         }
 
-        // check for PRs in sets and reps
-        const currWorkoutQuery = query(currentWorkoutCollectionRef)
-        const currWorkoutSnapshot = await getDocs(currWorkoutQuery)
+        // check for PRs in sets and reps (NEED TO IMPROVE PERFORMANCE HERE) 
+        // const currWorkoutQuery = query(currentWorkoutCollectionRef)
+        // const currWorkoutSnapshot = await getDocs(currWorkoutQuery)
 
-        let exercisePRs = []
+        // let exercisePRs = []
 
-        for(const workout of currWorkoutSnapshot.docs) {
-            const exercisesCollectionRef = collection(workout.ref, "exList")
-            const exListQuery = query(exercisesCollectionRef)
-            const exListSnapshot = await getDocs(exListQuery)
+        // for(const workout of currWorkoutSnapshot.docs) {
+        //     const exercisesCollectionRef = collection(workout.ref, "exList")
+        //     const exListQuery = query(exercisesCollectionRef)
+        //     const exListSnapshot = await getDocs(exListQuery)
 
-            for(const exercise of exListSnapshot.docs) {
-                const repsAndSetsRef = collection(exercise.ref, "currentEx")
-                const currentExQuery = query(repsAndSetsRef)
-                const currentExSnapshot = await getDocs(currentExQuery)
-                currentExSnapshot.forEach(doc => {
-                    const weight = doc.data().weight
-                    const reps = doc.data().reps
+        //     for(const exercise of exListSnapshot.docs) {
+        //         const repsAndSetsRef = collection(exercise.ref, "currentEx")
+        //         const currentExQuery = query(repsAndSetsRef)
+        //         const currentExSnapshot = await getDocs(currentExQuery)
+        //         currentExSnapshot.forEach(doc => {
+        //             const weight = doc.data().weight
+        //             const reps = doc.data().reps
 
-                    const PRsDataObject = {
-                        id: exercise.id,
-                        maxWeight: weight,
-                        maxReps: reps
-                    }
+        //             const PRsDataObject = {
+        //                 id: exercise.id,
+        //                 maxWeight: weight,
+        //                 maxReps: reps
+        //             }
 
-                    const existingExerciseIndex = exercisePRs.findIndex(item => item.id === exercise.id)
+        //             const existingExerciseIndex = exercisePRs.findIndex(item => item.id === exercise.id)
 
-                    if(existingExerciseIndex === -1) {
-                        exercisePRs.push(PRsDataObject)
-                    } else {
-                        if(weight > exercisePRs[existingExerciseIndex].maxWeight) {
-                            exercisePRs[existingExerciseIndex].maxWeight = weight
-                        }
-                        if(reps > exercisePRs[existingExerciseIndex].maxReps) {
-                            exercisePRs[existingExerciseIndex].maxReps = reps
-                        }
-                    }
-                })
-            }
-        }
+        //             if(existingExerciseIndex === -1) {
+        //                 exercisePRs.push(PRsDataObject)
+        //             } else {
+        //                 if(weight > exercisePRs[existingExerciseIndex].maxWeight) {
+        //                     exercisePRs[existingExerciseIndex].maxWeight = weight
+        //                 }
+        //                 if(reps > exercisePRs[existingExerciseIndex].maxReps) {
+        //                     exercisePRs[existingExerciseIndex].maxReps = reps
+        //                 }
+        //             }
+        //         })
+        //     }
+        // }
         
-        for(const item of exercises) {
+        // for(const item of exercises) {
         
-            for(const pr of exercisePRs) {
-                if(item.id === pr.id) {
-                    // console.log("matches", item.id, pr.id)
+        //     for(const pr of exercisePRs) {
+        //         if(item.id === pr.id) {
+        //             // console.log("matches", item.id, pr.id)
                     
-                    for(const set of item.setsReps) {
-                        if(set.weight === pr.maxWeight || set.reps === pr.maxReps) {
-                            // console.log(set.weight, pr.maxWeight)
-                            set.isPR = true
-                            if(set.isPR) {
-                                sendPRtoDash(userCollection, userId, item.name, set.setId, set.weight, set.reps, set.createdAt)
-                            }
-                        } else {
-                            set.isPR = false
-                        }
-                    }
-                } else {
-                    console.log("doesn't match", item.id, pr.id)
+        //             for(const set of item.setsReps) {
+        //                 if(set.weight === pr.maxWeight || set.reps === pr.maxReps) {
+        //                     // console.log(set.weight, pr.maxWeight)
+        //                     set.isPR = true
+        //                     if(set.isPR) {
+        //                         sendPRtoDash(userCollection, userId, item.name, set.setId, set.weight, set.reps, set.createdAt)
+        //                     }
+        //                 } else {
+        //                     set.isPR = false
+        //                 }
+        //             }
+        //         } 
+        //         // else {
+        //         //     console.log("doesn't match", item.id, pr.id)
                         
-                }
-            }
-        }
+        //         // }
+        //     }
+        // }
     
-        data.push(exercisePRs, exercises)
+        // data.push(exercisePRs, exercises)
         // console.log(exercises)
         return exercises
     } catch(e) {

@@ -11,6 +11,7 @@ import { handleDeleteExerciseSubmit, handleDeleteSetSubmit, handleEditSetSubmit,
 import Calendar from "react-calendar"
 import "react-calendar/dist/Calendar.css"
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
+import { Skeleton } from "@mui/material"
 
 export default function WorkoutLog() {
     const [workoutData, setWorkoutData] = useState([])
@@ -32,14 +33,16 @@ export default function WorkoutLog() {
         exId: "",
         setId: ""
     })
+    const [showSkel, setShowSkel] = useState(true)
+
     const calendarRef = useRef(null)
-    console.log(date)
+   
     useEffect(() => {
         setTimeout(() => {
             if(date) {
                 loadExerciseList(date)
             }
-        }, 1000)
+        }, 3000)
         
     }, [date])
 
@@ -49,8 +52,10 @@ export default function WorkoutLog() {
 
     async function loadExerciseList() {
         try {
+            setShowSkel(true)
             const data = await retrieveCurrentExSetsReps(usersInDB, currentUser, date)
             setWorkoutData(data)
+            setShowSkel(false)
         } catch(e) {
             console.log("error fetching exercises list: ", e)
         }
@@ -122,6 +127,31 @@ export default function WorkoutLog() {
         background: "white",
         zIndex: "12"
     }
+
+    const workoutSkels =
+        <div className="workout-skel-div-main">
+            <div className="workout-skel-div">
+                <div className="workout-skel-mini">
+                <Skeleton variant="rounded" width="50%" />
+                <Skeleton variant="rounded" width="20%" />
+                </div>
+                <Skeleton variant="rounded" width="100%" height="100%" />
+            </div>
+            <div className="workout-skel-div">
+                <div className="workout-skel-mini">
+                <Skeleton variant="rounded" width="50%" />
+                <Skeleton variant="rounded" width="20%" />
+                </div>
+                <Skeleton variant="rounded" width="100%" height="100%" />
+            </div>
+            <div className="workout-skel-div">
+                <div className="workout-skel-mini">
+                <Skeleton variant="rounded" width="50%" />
+                <Skeleton variant="rounded" width="20%" />
+                </div>
+                <Skeleton variant="rounded" width="100%" height="100%" />
+            </div>
+        </div>
 
     const handleClickOutside = (e) => {
         if(calendarRef.current && !calendarRef.current.contains(e.target)) {
@@ -265,8 +295,10 @@ export default function WorkoutLog() {
 
             
             <div className="current-log-container">
-                {/* {showSkel && currentWorkoutSkel} */}
-                { workoutData.length > 0 ?
+                {showSkel &&
+                    workoutSkels
+                }
+                { workoutData.length > 0 &&
                     <DragDropContext onDragEnd={handleDragEnd}>
                         <Droppable droppableId="workoutData">
                             {(provided) => (
@@ -287,9 +319,9 @@ export default function WorkoutLog() {
                             
                             )}
                         </Droppable>
-                    </DragDropContext> :
-                    <h1 className="current-log-title">Workout Log Empty</h1>
+                    </DragDropContext>
                 }
+                {!showSkel && workoutData.length === 0 && <h1 className="current-log-title">Workout Log Empty</h1>}
             </div>
         </div>
     )
