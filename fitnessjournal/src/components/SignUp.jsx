@@ -1,5 +1,5 @@
 import PasswordError from "./modals/PasswordError"
-
+import NonMatchingPasswordError from "./modals/NonMatchPasswordError"
 export default function SignUp(props) {
     
     return (
@@ -24,7 +24,7 @@ export default function SignUp(props) {
                         className="login-cred"
                         required
                     />
-                    <label htmlFor="email" className="sign-up-label">password</label>
+                    <label htmlFor="password" className="sign-up-label">Password</label>
                     {props.loginError && <PasswordError />}
                     <input
                         name="password"
@@ -36,9 +36,21 @@ export default function SignUp(props) {
                         className="login-cred"
                         required
                     />
+                    <label htmlFor="confirm-password" className="sign-up-label">Confirm Password</label>
+                    {props.nonMatchingPasswordError && <NonMatchingPasswordError />}
+                    <input
+                        name="confirmPassword"
+                        type="password"
+                        data-signup="signup"
+                        onChange={e => props.handleChange(e)}
+                        value={props.confirmPassword}
+                        placeholder="******"
+                        className="login-cred"
+                        required
+                    />
                 </fieldset>
 
-                <fieldset className="profile-creation-fieldset">
+                {/* <fieldset className="profile-creation-fieldset">
                     <div className="profile-creation-container name-and-age-container">
                         <div className="name-container">
                             <label htmlFor="name">Name</label>
@@ -154,7 +166,7 @@ export default function SignUp(props) {
                             
                         </div>
                     </div>
-                </fieldset>
+                </fieldset> */}
                 
                 <button data-signup="true" className="login-button">Sign up</button>
             </form>

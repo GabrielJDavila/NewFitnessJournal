@@ -13,18 +13,20 @@ export default function Layout() {
     const [loggedIn, setLoggedIn] = useState(false)
     const [showLogin, setShowLogin] = useState(true)
     const [loginError, setLoginError] = useState(false)
+    const [nonMatchingPasswordError, setNonMatchingPasswordError] = useState(false)
     const [loginInfo, setLoginInfo] = useState({
         email: "",
         password: "",
-        name: "",
-        age: "",
-        gender: "",
-        weight: "",
-        weightType: "",
-        height1: "",
-        heightType1: "",
-        height2: "",
-        heightType2: ""
+        confirmPassword: ""
+        // name: "",
+        // age: "",
+        // gender: "",
+        // weight: "",
+        // weightType: "",
+        // height1: "",
+        // heightType1: "",
+        // height2: "",
+        // heightType2: ""
     })
     const [signUpErrorMessage, setSignUpErrorMessage] = useState(false)
     const [currentUser, setCurrentUser] = useState({
@@ -49,10 +51,19 @@ export default function Layout() {
 
     async function handleSignUp(e) {
         e.preventDefault()
-        if(/[A-Z]/.test(loginInfo.password) &&
+        if(
+            /[A-Z]/.test(loginInfo.password) &&
             /[a-z]/.test(loginInfo.password) &&
             /\W/.test(loginInfo.password) &&
-            /\d/.test(loginInfo.password)
+            /\d/.test(loginInfo.password) &&
+            loginInfo.password !== loginInfo.confirmPassword
+        ) {
+            flipShowNonMatchingPasswordError()
+        } else if(/[A-Z]/.test(loginInfo.password) &&
+            /[a-z]/.test(loginInfo.password) &&
+            /\W/.test(loginInfo.password) &&
+            /\d/.test(loginInfo.password) &&
+            loginInfo.password === loginInfo.confirmPassword
         ) {
             // console.log(`check works, pass is: ${loginInfo.password}`)
             const signUpSuccess = await signUpUser(loginInfo)
@@ -70,6 +81,10 @@ export default function Layout() {
 
     function flipShowPasswordError() {
         setLoginError(prev => !prev)
+    }
+
+    function flipShowNonMatchingPasswordError() {
+        setNonMatchingPasswordError(true)
     }
 
     function handleChange(e) {
@@ -98,16 +113,19 @@ export default function Layout() {
                 handleChange={handleChange}
                 email={loginInfo.email}
                 password={loginInfo.password}
-                name={loginInfo.name}
-                gender={loginInfo.gender}
-                weight={loginInfo.weight}
-                weightType={loginInfo.weightType}
-                height1={loginInfo.height1}
-                heightType1={loginInfo.heightType1}
-                height2={loginInfo.height2}
-                heightType2={loginInfo.heightType2}
+                confirmPassword={loginInfo.confirmPassword}
+                // name={loginInfo.name}
+                // gender={loginInfo.gender}
+                // weight={loginInfo.weight}
+                // weightType={loginInfo.weightType}
+                // height1={loginInfo.height1}
+                // heightType1={loginInfo.heightType1}
+                // height2={loginInfo.height2}
+                // heightType2={loginInfo.heightType2}
                 flipShowLogin={flipShowLogin}
                 flipShowPasswordError={flipShowPasswordError}
+                flipShowNonMatchingPasswordError={flipShowNonMatchingPasswordError}
+                nonMatchingPasswordError={nonMatchingPasswordError}
                 loginError={loginError}
                 signUpErrorMessage={signUpErrorMessage}
                 

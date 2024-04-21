@@ -433,10 +433,17 @@ export async function saveTimerWorkout(userCollection, userId, date, workoutTime
         const userDocRef = doc(userCollection, userId)
         const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
         const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, adjustedDate)
+        const docSnap = await getDoc(dateOfWorkoutDocRef)
 
-        await updateDoc(dateOfWorkoutDocRef, {
-            workoutTime: workoutTime
-        })
+        if(!docSnap.exists) {
+            console.log("doc doesnt exist yo")
+            return
+        } else {
+            await updateDoc(dateOfWorkoutDocRef, {
+                workoutTime: workoutTime
+            })
+        }
+        
     } catch(e) {
         console.error("error adding workout time: ", e)
     }
