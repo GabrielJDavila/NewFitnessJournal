@@ -118,23 +118,6 @@ export const logout = async () => {
     await signOut(auth)
 }
 
-// export function previousModay() {
-//     const today = new Date()
-//     const numMonth = today.getMonth() + 1
-
-//     const stringMonth = numMonth <= 9 ? `0${numMonth}` : `${numMonth}`
-//     const stringDay = today.getDate() <= 9 ? `0${today.getDate()}` : `${today.getDate()}`
-   
-//     const newDateString = `${today.getFullYear()}-${stringMonth}-${stringDay}`
-
-//     const currentDayOfWeek = today.getDay()
-//     const daysToSubtract = currentDayOfWeek === 0 ? 6 : currentDayOfWeek - 1
-//     const getPastMonday = new Date()
-//     getPastMonday.setDate(today.getDate() - daysToSubtract)
-//     const timstampToCompare = Timestamp.fromDate(getPastMonday)
-    
-//     return timstampToCompare
-// }
 export async function queryWorkoutLogs(userCollection, userId) {
         const today = new Date()
 
@@ -171,9 +154,6 @@ export async function queryWorkoutLogs(userCollection, userId) {
         }
        
         return workoutsArr
-    // return onSnapshot(q, snapshot => {
-    //     onSuccess(snapshot.size)
-    // })
 }
 
 // search all exercises using the search tool. reference the user's categories collection, then loop through
@@ -411,7 +391,10 @@ export async function retrieveDoc(collectionType, itemId) {
 // add or udpdate current workout exercises
 export async function addUpdateWorkoutList(exerciseId, name, userCollection, userId) {
     try {
-        const date = new Date().toISOString().split("T")[0]
+        const selectedDate = localStorage.getItem("selectedDate")
+        const date = new Date(selectedDate).toISOString().split("T")[0]
+        
+        console.log(date)
         const userDocRef = doc(userCollection, userId)
         const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
         const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, date)
@@ -591,10 +574,10 @@ export async function retrieveCurrentExSetsReps(userCollection, userId, selected
         }
 
         // check for PRs in sets and reps (NEED TO IMPROVE PERFORMANCE HERE) 
-        // const currWorkoutQuery = query(currentWorkoutCollectionRef)
-        // const currWorkoutSnapshot = await getDocs(currWorkoutQuery)
+        const currWorkoutQuery = query(currentWorkoutCollectionRef)
+        const currWorkoutSnapshot = await getDocs(currWorkoutQuery)
 
-        // let exercisePRs = []
+        let exercisePRs = []
 
         // for(const workout of currWorkoutSnapshot.docs) {
         //     const exercisesCollectionRef = collection(workout.ref, "exList")
@@ -666,10 +649,13 @@ export async function retrieveCurrentExSetsReps(userCollection, userId, selected
 }
 
 // add or update sets and reps of current exercises
-export async function addSetsReps( exerciseId, weight, reps, weightType, userCollection, userId, date) {
+export async function addSetsReps( exerciseId, weight, reps, weightType, userCollection, userId) {
     try {
         // using exerciseId so it's easier to grab params later for use
         // const dateString = new Date().toISOString().split("T")[0]
+        const selectedDate = localStorage.getItem("selectedDate")
+        const date = new Date(selectedDate).toISOString().split("T")[0]
+        
         const userDocRef = doc(userCollection, userId)
         const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
         const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, date)

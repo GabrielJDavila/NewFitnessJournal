@@ -30,10 +30,7 @@ export default function AllCategories() {
     }
 
     useEffect(() => {
-        setTimeout(() => {
-            loadData()
-        }, 1000)
-        
+        loadData() 
     }, [])
 
     useEffect(() => {

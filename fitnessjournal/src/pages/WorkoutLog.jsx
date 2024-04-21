@@ -21,7 +21,8 @@ export default function WorkoutLog() {
     const [toggleDeleteAllExercisesModal, setToggleDeleteAllExercisesModal] = useState(false)
     const [toggleTimerModal, setToggleTimerModal] = useState(false)
     const [toggleCalendar, setToggleCalendar] = useState(false)
-    const [date, setDate] = useState(new Date())
+    const storedDate = localStorage.getItem("selectedDate")
+    const [date, setDate] = useState(storedDate ? new Date(storedDate) : new Date())
     const { currentUser } = useOutletContext()
     const [currentItemToDelete, setCurrentItemToDelete] = useState({
         exIdToDelete: "",
@@ -34,16 +35,14 @@ export default function WorkoutLog() {
         setId: ""
     })
     const [showSkel, setShowSkel] = useState(true)
-
     const calendarRef = useRef(null)
-   
+    const stringDate = date.toISOString().split("T")[0]
+    const [year, month, day] = stringDate.split("-")
+    const formattedDate = `${month}/${day}/${year}`
+
     useEffect(() => {
-        setTimeout(() => {
-            if(date) {
-                loadExerciseList(date)
-            }
-        }, 3000)
-        
+        setShowSkel(true)
+        loadExerciseList(date)
     }, [date])
 
     useEffect(() => {
@@ -52,7 +51,7 @@ export default function WorkoutLog() {
 
     async function loadExerciseList() {
         try {
-            setShowSkel(true)
+            
             const data = await retrieveCurrentExSetsReps(usersInDB, currentUser, date)
             setWorkoutData(data)
             setShowSkel(false)
@@ -74,6 +73,11 @@ export default function WorkoutLog() {
             ...prev,
             [name]: value
         }))
+    }
+
+    function handleDateChange(newDate) {
+        setDate(newDate)
+        localStorage.setItem("selectedDate", newDate.toISOString())
     }
 
     function handleToggleCalendar() {
@@ -198,7 +202,7 @@ export default function WorkoutLog() {
                         close
                     </span>
                     <Calendar
-                        onChange={setDate}
+                        onChange={handleDateChange}
                         value={date}
                         onClickDay={e => console.log(e)}
                     />
@@ -298,12 +302,12 @@ export default function WorkoutLog() {
                 {showSkel &&
                     workoutSkels
                 }
-                { workoutData.length > 0 &&
+                { workoutData.length > 0 && !showSkel &&
                     <DragDropContext onDragEnd={handleDragEnd}>
                         <Droppable droppableId="workoutData">
                             {(provided) => (
                                 <div {...provided.droppableProps} ref={provided.innerRef} className="current-log-inner-container">
-                                    <h2>Current Workout</h2>
+                                    <h2>Current Workout {formattedDate}</h2>
                                     <CurrentWorkoutList
                                         data={workoutData}
                                         // prs={PRData}
@@ -321,7 +325,7 @@ export default function WorkoutLog() {
                         </Droppable>
                     </DragDropContext>
                 }
-                {!showSkel && workoutData.length === 0 && <h1 className="current-log-title">Workout Log Empty</h1>}
+                {!showSkel && workoutData.length === 0 && <h1 className="current-log-title">Workout Log Empty {formattedDate}</h1>}
             </div>
         </div>
     )

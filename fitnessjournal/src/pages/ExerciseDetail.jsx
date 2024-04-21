@@ -13,7 +13,6 @@ export default function ExerciseDetail() {
     })
     const [showModal, setShowModal] = useState(false)
     const { currentUser } = useOutletContext()
-    const date = new Date().toISOString().split("T")[0]
 
     useEffect(() => {
         if(showModal) {
@@ -32,7 +31,7 @@ export default function ExerciseDetail() {
     function handleAddSetClick(e) {
         e.preventDefault()
         if (repsAndWeight.reps > 0) {
-            addSetsReps(params.id, repsAndWeight.weight, repsAndWeight.reps, repsAndWeight.weightType, usersInDB, currentUser, date)
+            addSetsReps(params.id, repsAndWeight.weight, repsAndWeight.reps, repsAndWeight.weightType, usersInDB, currentUser)
             setShowModal(true)
         } else {
             alert("Please enter an amount for reps.")

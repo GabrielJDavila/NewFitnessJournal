@@ -332,6 +332,7 @@ header {
 .calendar-container {
   position: relative;
   padding-top: 1rem;
+  width: 100%;
 }
 
 .calendar-container::after {
@@ -380,6 +381,9 @@ header {
 .dash-hero {
   background: url("./assets/lifting1.png");
   color: white;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .dashboard-top-content-container, .dashboard-bottom-container {
@@ -390,6 +394,9 @@ header {
   gap: 1.5rem;
   padding: 2rem;
   margin-top: 1rem;
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
 }
 
 .log-container {
@@ -397,7 +404,6 @@ header {
   border-radius: 6px;
   width: 100%;
   height: 175px;
-  max-width: 325px;
   padding: 0 .5rem .5rem;
   background: rgb(246, 246, 246);
 }
@@ -597,6 +603,9 @@ header {
 .log-hero {
   background: url("./assets/dumbbell.png");
   color: white;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 /* ======= WorkoutLog Page Styles ========= */
@@ -635,7 +644,7 @@ header {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  border-bottom: 1px solid rgb(176, 176, 176);
+  border-bottom: 1px solid rgb(219, 219, 219);
 }
 
 .workout-skel-mini {
@@ -643,32 +652,6 @@ header {
   flex-direction: row;
   justify-content: space-between;
 }
-
-/* .exercise-skel {
-  width: 100%;
-  height: 200px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  text-align: center;
-  gap: 1rem;
-  border: 1px solid black;
-}
-
-.ex-skel-title {
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  margin: 0 auto;
-}
-.skel-reps-weight-container {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  
-} */
 
 /* rendered workout styles */
 

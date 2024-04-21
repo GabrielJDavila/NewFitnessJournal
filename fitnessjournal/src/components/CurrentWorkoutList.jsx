@@ -2,24 +2,6 @@ import { Link, useOutletContext } from "react-router-dom"
 import { Draggable } from "react-beautiful-dnd"
 export default function CurrentWorkoutList(props) {
 
-    // console.log(props.prs)
-    // console.log(props.data)
-    // function compare() {
-    //     for(const item of props.data) {
-
-    //         for(const pr of props.prs) {
-    //             if(item.id === pr.id) {
-    //                 console.log("matches", item.id, pr.id)
-                    
-    //             } else {
-    //                 console.log("doesn't match", item.id, pr.id)
-                    
-    //             }
-    //         }
-    //     }
-    // }
-
-    // compare()
     const currentWorkout = props.data.map((ex, index) => {
         return (
             <Draggable key={ex.id} draggableId={ex.id} index={index}>

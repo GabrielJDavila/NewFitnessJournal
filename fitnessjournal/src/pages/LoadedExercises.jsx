@@ -18,9 +18,7 @@ export default function LoadedExercises() {
     const [toggleModal, setToggleModal] = useState(false)
     
     useEffect(() => {
-        setTimeout(() => {
-            loadExercisesData()
-        }, 1000)
+        loadExercisesData()
     }, [])
 
     useEffect(() => {
