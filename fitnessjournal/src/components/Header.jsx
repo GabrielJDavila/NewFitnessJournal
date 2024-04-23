@@ -49,7 +49,7 @@ export default function Header() {
                     <Link to="/" className="menu-item-link">
                         <li className="menu-item">Dashboard</li>
                     </Link>
-                    <Link className="menu-item-link">
+                    <Link to="Settings" className="menu-item-link">
                         <li className="menu-item">Settings</li>
                     </Link>
                     <Link className="menu-item-link">

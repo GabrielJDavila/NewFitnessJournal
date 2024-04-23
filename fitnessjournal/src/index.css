@@ -298,6 +298,12 @@ header {
   background: rgb(183, 75, 47);
 }
 
+/* ============ Settings.jsx styles ===================*/
+
+.settings-page {
+  margin-top: 5rem;
+}
+
 /* ============ Category.jsx styles ===================*/
 
 .category-container {
