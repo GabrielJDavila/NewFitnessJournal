@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* ============= Base/Global styles ==============*/
 
 * {
@@ -301,7 +305,21 @@ header {
 /* ============ Settings.jsx styles ===================*/
 
 .settings-page {
-  margin-top: 5rem;
+  margin-top: 6rem;
+  padding: 0 1rem;
+  text-align: left;
+}
+
+.settings-item {
+  text-decoration: none;
+  color: black;
+}
+
+/* ============ UserProfile.jsx styles ===================*/
+
+.user-profile-page {
+  margin-top: 6rem;
+  padding: 0 1rem;
 }
 
 /* ============ Category.jsx styles ===================*/
@@ -933,7 +951,8 @@ header {
 
 .category-container,
 .exercise-container,
-.skeleton-cat-container {
+.skeleton-cat-container,
+.settings-item {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -945,6 +964,8 @@ header {
 
 .category-name-link {
   width: 75%;
+  text-decoration: none;
+  color: #DC684B;
 }
 
 .category-name {
@@ -1247,4 +1268,20 @@ footer {
   background: rgb(220, 104, 75);
   color: black;
 
+}
+
+.back-btn-breadcrumb-container, .back-btn-breadcrumb-link {
+  display: flex;
+  text-decoration: none;
+  gap: .5rem
+}
+
+.back-btn-link-text, .arrow-back {
+  margin: 0;
+  color: #DC684B;
+}
+
+.back-btn-current-text {
+  margin: 0;
+  color: #DC684B;
 }

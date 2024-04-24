@@ -31,7 +31,7 @@ export default function CategoryNav(props) {
                     relative="path"
                 >
                     <button className="category-interface-btn">
-                        <span className="material-symbols-outlined arrow-back">
+                        <span className="material-symbols-outlined arrow-back-catnav">
                             arrow_back
                         </span>
                     </button>
