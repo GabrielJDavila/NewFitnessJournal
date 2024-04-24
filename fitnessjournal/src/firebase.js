@@ -118,6 +118,20 @@ export const logout = async () => {
     await signOut(auth)
 }
 
+// get user info
+export async function getUserInfo(userId) {
+    try {
+        const userDocRef = doc(usersInDB, userId)
+        const docSnap = await getDoc(userDocRef)
+
+        if (docSnap.exists()) {
+            return docSnap.data()
+        } 
+    } catch(err) {
+        console.error("error getting user info: ", err)
+    }
+}
+
 export async function queryWorkoutLogs(userCollection, userId) {
         const today = new Date()
 

@@ -10,7 +10,7 @@ export default function WorkoutLogLayout() {
 
     return (
         <div className="workout-log-layout">
-            <Outlet />
+            <Outlet context={{ currentUser }} />
         </div>
     )
 }

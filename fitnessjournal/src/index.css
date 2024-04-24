@@ -1,6 +1,6 @@
-@tailwind base;
+/* @tailwind base;
 @tailwind components;
-@tailwind utilities;
+@tailwind utilities; */
 
 /* ============= Base/Global styles ==============*/
 
@@ -315,11 +315,33 @@ header {
   color: black;
 }
 
+.settings-item-description {
+  color: rgb(166, 166, 166);
+}
+
 /* ============ UserProfile.jsx styles ===================*/
 
 .user-profile-page {
   margin-top: 6rem;
   padding: 0 1rem;
+  text-align: left;
+}
+
+.userinfo-outer-div {
+  
+}
+
+/* .userinfo-inner-div {
+  display: flex;
+  gap: .5rem;
+  align-items: center;
+  justify-content: space-between;
+} */
+
+.user-info-data-item {
+  border-bottom: 1px solid rgb(203, 203, 203);
+  padding: .5rem;
+  text-align: left;
 }
 
 /* ============ Category.jsx styles ===================*/
@@ -1278,7 +1300,7 @@ footer {
 
 .back-btn-link-text, .arrow-back {
   margin: 0;
-  color: #DC684B;
+  color: #cccccc;
 }
 
 .back-btn-current-text {

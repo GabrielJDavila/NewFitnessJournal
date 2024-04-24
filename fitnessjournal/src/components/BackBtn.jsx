@@ -11,9 +11,9 @@ export default function BackBtn(props) {
                 <span className="material-symbols-outlined arrow-back">
                     arrow_back
                 </span>
-                <h2 className="back-btn-link-text">{props.root}</h2>
+                <h2 className="back-btn-link-text">{props.root} / </h2>
             </Link>
-            <h2 className="back-btn-current-text">/ {props.current}</h2>
+            <h2 className="back-btn-current-text">{props.current}</h2>
         </div>
     )
 }

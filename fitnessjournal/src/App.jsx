@@ -27,7 +27,7 @@ function App() {
               <Route index element={<Settings />} />
               <Route path="UserProfile" element={<UserProfile />} />
             </Route>
-            <Route path="profilecreation" element={<ProfileCreation />}/>
+            {/* <Route path="profilecreation" element={<ProfileCreation />}/> */}
             <Route path="WorkoutLog" element={<WorkoutLogLayout />}>
               <Route index element={<WorkoutLog />} />
               <Route path="AllCategories" element={<AllCategories />} />
