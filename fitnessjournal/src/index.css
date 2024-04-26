@@ -344,6 +344,47 @@ header {
   text-align: left;
 }
 
+.user-info-edit-item {
+  padding: .5rem;
+  border-radius: 6px;
+  border: 1px solid lightgray;
+  width: 100%;
+  font-family: "Oswald", sans-serif;
+  font-size: 1rem;
+}
+
+.edit-profile-btn {
+  background-color: #DC684B;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  margin: 0 auto;
+  border-radius: 6px;
+  color: white;
+  gap: .5rem;
+}
+
+.cancel-save-container {
+  margin-top: 3rem;
+}
+
+.cancel-save-container, .cancel-edit-btn, .save-edit-btn  {
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  color: white;
+  gap: 1rem;
+}
+
+.cancel-edit-btn, .save-edit-btn {
+  width: 100%;
+  background-color: #DC684B;
+}
+
 /* ============ Category.jsx styles ===================*/
 
 .category-container {

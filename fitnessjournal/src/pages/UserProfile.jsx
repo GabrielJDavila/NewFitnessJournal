@@ -2,12 +2,14 @@
  import { useEffect, useState } from "react"
  import { useOutletContext } from "react-router-dom"
 import { getUserInfo } from "../firebase"
+import EditableProfileInfo from "./EditableProfileInfo"
 
  export default function UserProfile() {
     const [userData, setUserData] = useState()
     const { currentUser } = useOutletContext()
+    const [toggleEditInfo, setToggleEditInfo] = useState(false)
 
-    console.log(userData)
+    console.log(toggleEditInfo)
     useEffect(() => {
         loadUserData()
     }, [])
@@ -20,15 +22,21 @@ import { getUserInfo } from "../firebase"
             console.error("error loading user data: ", err)
         }
     }
+
+    function handleToggle() {
+        setToggleEditInfo(prev => !prev)
+    }
+
     return (
         <main className="user-profile-page">
             <BackBtn
                 root="Settings"
                 current="UserProfile"
             />
+            
             <p>User Info</p>
 
-            {userData &&
+            {userData && !toggleEditInfo &&
             <div className="non-edit-form">
                 <div className="userinfo-outer-div">
                     
@@ -66,6 +74,40 @@ import { getUserInfo } from "../firebase"
                 
             </div>
             }
+            {toggleEditInfo &&
+            <EditableProfileInfo
+                name={userData.name}
+                email={userData.email}
+                gender={userData.gender}
+                age={userData.age}
+                height={userData.height1}
+                weight={userData.weight}
+            />
+            }
+            {!toggleEditInfo ?
+            <div className="edit-profile-btn" onClick={handleToggle}>
+                <p>Edit</p>
+                <span class="material-symbols-outlined ">
+                    edit
+                </span>
+            </div>
+            :
+            <div className="cancel-save-container">
+                <div onClick={handleToggle} className="cancel-edit-btn">
+                    <p>cancel</p>
+                    <span class="material-symbols-outlined">
+                        close
+                    </span>
+                </div>
+                <div className="save-edit-btn">
+                    <p>save</p>
+                    <span class="material-symbols-outlined">
+                        save
+                    </span>
+                </div>
+            </div>
+            }
+            
         </main>
     )
  }
