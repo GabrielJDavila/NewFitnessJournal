@@ -1,104 +1,131 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useOutletContext } from "react-router-dom"
+import { editUserInfo } from "../firebase"
 
-export default function ProfileCreation(props) {
-    
-    const [userProfile, setUserProfile] = useState({
+export default function EditableProfileInfo(props) {
+    const [userInfo, setUserInfo] = useState({
         name: "",
-        age: "",
+        email: "",
         gender: "",
-        weight: "",
-        heighttype1: "",
-        heighttype2: "",
-        goals: ""
+        age: "",
+        height: "",
+        weight: ""
     })
+    const {currentUser} = useOutletContext()
+
+    function handleChange(name, value) {
+        setUserInfo(prev => ({
+            ...prev,
+            [name]: value
+        }))
+    }
+
+    function handleSubmit(e) {
+        e.preventDefault()
+        editUserInfo(
+            currentUser,
+            userInfo.name,
+            userInfo.email,
+            userInfo.gender,
+            userInfo.age,
+            userInfo.height,
+            userInfo.weight
+        )
+        props.loadUserData()
+        props.handleCreateToggle()
+    }
 
     return (
-        <div className="profile-creation-container">
-            <h1 className="profile-creation-title">Profile</h1>
-            <p>Creating your profile is recommended for an optimized experience. To skip, click on the dashboard button.</p>
-            <div className="render-form-btns-container">
-                <button onClick={e => props.handleSignUp(e)}>skip for now</button>
-                <button onClick={e => props.continueWithProfileCreation(e)}>create profile</button>
-            </div>
-
-            {props.renderProfileForm &&
-            <form onSubmit={e => props.handleSignUp(e)} className="profile-creation">
-                <fieldset className="profile-creation-fieldset">
-                    <label htmlFor="name">Name</label>
+        <form onSubmit={handleSubmit} className="non-edit-form">
+            <div className="userinfo-outer-div">
+                    
+                <div className="userinfo-inner-div">
+                    <p>Name:</p>
                     <input
                         name="name"
-                        id="name"
-                        type="text"
-                        placeholder="name"
-                        className="profile-input"
+                        onChange={e => handleChange(e.target.name, e.target.value)}
+                        value={userInfo.name}
+                        className="user-info-edit-item"
+                        required
                     />
-
-                    <label htmlFor="age">Age</label>
+                    {/* <p className="user-info-data-item">{props.name}</p> */}
+                </div>
+                <div className="userinfo-inner-div">
+                    <p>Email:</p>
                     <input
-                        name="age"
-                        id="age"
-                        type="text"
-                        placeholder="age"
-                        className="profile-input"
+                        name="email"
+                        onChange={e => handleChange(e.target.name, e.target.value)}
+                        value={userInfo.email}
+                        className="user-info-edit-item"
+                        required
                     />
-
-                    <label htmlFor="gender">Gender</label>
+                    {/* <p className="user-info-data-item">{props.email}</p> */}
+                </div>
+                <div className="userinfo-inner-div">
+                    <p>Gender:</p>
                     <input
                         name="gender"
-                        id="gender"
-                        type="text"
-                        placeholder="gender(optional)"
-                        className="profile-input"
+                        onChange={e => handleChange(e.target.name, e.target.value)}
+                        value={userInfo.gender}
+                        className="user-info-edit-item"
+                        required
                     />
-                </fieldset>
-
-                <fieldset className="profile-creation-fieldset body-measurements-container">
-                    <label htmlFor="weight">Weight</label>
-                    <div className="weight-container">
-                        <input
-                            name="weight"
-                            id="weight"
-                            type="text"
-                            placeholder="weight"
-                            className="profile-input weight"
-                        />
-                        <select className="profile-select">
-                            <option value="kg">kg</option>
-                            <option value="lb">lb</option>
-                        </select>    
-                    </div>
+                    {/* <p className="user-info-data-item">{props.gender}</p> */}
+                </div>
                     
-                    <div className="height-container">  
-                        <label htmlFor="height1">Height</label>
-                        <div className="height-first-measurement-container">
-                            <input
-                                name="height1"
-                                id="height1"
-                                type="text"
-                                className="height"
-                            />
-                            <select className="profile-select">
-                                <option value="ft">ft</option>
-                                <option value="m">m</option>
-                            </select>
-                        </div>
+            </div>
+                
+            <div className="userinfo-outer-div">
 
-                        <div className="height-second-measurement-container">
-                            <input
-                                name="height2"
-                                type="text"
-                                className="height"
-                            />
-                            <select className="profile-select">
-                                <option value="in">in</option>
-                                <option value="cm">cm</option>
-                            </select>
-                        </div>
-                        
-                    </div>
-                </fieldset>            
-            </form>}
-        </div>
+                <div className="userinfo-inner-div">
+                    <p>Age:</p>
+                    <input
+                        name="age"
+                        onChange={e => handleChange(e.target.name, e.target.value)}
+                        value={userInfo.age}
+                        className="user-info-edit-item"
+                        required
+                    />
+                    {/* <p className="user-info-data-item">{props.age}</p> */}
+                </div>
+                <div className="userinfo-inner-div">
+                    <p>Height(in):</p>
+                    <input
+                        name="height"
+                        onChange={e => handleChange(e.target.name, e.target.value)}
+                        value={userInfo.height}
+                        className="user-info-edit-item"
+                        required
+                    />
+                    {/* <p className="user-info-data-item">{props.height1}</p> */}
+                </div>
+                <div className="userinfo-inner-div">
+                    <p>Weight(lb):</p>
+                    <input
+                        name="weight"
+                        onChange={e => handleChange(e.target.name, e.target.value)}
+                        value={userInfo.weight}
+                        className="user-info-edit-item"
+                        required
+                    />
+                    {/* <p className="user-info-data-item">{props.weight}</p> */}
+                </div>
+
+            </div>
+            <div className="cancel-save-container">
+                <div onClick={props.handleCreateToggle} className="cancel-edit-btn">
+                    <p>cancel</p>
+                    <span class="material-symbols-outlined">
+                        close
+                    </span>
+                </div>
+                <button className="save-edit-btn">
+                    <p>save</p>
+                    <span class="material-symbols-outlined">
+                        save
+                    </span>
+                </button>
+            </div>
+        </form>
     )
 }

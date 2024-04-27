@@ -327,6 +327,10 @@ header {
   text-align: left;
 }
 
+.create-user-info-toggle-btn {
+  background-color: #DC684B;
+}
+
 .userinfo-outer-div {
   
 }
@@ -370,7 +374,7 @@ header {
   margin-top: 3rem;
 }
 
-.cancel-save-container, .cancel-edit-btn, .save-edit-btn  {
+.cancel-save-container, .cancel-edit-btn, .save-edit-btn, .create-user-info-toggle-btn {
   display: flex;
   text-align: center;
   align-items: center;

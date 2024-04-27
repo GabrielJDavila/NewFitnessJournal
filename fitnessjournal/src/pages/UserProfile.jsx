@@ -1,15 +1,16 @@
- import BackBtn from "../components/BackBtn"
- import { useEffect, useState } from "react"
- import { useOutletContext } from "react-router-dom"
+import BackBtn from "../components/BackBtn"
+import { useEffect, useState } from "react"
+import { useOutletContext } from "react-router-dom"
 import { getUserInfo } from "../firebase"
 import EditableProfileInfo from "./EditableProfileInfo"
+import ProfileCreation from "./ProfileCreation"
 
  export default function UserProfile() {
     const [userData, setUserData] = useState()
     const { currentUser } = useOutletContext()
     const [toggleEditInfo, setToggleEditInfo] = useState(false)
+    const [toggleCreateUserInfo, setToggleCreateUserInfo] = useState(false)
 
-    console.log(toggleEditInfo)
     useEffect(() => {
         loadUserData()
     }, [])
@@ -25,6 +26,10 @@ import EditableProfileInfo from "./EditableProfileInfo"
 
     function handleToggle() {
         setToggleEditInfo(prev => !prev)
+    }
+
+    function handleCreateToggle() {
+        setToggleCreateUserInfo(prev => !prev)
     }
 
     return (
@@ -72,9 +77,24 @@ import EditableProfileInfo from "./EditableProfileInfo"
 
                 </div>
                 
+                <div className="edit-profile-btn" onClick={handleToggle}>
+                    <p>Edit</p>
+                    <span class="material-symbols-outlined ">
+                        edit
+                    </span>
+                </div>
             </div>
             }
-            {toggleEditInfo &&
+
+            {!userData && !toggleCreateUserInfo && <p onClick={handleCreateToggle} className="create-user-info-toggle-btn">Create Profile</p>}
+            
+            {toggleCreateUserInfo &&
+            <ProfileCreation
+                handleCreateToggle={handleCreateToggle}
+                loadUserData={loadUserData}
+            />
+            }
+            {userData && toggleEditInfo &&
             <EditableProfileInfo
                 name={userData.name}
                 email={userData.email}
@@ -82,30 +102,11 @@ import EditableProfileInfo from "./EditableProfileInfo"
                 age={userData.age}
                 height={userData.height1}
                 weight={userData.weight}
+                toggleEditInfo={toggleEditInfo}
+                setToggleEditInfo={setToggleEditInfo}
+                handleToggle={handleToggle}
+                loadUserData={loadUserData}
             />
-            }
-            {!toggleEditInfo ?
-            <div className="edit-profile-btn" onClick={handleToggle}>
-                <p>Edit</p>
-                <span class="material-symbols-outlined ">
-                    edit
-                </span>
-            </div>
-            :
-            <div className="cancel-save-container">
-                <div onClick={handleToggle} className="cancel-edit-btn">
-                    <p>cancel</p>
-                    <span class="material-symbols-outlined">
-                        close
-                    </span>
-                </div>
-                <div className="save-edit-btn">
-                    <p>save</p>
-                    <span class="material-symbols-outlined">
-                        save
-                    </span>
-                </div>
-            </div>
             }
             
         </main>

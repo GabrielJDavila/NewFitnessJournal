@@ -132,6 +132,29 @@ export async function getUserInfo(userId) {
     }
 }
 
+// edit user info
+export async function editUserInfo(userId, name, email, gender, age, height, weight) {
+    try {
+        const userDocRef = doc(usersInDB, userId)
+        // const docSnap = await getDoc(userDocRef)
+
+        // if(!docSnap.exists()) {
+
+        // }
+        await setDoc(userDocRef, {
+            name: name,
+            email: email,
+            gender: gender,
+            age: age,
+            height1: height,
+            weight: weight
+        })
+        console.log("success")
+    } catch(err) {
+        console.error("error editing user info: ", err)
+    }
+}
+
 export async function queryWorkoutLogs(userCollection, userId) {
         const today = new Date()
 

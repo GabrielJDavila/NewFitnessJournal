@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import { useOutletContext } from "react-router-dom"
+import { editUserInfo } from "../firebase"
 
 export default function EditableProfileInfo(props) {
     const [userInfo, setUserInfo] = useState({
@@ -7,9 +8,10 @@ export default function EditableProfileInfo(props) {
         email: props.email,
         gender: props.gender,
         age: props.age,
-        height: props.height1,
+        height: props.height,
         weight: props.weight
     })
+    const {currentUser} = useOutletContext()
 
     function handleChange(name, value) {
         setUserInfo(prev => ({
@@ -17,8 +19,24 @@ export default function EditableProfileInfo(props) {
             [name]: value
         }))
     }
+
+    function handleSubmit(e) {
+        e.preventDefault()
+        editUserInfo(
+            currentUser,
+            userInfo.name,
+            userInfo.email,
+            userInfo.gender,
+            userInfo.age,
+            userInfo.height,
+            userInfo.weight
+        )
+        props.loadUserData()
+        props.handleToggle()
+    }
+
     return (
-        <form className="non-edit-form">
+        <form onSubmit={handleSubmit} className="non-edit-form">
             <div className="userinfo-outer-div">
                     
                 <div className="userinfo-inner-div">
@@ -94,7 +112,20 @@ export default function EditableProfileInfo(props) {
                 </div>
 
             </div>
-                
+            <div className="cancel-save-container">
+                <div onClick={props.handleToggle} className="cancel-edit-btn">
+                    <p>cancel</p>
+                    <span class="material-symbols-outlined">
+                        close
+                    </span>
+                </div>
+                <button className="save-edit-btn">
+                    <p>save</p>
+                    <span class="material-symbols-outlined">
+                        save
+                    </span>
+                </button>
+            </div>
         </form>
     )
 }
