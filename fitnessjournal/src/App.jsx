@@ -13,6 +13,8 @@ import ProfileCreation from "./pages/ProfileCreation"
 import SettingsLayout from "./components/SettingsLayout"
 import Settings from "./pages/Settings"
 import UserProfile from "./pages/UserProfile"
+import NutritionLayout from "./components/NutritionLayout"
+import NutritionLog from "./pages/NutritionLog"
 
 function App() {
 
@@ -33,6 +35,10 @@ function App() {
               <Route path="AllCategories" element={<AllCategories />} />
               <Route path="AllCategories/:id" element={<LoadedExercises />}/>
               <Route path="ExerciseDetail/:id" element={<ExerciseDetail />} />
+            </Route>
+
+            <Route path="NutritionLog" element={<NutritionLayout/>}>
+              <Route index element={<NutritionLog />} />
             </Route>
             
           </Route>

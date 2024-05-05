@@ -1,7 +1,8 @@
+
 import { useState, useEffect } from "react"
 import { Link, Outlet, useOutletContext } from "react-router-dom"
 
-export default function SettingsLayout() {
+export default function NutritionLayout() {
     const { currentUser } = useOutletContext()
 
     useEffect(() => {

@@ -1291,6 +1291,20 @@ header {
   align-items: center;
 }
 
+/* ======= Nutrition Log Styles ======= */
+
+.nutrition-log-layout {
+  text-align: center;
+}
+
+.food-log-hero {
+  background: url("./assets/food.png");
+  color: white;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
 /* ======= Footer Styles ======== */
 
 footer {
