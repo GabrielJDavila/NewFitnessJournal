@@ -15,6 +15,8 @@ import Settings from "./pages/Settings"
 import UserProfile from "./pages/UserProfile"
 import NutritionLayout from "./components/NutritionLayout"
 import NutritionLog from "./pages/NutritionLog"
+import SearchAllFoods from "./pages/SearchAllFoods"
+import FoodDetail from "./pages/FoodDetail"
 
 function App() {
 
@@ -39,6 +41,8 @@ function App() {
 
             <Route path="NutritionLog" element={<NutritionLayout/>}>
               <Route index element={<NutritionLog />} />
+              <Route path="SearchAllFoods" element={<SearchAllFoods />} />
+              <Route path="SearchAllFoods/:id" element={<FoodDetail />} />
             </Route>
             
           </Route>
