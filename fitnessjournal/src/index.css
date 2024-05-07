@@ -1,6 +1,6 @@
-/* @tailwind base;
+@tailwind base;
 @tailwind components;
-@tailwind utilities; */
+@tailwind utilities;
 
 /* ============= Base/Global styles ==============*/
 
@@ -1359,9 +1359,56 @@ header {
   justify-content: space-between;
 }
 
-.food-search {
-  margin-top: 3rem;
+.search-food-container {
+  margin-top: 5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 0 1rem;
 }
+
+.food-search {
+  padding: 1rem;
+  height: 100%;
+  width: 100%;
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.5rem;
+  border: 2px solid lightgray;
+  border-radius: 5px 0 0 5px;
+}
+
+.food-search-btn {
+  padding: 1rem .5rem;
+  border-radius: 0 5px 5px 0;
+  height: 100%;
+  border: 2px solid #DC684B;
+}
+
+.food-search-btn:hover {
+  background: #c65d42;
+}
+
+.search-food-icon {
+  height: 100%;
+  font-size: 2rem;
+  color: white;
+}
+
+.rendered-foods-container {
+  text-align: left;
+  padding: 1rem;
+  border-bottom: 1px solid lightgray;
+  display: flex;
+  justify-content: space-between;
+}
+
+.food-description{}
+.food-calories-preview{}
+/* .text-sm {
+  font-size: 1rem;
+  width: 40px;
+} */
 
 /* ======= Footer Styles ======== */
 

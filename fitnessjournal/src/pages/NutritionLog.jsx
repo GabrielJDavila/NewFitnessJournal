@@ -39,7 +39,11 @@ export default function NutritionLog() {
                 <h1>Nutrition</h1>
             </section>
             <section className="cal-remaining-section">
-                <h2>Calories</h2>
+                <div className="calories-title-container">
+                    <h2>Calories</h2>
+                    <h2>05/06/2024</h2>
+                </div>
+                
                 <div className="calories-remaining-container">
                     <p>2390</p>
                     <p>-</p>
