@@ -106,23 +106,6 @@ export default function ExerciseDetail() {
                 </div>
             </fieldset>
 
-            {/* <fieldset className="dash-input-fieldset">   
-                <div className="ex-info-container">
-                    <p className="ex-info-text weight">Weight Type:</p>
-                            <select
-                                name="weightType"
-                                value={repsAndWeight.weightType}
-                                onChange={e => handleChange(e.target.name, e.target.value)}
-                                className="weight-type"
-                                required
-                            >
-                                <option value="">-- select --</option>
-                                <option value="lb">lb</option>
-                                <option value="kg">kg</option>
-                            </select>
-                </div>
-            </fieldset> */}
-
             <fieldset className="dash-input-fieldset">
                 <div className="ex-info-container">
                     <p className="ex-info-text reps">Reps:</p>

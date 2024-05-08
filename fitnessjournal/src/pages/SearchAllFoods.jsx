@@ -1,31 +1,33 @@
 import { useState, useEffect } from "react"
 import { MagnifyingGlassCircleIcon, MagnifyingGlassIcon } from '@heroicons/react/24/solid'
+import { Link } from "react-router-dom"
 
 export default function SearchAllFoods() {
     const [searchQuery, setSearchQuery] = useState({
         name: ""
     })
     const [foodData, setFoodData] = useState(null)
-    console.log(foodData.foods)
-
+    console.log(searchQuery.name.length)
     useEffect(() => {
         fetchedFoodData()
     }, [])
 
     async function fetchedFoodData() {
-        try {
-            const res = await fetch(
-                `https://api.nal.usda.gov/fdc/v1/foods/search?api_key=OAsoWYlRcvGgu4PIfutME2Mmo0LsyoU5n8ANr0Ym&query=${searchQuery.name}`
-            )
-            if(!res.ok) {
-                throw new Error("Failed to fetch food data.")
+        if(searchQuery.name.length > 0) {
+            try {
+                const res = await fetch(
+                    `https://api.nal.usda.gov/fdc/v1/foods/search?api_key=OAsoWYlRcvGgu4PIfutME2Mmo0LsyoU5n8ANr0Ym&query=${searchQuery.name}`
+                )
+                if(!res.ok) {
+                    throw new Error("Failed to fetch food data.")
+                }
+
+                const data = await res.json()
+
+                setFoodData(data)
+            }catch(err) {
+                console.error("error fetching data:", err)
             }
-
-            const data = await res.json()
-
-            setFoodData(data)
-        }catch(err) {
-            console.error("error fetching data:", err)
         }
     }
 
@@ -43,21 +45,31 @@ export default function SearchAllFoods() {
     // const filteredFoods = [...new Set(foodData.foods.map(food => food.description))]
 
     const foodMap = new Map()
+    if (foodData) {
         foodData.foods.forEach(food => {
             if(!foodMap.has(food.description)) {
                 foodMap.set(food.description, food)
             }
         })
+    }
 
     const foodArr = Array.from(foodMap.values())
 
     console.log(foodArr)
     const renderedFoods = foodArr.map((food, index) => {
+        const foodId = food.fdcId
+        const firstChar = food.description.charAt(0).toUpperCase()
+        const slicedLetters = food.description.toLowerCase().slice(1)
+        const capWord = firstChar + slicedLetters
+        const cals = food.foodNutrients.find(nutrient => nutrient.nutrientName === "Energy")
+        const calsvalue = cals ? cals.value : ""
         return (
-        <div key={index} className="rendered-foods-container">
-            <p className="food-description">{food.description}</p>
-            <p className="food-calories-preview">{food.foodNutrients[3].value} KCALS</p>
-        </div>
+        <Link key={index} to={`${foodId}`}>
+            <div className="rendered-foods-container">
+                <p className="food-description">{capWord}</p>
+                <p className="food-calories-preview">{calsvalue} KCALS</p>
+            </div>
+        </Link>
         )
     })
     
@@ -78,7 +90,7 @@ export default function SearchAllFoods() {
                     </span>
                 </button>
             </form>
-            {foodData && renderedFoods}
+            {foodData && searchQuery && renderedFoods}
         </div>
         
     )
