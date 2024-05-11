@@ -1411,13 +1411,13 @@ header {
 } */
 
 .food-detail-page {
-  margin-top: 5rem;
+  margin-top: 6rem;
   padding: 0 1rem;
 }
 
 .food-detail-top-container {
   display: flex;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
 }
 
 .all-nutrients-container {}
@@ -1426,7 +1426,7 @@ header {
   display: flex;
   justify-content: space-between;
   border-bottom: 1px solid lightgray;
-  padding: .5rem 0;
+  padding: 1rem 0;
 }
 
 /* ======= Footer Styles ======== */
