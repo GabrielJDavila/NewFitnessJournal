@@ -42,21 +42,101 @@ export default function FoodDetail() {
         }))
     }
 
-    const nutrients = foodData && Object.entries(foodData.labelNutrients).map(([key, nutrient], index) => {
-        return (
-            <div key={index} className="nutrient-container">
-                <p>{key}</p>
-                <p>{Math.round(nutrient.value * servingSizeAmnt.amount)}</p>
-            </div>
-        )
-    })
+    // const nutrients = foodData ? Object.entries(foodData.labelNutrients).map(([key, nutrient], index) => {
+    //     return (
+    //         <div key={index} className="nutrient-container">
+    //             <p>{key}</p>
+    //             <p>{Math.round(nutrient.value * servingSizeAmnt.amount)}</p>
+    //         </div>
+    //     )
+    // }) : ""
+
+    const nutrientOrder = [
+        "calories",
+        "fat",
+        "saturatedFat",
+        "transFat",
+        "cholesterol",
+        "sodium",
+        "carbohydrates",
+        "fiber",
+        "sugars",
+        "protein",
+        "vitaminD",
+        "calcium",
+        "iron",
+        "potassium"
+    ]
+
+    const nutrients = foodData && foodData.labelNutrients ? (
+        <div className="rendered-nutrients">
+            {nutrientOrder.map((nutrientName, index) => (
+                foodData.labelNutrients[nutrientName] ?
+                <div key={index} className="nutrient-container">
+                    <p>{nutrientName}</p>
+                    <p>{Math.round(foodData.labelNutrients[nutrientName].value * servingSizeAmnt.amount)}</p>
+                </div>
+                :
+                <div key={index} className="nutrient-container">
+                    <p>{nutrientName}</p>
+                    <p>--</p>
+                </div>
+            ))}
+        </div>
+    ) :
+    (
+        <div className="no-nutrients-available">
+            {nutrientOrder.map((nutrientName, index) => (
+                <div key={index} className="nutrient-container">
+                    <p>{nutrientName}</p>
+                    <p>--</p>
+                </div>
+            ))}
+        </div>
+    )
+
+    // const noNutrientsAvailable = (
+    //     <div className="no-nutrients-available">
+    //         {nutrientOrder.map((nutrientName, index) => {
+    //             <div key={index} className="nutrient-container">
+    //                 <p>{nutrientName}</p>
+    //                 <p>--</p>
+    //             </div>
+    //         })}
+    //     </div>
+    // )
+
+    // const nutrients = foodData && 
+    //     <div>
+    //         <div classname="nutrient-container">
+    //             <p>{foodData.labelNutrients.calories}</p>
+    //             <p>{Math.round(foodData.labelNutrients.calories.value * servingSizeAmnt.amount)}</p>
+    //         </div>
+    //         <div classname="nutrient-container">
+    //             <p>{foodData.labelNutrients.fat}</p>
+    //             <p>{Math.round(foodData.labelNutrients.fat.value * servingSizeAmnt.amount)}</p>
+    //         </div>
+    //         <div classname="nutrient-container">
+    //             <p>{foodData.labelNutrients.transFat}</p>
+    //             <p>{Math.round(foodData.labelNutrients.transFat.value * servingSizeAmnt.amount)}</p>
+    //         </div>
+    //         <div classname="nutrient-container">
+    //             <p>{foodData.labelNutrients.carbohydrates}</p>
+    //             <p>{Math.round(foodData.labelNutrients.carbohydrates.value * servingSizeAmnt.amount)}</p>
+    //         </div>
+    //         <div classname="nutrient-container">
+    //             <p>{foodData.labelNutrients.transFat}</p>
+    //             <p>{Math.round(foodData.labelNutrients.transFat.value * servingSizeAmnt.amount)}</p>
+    //         </div>
+    //     </div>
+    
     
 
     const formulaGramsToOz = 0.035274
     const originalServingSize = foodData && `${foodData.servingSize * servingSizeAmnt.amount}${foodData.servingSizeUnit}`
     const originalServingSizeOz = foodData && `${Math.round(foodData.servingSize * servingSizeAmnt.amount * formulaGramsToOz)}oz`
-    console.log(originalServingSize, originalServingSizeOz)
-    console.log(servingSizeAmnt.amount * foodData.servingSize)
+    // console.log(originalServingSize, originalServingSizeOz)
+    // console.log(foodData && servingSizeAmnt.amount * foodData.servingSize)
     return (
         <div className="food-detail-page">
             <div className="food-detail-top-container">
@@ -79,7 +159,10 @@ export default function FoodDetail() {
                 </form>
             }
             <div className="all-nutrients-container">
-                {nutrients ? nutrients : <h1></h1>}
+                {/* {foodData && foodData.labelNutrients !== undefined && foodData.labelNutrients !== null ? 
+                    (Object.keys(foodData.labelNutrients).length === 0 ? noNutrientsAvailable : nutrients) 
+                    : noNutrientsAvailable} */}
+                {nutrients}
             </div>
         </div>
     )
