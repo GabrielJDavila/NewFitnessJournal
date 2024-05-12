@@ -5,6 +5,9 @@ export default function FoodDetail() {
     const params = useParams()
     const foodId = params.id
     const [foodData, setFoodData] = useState(null)
+    const [servingSizeAmnt, setServingSizeAmnt] = useState({
+        amount: "1"
+    })
     const firstChar = foodData ? foodData.description.charAt(0).toUpperCase() : ""
     const slicedLetters = foodData ? foodData.description.toLowerCase().slice(1) : ""
     const capWord = foodData && firstChar + slicedLetters
@@ -32,45 +35,51 @@ export default function FoodDetail() {
         
     }
 
-    // const nutrients = []
-    // for(const key in foodData.labelNutrients) {
-    //     if(foodData.labelNutrients.hasOwnProperty(key)) {
-    //         const nutrient = foodData.labelNutrients[key]
-    //         nutrients.push(
-    //             <div></div>
-    //         )
-    //     }
-    // }
-
-    // const nutrientExample = foodData && foodData.labelNutrients ? Object.entries(foodData.labelNutrients) : ""
-    // console.log(foodData.labelNutrients)
+    function handleChange(name, value) {
+        setServingSizeAmnt(prev => ({
+            ...prev,
+            [name]: value
+        }))
+    }
 
     const nutrients = foodData && Object.entries(foodData.labelNutrients).map(([key, nutrient], index) => {
         return (
             <div key={index} className="nutrient-container">
                 <p>{key}</p>
-                <p>{Math.round(nutrient.value)}</p>
+                <p>{Math.round(nutrient.value * servingSizeAmnt.amount)}</p>
             </div>
         )
     })
-    console.log(nutrients)
+    
 
-    // const nutrients = foodData & foodData.labelNutrients.map((nutrient, index) => {
-    //     return (
-    //         <div key={index} className="nutrient-container">
-    //             {nutrient.value}
-    //         </div>
-    //     )
-    // })
-
+    const formulaGramsToOz = 0.035274
+    const originalServingSize = foodData && `${foodData.servingSize * servingSizeAmnt.amount}${foodData.servingSizeUnit}`
+    const originalServingSizeOz = foodData && `${Math.round(foodData.servingSize * servingSizeAmnt.amount * formulaGramsToOz)}oz`
+    console.log(originalServingSize, originalServingSizeOz)
+    console.log(servingSizeAmnt.amount * foodData.servingSize)
     return (
         <div className="food-detail-page">
             <div className="food-detail-top-container">
                 <BackBtn />
                 <p>{capWord}</p>
             </div>
+            {foodData && foodData.servingSize &&
+                <form className="serving-size-form">
+                    <input
+                        type="text"
+                        name="amount"
+                        value={servingSizeAmnt.amount}
+                        onChange={e => handleChange(e.target.name, e.target.value)}
+                    />
+                    <select>
+                        <option value={originalServingSize}>{originalServingSize}</option>
+                        <option value={originalServingSizeOz}>{originalServingSizeOz}</option>
+                        <option value={foodData.servingSize}>{foodData.servingSize}{foodData.servingSizeUnit}</option>
+                    </select>
+                </form>
+            }
             <div className="all-nutrients-container">
-                {nutrients}
+                {nutrients ? nutrients : <h1></h1>}
             </div>
         </div>
     )
