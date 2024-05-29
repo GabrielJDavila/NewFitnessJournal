@@ -205,45 +205,6 @@ button {
   height: 2rem;
 }
 
-/* ============= Profile Creation Page ============== */
-
-/* .profile-creation-container {}
-
-.profile-creation-container, .profile-creation {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  max-width: 600px;
-  margin: 5rem auto 0
-}
-
-.profile-creation-fieldset {
-  display: flex;
-  flex-direction: column;
-  padding: 1rem;
-  border: none;
-  width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.body-measurements-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: left;
-  margin: 0 auto;
-  width: 100%;
-}
-
-.weight-container, .height-container {
-  width: 100%;
-} */
-
-
-
 /* ============= header and nav styles ==============*/
 header {
   background: black;
@@ -340,13 +301,6 @@ header {
   
 }
 
-/* .userinfo-inner-div {
-  display: flex;
-  gap: .5rem;
-  align-items: center;
-  justify-content: space-between;
-} */
-
 .user-info-data-item {
   border-bottom: 1px solid rgb(203, 203, 203);
   padding: .5rem;
@@ -395,10 +349,6 @@ header {
 }
 
 /* ============ Category.jsx styles ===================*/
-
-.category-container {
- 
-}
 
 .category-dropdown {
   background: rgb(220, 104, 75);
@@ -482,8 +432,16 @@ header {
   background-repeat: no-repeat;
 }
 
-.dashboard-top-content-container, .dashboard-bottom-container {
-  display: grid;
+.dashboard-top-content-container {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  gap: 2rem;
+  width: 90%;
+  max-width: 600px;
+  margin: auto;
+  justify-content: center;
+  /* display: grid;
   grid-template-columns: 50% 50%;
   justify-content: center;
   align-items: center;
@@ -492,7 +450,7 @@ header {
   margin-top: 1rem;
   width: 100%;
   max-width: 700px;
-  margin: 0 auto;
+  margin: 0 auto; */
 }
 
 .log-container {
@@ -1405,10 +1363,6 @@ header {
 
 .food-description{}
 .food-calories-preview{}
-/* .text-sm {
-  font-size: 1rem;
-  width: 40px;
-} */
 
 .food-detail-page {
   margin-top: 6rem;

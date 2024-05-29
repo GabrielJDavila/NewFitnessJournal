@@ -18,7 +18,7 @@ export default function Dashboard() {
     const [averageLoggedTime, setAverageLoggedTime] = useState()
     const [newPR, setNewPR] = useState()
     const { currentUser } = useOutletContext()
-    
+    console.log(totalWorkouts)
     useEffect(() => {
         window.scrollTo(0, 0)
     })
@@ -104,32 +104,6 @@ export default function Dashboard() {
                     }
                 </div>
 
-                { totalWorkouts ?
-                <div className="log-container">
-                     <div className="log-title-container">
-                        <span className="material-symbols-outlined dash-icon">
-                            nutrition
-                        </span>
-                        <p className="log-title">Nutrition</p>
-                    </div>
-                    <div className="log-text-container">
-                        <p className="log-text">1500 / 2300cal</p>
-                    </div>
-                </div> :
-                <div className="log-container">
-                    <div className="log-title-container">
-                        <Skeleton variant="circular" width={25} height={25}/>
-                        <Skeleton variant="rounded" width="60%" height={10}/>
-                    </div>
-                    <div className="log-text-container">
-                        <Skeleton variant="rounded" width="100%" height={75}/>
-                    </div>
-                </div>
-                }
-
-            {/* </div>
-
-            <div className="dashboard-bottom-container"> */}
                 { averageLoggedTime ?
                     <div className="log-container">
                         <div className="log-title-container">
@@ -184,10 +158,6 @@ export default function Dashboard() {
                     </div>
                 }
 
-                {/* <p>Progress</p>
-                <div className="graph-container">
-                    <img src="./src/assets/graph.svg" className="graph"/>
-                </div> */}
             </div>
 
 

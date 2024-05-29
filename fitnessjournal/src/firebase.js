@@ -581,6 +581,7 @@ export async function retrieveCurrentExSetsReps(userCollection, userId, selected
             // return noWorkoutMessage
             // alert("no workout found for this date.")
             console.log("no workout for this date.")
+            return []
             
         }
 
@@ -605,24 +606,28 @@ export async function retrieveCurrentExSetsReps(userCollection, userId, selected
             repsSetsSnapshot.forEach(set => {
                 const setId = set.id
                 const { createdAt, reps, weight, weightType } = set.data()
-                // console.log(weight)
                 exerciseData.setsReps.push({
                     setId,
                     createdAt,
                     reps,
                     weight,
-                    weightType
+                    weightType,
+                    isPR: false // initialize isPR as false
                 })
             })
             exercises.push(exerciseData)
         }
 
+        const prCollectionRef = collection(userDocRef, "LatestPR")
+        const prSnapshot = await getDocs(prCollectionRef)
+        const prs = prSnapshot.docs.map(doc => console.log(doc.data()))
+
         // check for PRs in sets and reps (NEED TO IMPROVE PERFORMANCE HERE) 
-        const currWorkoutQuery = query(currentWorkoutCollectionRef)
-        const currWorkoutSnapshot = await getDocs(currWorkoutQuery)
+        // const currWorkoutQuery = query(currentWorkoutCollectionRef)
+        // const currWorkoutSnapshot = await getDocs(currWorkoutQuery)
 
-        let exercisePRs = []
-
+        // let exercisePRs = []
+        
         // for(const workout of currWorkoutSnapshot.docs) {
         //     const exercisesCollectionRef = collection(workout.ref, "exList")
         //     const exListQuery = query(exercisesCollectionRef)
@@ -723,8 +728,6 @@ export async function addSetsReps( exerciseId, weight, reps, weightType, userCol
 }
 
 export async function editSingleSet(exerciseId, setId, newReps, newWeight, userCollection, userId, selectedDate) {
-    // const dateString = selectedDate.toISOString().split("T")[0]
-    // console.log(dateString)
     try {
         const dateString = selectedDate.toISOString().split("T")[0]
         const userDocRef = doc(userCollection, userId)
