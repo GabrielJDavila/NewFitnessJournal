@@ -72,6 +72,7 @@ export default function NewEx(props) {
             scheme: "",
             weightUnit: ""
         })
+        window.location.reload()
     }
 
     function toggle() {
