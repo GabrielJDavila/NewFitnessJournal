@@ -13,7 +13,7 @@ export default function NewEx(props) {
     const [toggleMessageState, setToggleMessageState] = useState(false)
     const { currentUser } = useOutletContext()
     const { categoryId } = useParams()
-
+    console.log(props.reloadExData)
     async function loadData() {
         try {
             const data = await getAllCategories(usersInDB, currentUser)
@@ -22,6 +22,22 @@ export default function NewEx(props) {
             console.log("error retrieving data: ", e)
         }
     }
+
+    // async function loadExercisesData() {
+    //     try {
+    //         const catNameData = await retrieveSelectedCatName(usersInDB, currentUser, params.id)
+    //         setSelectedCat(prev => ({
+    //             ...prev,
+    //             name: catNameData
+    //         }))
+
+    //         const data = await retreiveExFromCategory(usersInDB, currentUser, params.id)
+    //         setExercises(data)
+    //         setHideSkeleton(prev => !prev)
+    //     } catch(e) {
+    //         console.log("error retrieving data: ", e)
+    //     }
+    // }
 
     useEffect(() => {
         loadData()
@@ -72,7 +88,6 @@ export default function NewEx(props) {
             scheme: "",
             weightUnit: ""
         })
-        window.location.reload()
     }
 
     function toggle() {

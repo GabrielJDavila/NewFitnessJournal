@@ -16,7 +16,7 @@ export default function LoadedExercises() {
     const [clickedEx, setClickedEx] = useState("")
     const { currentUser } = useOutletContext()
     const [toggleModal, setToggleModal] = useState(false)
-    
+    console.log(exercises)
     useEffect(() => {
         loadExercisesData()
     }, [])
@@ -46,7 +46,7 @@ export default function LoadedExercises() {
 
             const data = await retreiveExFromCategory(usersInDB, currentUser, params.id)
             setExercises(data)
-            setHideSkeleton(prev => !prev)
+            setHideSkeleton(true)
         } catch(e) {
             console.log("error retrieving data: ", e)
         }
