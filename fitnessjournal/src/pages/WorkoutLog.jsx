@@ -39,7 +39,7 @@ export default function WorkoutLog() {
     const stringDate = date.toISOString().split("T")[0]
     const [year, month, day] = stringDate.split("-")
     const formattedDate = `${month}/${day}/${year}`
-
+    console.log(workoutData)
     useEffect(() => {
         setShowSkel(true)
         loadExerciseList(date)

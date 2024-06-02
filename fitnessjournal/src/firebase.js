@@ -609,7 +609,8 @@ export async function retrieveCurrentExSetsReps(userCollection, userId, selected
                     reps,
                     weight,
                     weightType,
-                    isPR: false // initialize isPR as false
+                    isWeightPR: false,
+                    isRepsPR: false // initialize isPR as false
                 })
             })
             exercises.push(exerciseData)
@@ -636,73 +637,117 @@ export async function retrieveCurrentExSetsReps(userCollection, userId, selected
         // ------------------------------
         
         let exercisePRs = []
+        const latestPRref = collection(userDocRef, "latestPR")
+        const prSnapshot = await getDocs(latestPRref)
+        const prs = prSnapshot.empty ? [] : prSnapshot.docs.map(doc => doc.data())
+        console.log(prs)
+        for(const exercise of exercises) {
+            let prData = prs.find(pr => pr.exName === exercise.name)
+            console.log(prData)
+            if(!prData) {
+                prData = {
+                    exName: exercise.name,
+                    weight: 0,
+                    reps: 0,
+                    setId: null,
+                    createdAt: null
+                }
+                prs.push(prData)
+            }
+
+            for(const set of exercise.setsReps) {
+                if(parseInt(set.weight) > parseInt(prData.weight)) {
+                    set.isWeightPR = true
+                }
+                if(parseInt(set.reps) > parseInt(prData.reps)) {
+                    set.isRepsPR = true
+                }
+                if(set.isWeightPR || set.isRepsPR) {
+                    sendPRtoDash(userCollection, userId, exercise.name, set.setId, set.weight, set.reps, set.createdAt)
+                }
+                    // else {
+                    //     set.isWeightPR = false
+                    //     set.isRepsPR = false
+                    // }
+            }
+        }
         // check for PRs in sets and reps (NEED TO IMPROVE PERFORMANCE HERE) 
-        const currWorkoutQuery = query(currentWorkoutCollectionRef)
-        const currWorkoutSnapshot = await getDocs(currWorkoutQuery)
+        // const currWorkoutQuery = query(currentWorkoutCollectionRef)
+        // const currWorkoutSnapshot = await getDocs(currWorkoutQuery)
         
-        for(const workout of currWorkoutSnapshot.docs) {
-            const exercisesCollectionRef = collection(workout.ref, "exList")
-            const exListQuery = query(exercisesCollectionRef)
-            const exListSnapshot = await getDocs(exListQuery)
+        // for(const workout of currWorkoutSnapshot.docs) {
+        //     const exercisesCollectionRef = collection(workout.ref, "exList")
+        //     const exListQuery = query(exercisesCollectionRef)
+        //     const exListSnapshot = await getDocs(exListQuery)
 
-            for(const exercise of exListSnapshot.docs) {
-                const repsAndSetsRef = collection(exercise.ref, "currentEx")
-                const currentExQuery = query(repsAndSetsRef)
-                const currentExSnapshot = await getDocs(currentExQuery)
-                currentExSnapshot.forEach(doc => {
-                    const weight = doc.data().weight
-                    const reps = doc.data().reps
-                    console.log(exercise.data().name)
-                    const PRsDataObject = {
-                        id: exercise.id,
-                        maxWeight: weight,
-                        maxReps: reps
-                    }
+        //     for(const exercise of exListSnapshot.docs) {
+        //         const repsAndSetsRef = collection(exercise.ref, "currentEx")
+        //         const currentExQuery = query(repsAndSetsRef)
+        //         const currentExSnapshot = await getDocs(currentExQuery)
+        //         currentExSnapshot.forEach(doc => {
+        //             const weight = doc.data().weight
+        //             const reps = doc.data().reps
+        //             console.log(exercise.data().name)
+        //             const PRsDataObject = {
+        //                 id: exercise.id,
+        //                 maxWeight: weight,
+        //                 maxReps: reps
+        //             }
 
-                    const existingExerciseIndex = exercisePRs.findIndex(item => item.id === exercise.id)
-                    console.log(existingExerciseIndex)
-
-                    if(existingExerciseIndex === -1) {
-                        exercisePRs.push(PRsDataObject)
-                    } else {
-                        if(weight > exercisePRs[existingExerciseIndex].maxWeight) {
-                            exercisePRs[existingExerciseIndex].maxWeight = weight
-                        }
-                        if(reps > exercisePRs[existingExerciseIndex].maxReps) {
-                            exercisePRs[existingExerciseIndex].maxReps = reps
-                        }
-                    }
-                })
-            }
-        }
-        
-        for(const item of exercises) {
-        
-            for(const pr of exercisePRs) {
-                if(item.id === pr.id) {
-                    // console.log("matches", item.id, pr.id)
+        //             const existingExerciseIndex = exercisePRs.findIndex(item => item.id === exercise.id)
+        //             console.log(exercisePRs)
                     
-                    for(const set of item.setsReps) {
-                        if(set.weight === pr.maxWeight || set.reps === pr.maxReps) {
-                            // console.log(set.weight, pr.maxWeight)
-                            set.isPR = true
-                            if(set.isPR) {
-                                sendPRtoDash(userCollection, userId, item.name, set.setId, set.weight, set.reps, set.createdAt)
-                            }
-                        } else {
-                            set.isPR = false
-                        }
-                    }
-                } 
-                // else {
-                //     console.log("doesn't match", item.id, pr.id)
+        //             if(existingExerciseIndex === -1) {
+        //                 exercisePRs.push(PRsDataObject)
+        //             } else {
+        //                 if(weight > exercisePRs[existingExerciseIndex].maxWeight) {
+        //                     exercisePRs[existingExerciseIndex].maxWeight = weight
+        //                 }
+        //                 if(reps > exercisePRs[existingExerciseIndex].maxReps) {
+        //                     exercisePRs[existingExerciseIndex].maxReps = reps
+        //                 }
+        //             }
+        //         })
+        //     }
+        // }
+        
+        // for(const item of exercises) {
+        
+        //     for(const pr of exercisePRs) {
+        //         if(item.id === pr.id) {
+        //             // console.log("matches", item.id, pr.id)
+                    
+        //             for(const set of item.setsReps) {
+        //                 if(set.weight > pr.maxWeight) {
+        //                     set.isWeightPR = true
+        //                 }
+        //                 if(set.reps > pr.maxReps) {
+        //                     set.isRepsPR = true
+        //                 }
+        //                 if(set.isWeightPR || set.isRepsPR) {
+        //                     sendPRtoDash(userCollection, userId, item.name, set.setId, set.weight, set.reps, set.createdAt)
+        //                 } else {
+        //                     set.isWeightPR = false
+        //                     set.isRepsPR = false
+        //                 }
+        //                 // if(set.weight === pr.maxWeight || set.reps === pr.maxReps) {
+        //                 //     console.log(set.weight, pr.maxWeight)
+        //                 //     set.isPR = true
+        //                 //     if(set.isPR) {
+        //                 //         sendPRtoDash(userCollection, userId, item.name, set.setId, set.weight, set.reps, set.createdAt)
+        //                 //     }
+        //                 // } else {
+        //                 //     set.isPR = false
+        //                 // }
+        //             }
+        //         } 
+        //         // else {
+        //         //     console.log("doesn't match", item.id, pr.id)
                         
-                // }
-            }
-        }
-    
+        //         // }
+        //     }
+        // }
         data.push(exercisePRs, exercises)
-        console.log(exercises)
         return exercises
     } catch(e) {
         console.log("ERROR ERROR ABORT!!!: " , e)

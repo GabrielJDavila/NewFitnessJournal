@@ -20,7 +20,7 @@ export default function CurrentWorkoutList(props) {
                         <ul className="all-sets-container">
                             {ex.setsReps.map((set, setIndex) => (
                                 <li key={setIndex} className="set-container">
-                                    {set.isPR ?
+                                    {set.isWeightPR || set.isRepsPR ?
                                     <span className="material-symbols-outlined pr-icon">
                                         trophy
                                     </span> :
