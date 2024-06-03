@@ -543,7 +543,7 @@ export async function grabLatestPR(userCollection, userId) {
 
 // collect set data if user got a PR, and then send to firestore for later use
 async function sendPRtoDash(userCollection, userId, name, setId, weight, reps, createdAt) {
-   
+   console.log(setId)
     try {
         const userDocRef = doc(userCollection, userId)
         const latestPRref = collection(userDocRef, "latestPR")
@@ -614,6 +614,7 @@ export async function retrieveCurrentExSetsReps(userCollection, userId, selected
                 })
             })
             exercises.push(exerciseData)
+            console.log(exercises.setId)
         }
 
         // ------------------------------
@@ -649,28 +650,37 @@ export async function retrieveCurrentExSetsReps(userCollection, userId, selected
                     exName: exercise.name,
                     weight: 0,
                     reps: 0,
-                    setId: null,
+                    setId: exercise.setsReps,
                     createdAt: null
                 }
                 prs.push(prData)
             }
 
             for(const set of exercise.setsReps) {
-                if(parseInt(set.weight) > parseInt(prData.weight)) {
-                    set.isWeightPR = true
-                }
-                if(parseInt(set.reps) > parseInt(prData.reps)) {
-                    set.isRepsPR = true
-                }
-                if(set.isWeightPR || set.isRepsPR) {
-                    sendPRtoDash(userCollection, userId, exercise.name, set.setId, set.weight, set.reps, set.createdAt)
-                }
-                    // else {
-                    //     set.isWeightPR = false
-                    //     set.isRepsPR = false
-                    // }
+                // const isExistingPRSet = prData.prSets.find(prSet => prSet.weight === set.weight || prSet.reps === set.reps)
+
+                // if(!isExistingPRSet) {
+                    if(parseInt(set.weight) > parseInt(prData.weight)) {
+                        set.isWeightPR = true
+                    }
+                    if(parseInt(set.reps) > parseInt(prData.reps)) {
+                        set.isRepsPR = true
+                    }
+                    if(set.isWeightPR || set.isRepsPR) {
+                        // prData.prSets.push({weight: set.weight, reps: set.reps})
+                        sendPRtoDash(userCollection, userId, exercise.name, set.setId, set.weight, set.reps, set.createdAt)
+                    } else {
+                        set.isWeightPR = false
+                        set.isRepsPR = false
+                    }
+                // }
             }
         }
+
+        // for(const pr of prs) {
+        //     const prDocRef = doc(latestPRref, pr.id ? pr.id : doc().id)
+        //     await setDoc(prDocRef, pr)
+        // }
         // check for PRs in sets and reps (NEED TO IMPROVE PERFORMANCE HERE) 
         // const currWorkoutQuery = query(currentWorkoutCollectionRef)
         // const currWorkoutSnapshot = await getDocs(currWorkoutQuery)
