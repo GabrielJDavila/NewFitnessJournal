@@ -658,7 +658,7 @@ export async function retrieveCurrentExSetsReps(userCollection, userId, selected
 
             for(const set of exercise.setsReps) {
                 // const isExistingPRSet = prData.prSets.find(prSet => prSet.weight === set.weight || prSet.reps === set.reps)
-
+// COMPARE NEW SET TO PR SET THAT MATCHES find out how to do this better
                 // if(!isExistingPRSet) {
                     if(parseInt(set.weight) > parseInt(prData.weight)) {
                         set.isWeightPR = true
