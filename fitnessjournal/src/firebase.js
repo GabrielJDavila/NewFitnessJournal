@@ -543,7 +543,7 @@ export async function grabLatestPR(userCollection, userId) {
 
 // collect set data if user got a PR, and then send to firestore for later use
 async function sendPRtoDash(userCollection, userId, name, setId, weight, reps, createdAt) {
-   console.log(setId)
+   
     try {
         const userDocRef = doc(userCollection, userId)
         const latestPRref = collection(userDocRef, "latestPR")
@@ -614,7 +614,6 @@ export async function retrieveCurrentExSetsReps(userCollection, userId, selected
                 })
             })
             exercises.push(exerciseData)
-            console.log(exercises.setId)
         }
 
         // ------------------------------
@@ -641,16 +640,22 @@ export async function retrieveCurrentExSetsReps(userCollection, userId, selected
         const latestPRref = collection(userDocRef, "latestPR")
         const prSnapshot = await getDocs(latestPRref)
         const prs = prSnapshot.empty ? [] : prSnapshot.docs.map(doc => doc.data())
-        console.log(prs)
+    
         for(const exercise of exercises) {
             let prData = prs.find(pr => pr.exName === exercise.name)
-            console.log(prData)
+            // console.log(exercise)
+            
+            // Issue might be that I'm initializing weight and reps
+            // with 0. Anything more than 0 will be considered PR?
+            // So I need to add current sets weight and reps to PR
+            // data or find a better way to compare.
             if(!prData) {
                 prData = {
                     exName: exercise.name,
                     weight: 0,
                     reps: 0,
-                    setId: exercise.setsReps,
+                    exId: exercise.id,
+                    setId: null,
                     createdAt: null
                 }
                 prs.push(prData)
@@ -660,10 +665,17 @@ export async function retrieveCurrentExSetsReps(userCollection, userId, selected
                 // const isExistingPRSet = prData.prSets.find(prSet => prSet.weight === set.weight || prSet.reps === set.reps)
 // COMPARE NEW SET TO PR SET THAT MATCHES find out how to do this better
                 // if(!isExistingPRSet) {
-                    if(parseInt(set.weight) > parseInt(prData.weight)) {
+                    // console.log(prData.weight, prData.reps)
+                for(const prSet of prs) {
+                    if(prSet.setId === set.setId) {
+                        console.log(prSet.weight, set.weight)
+                    }
+
+                    // console.log(prSet.setId, set.setId)
+                    if(parseInt(set.weight) > parseInt(prSet.weight)) {
                         set.isWeightPR = true
                     }
-                    if(parseInt(set.reps) > parseInt(prData.reps)) {
+                    if(parseInt(set.reps) > parseInt(prSet.reps)) {
                         set.isRepsPR = true
                     }
                     if(set.isWeightPR || set.isRepsPR) {
@@ -673,6 +685,22 @@ export async function retrieveCurrentExSetsReps(userCollection, userId, selected
                         set.isWeightPR = false
                         set.isRepsPR = false
                     }
+
+                    // if(parseInt(set.weight) > parseInt(prData.weight)) {
+                    //     set.isWeightPR = true
+                    // }
+                    // if(parseInt(set.reps) > parseInt(prData.reps)) {
+                    //     set.isRepsPR = true
+                    // }
+                    // if(set.isWeightPR || set.isRepsPR) {
+                    //     // prData.prSets.push({weight: set.weight, reps: set.reps})
+                    //     sendPRtoDash(userCollection, userId, exercise.name, set.setId, set.weight, set.reps, set.createdAt)
+                    // } else {
+                    //     set.isWeightPR = false
+                    //     set.isRepsPR = false
+                    // }
+                }
+                    
                 // }
             }
         }
