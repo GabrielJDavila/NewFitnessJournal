@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react"
 import { Link, useOutletContext } from "react-router-dom"
-import { usersInDB, retrieveCurrentExSetsReps, editSingleSet, deleteEx, deleteSingleSet, deleteAllEx, reOrderWorkoutList } from "../firebase"
+import { usersInDB, retrieveCurrentExSetsRepsAndPRs, editSingleSet, deleteEx, deleteSingleSet, deleteAllEx, reOrderWorkoutList } from "../firebase"
 import ConfirmDeleteAllExModal from "../components/modals/ConfirmDeleteAllEx"
 import ConfirmDeleteExModal from "../components/modals/ConfirmDeleteExModal"
 import ConfirmDeleteSetModal from "../components/modals/ConfirmDeleteSetModal"
@@ -28,6 +28,7 @@ export default function WorkoutLog() {
         exIdToDelete: "",
         setIdToDelete: "",
     })
+    console.log(workoutData)
     const [newSetInfo, setNewSetInfo] = useState({
         reps: "",
         weight: "",
@@ -39,7 +40,7 @@ export default function WorkoutLog() {
     const stringDate = date.toISOString().split("T")[0]
     const [year, month, day] = stringDate.split("-")
     const formattedDate = `${month}/${day}/${year}`
-    console.log(workoutData)
+    
     useEffect(() => {
         setShowSkel(true)
         loadExerciseList(date)
@@ -52,8 +53,8 @@ export default function WorkoutLog() {
     async function loadExerciseList() {
         try {
             
-            const data = await retrieveCurrentExSetsReps(usersInDB, currentUser, date)
-            setWorkoutData(data)
+            const data = await retrieveCurrentExSetsRepsAndPRs(usersInDB, currentUser, date)
+            setWorkoutData(data.exercises)
             setShowSkel(false)
         } catch(e) {
             console.log("error fetching exercises list: ", e)
