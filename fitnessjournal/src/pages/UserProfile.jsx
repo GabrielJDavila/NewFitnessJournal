@@ -13,7 +13,7 @@ import ProfileCreation from "./ProfileCreation"
 
     useEffect(() => {
         loadUserData()
-    }, [])
+    }, [userData])
 
     async function loadUserData() {
         try {
