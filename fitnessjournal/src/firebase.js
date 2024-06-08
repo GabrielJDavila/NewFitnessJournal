@@ -567,6 +567,10 @@ async function sendPRtoDash(userCollection, userId, name, setId, weight, reps, c
     }
 }
 
+// need to implement sendPRToDash
+// A way to make the code easier to load: render only the data that changes.
+// so when a user makes a change like adding an exercise, adding a set, retrieve the changed data,
+// but keep the old data. I can perhaps do this by saving the inital data to local storage?
 export async function retrieveCurrentExSetsRepsAndPRs(userCollection, userId, selectedDate) {
     try {
         const dateString = selectedDate.toISOString().split("T")[0]
