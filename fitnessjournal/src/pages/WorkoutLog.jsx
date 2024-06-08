@@ -28,7 +28,7 @@ export default function WorkoutLog() {
         exIdToDelete: "",
         setIdToDelete: "",
     })
-    console.log(workoutData)
+    
     const [newSetInfo, setNewSetInfo] = useState({
         reps: "",
         weight: "",
@@ -54,8 +54,11 @@ export default function WorkoutLog() {
         try {
             
             const data = await retrieveCurrentExSetsRepsAndPRs(usersInDB, currentUser, date)
-            setWorkoutData(data.exercises)
-            setShowSkel(false)
+            if(data) {
+                setWorkoutData(data.exercises)
+                setShowSkel(false)
+            }
+            
         } catch(e) {
             console.log("error fetching exercises list: ", e)
         }
@@ -303,7 +306,8 @@ export default function WorkoutLog() {
                 {showSkel &&
                     workoutSkels
                 }
-                { workoutData.length > 0 && !showSkel &&
+                {/* workoutData > 0 */}
+                { workoutData && !showSkel &&
                     <DragDropContext onDragEnd={handleDragEnd}>
                         <Droppable droppableId="workoutData">
                             {(provided) => (
@@ -326,7 +330,8 @@ export default function WorkoutLog() {
                         </Droppable>
                     </DragDropContext>
                 }
-                {!showSkel && workoutData.length === 0 && <h1 className="current-log-title">Workout Log Empty {formattedDate}</h1>}
+                {/* workoutData.length === 0 */}
+                {!showSkel && !workoutData && <h1 className="current-log-title">Workout Log Empty {formattedDate}</h1>}
             </div>
         </div>
     )
