@@ -12,6 +12,24 @@ import Calendar from "react-calendar"
 import "react-calendar/dist/Calendar.css"
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
 import { Skeleton } from "@mui/material"
+import {
+    getFirestore,
+    collection,
+    getDocs,
+    getDoc,
+    addDoc,
+    deleteDoc,
+    setDoc,
+    doc,
+    query,
+    updateDoc,
+    where,
+    serverTimestamp,
+    orderBy,
+    Timestamp,
+    limit,
+    onSnapshot
+} from "firebase/firestore"
 
 export default function WorkoutLog() {
     const [workoutData, setWorkoutData] = useState([])
@@ -40,6 +58,11 @@ export default function WorkoutLog() {
     const stringDate = date.toISOString().split("T")[0]
     const [year, month, day] = stringDate.split("-")
     const formattedDate = `${month}/${day}/${year}`
+
+    // const userDocRef = doc(usersInDB, currentUser)
+    // const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
+    // const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, date)
+    // const exercisesCollectionRef = collection(dateOfWorkoutDocRef, "exList")
     
     useEffect(() => {
         setShowSkel(true)
@@ -63,6 +86,12 @@ export default function WorkoutLog() {
             console.log("error fetching exercises list: ", e)
         }
     }
+
+    // const unsub = onSnapshot(exercisesCollectionRef, (doc) => {
+    //     doc.forEach(doc => {
+    //         console.log("current data: ", doc.data())
+    //     })    
+    // })
 
     async function reOrderList(exerciseId, newIndex, userCollection, userId, date) {
         try {
@@ -165,6 +194,10 @@ export default function WorkoutLog() {
         if(calendarRef.current && !calendarRef.current.contains(e.target)) {
             setToggleCalendar(false)
         }
+    }
+
+    function handleClick(e) {
+        console.log(e.currentTarget.getAttribute("data-currentex"))
     }
 
     document.addEventListener("click", handleClickOutside)
@@ -319,7 +352,7 @@ export default function WorkoutLog() {
                                         usersInDB={usersInDB}
                                         currentUser={currentUser}
                                         date={date}
-                                        
+                                        handleClick={handleClick}
                                         toggleDel={e => toggleDelete(e, setCurrentItemToDelete, setToggleDeleteExModal, setToggleDeleteSetModal)}
                                         toggleEdit={e => toggleEdit(e, setNewSetInfo, setToggleEditSetModal)}
                                     />

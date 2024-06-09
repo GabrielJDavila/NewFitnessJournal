@@ -15,7 +15,8 @@ import {
     serverTimestamp,
     orderBy,
     Timestamp,
-    limit
+    limit,
+    onSnapshot
 } from "firebase/firestore"
 import { createUserWithEmailAndPassword, fetchSignInMethodsForEmail, getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth"
 // TODO: Add SDKs for Firebase products that you want to use
@@ -571,6 +572,26 @@ async function sendPRtoDash(userCollection, userId, name, setId, weight, reps, c
 // A way to make the code easier to load: render only the data that changes.
 // so when a user makes a change like adding an exercise, adding a set, retrieve the changed data,
 // but keep the old data. I can perhaps do this by saving the inital data to local storage?
+
+// export async function unsub(userCollection, userId, selectedDate) {
+//     try {
+//         const dateString = selectedDate.toISOString().split("T")[0]
+//         const userDocRef = doc(userCollection, userId)
+//         const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
+//         const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, dateString)
+//         const exercisesCollectionRef = collection(dateOfWorkoutDocRef, "exList")
+
+//         onSnapshot(exercisesCollectionRef, (doc) => {
+//             doc.forEach(doc => {
+//                 console.log("current data: ", doc.data())
+//             })    
+//         })
+
+//     } catch(error) {
+//         console.error("error fetching update: ", error)
+//     }
+// }
+
 export async function retrieveCurrentExSetsRepsAndPRs(userCollection, userId, selectedDate) {
     try {
         const dateString = selectedDate.toISOString().split("T")[0]
@@ -586,6 +607,13 @@ export async function retrieveCurrentExSetsRepsAndPRs(userCollection, userId, se
         }
 
         const exercisesCollectionRef = collection(dateOfWorkoutDocRef, "exList")
+
+        const unsub = onSnapshot(exercisesCollectionRef, (doc) => {
+            doc.forEach(doc => {
+                console.log("current data: ", doc.data())
+            })
+            
+        })
         const exListQuery = query(exercisesCollectionRef, orderBy("index", "asc"))
         const exerciseSnapshot = await getDocs(exListQuery)
         const exercisesPromises = []

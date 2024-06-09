@@ -769,7 +769,8 @@ header {
 }
 
 .add-set-link {
-  width: 100%;
+  width: 40%;
+  margin: 1rem auto 0;
 }
 
 .set-detail {
@@ -778,9 +779,9 @@ header {
 }
 
 .add-set-btn {
-  width: 50%;
+  width: 100%;
   height: 50px;
-  margin: 1rem auto;
+  margin: 0 auto;
   text-align: center;
   
 }

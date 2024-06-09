@@ -1,12 +1,20 @@
 import { Link, useOutletContext } from "react-router-dom"
 import { Draggable } from "react-beautiful-dnd"
 export default function CurrentWorkoutList(props) {
-
+    
     const currentWorkout = props.data.map((ex, index) => {
         return (
             <Draggable key={ex.id} draggableId={ex.id} index={index}>
                 {(provided) => (
-                    <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} key={index} className="rendered-ex-dash-container">
+                    <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        key={index}
+                        data-currentex={index}
+                        onClick={e => props.handleClick(e)}
+                        className="rendered-ex-dash-container"
+                    >
                         <div className="ex-name-container">
                             <p className="ex-number">{index + 1}</p>
                             <p className="current-ex-name">{ex.name}</p>
