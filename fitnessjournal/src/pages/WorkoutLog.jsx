@@ -12,24 +12,6 @@ import Calendar from "react-calendar"
 import "react-calendar/dist/Calendar.css"
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
 import { Skeleton } from "@mui/material"
-import {
-    getFirestore,
-    collection,
-    getDocs,
-    getDoc,
-    addDoc,
-    deleteDoc,
-    setDoc,
-    doc,
-    query,
-    updateDoc,
-    where,
-    serverTimestamp,
-    orderBy,
-    Timestamp,
-    limit,
-    onSnapshot
-} from "firebase/firestore"
 
 export default function WorkoutLog() {
     const [workoutData, setWorkoutData] = useState([])
