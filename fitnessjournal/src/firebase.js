@@ -595,7 +595,6 @@ async function sendPRtoDash(userCollection, userId, name, setId, weight, reps, c
 export async function retrieveCurrentExSetsRepsAndPRs(userCollection, userId, selectedDate) {
     try {
         const dateString = selectedDate.toISOString().split("T")[0]
-        const data = []
         const userDocRef = doc(userCollection, userId)
         const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
         const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, dateString)
@@ -605,15 +604,13 @@ export async function retrieveCurrentExSetsRepsAndPRs(userCollection, userId, se
             return []
             
         }
-
         const exercisesCollectionRef = collection(dateOfWorkoutDocRef, "exList")
-
-        const unsub = onSnapshot(exercisesCollectionRef, (doc) => {
-            doc.forEach(doc => {
-                console.log("current data: ", doc.data())
-            })
+        // const unsub = onSnapshot(exercisesCollectionRef, (doc) => {
+        //     doc.forEach(doc => {
+        //         data.push(doc.data())
+        //     })
             
-        })
+        // })
         const exListQuery = query(exercisesCollectionRef, orderBy("index", "asc"))
         const exerciseSnapshot = await getDocs(exListQuery)
         const exercisesPromises = []
@@ -670,7 +667,6 @@ async function fetchAllExPRs(currentWorkoutCollectionRef) {
             const exListSnapshot = await getDocs(exListQuery)
 
             for(const exercise of exListSnapshot.docs) {
-                console.log(exercise.data().name)
                 const repsAndSetsRef = collection(exercise.ref, "currentEx")
                 const currentExQuery = query(repsAndSetsRef)
                 const currentExSnapshot = await getDocs(currentExQuery)
@@ -682,10 +678,8 @@ async function fetchAllExPRs(currentWorkoutCollectionRef) {
                         maxWeight: weight,
                         maxReps: reps
                     }
-                    console.log(exercise.id, PRsDataObject.id)
 
                     const existingExerciseIndex = exercisePRs.findIndex(item => item.id === exercise.id)
-                    console.log(existingExerciseIndex)
                     
                     if(existingExerciseIndex === -1) {
                         exercisePRs.push(PRsDataObject)
