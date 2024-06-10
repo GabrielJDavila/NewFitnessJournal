@@ -547,7 +547,7 @@ async function sendPRtoDash(userCollection, userId, name, setId, weight, reps, c
    
     try {
         const userDocRef = doc(userCollection, userId)
-        const latestPRref = collection(userDocRef, "latestPR")
+        const latestPRref = collection(userDocRef, "latestPRs")
         const exSetDocRef = doc(latestPRref, setId)
         const docSnap = await getDoc(exSetDocRef)
         if(docSnap.exists()) {
@@ -573,30 +573,12 @@ async function sendPRtoDash(userCollection, userId, name, setId, weight, reps, c
 // so when a user makes a change like adding an exercise, adding a set, retrieve the changed data,
 // but keep the old data. I can perhaps do this by saving the inital data to local storage?
 
-// export async function unsub(userCollection, userId, selectedDate) {
-//     try {
-//         const dateString = selectedDate.toISOString().split("T")[0]
-//         const userDocRef = doc(userCollection, userId)
-//         const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
-//         const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, dateString)
-//         const exercisesCollectionRef = collection(dateOfWorkoutDocRef, "exList")
-
-//         onSnapshot(exercisesCollectionRef, (doc) => {
-//             doc.forEach(doc => {
-//                 console.log("current data: ", doc.data())
-//             })    
-//         })
-
-//     } catch(error) {
-//         console.error("error fetching update: ", error)
-//     }
-// }
-
 export async function retrieveCurrentExSetsRepsAndPRs(userCollection, userId, selectedDate) {
     try {
         const dateString = selectedDate.toISOString().split("T")[0]
         const userDocRef = doc(userCollection, userId)
         const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
+        const latestPRsCollectionRef = collection(userDocRef, "latestPRs")
         const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, dateString)
         const dateDocSnap = await getDoc(dateOfWorkoutDocRef)
         if(!dateDocSnap.exists()) {
@@ -614,7 +596,7 @@ export async function retrieveCurrentExSetsRepsAndPRs(userCollection, userId, se
         })
 
         const exercises = await Promise.all(exercisesPromises)
-        const exercisePRs = await fetchAllExPRs(currentWorkoutCollectionRef)
+        const exercisePRs = await fetchAllExPRs(currentWorkoutCollectionRef, latestPRsCollectionRef, userCollection, userId)
         console.log(exercises, exercisePRs)
         return { exercises, exercisePRs }
     } catch(error) {
@@ -650,10 +632,14 @@ async function fetchExData(exDoc) {
             return exerciseData
 }
 
-async function fetchAllExPRs(currentWorkoutCollectionRef) {
+async function fetchAllExPRs(currentWorkoutCollectionRef, latestPRsCollectionRef, userCollection, userId) {
     const currWorkoutQuery = query(currentWorkoutCollectionRef)
-        const currWorkoutSnapshot = await getDocs(currWorkoutQuery)
-        let exercisePRs = []
+    const currWorkoutSnapshot = await getDocs(currWorkoutQuery)
+    const PRsQuery = query(latestPRsCollectionRef)
+    const PRsSnapshot = await getDocs(PRsQuery)
+    let sets = []
+    let PRsInDB = []
+
         for(const workout of currWorkoutSnapshot.docs) {
             const exercisesCollectionRef = collection(workout.ref, "exList")
             const exListQuery = query(exercisesCollectionRef)
@@ -664,36 +650,55 @@ async function fetchAllExPRs(currentWorkoutCollectionRef) {
                 const currentExQuery = query(repsAndSetsRef)
                 const currentExSnapshot = await getDocs(currentExQuery)
                 currentExSnapshot.forEach(doc => {
-                    const weight = doc.data().weight
-                    const reps = doc.data().reps
+                    const weight = Number(doc.data().weight)
+                    const reps = Number(doc.data().reps)
                     // PRsDataObject is not a PR object, but an instance of each exercise's set that has been logged.
                     // I can use this to compare to PRs. Each time I make a new set, compare this to PRs collection.
                     // If it doesn't exist, it is a PR. If it matches or is less than a set of specific exercise,
                     // it is not a PR.
-                    const PRsDataObject = {
+                    const SetDataObject = {
                         id: exercise.id,
+                        createdAt: doc.data().createdAt,
                         name: exercise.data().name,
-                        maxWeight: weight,
-                        maxReps: reps
+                        weight: weight,
+                        reps: reps
                     }
-                    console.log(PRsDataObject)
+                    
+                    sendPRtoDash(userCollection, userId, SetDataObject.name, SetDataObject.id, SetDataObject.weight, SetDataObject.reps, SetDataObject.createdAt)
 
-                    const existingExerciseIndex = exercisePRs.findIndex(item => item.id === exercise.id)
+                    const existingExerciseIndex = sets.findIndex(item => item.id === exercise.id)
                     
                     if(existingExerciseIndex === -1) {
-                        exercisePRs.push(PRsDataObject)
-                    } else {
-                        if(weight > exercisePRs[existingExerciseIndex].maxWeight) {
-                            exercisePRs[existingExerciseIndex].maxWeight = weight
-                        }
-                        if(reps > exercisePRs[existingExerciseIndex].maxReps) {
-                            exercisePRs[existingExerciseIndex].maxReps = reps
-                        }
+                        sets.push(SetDataObject)
                     }
+                    for(const pr of PRsSnapshot.docs) {
+                        console.log(pr.data())
+                        const previousPRWeight = pr.data().weight
+                        const previousPRReps = pr.data().reps
+                        console.log(previousPRWeight, previousPRReps)
+                        // if(previousPRWeight > sets[existingExerciseIndex].weight) {
+                        //     console.log(true)
+                        // } else {
+                        //     console.log(false)
+                        // }
+                    }
+                    
+                        
+                    // })
+                    
+                    // } else {
+                    //     if(weight > PRsInDB[existingExerciseIndex].weight) {
+                    //         console.log(exercise.id, PRsInDB[existingExerciseIndex].id)
+                    //         PRsInDB[existingExerciseIndex].weight = weight
+                    //     }
+                    //     if(reps > PRsInDB[existingExerciseIndex].reps) {
+                    //         PRsInDB[existingExerciseIndex].reps = reps
+                    //     }
+                    // }
                 })
             }
         }
-        return exercisePRs
+    return sets 
     // const currWorkoutQuery = query(currentWorkoutCollectionRef)
     //     const currWorkoutSnapshot = await getDocs(currWorkoutQuery)
     //     let exercisePRs = []
@@ -710,7 +715,7 @@ async function fetchAllExPRs(currentWorkoutCollectionRef) {
     //             if(existingExerciseIndex === -1) {
     //                 exercisePRs.push(pr)
     //             } else {
-    //                 if(pr.maxWeight > exercisePRs[existingExerciseIndex].maxWeight) {
+    //                 if(pr.weight > exercisePRs[existingExerciseIndex].maxWeight) {
     //                     exercisePRs[existingExerciseIndex].maxWeight = pr.maxWeight
     //                 }
     //                 if(pr.maxReps > exercisePRs[existingExerciseIndex].maxReps) {
