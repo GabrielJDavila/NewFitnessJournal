@@ -605,12 +605,6 @@ export async function retrieveCurrentExSetsRepsAndPRs(userCollection, userId, se
             
         }
         const exercisesCollectionRef = collection(dateOfWorkoutDocRef, "exList")
-        // const unsub = onSnapshot(exercisesCollectionRef, (doc) => {
-        //     doc.forEach(doc => {
-        //         data.push(doc.data())
-        //     })
-            
-        // })
         const exListQuery = query(exercisesCollectionRef, orderBy("index", "asc"))
         const exerciseSnapshot = await getDocs(exListQuery)
         const exercisesPromises = []
@@ -621,7 +615,7 @@ export async function retrieveCurrentExSetsRepsAndPRs(userCollection, userId, se
 
         const exercises = await Promise.all(exercisesPromises)
         const exercisePRs = await fetchAllExPRs(currentWorkoutCollectionRef)
-
+        console.log(exercises, exercisePRs)
         return { exercises, exercisePRs }
     } catch(error) {
         console.error("error fetching current workout data and PRs: ", error)
@@ -638,7 +632,6 @@ async function fetchExData(exDoc) {
                 id: exId,
                 name: exDoc.data().name,
                 setsReps: []
-
             }
 
             repsSetsSnapshot.forEach(set => {
@@ -673,11 +666,17 @@ async function fetchAllExPRs(currentWorkoutCollectionRef) {
                 currentExSnapshot.forEach(doc => {
                     const weight = doc.data().weight
                     const reps = doc.data().reps
+                    // PRsDataObject is not a PR object, but an instance of each exercise's set that has been logged.
+                    // I can use this to compare to PRs. Each time I make a new set, compare this to PRs collection.
+                    // If it doesn't exist, it is a PR. If it matches or is less than a set of specific exercise,
+                    // it is not a PR.
                     const PRsDataObject = {
                         id: exercise.id,
+                        name: exercise.data().name,
                         maxWeight: weight,
                         maxReps: reps
                     }
+                    console.log(PRsDataObject)
 
                     const existingExerciseIndex = exercisePRs.findIndex(item => item.id === exercise.id)
                     
