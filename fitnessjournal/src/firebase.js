@@ -664,24 +664,26 @@ async function fetchAllExPRs(currentWorkoutCollectionRef, latestPRsCollectionRef
                         reps: reps
                     }
                     
-                    sendPRtoDash(userCollection, userId, SetDataObject.name, SetDataObject.id, SetDataObject.weight, SetDataObject.reps, SetDataObject.createdAt)
+                    // sendPRtoDash(userCollection, userId, SetDataObject.name, SetDataObject.id, SetDataObject.weight, SetDataObject.reps, SetDataObject.createdAt)
 
                     const existingExerciseIndex = sets.findIndex(item => item.id === exercise.id)
                     
                     if(existingExerciseIndex === -1) {
                         sets.push(SetDataObject)
+                    } else {
+                        for(const pr of PRsSnapshot.docs) {
+                        
+                            const previousPRWeight = pr.data().weight
+                            const previousPRReps = pr.data().reps
+                            console.log(sets[existingExerciseIndex].weight)
+                            // if(previousPRWeight > sets[existingExerciseIndex].weight) {
+                            //     console.log(true)
+                            // } else {
+                            //     console.log(false)
+                            // }
+                        }
                     }
-                    for(const pr of PRsSnapshot.docs) {
-                        console.log(pr.data())
-                        const previousPRWeight = pr.data().weight
-                        const previousPRReps = pr.data().reps
-                        console.log(previousPRWeight, previousPRReps)
-                        // if(previousPRWeight > sets[existingExerciseIndex].weight) {
-                        //     console.log(true)
-                        // } else {
-                        //     console.log(false)
-                        // }
-                    }
+                    
                     
                         
                     // })
