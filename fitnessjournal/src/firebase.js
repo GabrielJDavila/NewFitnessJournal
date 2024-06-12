@@ -603,7 +603,8 @@ export async function retrieveCurrentExSetsRepsAndPRs(userCollection, userId, se
             if(exercise.setsReps.length > 0) {
                 for(const set of exercise.setsReps) {
                     for(let i = 0; i < exercisePRs.length; i++) {
-                        console.log(exercisePRs[i].exName)
+                        console.log(exercisePRs[i])
+                        console.log(exercise.name)
                         if(exercise.name === exercisePRs[i].exName) {
                             console.log(exercise.name, exercisePRs[i].exName)
                             // if matching name, compare wieght and reps combinations for PRs.
