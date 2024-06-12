@@ -28,6 +28,7 @@ export default function WorkoutLog() {
         exIdToDelete: "",
         setIdToDelete: "",
     })
+    console.log(workoutData)
     
     const [newSetInfo, setNewSetInfo] = useState({
         reps: "",
@@ -59,6 +60,7 @@ export default function WorkoutLog() {
         try {
             
             const data = await retrieveCurrentExSetsRepsAndPRs(usersInDB, currentUser, date)
+            console.log(data)
             if(data) {
                 setWorkoutData(data.exercises)
                 setShowSkel(false)

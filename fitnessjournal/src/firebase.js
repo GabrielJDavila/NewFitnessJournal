@@ -543,7 +543,7 @@ export async function grabLatestPR(userCollection, userId) {
 }
 
 // collect set data if user got a PR, and then send to firestore for later use
-async function sendPRtoDash(userCollection, userId, name, setId, weight, reps, createdAt) {
+async function sendPRtoDash(userCollection, userId, name, exerciseId, setId, weight, reps, createdAt) {
    
     try {
         const userDocRef = doc(userCollection, userId)
@@ -556,7 +556,7 @@ async function sendPRtoDash(userCollection, userId, name, setId, weight, reps, c
 
             await setDoc(exSetDocRef, {
                 exName: name,
-                setId: setId,
+                exId: exerciseId,
                 weight: weight,
                 reps: reps,
                 createdAt: createdAt
@@ -597,21 +597,26 @@ export async function retrieveCurrentExSetsRepsAndPRs(userCollection, userId, se
 
         const exercises = await Promise.all(exercisesPromises)
         const exercisePRs = await fetchAllExPRs(currentWorkoutCollectionRef, exercisesCollectionRef, latestPRsCollectionRef, userCollection, userId)
-        console.log(exercises, exercisePRs)
+        console.log(exercisePRs)
         for(const exercise of exercises) {
             
             if(exercise.setsReps.length > 0) {
                 for(const set of exercise.setsReps) {
                     for(let i = 0; i < exercisePRs.length; i++) {
                         console.log(exercisePRs[i])
-                        console.log(exercise.name)
-                        if(exercise.name === exercisePRs[i].exName) {
-                            console.log(exercise.name, exercisePRs[i].exName)
-                            // if matching name, compare wieght and reps combinations for PRs.
+                        if(exercise.id === exercisePRs[i].setId && (set.weight > exercisePRs[i].weight && set.isPR === false)) {
+                            console.log(exercise.id, exercisePRs[i].setId)
+                            sendPRtoDash(userCollection, userId, exercise.name, exercise.id, set.setId, set.weight, set.reps, set.createdAt)
+                            set.isPR = true
+                            // if matching name, compare weight and reps combinations for PRs.
                             // if a suitable PR, push to exercisePRs. If not, do nothing.
-                        } else {
-                            console.log("no match")
+
                         }
+                        if(exercise.id === exercisePRs[i].setId && (set.reps > exercisePRs[i].reps && set.weight <= exercisePRs[i].weight) && set.isPR === false) {
+                            set.isPR = true
+                            sendPRtoDash(userCollection, userId, exercise.name, exercise.id, set.setId, set.weight, set.reps, set.createdAt)
+                        }
+                        sendPRtoDash(userCollection, userId, exercise.name, exercise.id, set.setId, set.weight, set.reps, set.createdAt)
                     }
                 }
             } else {
@@ -645,24 +650,37 @@ async function fetchExData(exDoc) {
                     reps,
                     weight,
                     weightType,
-                    isWeightPR: false,
-                    isRepsPR: false // initialize isPR as false
+                    isPR: false // initialize isPR as false
                 })
             })
             return exerciseData
 }
 
 async function fetchAllExPRs(currentWorkoutCollectionRef, exercisesCollectionRef, latestPRsCollectionRef, userCollection, userId) {
-    const currWorkoutQuery = query(currentWorkoutCollectionRef)
+    // const currWorkoutQuery = query(currentWorkoutCollectionRef)
     // const currWorkoutSnapshot = await getDocs(currWorkoutQuery)
+    const exListQuery = query(exercisesCollectionRef, orderBy("index", "asc"))
+    const exerciseSnapshot = await getDocs(exListQuery)
     const PRsQuery = query(latestPRsCollectionRef)
     const PRsSnapshot = await getDocs(PRsQuery)
     let sets = []
     let PRsInDB = []
-
-    PRsSnapshot.forEach(doc => {
-        PRsInDB.push(doc.data())
-    })
+    if(PRsInDB.length > 0) {
+        PRsSnapshot.forEach(doc => {
+            PRsInDB.push(doc.data())
+        })
+    } else {
+        // iterate through exercises and add each current set to PRs, since there are no current PRs anyway.
+        // Since there are no PRs, any new set is technically a "PR". Push the set object to PRsInDB, make sure
+        // the data types match the types returned in above functions.
+        for(const exercise of exerciseSnapshot.docs) {
+            const repsAndSetsRef = collection(exercise.ref, "currentEx")
+            const currentExQuery = query(repsAndSetsRef)
+            const currentExSnapshot = await getDocs(currentExQuery)
+        }
+        console.log("nothing in PRsInDB!")
+    }
+    
     return PRsInDB 
 
         // for(const workout of currWorkoutSnapshot.docs) {
