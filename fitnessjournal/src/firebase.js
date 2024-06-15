@@ -677,6 +677,19 @@ async function fetchAllExPRs(currentWorkoutCollectionRef, exercisesCollectionRef
             const repsAndSetsRef = collection(exercise.ref, "currentEx")
             const currentExQuery = query(repsAndSetsRef)
             const currentExSnapshot = await getDocs(currentExQuery)
+            currentExSnapshot.forEach(doc => {
+                const weight = Number(doc.data().weight)
+                const reps = Number(doc.data().reps)
+                const SetDataObject = {
+                    setId: exercise.id,
+                    createdAt: doc.data().createdAt,
+                    exName: exercise.data().name,
+                    weight: weight,
+                    reps: reps
+                }
+
+                console.log(SetDataObject)
+            })
         }
         console.log("nothing in PRsInDB!")
     }
@@ -694,20 +707,16 @@ async function fetchAllExPRs(currentWorkoutCollectionRef, exercisesCollectionRef
             //     const repsAndSetsRef = collection(exercise.ref, "currentEx")
             //     const currentExQuery = query(repsAndSetsRef)
             //     const currentExSnapshot = await getDocs(currentExQuery)
-            //     currentExSnapshot.forEach(doc => {
-            //         const weight = Number(doc.data().weight)
-            //         const reps = Number(doc.data().reps)
-                    // PRsDataObject is not a PR object, but an instance of each exercise's set that has been logged.
-                    // I can use this to compare to PRs. Each time I make a new set, compare this to PRs collection.
-                    // If it doesn't exist, it is a PR. If it matches or is less than a set of specific exercise,
-                    // it is not a PR.
-                    // const SetDataObject = {
-                    //     setId: exercise.id,
-                    //     createdAt: doc.data().createdAt,
-                    //     exName: exercise.data().name,
-                    //     weight: weight,
-                    //     reps: reps
-                    // }
+                // currentExSnapshot.forEach(doc => {
+                //     const weight = Number(doc.data().weight)
+                //     const reps = Number(doc.data().reps)
+                //     const SetDataObject = {
+                //         setId: exercise.id,
+                //         createdAt: doc.data().createdAt,
+                //         exName: exercise.data().name,
+                //         weight: weight,
+                //         reps: reps
+                //     }
                     
                     // sendPRtoDash(userCollection, userId, SetDataObject.name, SetDataObject.id, SetDataObject.weight, SetDataObject.reps, SetDataObject.createdAt)
 
