@@ -666,11 +666,11 @@ async function fetchAllExPRs(currentWorkoutCollectionRef, exercisesCollectionRef
     const PRsSnapshot = await getDocs(PRsQuery)
     let sets = []
     let PRsInDB = []
-    if(PRsInDB.length > 0) {
-        PRsSnapshot.forEach(doc => {
-            PRsInDB.push(doc.data())
-        })
-    }
+    
+    PRsSnapshot.forEach(doc => {
+        PRsInDB.push(doc.data())
+    })
+    console.log(PRsInDB)
     // } else {
         // iterate through exercises and add each current set to PRs, since there are no current PRs anyway.
         // Since there are no PRs, any new set is technically a "PR". Push the set object to PRsInDB, make sure
@@ -705,12 +705,12 @@ async function fetchAllExPRs(currentWorkoutCollectionRef, exercisesCollectionRef
                 }
 
                 // check and see if set is in PRsInDB. We don't want copies of same set! filter out duplicates?
-                const existingExerciseIndex = PRsInDB.findIndex(item => item.id === exercise.id)
-                console.log(existingExerciseIndex)
-
+                const existingExerciseIndex = PRsInDB.findIndex(item => item.exId === exercise.id)
+                console.log(PRsInDB[existingExerciseIndex])
                 if(existingExerciseIndex === -1) {
                     PRsInDB.push(SetDataObject)
                 }
+                
             })
         }
         
@@ -721,7 +721,7 @@ async function fetchAllExPRs(currentWorkoutCollectionRef, exercisesCollectionRef
     // }
     console.log(PRsInDB)
     return PRsInDB 
-
+}
         // for(const workout of currWorkoutSnapshot.docs) {
             // const exCollectionRef = collection(dateOfWorkoutDocRef, "exList")
             // const exercisesCollectionRef = collection(workout.ref, "exList")
@@ -748,22 +748,22 @@ async function fetchAllExPRs(currentWorkoutCollectionRef, exercisesCollectionRef
 
                     // const existingExerciseIndex = PRsInDB.findIndex(item => item.id === exercise.id)
                     
-                    if(existingExerciseIndex === -1) {
-                        PRsInDB.push(SetDataObject)
-                    } else {
-                        for(const pr of PRsSnapshot.docs) {
+                    // if(existingExerciseIndex === -1) {
+                    //     PRsInDB.push(SetDataObject)
+                    // } else {
+                    //     for(const pr of PRsSnapshot.docs) {
                         
-                            const previousPRWeight = pr.data().weight
-                            const previousPRReps = pr.data().reps
-                            console.log(sets[existingExerciseIndex].name)
+                    //         const previousPRWeight = pr.data().weight
+                    //         const previousPRReps = pr.data().reps
+                    //         console.log(sets[existingExerciseIndex].name)
 
                             // if(previousPRWeight > sets[existingExerciseIndex].weight) {
                             //     console.log(true)
                             // } else {
                             //     console.log(false)
                             // }
-                        }
-                    }
+                    //     }
+                    // }
                     
                     
                         
@@ -807,7 +807,6 @@ async function fetchAllExPRs(currentWorkoutCollectionRef, exercisesCollectionRef
     //         })
     //     })
     //     return exercisePRs
-}
 
 async function fetchExercisePRs(workout) {
     const exercisesCollectionRef = collection(workout.ref, "exList")
