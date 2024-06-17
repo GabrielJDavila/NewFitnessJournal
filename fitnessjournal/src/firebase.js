@@ -521,7 +521,7 @@ export async function reOrderWorkoutList(exerciseId, newindex, userCollection, u
 export async function grabLatestPR(userCollection, userId) {
     try {
         const userDocRef = doc(userCollection, userId)
-        const latestPRref = collection(userDocRef, "latestPR")
+        const latestPRref = collection(userDocRef, "latestPRs")
         const prDocsQuery = query(latestPRref, orderBy("createdAt", "desc"), limit(1))
         const prDocsSnapshot = await getDocs(prDocsQuery)
         let prData = {}
