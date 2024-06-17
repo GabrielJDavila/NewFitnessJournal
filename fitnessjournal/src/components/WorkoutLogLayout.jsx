@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { Link, Outlet, useOutletContext } from "react-router-dom"
-import { deleteAllEx, usersInDB, retrieveCurrentExSetsReps } from "../firebase"
+import { deleteAllEx, usersInDB } from "../firebase"
 import EditSetModal from "./modals/EditSetModal"
 import CategoryNav from "./CategoryNav"
 

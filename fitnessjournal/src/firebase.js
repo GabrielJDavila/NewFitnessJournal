@@ -15,8 +15,7 @@ import {
     serverTimestamp,
     orderBy,
     Timestamp,
-    limit,
-    onSnapshot
+    limit
 } from "firebase/firestore"
 import { createUserWithEmailAndPassword, fetchSignInMethodsForEmail, getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth"
 // TODO: Add SDKs for Firebase products that you want to use
@@ -551,9 +550,14 @@ async function sendPRtoDash(userCollection, userId, name, exerciseId, weight, re
         const exSetDocRef = doc(latestPRref, exerciseId)
         const docSnap = await getDoc(exSetDocRef)
         if(docSnap.exists()) {
-            
+            await updateDoc(exSetDocRef, {
+                exName: name,
+                exId: exerciseId,
+                weight: weight,
+                reps: reps,
+                createdAt: createdAt
+            })
         } else {
-
             await setDoc(exSetDocRef, {
                 exName: name,
                 exId: exerciseId,
@@ -572,7 +576,6 @@ async function sendPRtoDash(userCollection, userId, name, exerciseId, weight, re
 // A way to make the code easier to load: render only the data that changes.
 // so when a user makes a change like adding an exercise, adding a set, retrieve the changed data,
 // but keep the old data. I can perhaps do this by saving the inital data to local storage?
-
 export async function retrieveCurrentExSetsRepsAndPRs(userCollection, userId, selectedDate) {
     try {
         const dateString = selectedDate.toISOString().split("T")[0]
@@ -597,38 +600,110 @@ export async function retrieveCurrentExSetsRepsAndPRs(userCollection, userId, se
 
         const exercises = await Promise.all(exercisesPromises)
         const exercisePRs = await fetchAllExPRs(currentWorkoutCollectionRef, exercisesCollectionRef, latestPRsCollectionRef, userCollection, userId)
-        console.log(exercisePRs)
+
         for(const exercise of exercises) {
-            
             if(exercise.setsReps.length > 0) {
+                let existingPR = exercisePRs.find(pr => pr.exId === exercise.id)
                 for(const set of exercise.setsReps) {
-                    for(let i = 0; i < exercisePRs.length; i++) {
-                        console.log(exercisePRs[i])
-                        if(exercise.id === exercisePRs[i].exId && (set.weight > exercisePRs[i].weight && set.isPR === false)) {
-                            // console.log(exercise.id, exercisePRs[i].setId)
-                            sendPRtoDash(userCollection, userId, exercise.name, exercise.id, set.weight, set.reps, set.createdAt)
-                            set.isPR = true
+                        let isPR = false
+                        if(!existingPR) {
+                            isPR = true
+                            existingPR = {...set}
+                        } else {
+                            if((set.weight > existingPR.weight) || (set.reps > existingPR.reps && set.weight <= existingPR.weight)) {
+                                
+                                isPR = true
+                                existingPR = {...set}                      
                             // if matching name, compare weight and reps combinations for PRs.
                             // if a suitable PR, push to exercisePRs. If not, do nothing.
-
+                            } 
                         }
-                        if(exercise.id === exercisePRs[i].exId && (set.reps > exercisePRs[i].reps && set.weight <= exercisePRs[i].weight) && set.isPR === false) {
+                        if(isPR) {
+                            await sendPRtoDash(userCollection, userId, exercise.name, exercise.id, set.weight, set.reps, set.createdAt)
                             set.isPR = true
-                            sendPRtoDash(userCollection, userId, exercise.name, exercise.id, set.weight, set.reps, set.createdAt)
+                            for(const otherSet of exercise.setsReps) {
+                                if(otherSet !== set) {
+                                    otherSet.isPR = false
+                                }
+                            }
                         }
-                        sendPRtoDash(userCollection, userId, exercise.name, exercise.id, set.weight, set.reps, set.createdAt)
-                    }
                 }
             } else {
                 console.log(`no sets yet for ${exercise.name}`)
             }
         }
-        console.log(exercises, exercisePRs)
         return { exercises, exercisePRs }
     } catch(error) {
         console.error("error fetching current workout data and PRs: ", error)
     }
 }
+// export async function retrieveCurrentExSetsRepsAndPRs(userCollection, userId, selectedDate) {
+//     try {
+//         const dateString = selectedDate.toISOString().split("T")[0]
+//         const userDocRef = doc(userCollection, userId)
+//         const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
+//         const latestPRsCollectionRef = collection(userDocRef, "latestPRs")
+//         const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, dateString)
+//         const dateDocSnap = await getDoc(dateOfWorkoutDocRef)
+//         if(!dateDocSnap.exists()) {
+//             console.log("no workout for this date.")
+//             return []
+            
+//         }
+//         const exercisesCollectionRef = collection(dateOfWorkoutDocRef, "exList")
+//         const exListQuery = query(exercisesCollectionRef, orderBy("index", "asc"))
+//         const exerciseSnapshot = await getDocs(exListQuery)
+//         const exercisesPromises = []
+
+//         exerciseSnapshot.forEach(exDoc => {
+//             exercisesPromises.push(fetchExData(exDoc))
+//         })
+
+//         const exercises = await Promise.all(exercisesPromises)
+//         const exercisePRs = await fetchAllExPRs(currentWorkoutCollectionRef, exercisesCollectionRef, latestPRsCollectionRef, userCollection, userId)
+//         console.log(exercisePRs)
+//         for(const exercise of exercises) {
+            
+//             if(exercise.setsReps.length > 0) {
+//                 for(const set of exercise.setsReps) {
+//                     for(let i = 0; i < exercisePRs.length; i++) {
+//                         console.log(exercisePRs[i].weight, set.weight)
+//                         if((exercise.id === exercisePRs[i].exId && (set.weight > exercisePRs[i].weight) && (set.createdAt.seconds > exercisePRs[i].createdAt.seconds)) || (exercise.id === exercisePRs[i].exId && (set.reps > exercisePRs[i].reps && set.weight <= exercisePRs[i].weight) && (set.createdAt.seconds > exercisePRs[i].createdAt.seconds))) {
+//                             console.log(set.createdAt.seconds, exercisePRs[i].createdAt.seconds)
+//                             set.isPR = true
+//                             console.log("set is PR")
+//                             // if matching name, compare weight and reps combinations for PRs.
+//                             // if a suitable PR, push to exercisePRs. If not, do nothing.
+
+//                         }
+//                         if(set.isPR === true && (set.createdAt.seconds > exercisePRs[i].createdAt.seconds)) {
+//                             console.log("sending set to PRsList")
+//                             sendPRtoDash(userCollection, userId, exercise.name, exercise.id, set.weight, set.reps, set.createdAt)
+//                         } else if(exercise.id === exercisePRs[i].exId && ((set.weight <= exercisePRs[i].weight) || (set.reps <= exercisePRs[i].reps)) ) {
+//                             set.isPR = false
+//                             console.log("set is not PR")
+//                         }
+                        
+//                         // if(exercise.id === exercisePRs[i].exId && (set.reps > exercisePRs[i].reps && set.weight <= exercisePRs[i].weight) && set.isPR === false) {
+                       
+//                         //      set.isPR = true
+                            
+//                         // } else {
+
+//                         // }
+//                         // sendPRtoDash(userCollection, userId, exercise.name, exercise.id, set.weight, set.reps, set.createdAt)
+//                     }
+//                 }
+//             } else {
+//                 console.log(`no sets yet for ${exercise.name}`)
+//             }
+//         }
+//         console.log(exercises, exercisePRs)
+//         return { exercises, exercisePRs }
+//     } catch(error) {
+//         console.error("error fetching current workout data and PRs: ", error)
+//     }
+// }
 
 async function fetchExData(exDoc) {
             const exId = exDoc.id
@@ -657,9 +732,7 @@ async function fetchExData(exDoc) {
             return exerciseData
 }
 
-async function fetchAllExPRs(currentWorkoutCollectionRef, exercisesCollectionRef, latestPRsCollectionRef, userCollection, userId) {
-    // const currWorkoutQuery = query(currentWorkoutCollectionRef)
-    // const currWorkoutSnapshot = await getDocs(currWorkoutQuery)
+async function fetchAllExPRs(exercisesCollectionRef, latestPRsCollectionRef) {
     const exListQuery = query(exercisesCollectionRef, orderBy("index", "asc"))
     const exerciseSnapshot = await getDocs(exListQuery)
     const PRsQuery = query(latestPRsCollectionRef)
@@ -670,25 +743,10 @@ async function fetchAllExPRs(currentWorkoutCollectionRef, exercisesCollectionRef
     PRsSnapshot.forEach(doc => {
         PRsInDB.push(doc.data())
     })
-    console.log(PRsInDB)
-    // } else {
         // iterate through exercises and add each current set to PRs, since there are no current PRs anyway.
         // Since there are no PRs, any new set is technically a "PR". Push the set object to PRsInDB, make sure
         // the data types match the types returned in above functions.
 
-    // for(const pr of PRsSnapshot.docs) {
-    //     console.log(pr.data())
-    //     PRsInDB.push(pr.data())
-        // const previousPRWeight = pr.data().weight
-        // const previousPRReps = pr.data().reps
-        // if(PRsInDB[existingExerciseIndex].weight > previousPRWeight) {}
-
-            // if(previousPRWeight > sets[existingExerciseIndex].weight) {
-            //     console.log(true)
-            // } else {
-            //     console.log(false)
-            // }
-    // }
         for(const exercise of exerciseSnapshot.docs) {
             const repsAndSetsRef = collection(exercise.ref, "currentEx")
             const currentExQuery = query(repsAndSetsRef)
@@ -703,231 +761,115 @@ async function fetchAllExPRs(currentWorkoutCollectionRef, exercisesCollectionRef
                     weight: weight,
                     reps: reps
                 }
-
                 // check and see if set is in PRsInDB. We don't want copies of same set! filter out duplicates?
                 const existingExerciseIndex = PRsInDB.findIndex(item => item.exId === exercise.id)
-                console.log(PRsInDB[existingExerciseIndex])
                 if(existingExerciseIndex === -1) {
                     PRsInDB.push(SetDataObject)
+                } else {
+                    console.log(PRsInDB[existingExerciseIndex])
                 }
                 
             })
         }
-        
-        //         }
-        //     })
-        // }
         console.log("nothing in PRsInDB!")
-    // }
-    console.log(PRsInDB)
     return PRsInDB 
-}
-        // for(const workout of currWorkoutSnapshot.docs) {
-            // const exCollectionRef = collection(dateOfWorkoutDocRef, "exList")
-            // const exercisesCollectionRef = collection(workout.ref, "exList")
-            // const exListQuery = query(exercisesCollectionRef)
-            // const exListSnapshot = await getDocs(exListQuery)
-
-            // for(const exercise of exListSnapshot.docs) {
-            //     exercise.data().name
-            //     const repsAndSetsRef = collection(exercise.ref, "currentEx")
-            //     const currentExQuery = query(repsAndSetsRef)
-            //     const currentExSnapshot = await getDocs(currentExQuery)
-                // currentExSnapshot.forEach(doc => {
-                //     const weight = Number(doc.data().weight)
-                //     const reps = Number(doc.data().reps)
-                //     const SetDataObject = {
-                //         setId: exercise.id,
-                //         createdAt: doc.data().createdAt,
-                //         exName: exercise.data().name,
-                //         weight: weight,
-                //         reps: reps
-                //     }
-                    
-                    // sendPRtoDash(userCollection, userId, SetDataObject.name, SetDataObject.id, SetDataObject.weight, SetDataObject.reps, SetDataObject.createdAt)
-
-                    // const existingExerciseIndex = PRsInDB.findIndex(item => item.id === exercise.id)
-                    
-                    // if(existingExerciseIndex === -1) {
-                    //     PRsInDB.push(SetDataObject)
-                    // } else {
-                    //     for(const pr of PRsSnapshot.docs) {
-                        
-                    //         const previousPRWeight = pr.data().weight
-                    //         const previousPRReps = pr.data().reps
-                    //         console.log(sets[existingExerciseIndex].name)
-
-                            // if(previousPRWeight > sets[existingExerciseIndex].weight) {
-                            //     console.log(true)
-                            // } else {
-                            //     console.log(false)
-                            // }
-                    //     }
-                    // }
-                    
-                    
-                        
-                    // })
-                    
-                    // } else {
-                    //     if(weight > PRsInDB[existingExerciseIndex].weight) {
-                    //         console.log(exercise.id, PRsInDB[existingExerciseIndex].id)
-                    //         PRsInDB[existingExerciseIndex].weight = weight
-                    //     }
-                    //     if(reps > PRsInDB[existingExerciseIndex].reps) {
-                    //         PRsInDB[existingExerciseIndex].reps = reps
-                    //     }
-                    // }
-            //     })
-            // }
-        // }
-    // const currWorkoutQuery = query(currentWorkoutCollectionRef)
-    //     const currWorkoutSnapshot = await getDocs(currWorkoutQuery)
-    //     let exercisePRs = []
-    //     const exercisePRPromises = []
-
-    //     currWorkoutSnapshot.forEach(workout => {
-    //         exercisePRPromises.push(fetchExercisePRs(workout))
-    //     })
-
-    //     const allExercisePRs = await Promise.all(exercisePRPromises)
-    //     allExercisePRs.forEach(exPR => {
-    //         exPR.forEach(pr => {
-    //             const existingExerciseIndex = exercisePRs.findIndex(item => item.id === pr.id)
-    //             if(existingExerciseIndex === -1) {
-    //                 exercisePRs.push(pr)
-    //             } else {
-    //                 if(pr.weight > exercisePRs[existingExerciseIndex].maxWeight) {
-    //                     exercisePRs[existingExerciseIndex].maxWeight = pr.maxWeight
-    //                 }
-    //                 if(pr.maxReps > exercisePRs[existingExerciseIndex].maxReps) {
-    //                     exercisePRs[existingExerciseIndex].maxReps = pr.maxReps
-    //                 }
-    //             }
-    //         })
-    //     })
-    //     return exercisePRs
-
-async function fetchExercisePRs(workout) {
-    const exercisesCollectionRef = collection(workout.ref, "exList")
-    const exListQuery = query(exercisesCollectionRef)
-    const exListSnapshot = await getDocs(exListQuery)
-    const exercisesPRs = []
-
-    for(const exercise of exListSnapshot.docs) {
-        console.log(exercise.data().name)
-        const repsAndSetsRef = collection(exercise.ref, "currentEx")
-        const currentExQuery = query(repsAndSetsRef)
-        const currentExSnapshot = await getDocs(currentExQuery)
-        currentExSnapshot.forEach(doc => {
-            const weight = doc.data().weight
-            const reps = doc.data().reps
-            const PRsDataObject = {
-                id: exercise.id,
-                maxWeight: weight,
-                maxReps: reps
-            }
-            exercisesPRs.push(PRsDataObject)
-        })
-    }
-    return exercisesPRs
 }
 
 // retrieve sets and reps for current exercise in selection
-export async function retrieveCurrentExSetsReps(userCollection, userId, selectedDate) {
-    try {
-        const dateString = selectedDate.toISOString().split("T")[0]
-        const data = []
-        const userDocRef = doc(userCollection, userId)
-        const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
-        const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, dateString)
-        const dateDocSnap = await getDoc(dateOfWorkoutDocRef)
-        if(!dateDocSnap.exists()) {
-            console.log("no workout for this date.")
-            return []
+// export async function retrieveCurrentExSetsReps(userCollection, userId, selectedDate) {
+//     try {
+//         const dateString = selectedDate.toISOString().split("T")[0]
+//         const data = []
+//         const userDocRef = doc(userCollection, userId)
+//         const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
+//         const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, dateString)
+//         const dateDocSnap = await getDoc(dateOfWorkoutDocRef)
+//         if(!dateDocSnap.exists()) {
+//             console.log("no workout for this date.")
+//             return []
             
-        }
+//         }
 
-        const exercisesCollectionRef = collection(dateOfWorkoutDocRef, "exList")
-        const exListQuery = query(exercisesCollectionRef, orderBy("index", "asc"))
-        const exerciseSnapshot = await getDocs(exListQuery)
-        const exercises = []
+//         const exercisesCollectionRef = collection(dateOfWorkoutDocRef, "exList")
+//         const exListQuery = query(exercisesCollectionRef, orderBy("index", "asc"))
+//         const exerciseSnapshot = await getDocs(exListQuery)
+//         const exercises = []
 
-        for(const exDoc of exerciseSnapshot.docs) {
-            const exId = exDoc.id
-            const currentExRef = collection(exDoc.ref, "currentEx")
-            const repsSetsQuery = query(currentExRef, orderBy("createdAt"))
-            const repsSetsSnapshot = await getDocs(repsSetsQuery)
+//         for(const exDoc of exerciseSnapshot.docs) {
+//             const exId = exDoc.id
+//             const currentExRef = collection(exDoc.ref, "currentEx")
+//             const repsSetsQuery = query(currentExRef, orderBy("createdAt"))
+//             const repsSetsSnapshot = await getDocs(repsSetsQuery)
 
-            const exerciseData = {
-                id: exId,
-                name: exDoc.data().name,
-                setsReps: []
+//             const exerciseData = {
+//                 id: exId,
+//                 name: exDoc.data().name,
+//                 setsReps: []
 
-            }
+//             }
 
-            repsSetsSnapshot.forEach(set => {
-                const setId = set.id
-                const { createdAt, reps, weight, weightType } = set.data()
-                exerciseData.setsReps.push({
-                    setId,
-                    createdAt,
-                    reps,
-                    weight,
-                    weightType,
-                    isWeightPR: false,
-                    isRepsPR: false // initialize isPR as false
-                })
-            })
-            exercises.push(exerciseData)
-        }
+//             repsSetsSnapshot.forEach(set => {
+//                 const setId = set.id
+//                 const { createdAt, reps, weight, weightType } = set.data()
+//                 exerciseData.setsReps.push({
+//                     setId,
+//                     createdAt,
+//                     reps,
+//                     weight,
+//                     weightType,
+//                     isWeightPR: false,
+//                     isRepsPR: false // initialize isPR as false
+//                 })
+//             })
+//             exercises.push(exerciseData)
+//         }
 
-        const currWorkoutQuery = query(currentWorkoutCollectionRef)
-        const currWorkoutSnapshot = await getDocs(currWorkoutQuery)
-        let exercisePRs = []
-        for(const workout of currWorkoutSnapshot.docs) {
-            const exercisesCollectionRef = collection(workout.ref, "exList")
-            const exListQuery = query(exercisesCollectionRef)
-            const exListSnapshot = await getDocs(exListQuery)
+//         const currWorkoutQuery = query(currentWorkoutCollectionRef)
+//         const currWorkoutSnapshot = await getDocs(currWorkoutQuery)
+//         let exercisePRs = []
+//         for(const workout of currWorkoutSnapshot.docs) {
+//             const exercisesCollectionRef = collection(workout.ref, "exList")
+//             const exListQuery = query(exercisesCollectionRef)
+//             const exListSnapshot = await getDocs(exListQuery)
 
-            for(const exercise of exListSnapshot.docs) {
-                console.log(exercise.data().name)
-                const repsAndSetsRef = collection(exercise.ref, "currentEx")
-                const currentExQuery = query(repsAndSetsRef)
-                const currentExSnapshot = await getDocs(currentExQuery)
-                currentExSnapshot.forEach(doc => {
-                    const weight = doc.data().weight
-                    const reps = doc.data().reps
-                    const PRsDataObject = {
-                        id: exercise.id,
-                        maxWeight: weight,
-                        maxReps: reps
-                    }
-                    console.log(exercise.id, PRsDataObject.id)
+//             for(const exercise of exListSnapshot.docs) {
+//                 console.log(exercise.data().name)
+//                 const repsAndSetsRef = collection(exercise.ref, "currentEx")
+//                 const currentExQuery = query(repsAndSetsRef)
+//                 const currentExSnapshot = await getDocs(currentExQuery)
+//                 currentExSnapshot.forEach(doc => {
+//                     const weight = doc.data().weight
+//                     const reps = doc.data().reps
+//                     const PRsDataObject = {
+//                         id: exercise.id,
+//                         maxWeight: weight,
+//                         maxReps: reps
+//                     }
+//                     console.log(exercise.id, PRsDataObject.id)
 
-                    const existingExerciseIndex = exercisePRs.findIndex(item => item.id === exercise.id)
-                    console.log(existingExerciseIndex)
+//                     const existingExerciseIndex = exercisePRs.findIndex(item => item.id === exercise.id)
+//                     console.log(existingExerciseIndex)
                     
-                    if(existingExerciseIndex === -1) {
-                        exercisePRs.push(PRsDataObject)
-                    } else {
-                        if(weight > exercisePRs[existingExerciseIndex].maxWeight) {
-                            exercisePRs[existingExerciseIndex].maxWeight = weight
-                        }
-                        if(reps > exercisePRs[existingExerciseIndex].maxReps) {
-                            exercisePRs[existingExerciseIndex].maxReps = reps
-                        }
-                    }
-                })
-            }
-        }
-        data.push(exercisePRs, exercises)
-        return exercises
-    } catch(e) {
-        console.log("ERROR ERROR ABORT!!!: " , e)
-    }
+//                     if(existingExerciseIndex === -1) {
+//                         exercisePRs.push(PRsDataObject)
+//                     } else {
+//                         if(weight > exercisePRs[existingExerciseIndex].maxWeight) {
+//                             exercisePRs[existingExerciseIndex].maxWeight = weight
+//                         }
+//                         if(reps > exercisePRs[existingExerciseIndex].maxReps) {
+//                             exercisePRs[existingExerciseIndex].maxReps = reps
+//                         }
+//                     }
+//                 })
+//             }
+//         }
+//         data.push(exercisePRs, exercises)
+//         return exercises
+//     } catch(e) {
+//         console.log("ERROR ERROR ABORT!!!: " , e)
+//     }
 
-}
+// }
         
         // const latestPRref = collection(userDocRef, "latestPR")
         // const prSnapshot = await getDocs(latestPRref)
