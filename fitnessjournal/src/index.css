@@ -757,6 +757,7 @@ header {
 .set-weight {
   width: 100px;
   margin-left: auto;
+  text-align: left;
 }
 
 .edit-ex {

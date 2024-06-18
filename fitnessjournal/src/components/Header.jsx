@@ -49,14 +49,14 @@ export default function Header() {
                     <Link to="/" className="menu-item-link">
                         <li className="menu-item">Dashboard</li>
                     </Link>
-                    <Link to="Settings" className="menu-item-link">
-                        <li className="menu-item">Settings</li>
+                    <Link to="WorkoutLog" className="menu-item-link">
+                        <li className="menu-item">Workout Log</li>
                     </Link>
                     <Link className="menu-item-link">
                         <li className="menu-item">Log Analysis</li>
                     </Link>
-                    <Link className="menu-item-link">
-                        <li className="menu-item">Body Stats</li>
+                    <Link to="Settings" className="menu-item-link">
+                        <li className="menu-item">Settings</li>
                     </Link>
                     <li onClick={signOutUser} className="menu-item">Logout</li>
                 </ul>

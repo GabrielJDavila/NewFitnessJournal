@@ -14,7 +14,10 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
 import { Skeleton } from "@mui/material"
 
 export default function WorkoutLog() {
-    const [workoutData, setWorkoutData] = useState([])
+    const [workoutData, setWorkoutData] = useState(() => {
+        const savedData = localStorage.getItem("workoutData")
+        return savedData ? savedData : []
+    })
     const [toggleEditSetModal, setToggleEditSetModal] = useState(false)
     const [toggleDeleteExModal, setToggleDeleteExModal] = useState(false)
     const [toggleDeleteSetModal, setToggleDeleteSetModal] = useState(false)
@@ -41,11 +44,6 @@ export default function WorkoutLog() {
     const stringDate = date.toISOString().split("T")[0]
     const [year, month, day] = stringDate.split("-")
     const formattedDate = `${month}/${day}/${year}`
-
-    // const userDocRef = doc(usersInDB, currentUser)
-    // const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
-    // const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, date)
-    // const exercisesCollectionRef = collection(dateOfWorkoutDocRef, "exList")
     
     useEffect(() => {
         setShowSkel(true)
@@ -54,6 +52,10 @@ export default function WorkoutLog() {
 
     useEffect(() => {
         window.scrollTo(0, 0)
+    })
+
+    useEffect(() => {
+        localStorage.setItem("workoutData", workoutData)
     })
 
     async function loadExerciseList() {
@@ -70,12 +72,6 @@ export default function WorkoutLog() {
             console.log("error fetching exercises list: ", e)
         }
     }
-
-    // const unsub = onSnapshot(exercisesCollectionRef, (doc) => {
-    //     doc.forEach(doc => {
-    //         console.log("current data: ", doc.data())
-    //     })    
-    // })
 
     async function reOrderList(exerciseId, newIndex, userCollection, userId, date) {
         try {
@@ -211,7 +207,7 @@ export default function WorkoutLog() {
                     <p className="link-text">Timer</p>
                 </div>
                 <div className="date-dash">
-                    <span ref={calendarRef} onClick={e => handleToggleCalendar(e)} className="material-symbols-outlined calendar-icon">
+                    <span onClick={e => handleToggleCalendar(e)} className="material-symbols-outlined calendar-icon">
                          calendar_month
                     </span>
                     <p className="link-text">Date</p>
