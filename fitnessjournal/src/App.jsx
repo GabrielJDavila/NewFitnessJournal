@@ -17,6 +17,7 @@ import NutritionLayout from "./components/NutritionLayout"
 import NutritionLog from "./pages/NutritionLog"
 import SearchAllFoods from "./pages/SearchAllFoods"
 import FoodDetail from "./pages/FoodDetail"
+import ComingSoon from "./pages/ComingSoon"
 
 function App() {
 
@@ -39,11 +40,12 @@ function App() {
               <Route path="ExerciseDetail/:id" element={<ExerciseDetail />} />
             </Route>
 
-            <Route path="NutritionLog" element={<NutritionLayout/>}>
+            <Route path="ComingSoon" element={<ComingSoon />}/>
+            {/* <Route path="NutritionLog" element={<NutritionLayout/>}>
               <Route index element={<NutritionLog />} />
               <Route path="SearchAllFoods" element={<SearchAllFoods />} />
               <Route path="SearchAllFoods/:id" element={<FoodDetail />} />
-            </Route>
+            </Route> */}
             
           </Route>
         </Routes>

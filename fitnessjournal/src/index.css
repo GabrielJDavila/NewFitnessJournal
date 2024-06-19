@@ -1440,3 +1440,19 @@ footer {
   margin: 0;
   color: #DC684B;
 }
+
+/* ======== Coming Soon Page ========= */
+
+.coming-soon-container {
+  margin: 10rem auto;
+  text-align: center;
+}
+
+.coming-soon-title {
+  font-size: 3rem;
+}
+
+.coming-soon-link {
+  color: #DC684B;
+  border-bottom: 1px solid #DC684B;
+}
