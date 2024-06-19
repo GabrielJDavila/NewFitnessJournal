@@ -9,17 +9,18 @@ export default function CategoryNav(props) {
     const [toggleNewCatModal, setToggleNewCatModal] = useState(false)
     const [toggleNewExModal, setToggleNewExModal] = useState(false)
     const [toggleSearch, setToggleSearch] = useState(false)
-    const [closeExToggle, setCloseExToggle] = useState(true)
+    const [closeExToggle, setCloseExToggle] = useState(false)
 
-    // useEffect(() => {
-    //     if(toggleNewExModal) {
-    //         const timeout = setTimeout(() => {
-    //             setToggleNewExModal(false)
-    //         }, 2000)
+    useEffect(() => {
+        if(closeExToggle) {
+            const timeout = setTimeout(() => {
+                setCloseExToggle(false)
+                setToggleNewExModal(false)
+            }, 2000)
 
-    //         return () => clearTimeout(timeout) 
-    //     }
-    // }, [toggleNewExModal])
+            return () => clearTimeout(timeout) 
+        }
+    }, [closeExToggle])
 
     function toggleModal(e) {
         if(e.target.dataset.newcat) {
@@ -33,9 +34,11 @@ export default function CategoryNav(props) {
         }
     }
 
-    function flipNewExModal() {
-        setToggleNewExModal(false)
-        console.log("flipped")
+    function flipNewExModal(flip) {
+        if(flip) {
+            setCloseExToggle(true)
+            console.log("flipped")
+        }
     }
 
     return (

@@ -57,11 +57,12 @@ export default function NewEx(props) {
         e.preventDefault()
         const selectedCategory = loadedCategories.find(cat => cat.name === newExFormData.category)
         if(selectedCategory) {
+            const flip = true
             addExToCategory(usersInDB, currentUser, newExFormData.name, selectedCategory.id)
             clearForm()
             toggle()
             props.reloadExData()
-            props.flipNewExModal()
+            props.flipNewExModal(flip)
         } else {
             console.log("invalid category selected")
         }
@@ -151,7 +152,10 @@ export default function NewEx(props) {
                 <option value="weight-lbs">lbs</option>
                 <option value="weight-kg">kg</option>
             </select>
-            <button className="confirm-btn" data-addex>add exercise</button>
+            <div onClick={props.flipNewExModal} data-closenewex>
+            <button className="confirm-btn" data-closenewex>add exercise</button>
+            </div>
+            
             { toggleMessageState && <p className="message">exercise saved!</p>}
         </form>
     )
