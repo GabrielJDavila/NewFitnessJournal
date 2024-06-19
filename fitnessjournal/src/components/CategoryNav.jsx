@@ -1,4 +1,4 @@
-import { useState } from "react"; 
+import { useEffect, useState } from "react"; 
 import BackBtn from "./BackBtn";
 import { Link } from "react-router-dom"
 import SearchTool from "./modals/SearchTool";
@@ -9,15 +9,33 @@ export default function CategoryNav(props) {
     const [toggleNewCatModal, setToggleNewCatModal] = useState(false)
     const [toggleNewExModal, setToggleNewExModal] = useState(false)
     const [toggleSearch, setToggleSearch] = useState(false)
+    const [closeExToggle, setCloseExToggle] = useState(true)
+
+    // useEffect(() => {
+    //     if(toggleNewExModal) {
+    //         const timeout = setTimeout(() => {
+    //             setToggleNewExModal(false)
+    //         }, 2000)
+
+    //         return () => clearTimeout(timeout) 
+    //     }
+    // }, [toggleNewExModal])
 
     function toggleModal(e) {
         if(e.target.dataset.newcat) {
             setToggleNewCatModal(prev => !prev)
+            console.log("toggled cat")
         } else if(e.target.dataset.addex) {
             setToggleNewExModal(prev => !prev)
+            console.log("toggled neEx")
         } else if(e.target.dataset.search || e.target.dataset.close) {
             setToggleSearch(prev => !prev)
         }
+    }
+
+    function flipNewExModal() {
+        setToggleNewExModal(false)
+        console.log("flipped")
     }
 
     return (
@@ -67,7 +85,7 @@ export default function CategoryNav(props) {
             </div>
             <SearchTool toggleModal={toggleModal} toggleSearchBar={toggleSearch}/>
             {toggleNewCatModal && <NewCat toggleModal={toggleModal} />}
-            {toggleNewExModal && <NewEx reloadExData={props.reloadExData} toggleModal={toggleModal} currentCatId={props.currentCatId}/>}
+            {toggleNewExModal && <NewEx reloadExData={props.reloadExData} toggleModal={toggleModal} flipNewExModal={flipNewExModal} currentCatId={props.currentCatId}/>}
 
         </div>
     )

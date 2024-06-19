@@ -61,6 +61,7 @@ export default function NewEx(props) {
             clearForm()
             toggle()
             props.reloadExData()
+            props.flipNewExModal()
         } else {
             console.log("invalid category selected")
         }
@@ -150,7 +151,7 @@ export default function NewEx(props) {
                 <option value="weight-lbs">lbs</option>
                 <option value="weight-kg">kg</option>
             </select>
-            <button className="confirm-btn">add exercise</button>
+            <button className="confirm-btn" data-addex>add exercise</button>
             { toggleMessageState && <p className="message">exercise saved!</p>}
         </form>
     )
