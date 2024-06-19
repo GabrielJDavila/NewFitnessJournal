@@ -10,17 +10,37 @@ export default function CategoryNav(props) {
     const [toggleNewExModal, setToggleNewExModal] = useState(false)
     const [toggleSearch, setToggleSearch] = useState(false)
     const [closeExToggle, setCloseExToggle] = useState(false)
+    const [closeCatToggle, setCloseCatToggle] = useState(false)
     
     useEffect(() => {
         if(closeExToggle) {
-            const timeout = setTimeout(() => {
+            const exTimeout = setTimeout(() => {
                 setCloseExToggle(false)
                 setToggleNewExModal(false)
             }, 2000)
 
-            return () => clearTimeout(timeout) 
+            return () => clearTimeout(exTimeout) 
+        }
+        if(closeCatToggle) {
+            const exTimeout = setTimeout(() => {
+                setCloseCatToggle(false)
+                setToggleNewCatModal(false)
+            }, 1000)
+
+            return () => clearTimeout(exTimeout)
         }
     }, [closeExToggle])
+
+    useEffect(() => {
+        if(closeCatToggle) {
+            const catTimeout = setTimeout(() => {
+                setCloseCatToggle(false)
+                setToggleNewCatModal(false)
+            }, 1000)
+
+            return () => clearTimeout(catTimeout)
+        }
+    }, [closeCatToggle])
 
     function toggleModal(e) {
         if(e.target.dataset.newcat) {
@@ -34,10 +54,17 @@ export default function CategoryNav(props) {
         }
     }
 
-    function flipNewExModal(flip) {
-        if(flip) {
+    function flipExModal(exFlip) {
+        if(exFlip) {
             setCloseExToggle(true)
-          
+            console.log("ex flipped")
+        }
+    }
+
+    function flipCatModal(catFlip) {
+        if(catFlip) {
+            setCloseCatToggle(true)
+            console.log("cat flipped")
         }
     }
 
@@ -87,8 +114,8 @@ export default function CategoryNav(props) {
                 <p className="category-interface-btn-text">new exercise</p>
             </div>
             <SearchTool toggleModal={toggleModal} toggleSearchBar={toggleSearch}/>
-            {toggleNewCatModal && <NewCat toggleModal={toggleModal} loadCats={props.loadData}/>}
-            {toggleNewExModal && <NewEx reloadExData={props.reloadExData} toggleModal={toggleModal} flipNewExModal={flipNewExModal} currentCatId={props.currentCatId}/>}
+            {toggleNewCatModal && <NewCat toggleModal={toggleModal} loadCats={props.loadData} flipCatModal={flipCatModal}/>}
+            {toggleNewExModal && <NewEx reloadExData={props.reloadExData} toggleModal={toggleModal} flipExModal={flipExModal} currentCatId={props.currentCatId}/>}
 
         </div>
     )

@@ -11,7 +11,9 @@ export default function NewCat(props) {
     console.log(currentUser)
     function handleSubmit(e) {
         e.preventDefault()
+        const catFlip = true
         addNewCat(usersInDB, currentUser, newCatName.name)
+        props.flipCatModal(catFlip)
         props.loadCats()
     }
 

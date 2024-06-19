@@ -31,7 +31,7 @@ export default function NewEx(props) {
         if(toggle) {
             const timeout = setTimeout(() => {
                 setToggleMessageState(false)
-            }, 3000)
+            }, 1000)
 
             return () => clearTimeout(timeout)
         }
@@ -41,12 +41,12 @@ export default function NewEx(props) {
         e.preventDefault()
         const selectedCategory = loadedCategories.find(cat => cat.name === newExFormData.category)
         if(selectedCategory) {
-            const flip = true
+            const exFlip = true
             addExToCategory(usersInDB, currentUser, newExFormData.name, selectedCategory.id)
             clearForm()
             toggle()
+            props.flipExModal(exFlip)
             props.reloadExData()
-            props.flipNewExModal(flip)
         } else {
             console.log("invalid category selected")
         }
