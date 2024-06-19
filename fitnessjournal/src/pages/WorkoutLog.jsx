@@ -31,7 +31,6 @@ export default function WorkoutLog() {
         exIdToDelete: "",
         setIdToDelete: "",
     })
-    console.log(workoutData)
     
     const [newSetInfo, setNewSetInfo] = useState({
         reps: "",

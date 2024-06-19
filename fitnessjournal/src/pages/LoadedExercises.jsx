@@ -16,7 +16,7 @@ export default function LoadedExercises() {
     const [clickedEx, setClickedEx] = useState("")
     const { currentUser } = useOutletContext()
     const [toggleModal, setToggleModal] = useState(false)
-    console.log(exercises)
+    
     useEffect(() => {
         loadExercisesData()
     }, [])

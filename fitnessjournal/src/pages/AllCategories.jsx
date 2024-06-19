@@ -10,8 +10,6 @@ import { Skeleton } from "@mui/material"
 export default function AllCategories() {
     const [toggleEditModal, setToggleEditModal] = useState(false)
     const [openConfirmDeleteModal, setOpenConfirmDeleteModal] = useState(false)
-    const [toggleNewCatModal, setToggleNewCatModal] = useState(false)
-    const [toggleNewExModal, setToggleNewExModal] = useState(false)
     const [loadedCategories, setLoadedCategories] = useState([])
     const [currentId, setCurrentId] = useState(null)
     const [editCategoryTitle, setEditCategoryTitle] = useState({
@@ -51,13 +49,13 @@ export default function AllCategories() {
         toggleDelete()
     }
 
-    function toggleModal(e) {
-        if(e.target.dataset.newcat) {
-            setToggleNewCatModal(prev => !prev)
-        } else if(e.target.dataset.addex) {
-            setToggleNewExModal(prev => !prev)
-        }
-    }
+    // function toggleModal(e) {
+    //     if(e.target.dataset.newcat) {
+    //         setToggleNewCatModal(prev => !prev)
+    //     } else if(e.target.dataset.addex) {
+    //         setToggleNewExModal(prev => !prev)
+    //     }
+    // }
 
     function toggleDelete(e) {
         setOpenConfirmDeleteModal(prev => !prev)
@@ -147,9 +145,8 @@ export default function AllCategories() {
         <div className="all-cats-container">
             <CategoryNav
                 toggleModal={e => toggleModal(e)}
+                loadData={loadData}
             />
-            {toggleNewCatModal && <NewCat toggleModal={e => toggleModal(e)}/>}
-            {toggleNewExModal && <NewEx toggleModal={e => toggleModal(e)}/>}
             <div className="all-ex-page-container">
                 {/* <form className="search-ex-form">
                     <BackBtn />

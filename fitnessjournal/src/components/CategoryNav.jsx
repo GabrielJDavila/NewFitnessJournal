@@ -10,7 +10,7 @@ export default function CategoryNav(props) {
     const [toggleNewExModal, setToggleNewExModal] = useState(false)
     const [toggleSearch, setToggleSearch] = useState(false)
     const [closeExToggle, setCloseExToggle] = useState(false)
-
+    
     useEffect(() => {
         if(closeExToggle) {
             const timeout = setTimeout(() => {
@@ -25,10 +25,10 @@ export default function CategoryNav(props) {
     function toggleModal(e) {
         if(e.target.dataset.newcat) {
             setToggleNewCatModal(prev => !prev)
-            console.log("toggled cat")
+           
         } else if(e.target.dataset.addex) {
             setToggleNewExModal(prev => !prev)
-            console.log("toggled neEx")
+            
         } else if(e.target.dataset.search || e.target.dataset.close) {
             setToggleSearch(prev => !prev)
         }
@@ -37,7 +37,7 @@ export default function CategoryNav(props) {
     function flipNewExModal(flip) {
         if(flip) {
             setCloseExToggle(true)
-            console.log("flipped")
+          
         }
     }
 
@@ -87,7 +87,7 @@ export default function CategoryNav(props) {
                 <p className="category-interface-btn-text">new exercise</p>
             </div>
             <SearchTool toggleModal={toggleModal} toggleSearchBar={toggleSearch}/>
-            {toggleNewCatModal && <NewCat toggleModal={toggleModal} />}
+            {toggleNewCatModal && <NewCat toggleModal={toggleModal} loadCats={props.loadData}/>}
             {toggleNewExModal && <NewEx reloadExData={props.reloadExData} toggleModal={toggleModal} flipNewExModal={flipNewExModal} currentCatId={props.currentCatId}/>}
 
         </div>

@@ -1161,7 +1161,7 @@ header {
 
 .new-cat-container {
   position: fixed;
-  top: 100px;
+  top: 200px;
   right: 50px;
   left: 50px;
   color: black;
@@ -1170,7 +1170,7 @@ header {
   justify-content: center;
   text-align: center;
   width: 70%;
-  height: 300px;
+  height: 200px;
   max-width: 300px;
   margin: 0 auto;
   background: white;
@@ -1183,6 +1183,8 @@ header {
   height: 2rem;
   width: 90%;
   margin: 1rem auto;
+  border: 1px solid lightgray;
+  border-radius: 4px;
 }
 
 .new-cat-btns-container {

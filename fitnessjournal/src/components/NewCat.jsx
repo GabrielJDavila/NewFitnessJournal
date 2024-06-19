@@ -12,6 +12,7 @@ export default function NewCat(props) {
     function handleSubmit(e) {
         e.preventDefault()
         addNewCat(usersInDB, currentUser, newCatName.name)
+        props.loadCats()
     }
 
     function handleChange(name, value, stateSetter) {
