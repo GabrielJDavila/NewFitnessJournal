@@ -18,15 +18,6 @@ export default function Layout() {
         email: "",
         password: "",
         confirmPassword: ""
-        // name: "",
-        // age: "",
-        // gender: "",
-        // weight: "",
-        // weightType: "",
-        // height1: "",
-        // heightType1: "",
-        // height2: "",
-        // heightType2: ""
     })
     const [signUpErrorMessage, setSignUpErrorMessage] = useState(false)
     const [currentUser, setCurrentUser] = useState({
@@ -38,7 +29,6 @@ export default function Layout() {
             if(user) {
                 setLoggedIn(!!user)
                 setCurrentUser(user.uid)
-                // console.log("user is signed in: ", user.uid)
             }
         })
         return () => unsubcribe()
@@ -65,12 +55,10 @@ export default function Layout() {
             /\d/.test(loginInfo.password) &&
             loginInfo.password === loginInfo.confirmPassword
         ) {
-            // console.log(`check works, pass is: ${loginInfo.password}`)
             const signUpSuccess = await signUpUser(loginInfo)
             setSignUpErrorMessage(signUpSuccess)
         } else {
             flipShowPasswordError()
-            // console.log(`check fails. attempted password: ${loginInfo.password}`)
         }
     }
 
@@ -114,14 +102,6 @@ export default function Layout() {
                 email={loginInfo.email}
                 password={loginInfo.password}
                 confirmPassword={loginInfo.confirmPassword}
-                // name={loginInfo.name}
-                // gender={loginInfo.gender}
-                // weight={loginInfo.weight}
-                // weightType={loginInfo.weightType}
-                // height1={loginInfo.height1}
-                // heightType1={loginInfo.heightType1}
-                // height2={loginInfo.height2}
-                // heightType2={loginInfo.heightType2}
                 flipShowLogin={flipShowLogin}
                 flipShowPasswordError={flipShowPasswordError}
                 flipShowNonMatchingPasswordError={flipShowNonMatchingPasswordError}
@@ -132,16 +112,6 @@ export default function Layout() {
             />
         )
     }
-
-    // if (renderProfileCreation && !loggedIn) {
-    //     return (
-    //         <ProfileCreation
-    //             handleSignUp={handleSignUp}
-    //             continueWithProfileCreation={continueWithProfileCreation}
-    //             renderProfileForm={renderProfileForm}
-    //         />
-    //     )
-    // }
    
     return (
         <div className="first-layout">

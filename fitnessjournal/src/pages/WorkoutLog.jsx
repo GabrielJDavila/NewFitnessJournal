@@ -50,10 +50,6 @@ export default function WorkoutLog() {
     }, [date])
 
     useEffect(() => {
-        window.scrollTo(0, 0)
-    })
-
-    useEffect(() => {
         localStorage.setItem("workoutData", workoutData)
     })
 

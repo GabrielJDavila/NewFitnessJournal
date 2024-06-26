@@ -18,10 +18,6 @@ export default function Dashboard() {
     const [averageLoggedTime, setAverageLoggedTime] = useState()
     const [newPR, setNewPR] = useState()
     const { currentUser } = useOutletContext()
-    
-    useEffect(() => {
-        window.scrollTo(0, 0)
-    })
 
     useEffect(() => {
         setTimeout(() => {

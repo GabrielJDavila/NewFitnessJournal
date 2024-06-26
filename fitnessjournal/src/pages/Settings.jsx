@@ -7,11 +7,11 @@ export default function Settings() {
                 <p>User profile</p>
                 <p className="settings-item-description">view and update profile.</p>
             </Link>
-            <Link to="Theme" className="settings-item">
+            <Link to="/ComingSoon" className="settings-item">
                 <p>Theme</p>
                 <p className="settings-item-description">change theme color.</p>
             </Link>
-            <Link to="Notifications" className="settings-item">
+            <Link to="/ComingSoon" className="settings-item">
                 <p>Notifications</p>
                 <p className="settings-item-description">change notification settings.</p>
             </Link>

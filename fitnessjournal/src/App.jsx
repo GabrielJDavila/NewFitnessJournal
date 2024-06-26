@@ -18,12 +18,14 @@ import NutritionLog from "./pages/NutritionLog"
 import SearchAllFoods from "./pages/SearchAllFoods"
 import FoodDetail from "./pages/FoodDetail"
 import ComingSoon from "./pages/ComingSoon"
+import ScrollToTop from "./components/ScrollToTop"
 
 function App() {
 
   return (
     <BrowserRouter>
       <div className="app">
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Dashboard />} />
