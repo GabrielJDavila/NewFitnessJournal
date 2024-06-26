@@ -1255,6 +1255,11 @@ header {
   align-items: center;
 }
 
+.add-btn {
+  padding: .5rem;
+  color: white;
+}
+
 /* ======= Nutrition Log Styles ======= */
 
 .nutrition-log-layout {
@@ -1425,9 +1430,13 @@ footer {
 }
 
 .set-added-modal {
+  position: fixed;
   background: rgb(220, 104, 75);
+  padding: .5rem;
   color: black;
-
+  bottom: 84px;
+  right: 0;
+  left: 0;
 }
 
 .back-btn-breadcrumb-container, .back-btn-breadcrumb-link {
