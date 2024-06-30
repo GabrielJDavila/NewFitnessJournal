@@ -40,6 +40,7 @@ export default function WorkoutLog() {
     })
     const [showSkel, setShowSkel] = useState(true)
     const calendarRef = useRef(null)
+    console.log(date)
     const stringDate = date.toISOString().split("T")[0]
     const [year, month, day] = stringDate.split("-")
     const formattedDate = `${month}/${day}/${year}`

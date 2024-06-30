@@ -1119,3 +1119,22 @@ export async function deleteAllEx(userCollection, userId, selectedDate) {
         console.log("error deleting workout: ", e)
     }
 }
+
+// Retrieve all PRs to show in Log Analysis Page
+
+export async function RetrieveAllPRs(userCollection, userId) {
+    try {
+        const userDocRef = doc(userCollection, userId)
+        const latestPRref = collection(userDocRef, "latestPRs")
+        const PRsQuery = query(latestPRref, orderBy("exName", "asc"))
+        const PRsSnapshot = await getDocs(PRsQuery)
+        let PRs = []
+        for(const doc of PRsSnapshot.docs) {
+            PRs.push(doc.data())
+        }
+        console.log(PRs)
+        return PRs
+    } catch(err) {
+        console.error("error retrieving PRs: ", err)
+    }
+}

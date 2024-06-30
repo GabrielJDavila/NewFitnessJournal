@@ -19,6 +19,7 @@ import SearchAllFoods from "./pages/SearchAllFoods"
 import FoodDetail from "./pages/FoodDetail"
 import ComingSoon from "./pages/ComingSoon"
 import ScrollToTop from "./components/ScrollToTop"
+import Analysis from "./pages/Analysis"
 
 function App() {
 
@@ -42,6 +43,7 @@ function App() {
               <Route path="ExerciseDetail/:id" element={<ExerciseDetail />} />
             </Route>
 
+            <Route path="Analysis" element={<Analysis/>}/>
             <Route path="ComingSoon" element={<ComingSoon />}/>
             {/* <Route path="NutritionLog" element={<NutritionLayout/>}>
               <Route index element={<NutritionLog />} />
