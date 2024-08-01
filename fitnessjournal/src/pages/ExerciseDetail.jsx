@@ -59,13 +59,13 @@ export default function ExerciseDetail() {
         if(e.target.dataset.addreps) {
             setRepsAndWeight(prev => ({
                 ...prev,
-                reps: currentReps + 5
+                reps: currentReps + 1
             }))
         }
         if(e.target.dataset.minusreps && currentReps > 0) {
             setRepsAndWeight(prev => ({
                 ...prev,
-                reps: currentReps - 5
+                reps: currentReps - 1
             }))
         }
     }
