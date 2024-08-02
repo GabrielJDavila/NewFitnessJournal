@@ -720,7 +720,7 @@ header {
   margin: 0 auto;
   list-style: none;
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   text-align: left;
   gap: 1rem;
   align-items: center;
@@ -733,17 +733,19 @@ header {
 }
 
 .pr-icon {
+  width: 24px;
   color: #DC684B;
   font-size: 1rem;
 }
 
 .set-reps {
   text-align: left;
+  margin-right: auto;
 }
 .set-weight {
   width: 100px;
-  margin-left: auto;
   text-align: left;
+  margin-right: auto;
 }
 
 .edit-ex {

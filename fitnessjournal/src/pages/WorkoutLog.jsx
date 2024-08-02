@@ -15,9 +15,10 @@ import { Skeleton } from "@mui/material"
 
 export default function WorkoutLog() {
     const [workoutData, setWorkoutData] = useState(() => {
-        const savedData = localStorage.getItem("workoutData")
+        const savedData = JSON.parse(localStorage.getItem("workoutData"))
         return savedData ? savedData : []
     })
+    
     const [toggleEditSetModal, setToggleEditSetModal] = useState(false)
     const [toggleDeleteExModal, setToggleDeleteExModal] = useState(false)
     const [toggleDeleteSetModal, setToggleDeleteSetModal] = useState(false)
@@ -40,7 +41,6 @@ export default function WorkoutLog() {
     })
     const [showSkel, setShowSkel] = useState(true)
     const calendarRef = useRef(null)
-    console.log(date)
     const stringDate = date.toISOString().split("T")[0]
     const [year, month, day] = stringDate.split("-")
     const formattedDate = `${month}/${day}/${year}`
@@ -51,14 +51,16 @@ export default function WorkoutLog() {
     }, [date])
 
     useEffect(() => {
-        localStorage.setItem("workoutData", workoutData)
+        localStorage.setItem("workoutData", JSON.stringify(workoutData))
     })
 
     async function loadExerciseList() {
+        
+        if(workoutData) {
+            setShowSkel(false)
+        }
         try {
-            
             const data = await retrieveCurrentExSetsRepsAndPRs(usersInDB, currentUser, date)
-            console.log(data)
             if(data) {
                 setWorkoutData(data.exercises)
                 setShowSkel(false)
