@@ -6,6 +6,7 @@ import SetAdded from "../components/modals/SetAdded"
 
 export default function ExerciseDetail() {
     const params = useParams()
+    // Check if params ID in local storage matches. If so, then get the wieght/reps in storage; if not, empty state like below
     const [repsAndWeight, setRepsAndWeight] = useState({
         reps: 0,
         weight: 0,
@@ -13,7 +14,7 @@ export default function ExerciseDetail() {
     })
     const [showModal, setShowModal] = useState(false)
     const { currentUser } = useOutletContext()
-
+    console.log(localStorage.getItem(params.id))
     useEffect(() => {
         if(showModal) {
             const flipModalState = setTimeout(() => {
@@ -33,6 +34,8 @@ export default function ExerciseDetail() {
         if (repsAndWeight.reps > 0) {
             addSetsReps(params.id, repsAndWeight.weight, repsAndWeight.reps, repsAndWeight.weightType, usersInDB, currentUser)
             setShowModal(true)
+            // Might have to store 3 things at once: params ID, wieght and reps. Check for ID when initializing state.
+            localStorage.setItem(params.id, repsAndWeight.weight, repsAndWeight.reps)
         } else {
             alert("Please enter an amount for reps.")
         }        
