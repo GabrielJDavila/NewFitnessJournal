@@ -61,9 +61,9 @@ export default function CurrentWorkoutList(props) {
                                     </li>
                                 ))}
                             </ul>
-                            <Link to={`ExerciseDetail/${ex.id}`} className="add-set-link">
-                                <button className="add-set-btn">Add set</button>
-                            </Link>
+                            {/* <Link to={`ExerciseDetail/${ex.id}`} className="add-set-link"> */}
+                                <button onClick={e => props.toggleAdd(e)} className="add-set-btn">Add set</button>
+                            {/* </Link> */}
                         </div>
                     )}
                 </Draggable>

@@ -68,6 +68,30 @@ export async function handleEditSetSubmit(e, {
     
 }
 
+// handles the result of user clicking comfirm of AddSetModal.
+export async function handleAddSetSubmit(e, {
+    // addSetsReps,
+    // newSetInfo,
+    // usersInDB,
+    // currentUser,
+    // date,
+    // loadExerciseList,
+    toggleAddSet
+},
+{
+    setToggleAddSetModal
+}) {
+    e.preventDefault()
+    try {
+        // await editSingleSet(newSetInfo.exId, newSetInfo.setId, newSetInfo.reps, newSetInfo.weight, usersInDB, currentUser, date)
+        // await loadExerciseList(e)
+        toggleAddSet(e, setToggleAddSetModal)
+    } catch(e) {
+        console.log("error", e)
+    }
+    
+}
+
 // // handles the result of user clicking confirm of ConfirmDeleteSetModal.
 export async function handleDeleteSetSubmit(e, { 
     deleteSingleSet,
@@ -115,6 +139,12 @@ export function toggleDelete(e, setCurrentItemToDelete, setToggleDeleteExModal, 
         setToggleDeleteSetModal(false)
     }
 
+}
+
+// Toggles add set state.
+export function toggleAddSet(e, setToggleAddSetModal) {
+    console.log(e.target.id)
+    setToggleAddSetModal(prev => !prev)
 }
 
 // Toggles the edit set modal.

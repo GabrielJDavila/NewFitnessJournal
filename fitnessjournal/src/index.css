@@ -763,8 +763,14 @@ header {
 }
 
 .set-detail {
+  position: absolute;
+  top: 0;
+  margin: 0;
   display: flex;
   flex-direction: column;
+  background: white;
+  z-index: 20;
+  height: 91%;
 }
 
 .add-set-btn {
@@ -830,8 +836,8 @@ header {
 /*=============== ExerciseDetail.jsx styles ====================*/
 
 .set-detail {
-  margin-top: 100px;
-  padding: 0 1rem;
+  margin-top: 0;
+  padding: 10rem 1rem;
   position: fixed;
   width: 100%;
 }
@@ -841,7 +847,7 @@ header {
   display: flex;
   justify-content: center;
   align-items: center;
-  top: 1rem;
+  top: 12rem;
   background: #DC684B;
   padding: .5rem;
   width: 40px;

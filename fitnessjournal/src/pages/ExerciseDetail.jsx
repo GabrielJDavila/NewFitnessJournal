@@ -4,7 +4,7 @@ import { addSetsReps, usersInDB} from "../firebase"
 import ExDetailBackBtn from "../components/ExDetailBackBtn"
 import SetAdded from "../components/modals/SetAdded"
 
-export default function ExerciseDetail() {
+export default function ExerciseDetail(props) {
     const params = useParams()
     // Check if params ID in local storage matches. If so, then get the wieght/reps in storage; if not, empty state like below
     const [repsAndWeight, setRepsAndWeight] = useState(() => {
@@ -13,7 +13,7 @@ export default function ExerciseDetail() {
     })
     const [showModal, setShowModal] = useState(false)
     const { currentUser } = useOutletContext()
-    console.log(localStorage.getItem(params.id))
+    
     useEffect(() => {
         if(showModal) {
             const flipModalState = setTimeout(() => {
@@ -94,6 +94,7 @@ export default function ExerciseDetail() {
     return (
         <form onSubmit={e => handleAddSetClick(e)} className="set-detail">
             <ExDetailBackBtn />
+            <p onClick={e => props.toggleAddSet(e)}>cancel</p>
             <fieldset className="dash-input-fieldset">   
                 <div className="ex-info-container">
                     <p className="ex-info-text weight">Weight (lbs):</p>
