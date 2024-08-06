@@ -436,7 +436,6 @@ header {
   padding: 1rem;
   gap: 2rem;
   width: 90%;
-  max-width: 600px;
   margin: auto;
   justify-content: center;
 }
@@ -1476,6 +1475,8 @@ footer {
 .log-analysis {
   text-align: left;
   width: 100%;
+  margin: auto;
+  text-align: center;
   padding: 1rem;
 }
 
@@ -1492,6 +1493,10 @@ footer {
 .log-table, th, td {
   border: 1px solid grey;
   padding: .5rem;
+  width: 100%;
+  max-width: 700px;
+  margin: auto;
+  text-align: left;
 }
 
 .log-row-titles
@@ -1527,4 +1532,16 @@ footer {
 .coming-soon-link {
   color: #DC684B;
   border-bottom: 1px solid #DC684B;
+}
+
+@media screen and (min-width: 700px) {
+  .dashboard-top-content-container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+  }
+
+  .log-container {
+    width: 30%;
+  }
 }
