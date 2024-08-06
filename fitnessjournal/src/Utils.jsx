@@ -60,7 +60,7 @@ export async function handleEditSetSubmit(e, {
     e.preventDefault()
     try {
         await editSingleSet(newSetInfo.exId, newSetInfo.setId, newSetInfo.reps, newSetInfo.weight, usersInDB, currentUser, date)
-        await loadExerciseList(e)
+        await loadExerciseList(date)
         toggleEdit(e, setNewSetInfo, setToggleEditSetModal)
     } catch(e) {
         console.log("error", e)

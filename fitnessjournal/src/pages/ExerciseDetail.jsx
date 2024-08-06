@@ -5,12 +5,14 @@ import ExDetailBackBtn from "../components/ExDetailBackBtn"
 import SetAdded from "../components/modals/SetAdded"
 
 export default function ExerciseDetail(props) {
-    const params = useParams()
+    console.log(props.exid)
+    // const params = useParams()
     // Check if params ID in local storage matches. If so, then get the wieght/reps in storage; if not, empty state like below
     const [repsAndWeight, setRepsAndWeight] = useState(() => {
-        const savedData = localStorage.getItem(params.id)
+        const savedData = localStorage.getItem(props.exid)
         return savedData ? JSON.parse(savedData) : {reps: 0, weight: 0, weightType: ""}
     })
+    
     const [showModal, setShowModal] = useState(false)
     const { currentUser } = useOutletContext()
     
@@ -30,13 +32,13 @@ export default function ExerciseDetail(props) {
 
     useEffect(() => {
         // Might have to store 3 things at once: params ID, wieght and reps. Check for ID when initializing state.
-        localStorage.setItem(params.id, JSON.stringify(repsAndWeight))
+        localStorage.setItem(props.exid, JSON.stringify(repsAndWeight))
     }, [repsAndWeight])
 
     function handleAddSetClick(e) {
         e.preventDefault()
         if (repsAndWeight.reps > 0) {
-            addSetsReps(params.id, repsAndWeight.weight, repsAndWeight.reps, repsAndWeight.weightType, usersInDB, currentUser)
+            addSetsReps(props.exid, repsAndWeight.weight, repsAndWeight.reps, repsAndWeight.weightType, usersInDB, currentUser)
             setShowModal(true)
         } else {
             alert("Please enter an amount for reps.")

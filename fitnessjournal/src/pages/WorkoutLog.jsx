@@ -30,12 +30,13 @@ export default function WorkoutLog() {
     const [toggleCalendar, setToggleCalendar] = useState(false)
     const storedDate = localStorage.getItem("selectedDate")
     const [date, setDate] = useState(storedDate ? new Date(storedDate) : new Date())
+    console.log(date)
     const { currentUser } = useOutletContext()
     const [currentItemToDelete, setCurrentItemToDelete] = useState({
         exIdToDelete: "",
         setIdToDelete: "",
     })
-    
+    const [exid, setExid] = useState("")
     const [newSetInfo, setNewSetInfo] = useState({
         reps: "",
         weight: "",
@@ -180,7 +181,9 @@ export default function WorkoutLog() {
     }
 
     function handleClick(e) {
+        console.log(e.target.dataset.exid)
         console.log(e.currentTarget.getAttribute("data-currentex"))
+        setExid(e.target.dataset.exid)
     }
 
     document.addEventListener("click", handleClickOutside)
@@ -257,6 +260,8 @@ export default function WorkoutLog() {
             { toggleAddSetModal &&
                 <ExerciseDetail
                     toggleAddSet={toggleAddSet}
+                    onClick={handleClick}
+                    exid={exid}
                     // handleAddSet={e => handleAddSetSubmit(e, {
                     //     editSingleSet,
                     //     newSetInfo,

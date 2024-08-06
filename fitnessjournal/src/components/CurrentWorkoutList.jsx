@@ -62,7 +62,7 @@ export default function CurrentWorkoutList(props) {
                                 ))}
                             </ul>
                             {/* <Link to={`ExerciseDetail/${ex.id}`} className="add-set-link"> */}
-                                <button onClick={e => props.toggleAdd(e)} className="add-set-btn">Add set</button>
+                                <button data-exid={ex.id} onClick={e => props.toggleAdd(e)} className="add-set-btn">Add set</button>
                             {/* </Link> */}
                         </div>
                     )}
