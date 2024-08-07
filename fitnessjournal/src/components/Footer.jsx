@@ -65,11 +65,11 @@ export default function Footer() {
                         </span>
                         <p className="footer-nav-item-text">Workouts</p>
                     </Link>
-                    <Link to="Analysis" className="footer-menu-item-link">
-                        <span className="material-symbols-outlined">
-                            bar_chart
+                    <Link to="Settings" className="footer-menu-item-link">
+                        <span class="material-symbols-outlined">
+                            settings
                         </span>
-                        <p className="footer-nav-item-text">Analysis</p>
+                        <p className="footer-nav-item-text">Settings</p>
                     </Link>
                     {/* <Link className="footer-menu-item-link">
                         <li className="footer-menu-item">Body Stats</li>

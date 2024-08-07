@@ -2,27 +2,28 @@ import { useEffect, useState } from "react"
 import { useOutletContext } from "react-router-dom"
 import { RetrieveAllPRs, usersInDB } from "../firebase"
 
-export default function Analysis() {
-    const [prData, setPRData] = useState([])
+export default function Analysis(props) {
+    const [prData, setPRData] = useState(props.allPRs)
     const { currentUser } = useOutletContext()
 
-    useEffect(() => {
-        loadData()
-    }, [])
-    async function loadData() {
-        try {
-            const data = await RetrieveAllPRs(usersInDB, currentUser)
-            console.log(data)
-            setPRData(data)
-        } catch(err) {
-            console.error("error retrieving data: ", err)
-        }
-    }
+    // useEffect(() => {
+    //     loadData()
+    // }, [])
+    // async function loadData() {
+    //     try {
+    //         const data = await RetrieveAllPRs(usersInDB, currentUser)
+    //         console.log(data)
+    //         setPRData(data)
+    //     } catch(err) {
+    //         console.error("error retrieving data: ", err)
+    //     }
+    // }
 
-    const tableData = prData.map(ex => {
+    const tableData = props.allPRs.map(ex => {
         const milliseconds = ex.createdAt.seconds * 1000 + ex.createdAt.nanoseconds / 1000000
         const date = new Date(milliseconds)
         const stringDate = date.toISOString().split("T")[0]
+        console.log(stringDate)
         const [year, month, day] = stringDate.split("-")
         const formattedDate = `${month}/${day}/${year}`
         return (
@@ -35,10 +36,7 @@ export default function Analysis() {
         )
     })
     return (
-        <main>
-            <section className="hero-section analysis-section">
-                <h1>Analysis</h1>
-            </section>
+        <main className="log-analysis-container">
             <div className="log-analysis">
                 <h2 className="log-analysis-title2">Personal Records</h2>
                 <table className="log-table">

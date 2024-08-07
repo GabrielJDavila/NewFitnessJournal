@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { NavLink, Link, useOutletContext } from "react-router-dom"
-import { usersInDB, editSingleSet, deleteCategory, deleteEx, deleteSingleSet, deleteAllEx, grabLatestPR } from "../firebase"
+import { usersInDB, editSingleSet, deleteCategory, deleteEx, deleteSingleSet, deleteAllEx, grabLatestPR, RetrieveAllPRs } from "../firebase"
 import ConfirmDeleteExModal from "../components/modals/ConfirmDeleteExModal"
 import ConfirmDeleteSetModal from "../components/modals/ConfirmDeleteSetModal"
 import EditSetModal from "../components/modals/EditSetModal"
@@ -11,12 +11,14 @@ import "react-calendar/dist/Calendar.css"
 import { queryWorkoutLogs } from "../firebase"
 import Button from "@mui/material/Button"
 import { Skeleton } from "@mui/material"
+import Analysis from "./Analysis"
 
 
 export default function Dashboard() {
     const [totalWorkouts, setTotalWorkouts] = useState()
     const [averageLoggedTime, setAverageLoggedTime] = useState()
     const [newPR, setNewPR] = useState()
+    const [allPRs, setAllPRs] = useState([])
     const { currentUser } = useOutletContext()
 
     useEffect(() => {
@@ -39,6 +41,8 @@ export default function Dashboard() {
             setTotalWorkouts(data)
             const prData = await grabLatestPR(usersInDB, currentUser)
             setNewPR(prData)
+            const allPRsData = await RetrieveAllPRs(usersInDB, currentUser)
+            setAllPRs(allPRsData)
         } catch(e) {
             console.error("error fetching logged workouts: ", e)
         }
@@ -71,7 +75,7 @@ export default function Dashboard() {
 
     return (
         <main className="dashboard">
-            <section className="hero-section dash-hero">
+            <section className="hero-section analysis-section">
                 <h1>Dashboard</h1>
             </section>
             {/* <h1 className="current-log-title">Nothing to Show</h1> */}
@@ -128,7 +132,7 @@ export default function Dashboard() {
                             <span className="material-symbols-outlined dash-icon">
                                 trophy
                             </span>
-                            <p className="log-title">Recent PRs</p>
+                            <p className="log-title">Most Recent PRs</p>
                         </div>
                         <div className="log-text-container">
                             {/* <p className="log-text">{averageLoggedTime ? averageLoggedTime : "00:00:00"}</p> */}
@@ -153,7 +157,23 @@ export default function Dashboard() {
                         </div>
                     </div>
                 }
+            </div>
+            <div className="dashboard-bottom-container">
+                {allPRs ?
+                    <Analysis
+                        allPRs={allPRs}
 
+                    /> :
+                    <div className="log-container">
+                        <div className="log-title-container">
+                            <Skeleton variant="circular" width={25} height={25}/>
+                            <Skeleton variant="rounded" width="60%" height={10}/>
+                        </div>
+                        <div className="log-text-container">
+                            <Skeleton variant="rounded" width="100%" height={75}/>
+                        </div>
+                    </div>
+                }
             </div>
 
 
