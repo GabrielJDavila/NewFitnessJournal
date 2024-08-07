@@ -7,19 +7,22 @@ import ConfirmDeleteSetModal from "../components/modals/ConfirmDeleteSetModal"
 import EditSetModal from "../components/modals/EditSetModal"
 import TimerModal from "../components/modals/TimerModal"
 import CurrentWorkoutList from "../components/CurrentWorkoutList"
-import { handleDeleteExerciseSubmit, handleDeleteSetSubmit, handleEditSetSubmit, handleDeleteAllExSubmit, toggleEdit, toggleDelete, toggleDeleteAllEx } from "../Utils"
+import { handleDeleteExerciseSubmit, handleDeleteSetSubmit, handleAddSetSubmit, handleEditSetSubmit, handleDeleteAllExSubmit, toggleAddSet, toggleEdit, toggleDelete, toggleDeleteAllEx } from "../Utils"
 import Calendar from "react-calendar"
 import "react-calendar/dist/Calendar.css"
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
 import { Skeleton } from "@mui/material"
+import AddSetModal from "../components/modals/AddSetModal"
+import ExerciseDetail from "./ExerciseDetail"
 
 export default function WorkoutLog() {
     const [workoutData, setWorkoutData] = useState(() => {
-        const savedData = JSON.parse(localStorage.getItem("workoutData"))
+        const savedData = localStorage.getItem("workoutData")
         return savedData ? savedData : []
     })
     
     const [toggleEditSetModal, setToggleEditSetModal] = useState(false)
+    const [toggleAddSetModal, setToggleAddSetModal] = useState(false)
     const [toggleDeleteExModal, setToggleDeleteExModal] = useState(false)
     const [toggleDeleteSetModal, setToggleDeleteSetModal] = useState(false)
     const [toggleDeleteAllExercisesModal, setToggleDeleteAllExercisesModal] = useState(false)
@@ -27,12 +30,13 @@ export default function WorkoutLog() {
     const [toggleCalendar, setToggleCalendar] = useState(false)
     const storedDate = localStorage.getItem("selectedDate")
     const [date, setDate] = useState(storedDate ? new Date(storedDate) : new Date())
+    console.log(date)
     const { currentUser } = useOutletContext()
     const [currentItemToDelete, setCurrentItemToDelete] = useState({
         exIdToDelete: "",
         setIdToDelete: "",
     })
-    
+    const [exid, setExid] = useState("")
     const [newSetInfo, setNewSetInfo] = useState({
         reps: "",
         weight: "",
@@ -54,11 +58,9 @@ export default function WorkoutLog() {
         localStorage.setItem("workoutData", JSON.stringify(workoutData))
     })
 
-    async function loadExerciseList() {
+    async function loadExerciseList(date) {
         
-        if(workoutData) {
-            setShowSkel(false)
-        }
+        
         try {
             const data = await retrieveCurrentExSetsRepsAndPRs(usersInDB, currentUser, date)
             if(data) {
@@ -101,6 +103,10 @@ export default function WorkoutLog() {
 
     function ToggleDeleteAll() {
         setToggleDeleteAllExercisesModal(prev => !prev)
+    }
+
+    function toggleAddSet() {
+        setToggleAddSetModal(prev => !prev)
     }
 
     async function handleDragEnd(result) {
@@ -175,7 +181,9 @@ export default function WorkoutLog() {
     }
 
     function handleClick(e) {
+        console.log(e.target.dataset.exid)
         console.log(e.currentTarget.getAttribute("data-currentex"))
+        setExid(e.target.dataset.exid)
     }
 
     document.addEventListener("click", handleClickOutside)
@@ -248,6 +256,34 @@ export default function WorkoutLog() {
                     modalStyles={modalStyles}
                 />
             }
+
+            { toggleAddSetModal &&
+                <ExerciseDetail
+                    toggleAddSet={toggleAddSet}
+                    onClick={handleClick}
+                    exid={exid}
+                    loadExerciseList={loadExerciseList}
+                    date={date}
+                    // handleAddSet={e => handleAddSetSubmit(e, {
+                    //     editSingleSet,
+                    //     newSetInfo,
+                    //     usersInDB,
+                    //     currentUser,
+                    //     date,
+                    //     loadExerciseList,
+                    //     toggleAddSet
+                    // }, 
+                    // {
+                    //     setNewSetInfo,
+                    //     setToggleAddSetModal 
+                    // })}
+                    // modalStyles={modalStyles}
+                    // toggle={e => toggleAddSet(e, setToggleAddSetModal)}
+                    // handleChange={handleChange}
+                    // title={newSetInfo.title}
+                />
+            }
+
             { toggleEditSetModal &&
                 <EditSetModal
                     handleEditSet={e => handleEditSetSubmit(e, {
@@ -333,6 +369,7 @@ export default function WorkoutLog() {
                                         handleClick={handleClick}
                                         toggleDel={e => toggleDelete(e, setCurrentItemToDelete, setToggleDeleteExModal, setToggleDeleteSetModal)}
                                         toggleEdit={e => toggleEdit(e, setNewSetInfo, setToggleEditSetModal)}
+                                        toggleAdd={e => toggleAddSet(e)}
                                     />
                                     {provided.placeholder}
                                 </div>

@@ -436,7 +436,6 @@ header {
   padding: 1rem;
   gap: 2rem;
   width: 90%;
-  max-width: 600px;
   margin: auto;
   justify-content: center;
 }
@@ -445,6 +444,8 @@ header {
   box-shadow: 0 0 5px 2px rgb(220, 220, 220);
   border-radius: 6px;
   width: 100%;
+  max-width: 380px;
+  margin: auto;
   height: 175px;
   padding: 0 .5rem .5rem;
   background: rgb(246, 246, 246);
@@ -763,8 +764,14 @@ header {
 }
 
 .set-detail {
+  position: absolute;
+  top: 0;
+  margin: 0;
   display: flex;
   flex-direction: column;
+  background: white;
+  z-index: 20;
+  height: 91%;
 }
 
 .add-set-btn {
@@ -830,8 +837,8 @@ header {
 /*=============== ExerciseDetail.jsx styles ====================*/
 
 .set-detail {
-  margin-top: 100px;
-  padding: 0 1rem;
+  margin-top: 0;
+  padding: 10rem 1rem;
   position: fixed;
   width: 100%;
 }
@@ -841,7 +848,7 @@ header {
   display: flex;
   justify-content: center;
   align-items: center;
-  top: 1rem;
+  top: 12rem;
   background: #DC684B;
   padding: .5rem;
   width: 40px;
@@ -1470,6 +1477,8 @@ footer {
 .log-analysis {
   text-align: left;
   width: 100%;
+  margin: auto;
+  text-align: center;
   padding: 1rem;
 }
 
@@ -1486,6 +1495,10 @@ footer {
 .log-table, th, td {
   border: 1px solid grey;
   padding: .5rem;
+  width: 100%;
+  max-width: 700px;
+  margin: auto;
+  text-align: left;
 }
 
 .log-row-titles
@@ -1521,4 +1534,16 @@ footer {
 .coming-soon-link {
   color: #DC684B;
   border-bottom: 1px solid #DC684B;
+}
+
+@media screen and (min-width: 700px) {
+  .dashboard-top-content-container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+  }
+
+  .log-container {
+    width: 30%;
+  }
 }

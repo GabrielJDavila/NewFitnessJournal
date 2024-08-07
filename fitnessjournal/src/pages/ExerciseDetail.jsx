@@ -4,16 +4,18 @@ import { addSetsReps, usersInDB} from "../firebase"
 import ExDetailBackBtn from "../components/ExDetailBackBtn"
 import SetAdded from "../components/modals/SetAdded"
 
-export default function ExerciseDetail() {
-    const params = useParams()
+export default function ExerciseDetail(props) {
+    console.log(props.exid)
+    // const params = useParams()
     // Check if params ID in local storage matches. If so, then get the wieght/reps in storage; if not, empty state like below
     const [repsAndWeight, setRepsAndWeight] = useState(() => {
-        const savedData = localStorage.getItem(params.id)
+        const savedData = localStorage.getItem(props.exid)
         return savedData ? JSON.parse(savedData) : {reps: 0, weight: 0, weightType: ""}
     })
+    
     const [showModal, setShowModal] = useState(false)
     const { currentUser } = useOutletContext()
-    console.log(localStorage.getItem(params.id))
+    
     useEffect(() => {
         if(showModal) {
             const flipModalState = setTimeout(() => {
@@ -30,14 +32,15 @@ export default function ExerciseDetail() {
 
     useEffect(() => {
         // Might have to store 3 things at once: params ID, wieght and reps. Check for ID when initializing state.
-        localStorage.setItem(params.id, JSON.stringify(repsAndWeight))
+        localStorage.setItem(props.exid, JSON.stringify(repsAndWeight))
     }, [repsAndWeight])
 
     function handleAddSetClick(e) {
         e.preventDefault()
         if (repsAndWeight.reps > 0) {
-            addSetsReps(params.id, repsAndWeight.weight, repsAndWeight.reps, repsAndWeight.weightType, usersInDB, currentUser)
+            addSetsReps(props.exid, repsAndWeight.weight, repsAndWeight.reps, repsAndWeight.weightType, usersInDB, currentUser)
             setShowModal(true)
+            props.loadExerciseList(props.date)
         } else {
             alert("Please enter an amount for reps.")
         }        
@@ -94,6 +97,7 @@ export default function ExerciseDetail() {
     return (
         <form onSubmit={e => handleAddSetClick(e)} className="set-detail">
             <ExDetailBackBtn />
+            <p onClick={e => props.toggleAddSet(e)}>cancel</p>
             <fieldset className="dash-input-fieldset">   
                 <div className="ex-info-container">
                     <p className="ex-info-text weight">Weight (lbs):</p>
