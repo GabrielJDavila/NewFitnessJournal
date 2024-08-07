@@ -40,6 +40,7 @@ export default function ExerciseDetail(props) {
         if (repsAndWeight.reps > 0) {
             addSetsReps(props.exid, repsAndWeight.weight, repsAndWeight.reps, repsAndWeight.weightType, usersInDB, currentUser)
             setShowModal(true)
+            props.loadExerciseList(props.date)
         } else {
             alert("Please enter an amount for reps.")
         }        

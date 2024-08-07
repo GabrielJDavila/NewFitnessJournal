@@ -262,6 +262,8 @@ export default function WorkoutLog() {
                     toggleAddSet={toggleAddSet}
                     onClick={handleClick}
                     exid={exid}
+                    loadExerciseList={loadExerciseList}
+                    date={date}
                     // handleAddSet={e => handleAddSetSubmit(e, {
                     //     editSingleSet,
                     //     newSetInfo,
