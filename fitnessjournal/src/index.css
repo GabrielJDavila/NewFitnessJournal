@@ -248,6 +248,7 @@ header {
   text-align: center;
   transition: .2s all ease;
   overflow: hidden;
+  border-radius: 0 0 6px 6px;
 }
 
 .menu-item-link {
@@ -260,7 +261,7 @@ header {
   list-style: none;
   margin: 0;
   border-top: 1px solid rgb(191, 76, 48);
-  padding: .5rem;
+  padding: .95rem;
   font-size: 1.5rem;
   cursor: pointer;
   transition: .2s ease-in-out;

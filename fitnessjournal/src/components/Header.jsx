@@ -52,9 +52,6 @@ export default function Header() {
                     <Link to="WorkoutLog" className="menu-item-link">
                         <li className="menu-item">Workout Log</li>
                     </Link>
-                    <Link to="Analysis" className="menu-item-link">
-                        <li className="menu-item">Log Analysis</li>
-                    </Link>
                     <Link to="Settings" className="menu-item-link">
                         <li className="menu-item">Settings</li>
                     </Link>
