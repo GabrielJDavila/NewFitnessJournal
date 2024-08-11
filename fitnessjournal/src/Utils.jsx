@@ -23,6 +23,8 @@ export async function handleDeleteAllExSubmit(e, {
     }
 }
 
+
+// Add delete message on complete, go to WorkoutLog and passi it in
 export async function handleDeleteExerciseSubmit(e, {
     deleteEx,
     usersInDB,
