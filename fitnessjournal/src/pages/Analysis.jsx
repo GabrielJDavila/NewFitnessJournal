@@ -48,12 +48,6 @@ export default function Analysis(props) {
                             <th>Date</th>
                         </tr>
                         {tableData}
-                        {/* <tr className="log-row">
-                            <td>RFE Split Squat</td>
-                            <td>70</td>
-                            <td>10</td>
-                            <td>06/26/2024</td>
-                        </tr> */}
                     </tbody>
                 </table>
             </div>

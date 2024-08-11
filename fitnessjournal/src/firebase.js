@@ -549,13 +549,23 @@ async function sendPRtoDash(userCollection, userId, name, exerciseId, weight, re
         const latestPRref = collection(userDocRef, "latestPRs")
         const exSetDocRef = doc(latestPRref, exerciseId)
         const docSnap = await getDoc(exSetDocRef)
-        await setDoc(exSetDocRef, {
+
+        await addDoc(latestPRref, {
             exName: name,
             exId: exerciseId,
             weight: weight,
             reps: reps,
             createdAt: createdAt
         })
+
+        // await setDoc(exSetDocRef, {
+        //     exName: name,
+        //     exId: exerciseId,
+        //     weight: weight,
+        //     reps: reps,
+        //     createdAt: createdAt
+        // })
+
         // if(docSnap.exists()) {
         //     await updateDoc(exSetDocRef, {
         //         exName: name,
@@ -565,7 +575,7 @@ async function sendPRtoDash(userCollection, userId, name, exerciseId, weight, re
         //         createdAt: createdAt
         //     })
         // } else {
-        //     await setDoc(exSetDocRef, {
+        //     await addDoc(doc(latestPRref), {
         //         exName: name,
         //         exId: exerciseId,
         //         weight: weight,
@@ -852,11 +862,25 @@ export async function RetrieveAllPRs(userCollection, userId) {
     try {
         const userDocRef = doc(userCollection, userId)
         const latestPRref = collection(userDocRef, "latestPRs")
-        const PRsQuery = query(latestPRref, orderBy("exName", "asc"))
+        const PRsQuery = query(latestPRref, orderBy("createdAt", "desc"))
         const PRsSnapshot = await getDocs(PRsQuery)
         let PRs = []
+
+        const latestPRsMap = new Map()
+        // need to refactor this. I want to grab the latest PR for each exercise that is a PR.
         for(const doc of PRsSnapshot.docs) {
-            PRs.push(doc.data())
+            const exId = doc.data().exId
+            const milliseconds = doc.data().createdAt.seconds * 1000 + doc.data().createdAt.nanoseconds / 1000000
+            console.log(milliseconds)
+            if(PRs.some(pr => 
+                pr.exId === exId 
+                // (pr.createdAt.seconds * 1000 + pr.createdAt.nanoseconds / 1000000) < milliseconds
+            )) {
+                console.log("pr exists already")
+                
+            } else {
+                PRs.push(doc.data())
+            }
         }
         console.log(PRs)
         return PRs
