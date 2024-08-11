@@ -102,7 +102,8 @@ export async function handleDeleteSetSubmit(e, {
     date,
     currentItemToDelete,
     loadExerciseList,
-    toggleDelete 
+    toggleDelete,
+    toggleDeleteSetMessage 
 }, 
 { 
     setCurrentItemToDelete,
@@ -110,9 +111,10 @@ export async function handleDeleteSetSubmit(e, {
     setToggleDeleteSetModal 
 }) {
     e.preventDefault()
+    toggleDelete(e, setCurrentItemToDelete, setToggleDeleteExModal, setToggleDeleteSetModal)
+    toggleDeleteSetMessage()
     await deleteSingleSet(usersInDB, currentUser, date, currentItemToDelete.exIdToDelete, currentItemToDelete.setIdToDelete)
     await loadExerciseList(date)
-    toggleDelete(e, setCurrentItemToDelete, setToggleDeleteExModal, setToggleDeleteSetModal)
 }
 
 // Toggles deleteAllEx modal

@@ -14,6 +14,7 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
 import { Skeleton } from "@mui/material"
 import AddSetModal from "../components/modals/AddSetModal"
 import ExerciseDetail from "./ExerciseDetail"
+import DeleteMessage from "../components/modals/DeleteMessage"
 
 export default function WorkoutLog() {
     const [workoutData, setWorkoutData] = useState(() => {
@@ -25,6 +26,7 @@ export default function WorkoutLog() {
     const [toggleAddSetModal, setToggleAddSetModal] = useState(false)
     const [toggleDeleteExModal, setToggleDeleteExModal] = useState(false)
     const [toggleDeleteSetModal, setToggleDeleteSetModal] = useState(false)
+    const [deleteSetMessage, setDeleteSetMessage] = useState(false)
     const [toggleDeleteAllExercisesModal, setToggleDeleteAllExercisesModal] = useState(false)
     const [toggleTimerModal, setToggleTimerModal] = useState(false)
     const [toggleCalendar, setToggleCalendar] = useState(false)
@@ -57,6 +59,16 @@ export default function WorkoutLog() {
     useEffect(() => {
         localStorage.setItem("workoutData", JSON.stringify(workoutData))
     })
+
+    useEffect(() => {
+        if(deleteSetMessage) {
+            const timeout = setTimeout(() => {
+                toggleDeleteSetMessage()
+            }, 3000)
+
+            return () => clearTimeout(timeout)
+        }
+    }, [deleteSetMessage])
 
     async function loadExerciseList(date) {
         
@@ -107,6 +119,10 @@ export default function WorkoutLog() {
 
     function toggleAddSet() {
         setToggleAddSetModal(prev => !prev)
+    }
+
+    function toggleDeleteSetMessage() {
+        setDeleteSetMessage(prev => !prev)
     }
 
     async function handleDragEnd(result) {
@@ -336,7 +352,8 @@ export default function WorkoutLog() {
                         date,
                         currentItemToDelete,
                         loadExerciseList,
-                        toggleDelete
+                        toggleDelete,
+                        toggleDeleteSetMessage
                     },
                     {
                         setCurrentItemToDelete,
@@ -378,7 +395,7 @@ export default function WorkoutLog() {
                         </Droppable>
                     </DragDropContext>
                 }
-                {/* workoutData.length === 0 */}
+                {deleteSetMessage && <DeleteMessage />}
                 {!showSkel && !workoutData && <h1 className="current-log-title">Workout Log Empty {formattedDate}</h1>}
             </div>
         </div>
