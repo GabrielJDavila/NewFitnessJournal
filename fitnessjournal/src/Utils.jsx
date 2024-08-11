@@ -39,7 +39,7 @@ export async function handleDeleteExerciseSubmit(e, {
 }) {
     e.preventDefault()
     await deleteEx(usersInDB, currentUser, date, currentItemToDelete.exIdToDelete)
-    await loadExerciseList(e)
+    await loadExerciseList(date)
     toggleDelete(e, setCurrentItemToDelete, setToggleDeleteExModal, setToggleDeleteSetModal)
 }
 
@@ -109,7 +109,7 @@ export async function handleDeleteSetSubmit(e, {
 }) {
     e.preventDefault()
     await deleteSingleSet(usersInDB, currentUser, date, currentItemToDelete.exIdToDelete, currentItemToDelete.setIdToDelete)
-    await loadExerciseList(e)
+    await loadExerciseList(date)
     toggleDelete(e, setCurrentItemToDelete, setToggleDeleteExModal, setToggleDeleteSetModal)
 }
 

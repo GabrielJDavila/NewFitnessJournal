@@ -549,23 +549,30 @@ async function sendPRtoDash(userCollection, userId, name, exerciseId, weight, re
         const latestPRref = collection(userDocRef, "latestPRs")
         const exSetDocRef = doc(latestPRref, exerciseId)
         const docSnap = await getDoc(exSetDocRef)
-        if(docSnap.exists()) {
-            await updateDoc(exSetDocRef, {
-                exName: name,
-                exId: exerciseId,
-                weight: weight,
-                reps: reps,
-                createdAt: createdAt
-            })
-        } else {
-            await setDoc(exSetDocRef, {
-                exName: name,
-                exId: exerciseId,
-                weight: weight,
-                reps: reps,
-                createdAt: createdAt
-            })
-        }
+        await setDoc(exSetDocRef, {
+            exName: name,
+            exId: exerciseId,
+            weight: weight,
+            reps: reps,
+            createdAt: createdAt
+        })
+        // if(docSnap.exists()) {
+        //     await updateDoc(exSetDocRef, {
+        //         exName: name,
+        //         exId: exerciseId,
+        //         weight: weight,
+        //         reps: reps,
+        //         createdAt: createdAt
+        //     })
+        // } else {
+        //     await setDoc(exSetDocRef, {
+        //         exName: name,
+        //         exId: exerciseId,
+        //         weight: weight,
+        //         reps: reps,
+        //         createdAt: createdAt
+        //     })
+        // }
 
     } catch(e) {
         console.error("error sending ", e)
