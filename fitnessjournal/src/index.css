@@ -380,15 +380,6 @@ header {
   width: 100%;
 }
 
-.calendar-container::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    box-shadow: 0 0 6px 3px rgba(0, 0, 0, 0.3);
-    z-index: -1;
-}
 
 .close-btn {
   position: absolute;

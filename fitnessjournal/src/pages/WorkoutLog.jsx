@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react"
 import { Link, useOutletContext } from "react-router-dom"
-import { usersInDB, retrieveCurrentExSetsRepsAndPRs, editSingleSet, deleteEx, deleteSingleSet, deleteAllEx, reOrderWorkoutList } from "../firebase"
+import { usersInDB, retrieveCurrentExSetsRepsAndPRs, editSingleSet, deleteEx, deleteSingleSet, deleteAllEx, reOrderWorkoutList, retrieveAllWorkouts } from "../firebase"
 import ConfirmDeleteAllExModal from "../components/modals/ConfirmDeleteAllEx"
 import ConfirmDeleteExModal from "../components/modals/ConfirmDeleteExModal"
 import ConfirmDeleteSetModal from "../components/modals/ConfirmDeleteSetModal"
@@ -9,7 +9,8 @@ import TimerModal from "../components/modals/TimerModal"
 import CurrentWorkoutList from "../components/CurrentWorkoutList"
 import { handleDeleteExerciseSubmit, handleDeleteSetSubmit, handleAddSetSubmit, handleEditSetSubmit, handleDeleteAllExSubmit, toggleAddSet, toggleEdit, toggleDelete, toggleDeleteAllEx } from "../Utils"
 import Calendar from "react-calendar"
-import "react-calendar/dist/Calendar.css"
+import "../calendar-custom.css"
+// import "react-calendar/dist/Calendar.css"
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
 import { Skeleton } from "@mui/material"
 import AddSetModal from "../components/modals/AddSetModal"
@@ -21,7 +22,7 @@ export default function WorkoutLog() {
         const savedData = localStorage.getItem("workoutData")
         return savedData ? savedData : []
     })
-    
+    const [workoutDatesData, setWorkoutDatesData] = useState([])
     const [toggleEditSetModal, setToggleEditSetModal] = useState(false)
     const [toggleAddSetModal, setToggleAddSetModal] = useState(false)
     const [toggleDeleteExModal, setToggleDeleteExModal] = useState(false)
@@ -58,7 +59,7 @@ export default function WorkoutLog() {
 
     useEffect(() => {
         localStorage.setItem("workoutData", JSON.stringify(workoutData))
-    })
+    }, [])
 
     useEffect(() => {
         if(deleteSetMessage) {
@@ -71,13 +72,15 @@ export default function WorkoutLog() {
     }, [deleteSetMessage])
 
     async function loadExerciseList(date) {
-        
-        
         try {
             const data = await retrieveCurrentExSetsRepsAndPRs(usersInDB, currentUser, date)
+            const workoutDates = await retrieveAllWorkouts(usersInDB, currentUser)
             if(data) {
                 setWorkoutData(data.exercises)
                 setShowSkel(false)
+            }
+            if(workoutDates) {
+                setWorkoutDatesData(workoutDates)
             }
             
         } catch(e) {
@@ -103,6 +106,19 @@ export default function WorkoutLog() {
     function handleDateChange(newDate) {
         setDate(newDate)
         localStorage.setItem("selectedDate", newDate.toISOString())
+        handleToggleCalendar()
+    }
+
+    // function to check place previous workout dates on corresponding tiles in react calendar
+    function tileClassName({ date, view }) {
+        const workoutDatesSet = new Set(workoutDatesData)
+        const formattedCalendarDate = date.toISOString().split('T')[0]
+
+        if(view === "month" && workoutDatesSet.has(formattedCalendarDate)) {
+            return "react-calendar__tile--highlight"
+        } else {
+            return null
+        }
     }
 
     function handleToggleCalendar() {
@@ -244,6 +260,7 @@ export default function WorkoutLog() {
                         onChange={handleDateChange}
                         value={date}
                         onClickDay={e => console.log(e)}
+                        tileClassName={tileClassName}
                     />
                 </div>
             }

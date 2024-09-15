@@ -589,6 +589,26 @@ async function sendPRtoDash(userCollection, userId, name, exerciseId, weight, re
     }
 }
 
+// grab all workouts from beginning of app usage
+export async function retrieveAllWorkouts(userCollection, userId) {
+    let workouts = []
+
+    try {
+        const userDocRef = doc(userCollection, userId)
+        const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
+        const workoutListQuery = query(currentWorkoutCollectionRef)
+        const workoutListSnapshot = await getDocs(workoutListQuery)
+
+        workoutListSnapshot.forEach(workoutDoc => {
+            workouts.push(workoutDoc.id)
+        })
+    
+    return workouts
+    } catch(error) {
+        console.error("error retrieving all workouts: ", error)
+    }
+}
+
 // need to implement sendPRToDash
 // A way to make the code easier to load: render only the data that changes.
 // so when a user makes a change like adding an exercise, adding a set, retrieve the changed data,
