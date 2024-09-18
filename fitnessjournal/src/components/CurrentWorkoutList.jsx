@@ -1,10 +1,9 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Link, useOutletContext } from "react-router-dom"
 import { Draggable } from "react-beautiful-dnd"
 export default function CurrentWorkoutList(props) {
     const [flipView, setFlipView] = useState(new Array(props.data.length).fill(false))
-    console.log(props.data)
-    console.log(flipView)
+    const [currentIndex, setCurrentindex] = useState(null)
 
     // function to reset flipView to close any existing edit/view modals
     function resetFlipView() {
@@ -15,14 +14,19 @@ export default function CurrentWorkoutList(props) {
     function handleFlipView(e) {
         resetFlipView()
         console.log(e.target.dataset.flipview)
-        const index = e.target.dataset.flipview
+        const index = Number(e.target.dataset.flipview)
         setFlipView(prev => {
             const boolArr = [...prev]
             boolArr[index] = !boolArr[index]
             return boolArr
         })
+        setCurrentindex(index)
     }
 
+    const divStyles = {
+        height: flipView[currentIndex] ? "100px" : "0px",
+        border: flipView[currentIndex] ? "2px solid black" : "none"
+    }
         const currentWorkout = props.data.map((ex, index) => {
             return (
                 <Draggable key={ex.id} draggableId={ex.id} index={index}>
@@ -39,14 +43,25 @@ export default function CurrentWorkoutList(props) {
                             <div className="ex-name-container">
                                 <p className="ex-number">{index + 1}</p>
                                 <p className="current-ex-name">{ex.name}</p>
-                                <i onClick={e => handleFlipView(e)} data-flipview={index} className="fa-solid fa-ellipsis-vertical"></i>
-                                <div className="ex-detail-div">
+                                {!flipView[index] ?
+                                <i onClick={e => handleFlipView(e)} data-flipview={index} style={{transform: flipView[index] ? "rotate(90deg)" : "rotate(0deg)", transition: ".2s ease all"}} className="fa-solid fa-ellipsis-vertical"></i>
+                                :
+                                <i onClick={e => resetFlipView()} data-flipview={index} style={{transform: flipView[index] ? "rotate(0deg)" : "rotate(90deg)", transition: ".2s ease all"}} className="fa-solid fa-ellipsis"></i>
+                                }
+                                {flipView[index] &&
+                                <div
+                                    style={{
+                                        height: flipView[index] ? "100px" : "0px",
+                                    }}
+                                    className="ex-detail-div"
+                                >
                                     <i
                                         onClick={e => props.toggleDel(e)}
                                         data-deleteexid={ex.id}
                                         className="fa-solid fa-trash curr-ex-delete"
                                     ></i>
                                 </div>
+                                }
                             </div>
                             
                             <ul className="all-sets-container">
