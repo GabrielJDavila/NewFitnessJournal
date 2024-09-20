@@ -750,6 +750,15 @@ th:last-child, td:last-child {
   position: relative;
 }
 
+.ex-detail-div {
+  position: absolute;
+  right: 0;
+  top: 20px;
+  background-color: white;
+  box-shadow: 0 0 4px 1px rgb(195, 195, 195);
+  border: 2px solid rgb(195, 195, 195);
+}
+
 .curr-ex-delete {
   font-size: 1rem;
 }
