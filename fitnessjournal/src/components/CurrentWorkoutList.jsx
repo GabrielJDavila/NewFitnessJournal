@@ -28,6 +28,8 @@ export default function CurrentWorkoutList(props) {
         border: flipView[currentIndex] ? "2px solid black" : "none"
     }
         const currentWorkout = props.data.map((ex, index) => {
+            console.log(ex.name.length)
+            const shortenedExName = ex.name.length > 35 ? `${ex.name.slice(0, ex.name.length - 1) + '...'}` : ex.name
             return (
                 <Draggable key={ex.id} draggableId={ex.id} index={index}>
                     {(provided) => (
@@ -42,7 +44,7 @@ export default function CurrentWorkoutList(props) {
                         >
                             <div className="ex-name-container">
                                 <p className="ex-number">{index + 1}</p>
-                                <p className="current-ex-name">{ex.name}</p>
+                                <p className="current-ex-name">{shortenedExName}</p>
                                 {!flipView[index] ?
                                 <i onClick={e => handleFlipView(e)} data-flipview={index} style={{transform: flipView[index] ? "rotate(90deg)" : "rotate(0deg)", transition: ".2s ease all"}} className="fa-solid fa-ellipsis-vertical"></i>
                                 :
@@ -52,14 +54,32 @@ export default function CurrentWorkoutList(props) {
                                 <div
                                     style={{
                                         height: flipView[index] ? "100px" : "0px",
+                                        width: flipView[index] ? "100px" : "0px"
                                     }}
                                     className="ex-detail-div"
                                 >
-                                    <i
-                                        onClick={e => props.toggleDel(e)}
-                                        data-deleteexid={ex.id}
-                                        className="fa-solid fa-trash curr-ex-delete"
-                                    ></i>
+                                    <div className="ex-detail-edit-div">
+                                        <p>Edit</p>
+                                        <span className="material-symbols-outlined curr-ex-edit">
+                                            edit
+                                        </span>
+                                    </div>
+                                    <div className="ex-detail-delete-div">
+                                        <p>Delete</p>
+                                        <span
+                                            className="material-symbols-outlined curr-ex-delete"
+                                            onClick={e => props.toggleDel(e)}
+                                            data-deleteexid={ex.id}
+                                        >
+                                            delete
+                                        </span>
+                                        {/* <i
+                                            onClick={e => props.toggleDel(e)}
+                                            data-deleteexid={ex.id}
+                                            className="fa-solid fa-trash curr-ex-delete"
+                                        ></i> */}
+                                    </div>
+                                    
                                 </div>
                                 }
                             </div>
