@@ -28,7 +28,8 @@ export default function CurrentWorkoutList(props) {
         border: flipView[currentIndex] ? "2px solid black" : "none"
     }
         const currentWorkout = props.data.map((ex, index) => {
-            console.log(ex.name.length)
+            console.log(props.date)
+            // fix this to work across all screen sizes. Should only show with ellipses on mobile since its a smaller screen
             const shortenedExName = ex.name.length > 35 ? `${ex.name.slice(0, ex.name.length - 1) + '...'}` : ex.name
             return (
                 <Draggable key={ex.id} draggableId={ex.id} index={index}>
@@ -53,11 +54,17 @@ export default function CurrentWorkoutList(props) {
                                 {flipView[index] &&
                                 <div
                                     style={{
-                                        height: flipView[index] ? "100px" : "0px",
+                                        height: flipView[index] ? "auto" : "0px",
                                         width: flipView[index] ? "100px" : "0px"
                                     }}
                                     className="ex-detail-div"
                                 >
+                                    <Link to={`ExDetailedView/${ex.id}`} state={{ date: props.date }} className="ex-detail-view-div">
+                                        <p>View</p>
+                                        <span class="material-symbols-outlined curr-ex-view">
+                                            visibility
+                                        </span>
+                                    </Link>
                                     <div className="ex-detail-edit-div">
                                         <p>Edit</p>
                                         <span className="material-symbols-outlined curr-ex-edit">

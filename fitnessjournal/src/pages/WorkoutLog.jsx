@@ -17,11 +17,24 @@ import AddSetModal from "../components/modals/AddSetModal"
 import ExerciseDetail from "./ExerciseDetail"
 import DeleteMessage from "../components/modals/DeleteMessage"
 
+// Receiving this error:
+// chunk-GSZ7ISAW.js?v=c4884d0e:9145 Uncaught QuotaExceededError: Failed to execute 'setItem' on 'Storage': Setting the value of 'workoutData' exceeded the quota.
+//     at WorkoutLog.jsx:61:22
+//     at commitHookEffectListMount (chunk-GSZ7ISAW.js?v=c4884d0e:16904:34)
+//     at commitPassiveMountOnFiber (chunk-GSZ7ISAW.js?v=c4884d0e:18152:19)
+//     at commitPassiveMountEffects_complete (chunk-GSZ7ISAW.js?v=c4884d0e:18125:17)
+//     at commitPassiveMountEffects_begin (chunk-GSZ7ISAW.js?v=c4884d0e:18115:15)
+//     at commitPassiveMountEffects (chunk-GSZ7ISAW.js?v=c4884d0e:18105:11)
+//     at flushPassiveEffectsImpl (chunk-GSZ7ISAW.js?v=c4884d0e:19486:11)
+//     at flushPassiveEffects (chunk-GSZ7ISAW.js?v=c4884d0e:19443:22)
+//     at commitRootImpl (chunk-GSZ7ISAW.js?v=c4884d0e:19412:13)
+//     at commitRoot (chunk-GSZ7ISAW.js?v=c4884d0e:19273:13)
 export default function WorkoutLog() {
-    const [workoutData, setWorkoutData] = useState(() => {
-        const savedData = localStorage.getItem("workoutData")
-        return savedData ? savedData : []
-    })
+    const [workoutData, setWorkoutData] = useState([])
+    // const [workoutData, setWorkoutData] = useState(() => {
+    //     const savedData = localStorage.getItem("workoutData")
+    //     return savedData ? savedData : []
+    // })
     const [workoutDatesData, setWorkoutDatesData] = useState([])
     const [toggleEditSetModal, setToggleEditSetModal] = useState(false)
     const [toggleAddSetModal, setToggleAddSetModal] = useState(false)
@@ -57,9 +70,9 @@ export default function WorkoutLog() {
         loadExerciseList(date)
     }, [date])
 
-    useEffect(() => {
-        localStorage.setItem("workoutData", JSON.stringify(workoutData))
-    }, [])
+    // useEffect(() => {
+    //     localStorage.setItem("workoutData", JSON.stringify(workoutData))
+    // }, [workoutData])
 
     useEffect(() => {
         if(deleteSetMessage) {
