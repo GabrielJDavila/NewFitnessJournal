@@ -2,10 +2,10 @@ import { Link } from "react-router-dom"
 
 export default function ExDetailedViewNav() {
     return (
-        <div>
-            <Link>Log</Link>
-            <Link>History</Link>
-            <Link>Progress</Link>
+        <div className="ex-detail-nav">
+            <Link className="ex-detail-nav-item">Log</Link>
+            <Link className="ex-detail-nav-item">History</Link>
+            <Link className="ex-detail-nav-item">Progress</Link>
         </div>
     )
 }

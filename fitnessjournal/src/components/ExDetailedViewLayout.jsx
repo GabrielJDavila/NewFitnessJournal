@@ -10,7 +10,7 @@ export default function ExDetailedViewLayout() {
     })
 
     return (
-        <div className="ex-detail-layout" style={{marginTop: "100px"}}>
+        <div className="ex-detail-layout">
             <ExDetailedViewNav />
             <Outlet context={{ currentUser }} />
         </div>

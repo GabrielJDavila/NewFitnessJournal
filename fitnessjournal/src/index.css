@@ -788,6 +788,22 @@ th:last-child, td:last-child {
   margin-left: auto;
 }
 
+.ex-detail-layout {
+  margin-top: 65px;
+}
+
+.ex-detail-nav {
+  display: flex;
+  justify-content: center;
+}
+
+.ex-detail-nav-item {
+  background-color: #DC684B;
+  padding: 1rem;
+  width: 100%;
+  border: 2px solid #c65d42;
+}
+
 .all-sets-container {
   padding: .5rem 0;
   display: flex;
