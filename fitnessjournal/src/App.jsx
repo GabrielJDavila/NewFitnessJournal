@@ -20,6 +20,8 @@ import FoodDetail from "./pages/FoodDetail"
 import ComingSoon from "./pages/ComingSoon"
 import ScrollToTop from "./components/ScrollToTop"
 import Analysis from "./pages/Analysis"
+import ExDetailedViewLayout from "./components/ExDetailedViewLayout"
+import ExDetailedView from "./pages/ExDetailedView"
 
 function App() {
 
@@ -38,6 +40,11 @@ function App() {
             {/* <Route path="profilecreation" element={<ProfileCreation />}/> */}
             <Route path="WorkoutLog" element={<WorkoutLogLayout />}>
               <Route index element={<WorkoutLog />} />
+              {/* create a layout for ExDetailedView, so that I can switch between pages: Detailed View, History, and PRs */}
+              <Route path="ExDetailedView/:id" element={<ExDetailedViewLayout />}>
+                <Route index element={<ExDetailedView />}/>
+              </Route>
+              
               <Route path="AllCategories" element={<AllCategories />} />
               <Route path="AllCategories/:id" element={<LoadedExercises />}/>
               <Route path="ExerciseDetail/:id" element={<ExerciseDetail />} />

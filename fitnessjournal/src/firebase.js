@@ -679,6 +679,63 @@ export async function retrieveCurrentExSetsRepsAndPRs(userCollection, userId, se
     }
 }
 
+export async function retrieveExDetailedView(userCollection, userId, exId, currentDate) {
+    const dateString = currentDate.toISOString().split("T")[0]
+    const userDocRef = doc(userCollection, userId)
+    const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
+    const latestPRsCollectionRef = collection(userDocRef, "latestPRs")
+    const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, dateString)
+    const dateDocSnap = await getDoc(dateOfWorkoutDocRef)
+    if(!dateDocSnap.exists()) {
+        console.log("no workout for this date.")
+        return []
+            
+    }
+
+    const exListCollection = collection(dateOfWorkoutDocRef, "exList")
+    const exerciseDocRef = doc(exListCollection, exId)
+    const exerciseDocSnap = await getDoc(exerciseDocRef)
+    const repsAndSetsRef = collection(exerciseDocRef, "currentEx")
+
+    const setsAndRepsQuery = query(repsAndSetsRef)
+    const setsAndRepsSnapshot = await getDocs(setsAndRepsQuery)
+    
+    let exerciseData = {
+        exName: exerciseDocSnap.data().name,
+        setsReps: []
+    }
+    setsAndRepsSnapshot.forEach(set => {
+        const setId = set.id
+        const { createdAt, reps, weight } = set.data()
+        exerciseData.setsReps.push({
+            setId,
+            createdAt,
+            reps,
+            weight
+        })
+    })
+
+    console.log(exerciseData)
+    return exerciseData
+}
+
+export async function retrieveExHistory(userCollection, userId, exId) {
+    const userDocRef = doc(userCollection, userId)
+    const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
+    const exCollectionQuery = query(currentWorkoutCollectionRef)
+    const exCollectionSnapshot = await getDocs(exCollectionQuery)
+
+    // Loop through each logged workout, and collect the docs that hold the exId.
+    
+    const exListCollection = collection(dateOfWorkoutDocRef, "exList")
+    const exerciseDocRef = doc(exListCollection, exId)
+    const exerciseDocSnap = await getDoc(exerciseDocRef)
+    const repsAndSetsRef = collection(exerciseDocRef, "currentEx")
+
+    const setsAndRepsQuery = query(repsAndSetsRef)
+    const setsAndRepsSnapshot = await getDocs(setsAndRepsQuery)
+}
+
 async function fetchExData(exDoc) {
             const exId = exDoc.id
             const currentExRef = collection(exDoc.ref, "currentEx")
