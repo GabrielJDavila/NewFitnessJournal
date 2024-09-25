@@ -22,6 +22,7 @@ import ScrollToTop from "./components/ScrollToTop"
 import Analysis from "./pages/Analysis"
 import ExDetailedViewLayout from "./components/ExDetailedViewLayout"
 import ExDetailedView from "./pages/ExDetailedView"
+import ExDetailedHistory from "./pages/ExDetailedHistory"
 
 function App() {
 
@@ -43,6 +44,7 @@ function App() {
               {/* create a layout for ExDetailedView, so that I can switch between pages: Detailed View, History, and PRs */}
               <Route path="ExDetailedView/:id" element={<ExDetailedViewLayout />}>
                 <Route index element={<ExDetailedView />}/>
+                <Route path="ExDetailedHistory" element={<ExDetailedHistory/>}/>
               </Route>
               
               <Route path="AllCategories" element={<AllCategories />} />

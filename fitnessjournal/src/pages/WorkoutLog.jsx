@@ -45,6 +45,7 @@ export default function WorkoutLog() {
     const [toggleTimerModal, setToggleTimerModal] = useState(false)
     const [toggleCalendar, setToggleCalendar] = useState(false)
     const storedDate = localStorage.getItem("selectedDate")
+    console.log(storedDate)
     const [date, setDate] = useState(storedDate ? new Date(storedDate) : new Date())
     console.log(date)
     const { currentUser } = useOutletContext()

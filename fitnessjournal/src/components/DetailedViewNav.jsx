@@ -4,7 +4,7 @@ export default function ExDetailedViewNav() {
     return (
         <div className="ex-detail-nav">
             <Link className="ex-detail-nav-item">Log</Link>
-            <Link className="ex-detail-nav-item">History</Link>
+            <Link to="ExDetailedHistory" className="ex-detail-nav-item">History</Link>
             <Link className="ex-detail-nav-item">Progress</Link>
         </div>
     )
