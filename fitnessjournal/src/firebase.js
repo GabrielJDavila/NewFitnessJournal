@@ -707,6 +707,7 @@ export async function retrieveExDetailedView(userCollection, userId, exId, curre
     setsAndRepsSnapshot.forEach(set => {
         const setId = set.id
         const { createdAt, reps, weight } = set.data()
+        // let date = new Date(createdAt).toLocaleString()
         exerciseData.setsReps.push({
             setId,
             createdAt,
@@ -722,18 +723,58 @@ export async function retrieveExDetailedView(userCollection, userId, exId, curre
 export async function retrieveExHistory(userCollection, userId, exId) {
     const userDocRef = doc(userCollection, userId)
     const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
-    const exCollectionQuery = query(currentWorkoutCollectionRef)
-    const exCollectionSnapshot = await getDocs(exCollectionQuery)
+    const WorkoutCollectionQuery = query(currentWorkoutCollectionRef)
+    const WorkoutCollectionSnapshot = await getDocs(WorkoutCollectionQuery)
 
     // Loop through each logged workout, and collect the docs that hold the exId.
-    
-    const exListCollection = collection(dateOfWorkoutDocRef, "exList")
-    const exerciseDocRef = doc(exListCollection, exId)
-    const exerciseDocSnap = await getDoc(exerciseDocRef)
-    const repsAndSetsRef = collection(exerciseDocRef, "currentEx")
+    const exerciseData = {
+        id: exId,
+        exHistory: []
+    }
 
-    const setsAndRepsQuery = query(repsAndSetsRef)
-    const setsAndRepsSnapshot = await getDocs(setsAndRepsQuery)
+    for(const workout of WorkoutCollectionSnapshot.docs) {
+        const ExListRef = collection(workout.ref, "exList")
+        const ExListQuery = query(ExListRef)
+        const ExListSnapshot = await getDocs(ExListQuery)
+
+        for(const exercise of ExListSnapshot.docs) {
+            if(exercise.id === exId) {
+                let date = exercise.data().createdAt.toDate().toLocaleString()
+                console.log(date)
+                // checking to see if there is an existing date for this given exercise already.
+                let existingDateEntry = exerciseData.exHistory.find(entry => entry.date === date)
+
+                // if no existing date, create an object for this date with sets array and push to exerciseData.
+                if(!existingDateEntry) {
+                    existingDateEntry = {
+                        date: date,
+                        sets: []
+                    }
+                    exerciseData.exHistory.push(existingDateEntry)
+                }
+                // exerciseData.exHistory.push({
+
+                // })
+                const repsAndSetsRef = collection(exercise.ref, "currentEx")
+                const repsSetsQuery = query(repsAndSetsRef)
+                const repsSetsSnapshot = await getDocs(repsSetsQuery)
+
+                // On each loop, push set data to new existingDateEntry object. There is no conflict because each existingDateEntry object sets array is fresh.
+                repsSetsSnapshot.forEach(set => {
+                    const setId = set.id
+                    const { createdAt, reps, weight } = set.data()
+                    existingDateEntry.sets.push({
+                        setId,
+                        createdAt: createdAt.toDate().toLocaleString(),
+                        weight,
+                        reps
+                    })
+                })
+            }
+        }
+    }
+    console.log(exerciseData)
+    return exerciseData
 }
 
 async function fetchExData(exDoc) {

@@ -24,6 +24,7 @@ export default function ExDetailedHistory() {
     return (
         <div className="ex-detailed-history-page">
             <h2>History</h2>
+            
         </div>
     )
 }
