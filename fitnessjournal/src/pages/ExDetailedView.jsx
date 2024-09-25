@@ -24,14 +24,15 @@ export default function ExDetailedView() {
         }
     }
     return (
-        <div style={{marginTop: "200px"}}>
-            <p>{exData.exName && exData.exName}</p>
+        <div className="ex-detailed-view-page">
+            <h2 className="ex-detailed-view-name">{exData.exName && exData.exName}</h2>
             {exData.setsReps && exData.setsReps.length > 0 &&
                 exData.setsReps.map((set, index) => {
                     return (
-                        <div key={index} style={{display: "flex", flexDirection: "row", gap: "1rem", justifyContent: "center"}}>
-                            <p>{set.weight}</p>
-                            <p>{set.reps}</p>
+                        // Turn this into a form element that can be edited. Will send back to firebase to update.
+                        <div key={index} style={{display: "flex", flexDirection: "row", gap: "1rem", justifyContent: "center"}} className="">
+                            <p>Weight: {set.weight}</p>
+                            <p>Reps: {set.reps}</p>
                         </div>
                     )
                 })

@@ -792,6 +792,18 @@ th:last-child, td:last-child {
   margin-top: 65px;
 }
 
+.ex-detailed-view-page {
+  margin: 2rem 0 auto;
+  padding: 1rem;
+  text-align: center;
+}
+
+.ex-detailed-view-name {
+  margin-right: auto;
+  text-align: left;
+  margin-bottom: 1rem;
+}
+
 .ex-detail-nav {
   display: flex;
   justify-content: center;
@@ -802,6 +814,7 @@ th:last-child, td:last-child {
   padding: 1rem;
   width: 100%;
   border: 2px solid #c65d42;
+  color: white;
 }
 
 .all-sets-container {
