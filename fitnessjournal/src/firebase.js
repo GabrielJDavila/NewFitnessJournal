@@ -989,12 +989,11 @@ export async function RetrieveAllPRs(userCollection, userId) {
         for(const doc of PRsSnapshot.docs) {
             const exId = doc.data().exId
             const milliseconds = doc.data().createdAt.seconds * 1000 + doc.data().createdAt.nanoseconds / 1000000
-            console.log(milliseconds)
+            
             if(PRs.some(pr => 
                 pr.exId === exId 
                 // (pr.createdAt.seconds * 1000 + pr.createdAt.nanoseconds / 1000000) < milliseconds
             )) {
-                console.log("pr exists already")
                 
             } else {
                 PRs.push(doc.data())
