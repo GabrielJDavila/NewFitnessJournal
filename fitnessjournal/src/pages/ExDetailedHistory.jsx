@@ -22,15 +22,23 @@ export default function ExDetailedHistory() {
         }
     }
 
-    const renderedData = data && data.exHistory.map((entry, index) => {
+    const renderedData = data && data.exHistory?.map((entry, index) => {
         return (
             <div key={index} className="ex-history-day-container">
-                <p className="ex-history-date">{entry.date}</p>
+                <p className="ex-history-date">{entry.date.slice(0, 9)}</p>
+                <div className="ex-history-categories-container">
+                    <p>weight</p>
+                    <p>reps</p>
+                    <p>PR</p>
+                    <p>note</p>
+                </div>
                 {entry.sets.map((set, setIndex) => {
                     return (
                       <div key={setIndex} className="ex-history-weight-reps-container">
-                        <p className="ex-history-weight">weight: {set.weight}</p>
-                        <p className="ex-history-reps">reps: {set.reps}</p>
+                        <p className="ex-history-weight">{set.weight}</p>
+                        <p className="ex-history-reps">{set.reps}</p>
+                        <p className="ex-history-pr">{set.pr? `${set.pr}` : ""}</p>
+                        <p className="ex-history-note">{set.note? `${set.note}` : ""}</p>
                       </div>  
                     )
                 })}
@@ -40,7 +48,10 @@ export default function ExDetailedHistory() {
     return (
         <div className="ex-detailed-history-page">
             <h2>History</h2>
-            {data && renderedData}
+            <div className="ex-history-data-container">
+                {data && renderedData}
+            </div>
+            
         </div>
     )
 }
