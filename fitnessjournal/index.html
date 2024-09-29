@@ -11,6 +11,19 @@
     <title>Fitness Journal</title>
   </head>
   <body>
+    <script>
+      if("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register("serviceWorker.js").then(function(registration) {
+            // registration was successful
+            console.log("service worker registration was successful with scope: ", registration.scope)
+          }, function(error) {
+            // registration failed
+              console.log("service worker registration failed: ", error)
+          })
+        })
+      }
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
