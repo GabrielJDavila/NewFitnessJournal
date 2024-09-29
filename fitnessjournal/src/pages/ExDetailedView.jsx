@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react"
 import { useParams, useLocation, useOutletContext } from "react-router-dom"
-import { usersInDB, retrieveExDetailedView } from "../firebase"
-import ExerciseDetailEdit from "./ExerciseDetailEdit"
+import { usersInDB, retrieveExDetailedView, addSetsReps } from "../firebase"
 
 export default function ExDetailedView() {
     const params = useParams()
@@ -11,19 +10,71 @@ export default function ExDetailedView() {
     const [exData, setExData] = useState([])
     const [exSetsData, setExSetsData] = useState({
         exName: "",
-        exWeight: "",
-        exReps: "",
+        exWeight: 0,
+        exReps: 0,
     })
     console.log(exSetsData)
     useEffect(() => {
         grabExDetailedView()
     }, [])
 
+    function addOrMinusWeight(e) {
+        let currentWeight = parseInt(exSetsData.exWeight, 10)
+        console.log(currentWeight)
+        if(e.target.dataset.minusweight && currentWeight > 0) {
+            setExSetsData(prev => ({
+                ...prev,
+                exWeight: currentWeight - 1
+            }))
+        } else if(e.target.dataset.addweight) {
+            setExSetsData(prev => ({
+                ...prev,
+                exWeight: currentWeight + 1
+            }))
+        } 
+    }
+
+    function addOrMinusReps(e) {
+        let currentReps = parseInt(exSetsData.exReps, 10)
+        if(e.target.dataset.minusreps && currentReps > 0) {
+            setExSetsData(prev => ({
+                ...prev,
+                exReps: currentReps - 1
+            }))
+        } else if(e.target.dataset.addreps) {
+            setExSetsData(prev => ({
+                ...prev,
+                exReps: currentReps + 1
+            }))
+        }
+    }
+
     function handleChange(name, value) {
         setExSetsData(prev => ({
             ...prev,
             [name]: value
         }))
+        // if(typeof value === "number") {
+        //     const newVal = parseInt(value, 10) | 0
+        //     setExSetsData(prev => ({
+        //         ...prev,
+        //         [name]: newVal
+        //     }))
+        // } else {
+        //     setExSetsData(prev => ({
+        //         ...prev,
+        //         [name]: value
+        //     }))
+        // }
+    }
+
+    function handleSubmit(e) {
+        e.preventDefault()
+        if(exSetsData.exReps > 0) {
+            addSetsReps(params.id, exSetsData.exWeight, exSetsData.exReps, "lbs", usersInDB, currentUser)
+            grabExDetailedView()
+        }
+        
     }
     async function grabExDetailedView() {
         try {
@@ -38,8 +89,8 @@ export default function ExDetailedView() {
     return (
         <div className="ex-detailed-view-page">
             <h2 className="ex-detailed-view-name">{exData.exName && exData.exName}</h2>
-            <form>
-                <div>
+            <form onSubmit={e => handleSubmit(e)} className="ex-detail-form">
+                <div className="ex-detail-addminus-div">
                     <p onClick={e => addOrMinusWeight(e)} data-minusweight="weight" className="q-btn">-</p>
                     <input
                         name="exWeight"
@@ -50,8 +101,8 @@ export default function ExDetailedView() {
                     />
                     <p onClick={e => addOrMinusWeight(e)} data-addweight="weight" className="q-btn">+</p>
                 </div>
-                <div>
-                    <p onClick={e => addOrMinusWeight(e)} data-minusweight="weight" className="q-btn">-</p>
+                <div className="ex-detail-addminus-div">
+                    <p onClick={e => addOrMinusReps(e)} data-minusreps="reps" className="q-btn">-</p>
                     <input
                         name="exReps"
                         onChange={e => handleChange(e.target.name, e.target.value)}
@@ -59,20 +110,23 @@ export default function ExDetailedView() {
                         className="weight-input"
                         required
                     />
-                    <p onClick={e => addOrMinusWeight(e)} data-addweight="weight" className="q-btn">+</p>
+                    <p onClick={e => addOrMinusReps(e)} data-addreps="reps" className="q-btn">+</p>
                 </div>
+                <button className="ex-detail-add-set-btn">Add set</button>
             </form>
-            {exData.setsReps && exData.setsReps.length > 0 &&
-                exData.setsReps.map((set, index) => {
-                    return (
-                        // Turn this into a form element that can be edited. Will send back to firebase to update.
-                        <div key={index} style={{display: "flex", flexDirection: "row", gap: "1rem", justifyContent: "center"}} className="">
-                            <p>Weight: {set.weight}</p>
-                            <p>Reps: {set.reps}</p>
-                        </div>
-                    )
-                })
-            }
+            <div className="ex-detail-current-sets">
+                {exData.setsReps && exData.setsReps.length > 0 &&
+                    exData.setsReps.map((set, index) => {
+                        return (
+                            // Turn this into a form element that can be edited. Will send back to firebase to update.
+                            <div key={index} style={{display: "flex", flexDirection: "row", gap: "1rem", justifyContent: "center"}} className="ex-detail-rendered-set">
+                                <p>Weight: {set.weight}</p>
+                                <p>Reps: {set.reps}</p>
+                            </div>
+                        )
+                    })
+                }
+            </div>
         </div>
     )
 }
