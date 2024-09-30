@@ -15,9 +15,10 @@ import {
     serverTimestamp,
     orderBy,
     Timestamp,
-    limit
+    limit,
+    connectFirestoreEmulator
 } from "firebase/firestore"
-import { createUserWithEmailAndPassword, fetchSignInMethodsForEmail, getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth"
+import { connectAuthEmulator, createUserWithEmailAndPassword, fetchSignInMethodsForEmail, getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth"
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -34,7 +35,11 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig)
 const db = getFirestore(app)
-export const auth = getAuth()
+connectFirestoreEmulator(db, '127.0.0.1', 8080)
+const auth = getAuth()
+connectAuthEmulator(auth, "http://127.0.0.1:9099");
+
+export { auth }
 
 // Initialize firestore references
 export const existingCatsCollection = collection(db, "existingCategories")
@@ -54,6 +59,7 @@ async function addUserToCollection(collectionType, user, { email, name, age, gen
             return
             
         } else {
+            // if user is added, thus successfully signed in, we can add pre-made categories and at least one exercise per category.
             await setDoc(docRef, {
                 userId: user,
                 email: email,
