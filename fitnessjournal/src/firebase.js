@@ -19,6 +19,7 @@ import {
     connectFirestoreEmulator
 } from "firebase/firestore"
 import { connectAuthEmulator, createUserWithEmailAndPassword, fetchSignInMethodsForEmail, getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth"
+import { exerciseData } from "./exerciseData"
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -69,14 +70,14 @@ async function addUserToCollection(collectionType, user, { email, name, age, gen
                 userId: user,
                 email: email,
                 name: name,
-                age: age,
-                gender: gender,
-                weight: weight,
-                weightType: weightType,
-                height1: height1,
-                heightType1,
-                height2: height2,
-                heightType2: heightType2
+                // age: age,
+                // gender: gender,
+                // weight: weight,
+                // weightType: weightType,
+                // height1: height1,
+                // heightType1,
+                // height2: height2,
+                // heightType2: heightType2
             })
             // console.log(`added user: ${user}`)
         }
@@ -99,7 +100,7 @@ export async function signUpUser(loginInfo) {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password)
             const user = userCredential.user.uid
             await addUserToCollection(usersInDB, user, loginInfo)
-            await getExistingCatsAndEx(user, existingCatsCollection, usersInDB)
+            await getExistingCatsAndEx(user, existingCatsCollection, usersInDB, exerciseData)
             return false
         } else {
             return true
@@ -235,40 +236,61 @@ export async function searchAllExercises(userCollection, userId, searchQuery) {
     return exList
 }
 
-export async function getExistingCatsAndEx(userId, existingCatsCollection, userCollection) {
+export async function getExistingCatsAndEx(userId, existingCatsCollection, userCollection, exerciseData) {
     // const existingCatsRef = collection(db, "existingCategories")
-
+    console.log(exerciseData)
     try {
-        const categoriesArr = []
+        // const categoriesArr = []
 
-        const q = query(existingCatsCollection)
-        const categoriesSnapshot = await getDocs(q)
+        // const q = query(existingCatsCollection)
+        // const categoriesSnapshot = await getDocs(q)
 
-        for(const catDoc of categoriesSnapshot.docs) {
-            const categoryName = catDoc.data().category
+        for(const category of exerciseData) {
+            const catName = category.category
             const userDocRef = doc(userCollection, userId)
             const categoriesCollectionRef = collection(userDocRef, "categories")
-            const catDocId = catDoc.id
-            const customCatDocRef = doc(categoriesCollectionRef, catDocId)
+            const customCatDocRef = doc(categoriesCollectionRef)
             const newCatDocRef = await setDoc(customCatDocRef, {
-                name: categoryName
+                name: catName
             })
             const exercisesArr = []
-            const exRef = collection(catDoc.ref, "exercises")
-            const exercisesSnapshot = await getDocs(exRef)
             
-            for(const exDoc of exercisesSnapshot.docs) {
-                const exName = exDoc.data().exercise
+            for(const exercise of category.exercises) {
+                const exName = exercise
 
                 const exCollectionRef = collection(customCatDocRef, "exercises")
-                const userExDocRef = doc(exCollectionRef, exDoc.id)
+                const userExDocRef = doc(exCollectionRef)
                 await setDoc(userExDocRef, {
                     name: exName
                 })
 
             }
-
         }
+        // for(const catDoc of categoriesSnapshot.docs) {
+        //     const categoryName = catDoc.data().category
+        //     const userDocRef = doc(userCollection, userId)
+        //     const categoriesCollectionRef = collection(userDocRef, "categories")
+        //     const catDocId = catDoc.id
+        //     const customCatDocRef = doc(categoriesCollectionRef, catDocId)
+        //     const newCatDocRef = await setDoc(customCatDocRef, {
+        //         name: categoryName
+        //     })
+        //     const exercisesArr = []
+        //     const exRef = collection(catDoc.ref, "exercises")
+        //     const exercisesSnapshot = await getDocs(exRef)
+            
+        //     for(const exDoc of exercisesSnapshot.docs) {
+        //         const exName = exDoc.data().exercise
+
+        //         const exCollectionRef = collection(customCatDocRef, "exercises")
+        //         const userExDocRef = doc(exCollectionRef, exDoc.id)
+        //         await setDoc(userExDocRef, {
+        //             name: exName
+        //         })
+
+        //     }
+
+        // }
         
         // cloneDataForNewUser(userId, userCollection, categoriesArr)
     } catch(e) {
