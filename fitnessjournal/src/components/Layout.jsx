@@ -19,11 +19,13 @@ export default function Layout() {
         password: "",
         confirmPassword: ""
     })
+    const [showPassword, setShowPassword] = useState(false)
     const [signUpErrorMessage, setSignUpErrorMessage] = useState(false)
     const [currentUser, setCurrentUser] = useState({
         uid: ""
     })
  
+    console.log(showPassword)
     useEffect(() => {
         const unsubcribe = onAuthStateChanged(auth, user => {
             if(user) {
@@ -62,8 +64,18 @@ export default function Layout() {
         }
     }
 
+    function flipShowPassword() {
+        setShowPassword(prev => !prev)
+    }
+
     function flipShowLogin() {
         setShowLogin(prev => !prev)
+        setLoginInfo({
+            email: "",
+            password: "",
+            confirmPassword: ""
+        })
+        setShowPassword(false)
         setLoginError(false)
     }
 
@@ -91,6 +103,8 @@ export default function Layout() {
                 email={loginInfo.email}
                 password={loginInfo.password}
                 flipShowLogin={flipShowLogin}
+                flipShowPassword={flipShowPassword}
+                showPassword={showPassword}
             />
         )
     }
@@ -108,7 +122,8 @@ export default function Layout() {
                 nonMatchingPasswordError={nonMatchingPasswordError}
                 loginError={loginError}
                 signUpErrorMessage={signUpErrorMessage}
-                
+                flipShowPassword={flipShowPassword}
+                showPassword={showPassword}
             />
         )
     }

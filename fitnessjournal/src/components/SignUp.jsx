@@ -1,7 +1,7 @@
 import PasswordError from "./modals/PasswordError"
 import NonMatchingPasswordError from "./modals/NonMatchPasswordError"
 export default function SignUp(props) {
-    
+
     return (
         <div className="signup-page-container">
             <form onSubmit={e => props.handleSignUp(e)} className="signup-page">
@@ -26,28 +26,67 @@ export default function SignUp(props) {
                     />
                     <label htmlFor="password" className="sign-up-label">Password</label>
                     {props.loginError && <PasswordError />}
-                    <input
-                        name="password"
-                        type="password"
-                        data-signup="signup"
-                        onChange={e => props.handleChange(e)}
-                        value={props.password}
-                        placeholder="******"
-                        className="login-cred"
-                        required
-                    />
+                    <div style={{display: "flex", alignItems: "center", gap: ".5rem", position: "relative"}} className="">
+                        <input
+                            name="password"
+                            type={props.showPassword ? "text" : "password"}
+                            data-signup="signup"
+                            onChange={e => props.handleChange(e)}
+                            value={props.password}
+                            placeholder="******"
+                            className="login-cred"
+                            required
+                        />
+                        {!props.showPassword ?
+                        <span
+                            className="material-symbols-outlined curr-ex-view-signup"
+                            style={{position: "absolute", marginLeft: "auto", right: "10px", color: "darkgray"}}
+                            onClick={e => props.flipShowPassword(e)}
+                        >
+                            visibility
+                        </span>
+                        :
+                        <span
+                            className="material-symbols-outlined curr-ex-view-signup"
+                            style={{position: "absolute", marginLeft: "auto", right: "10px", color: "darkgray"}}
+                            onClick={e => props.flipShowPassword(e)}
+                        >
+                            visibility_off
+                        </span>
+                        }
+                    </div>
+                    
                     <label htmlFor="confirm-password" className="sign-up-label">Confirm Password</label>
                     {props.nonMatchingPasswordError && <NonMatchingPasswordError />}
-                    <input
-                        name="confirmPassword"
-                        type="password"
-                        data-signup="signup"
-                        onChange={e => props.handleChange(e)}
-                        value={props.confirmPassword}
-                        placeholder="******"
-                        className="login-cred"
-                        required
-                    />
+                    <div style={{display: "flex", alignItems: "center", gap: ".5rem", position: "relative"}} className="">
+                        <input
+                            name="confirmPassword"
+                            type={props.showPassword ? "text" : "password"}
+                            data-signup="signup"
+                            onChange={e => props.handleChange(e)}
+                            value={props.confirmPassword}
+                            placeholder="******"
+                            className="login-cred"
+                            required
+                        />
+                        {!props.showPassword ?
+                        <span
+                            className="material-symbols-outlined curr-ex-view-signup"
+                            style={{position: "absolute", marginLeft: "auto", right: "10px", color: "darkgray"}}
+                            onClick={e => props.flipShowPassword(e)}
+                        >
+                            visibility
+                        </span>
+                        :
+                        <span
+                            className="material-symbols-outlined curr-ex-view-signup"
+                            style={{position: "absolute", marginLeft: "auto", right: "10px", color: "darkgray"}}
+                            onClick={e => props.flipShowPassword(e)}
+                        >
+                            visibility_off
+                        </span>
+                        }
+                    </div>
                 </fieldset>
 
                 {/* <fieldset className="profile-creation-fieldset">

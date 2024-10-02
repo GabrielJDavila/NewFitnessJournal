@@ -18,16 +18,35 @@ export default function Login(props) {
                         className="login-cred"
                         required
                     />
-                    <input
-                        name="password"
-                        type="password"
-                        data-login="login"
-                        onChange={e => props.handleChange(e)}
-                        value={props.password}
-                        placeholder="******"
-                        className="login-cred"
-                        required
-                    />
+                    <div style={{display: "flex", alignItems: "center", gap: ".5rem", position: "relative"}} className="">
+                        <input
+                            name="password"
+                            type={props.showPassword ? "text" : "password"}
+                            data-login="login"
+                            onChange={e => props.handleChange(e)}
+                            value={props.password}
+                            placeholder="******"
+                            className="login-cred"
+                            required
+                        />
+                        {!props.showPassword ?
+                        <span
+                            className="material-symbols-outlined curr-ex-view-signup"
+                            style={{position: "absolute", marginLeft: "auto", right: "10px", color: "darkgray"}}
+                            onClick={e => props.flipShowPassword(e)}
+                        >
+                            visibility
+                        </span>
+                        :
+                        <span
+                            className="material-symbols-outlined curr-ex-view-signup"
+                            style={{position: "absolute", marginLeft: "auto", right: "10px", color: "darkgray"}}
+                            onClick={e => props.flipShowPassword(e)}
+                        >
+                            visibility_off
+                        </span>
+                        }
+                    </div>
                 </fieldset>
                 <button className="login-button">Login</button>
             </form>
