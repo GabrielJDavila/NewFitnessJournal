@@ -16,6 +16,11 @@ export default function Layout() {
     const [nonMatchingPasswordError, setNonMatchingPasswordError] = useState(false)
     const [loginInfo, setLoginInfo] = useState({
         email: "",
+        password: ""
+    })
+    const [newSignUpInfo, setNewSignUpInfo] = useState({
+        name: "",
+        email: "",
         password: "",
         confirmPassword: ""
     })
@@ -44,20 +49,20 @@ export default function Layout() {
     async function handleSignUp(e) {
         e.preventDefault()
         if(
-            /[A-Z]/.test(loginInfo.password) &&
-            /[a-z]/.test(loginInfo.password) &&
-            /\W/.test(loginInfo.password) &&
-            /\d/.test(loginInfo.password) &&
-            loginInfo.password !== loginInfo.confirmPassword
+            /[A-Z]/.test(newSignUpInfo.password) &&
+            /[a-z]/.test(newSignUpInfo.password) &&
+            /\W/.test(newSignUpInfo.password) &&
+            /\d/.test(newSignUpInfo.password) &&
+            newSignUpInfo.password !== newSignUpInfo.confirmPassword
         ) {
             flipShowNonMatchingPasswordError()
-        } else if(/[A-Z]/.test(loginInfo.password) &&
-            /[a-z]/.test(loginInfo.password) &&
-            /\W/.test(loginInfo.password) &&
-            /\d/.test(loginInfo.password) &&
-            loginInfo.password === loginInfo.confirmPassword
+        } else if(/[A-Z]/.test(newSignUpInfo.password) &&
+            /[a-z]/.test(newSignUpInfo.password) &&
+            /\W/.test(newSignUpInfo.password) &&
+            /\d/.test(newSignUpInfo.password) &&
+            newSignUpInfo.password === newSignUpInfo.confirmPassword
         ) {
-            const signUpSuccess = await signUpUser(loginInfo)
+            const signUpSuccess = await signUpUser(newSignUpInfo)
             setSignUpErrorMessage(signUpSuccess)
         } else {
             flipShowPasswordError()
@@ -71,6 +76,11 @@ export default function Layout() {
     function flipShowLogin() {
         setShowLogin(prev => !prev)
         setLoginInfo({
+            email: "",
+            password: ""
+        })
+        setNewSignUpInfo({
+            name: "",
             email: "",
             password: "",
             confirmPassword: ""
@@ -95,6 +105,14 @@ export default function Layout() {
         }))
     }
 
+    function handleSignUpChange(e) {
+        const {name, value} = e.target
+        setNewSignUpInfo(prev => ({
+            ...prev,
+            [name]: value
+        }))
+    }
+
     if(!loggedIn && showLogin) {
         return (
             <Login
@@ -112,10 +130,11 @@ export default function Layout() {
         return (
             <SignUp
                 handleSignUp={handleSignUp}
-                handleChange={handleChange}
-                email={loginInfo.email}
-                password={loginInfo.password}
-                confirmPassword={loginInfo.confirmPassword}
+                handleChange={handleSignUpChange}
+                name={newSignUpInfo.name}
+                email={newSignUpInfo.email}
+                password={newSignUpInfo.password}
+                confirmPassword={newSignUpInfo.confirmPassword}
                 flipShowLogin={flipShowLogin}
                 flipShowPasswordError={flipShowPasswordError}
                 flipShowNonMatchingPasswordError={flipShowNonMatchingPasswordError}
