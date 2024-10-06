@@ -8,6 +8,18 @@ export default function SignUp(props) {
                 <h1 className="login-form-title">Sign Up New User</h1>
                 <p onClick={e => props.flipShowLogin(e)} className="switch-to-login">Already have an account? Log in here.</p>
                 <fieldset className="login-input-fieldset">
+                    <label htmlFor="name" className="sign-up-label">Name</label>
+                    
+                    <input
+                        name="name"
+                        type="text"
+                        data-signup="signup"
+                        onChange={e => props.handleChange(e)}
+                        value={props.name}
+                        placeholder="your name"
+                        className="login-cred"
+                        required
+                    />
                     <label htmlFor="email" className="sign-up-label">Email</label>
                     {props.signUpErrorMessage &&
                         <div className="password-error">
