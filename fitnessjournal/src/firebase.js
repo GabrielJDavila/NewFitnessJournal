@@ -40,7 +40,7 @@ connectFirestoreEmulator(db, '127.0.0.1', 8081)
 const auth = getAuth()
 connectAuthEmulator(auth, "http://127.0.0.1:9099");
 
-if(process.env.NODE_ENV === "development") {
+if(import.meta.env.VITE_NODE_ENV === "development") {
     connectFirestoreEmulator(db, '127.0.0.1', 8081)
     connectAuthEmulator(auth, "http://127.0.0.1:9099");
 }
