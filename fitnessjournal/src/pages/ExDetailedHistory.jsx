@@ -6,6 +6,8 @@ export default function ExDetailedHistory() {
     const params = useParams()
     const { currentUser } = useOutletContext()
     const [data, setData] = useState([])
+    const storedDate = localStorage.getItem("selectedDate")
+    const [date, setDate] = useState(storedDate ? new Date(storedDate) : new Date())
 
     useEffect(() => {
         retrieveExHistoryFromFirebase()

@@ -12,6 +12,8 @@ export default function ExerciseDetail(props) {
         const savedData = localStorage.getItem(props.exid)
         return savedData ? JSON.parse(savedData) : {reps: 0, weight: 0, weightType: ""}
     })
+    const storedDate = localStorage.getItem("selectedDate")
+    const [date, setDate] = useState(storedDate ? new Date(storedDate) : new Date())
     
     const [showModal, setShowModal] = useState(false)
     const { currentUser } = useOutletContext()
@@ -38,7 +40,7 @@ export default function ExerciseDetail(props) {
     function handleAddSetClick(e) {
         e.preventDefault()
         if (repsAndWeight.reps > 0) {
-            addSetsReps(props.exid, repsAndWeight.weight, repsAndWeight.reps, repsAndWeight.weightType, usersInDB, currentUser)
+            addSetsReps(props.exid, repsAndWeight.weight, repsAndWeight.reps, repsAndWeight.weightType, usersInDB, currentUser, date)
             setShowModal(true)
             props.loadExerciseList(props.date)
         } else {

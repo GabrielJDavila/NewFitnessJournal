@@ -13,7 +13,7 @@ export default function ExDetailedView() {
         exWeight: 0,
         exReps: 0,
     })
-    console.log(exSetsData)
+    console.log(date)
     useEffect(() => {
         grabExDetailedView()
     }, [])

@@ -463,14 +463,16 @@ export async function addUpdateWorkoutList(exerciseId, name, userCollection, use
     try {
         const selectedDate = localStorage.getItem("selectedDate")
         const date = new Date(selectedDate).toISOString().split("T")[0]
+        const dateObj = new Date(selectedDate)
+        const createdAtTimestamp = Timestamp.fromDate(dateObj)
         
-        console.log(date)
+        console.log(dateObj, "hello")
         const userDocRef = doc(userCollection, userId)
         const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
         const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, date)
 
         await setDoc(dateOfWorkoutDocRef, {
-            createdAt: serverTimestamp()
+            createdAt: createdAtTimestamp
         })
 
         const selectedExListCollectionRef = collection(dateOfWorkoutDocRef, "exList")
@@ -488,7 +490,7 @@ export async function addUpdateWorkoutList(exerciseId, name, userCollection, use
             await setDoc(exDocRef, {
                 id: exerciseId,
                 name: name,
-                createdAt: serverTimestamp(),
+                createdAt: createdAtTimestamp,
                 index: currentIndex
             })
         }
@@ -887,7 +889,9 @@ export async function addSetsReps( exerciseId, weight, reps, weightType, userCol
         // const dateString = new Date().toISOString().split("T")[0]
         const selectedDate = localStorage.getItem("selectedDate")
         const date = new Date(selectedDate).toISOString().split("T")[0]
-        
+        const dateObj = new Date(selectedDate)
+        const createdAtTimestamp = Timestamp.fromDate(dateObj)
+        console.log(createdAtTimestamp)
         const userDocRef = doc(userCollection, userId)
         const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
         const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, date)
@@ -901,7 +905,7 @@ export async function addSetsReps( exerciseId, weight, reps, weightType, userCol
             weight: weight,
             weightType: weightType,
             reps: reps,
-            createdAt: serverTimestamp()
+            createdAt: createdAtTimestamp
         })
 
     } catch(e) {
