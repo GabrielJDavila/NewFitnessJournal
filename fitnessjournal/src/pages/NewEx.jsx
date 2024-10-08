@@ -47,6 +47,7 @@ export default function NewEx(props) {
             toggle()
             props.flipExModal(exFlip)
             props.reloadExData()
+            props.toggleModal()
         } else {
             console.log("invalid category selected")
         }

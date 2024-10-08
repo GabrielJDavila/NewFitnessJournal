@@ -90,27 +90,34 @@ export default function ExDetailedView() {
         <div className="ex-detailed-view-page">
             <h2 className="ex-detailed-view-name">{exData.exName && exData.exName}</h2>
             <form onSubmit={e => handleSubmit(e)} className="ex-detail-form">
-                <div className="ex-detail-addminus-div">
-                    <p onClick={e => addOrMinusWeight(e)} data-minusweight="weight" className="q-btn">-</p>
-                    <input
-                        name="exWeight"
-                        onChange={e => handleChange(e.target.name, e.target.value)}
-                        value={exSetsData.exWeight}
-                        className="weight-input"
-                        required
-                    />
-                    <p onClick={e => addOrMinusWeight(e)} data-addweight="weight" className="q-btn">+</p>
+                <div>
+                    <p>Weight (lbs)</p>
+                    <div className="ex-detail-addminus-div">
+                        <p onClick={e => addOrMinusWeight(e)} data-minusweight="weight" className="q-btn">-</p>
+                        <input
+                            name="exWeight"
+                            onChange={e => handleChange(e.target.name, e.target.value)}
+                            value={exSetsData.exWeight}
+                            className="weight-input"
+                            required
+                        />
+                        <p onClick={e => addOrMinusWeight(e)} data-addweight="weight" className="q-btn">+</p>
+                    </div>
                 </div>
-                <div className="ex-detail-addminus-div">
-                    <p onClick={e => addOrMinusReps(e)} data-minusreps="reps" className="q-btn">-</p>
-                    <input
-                        name="exReps"
-                        onChange={e => handleChange(e.target.name, e.target.value)}
-                        value={exSetsData.exReps}
-                        className="weight-input"
-                        required
-                    />
-                    <p onClick={e => addOrMinusReps(e)} data-addreps="reps" className="q-btn">+</p>
+
+                <div>
+                    <p>Reps</p>
+                    <div className="ex-detail-addminus-div">
+                        <p onClick={e => addOrMinusReps(e)} data-minusreps="reps" className="q-btn">-</p>
+                        <input
+                            name="exReps"
+                            onChange={e => handleChange(e.target.name, e.target.value)}
+                            value={exSetsData.exReps}
+                            className="weight-input"
+                            required
+                        />
+                        <p onClick={e => addOrMinusReps(e)} data-addreps="reps" className="q-btn">+</p>
+                    </div>
                 </div>
                 <button className="ex-detail-add-set-btn">Add set</button>
             </form>
