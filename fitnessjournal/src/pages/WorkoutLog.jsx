@@ -30,6 +30,7 @@ import DeleteMessage from "../components/modals/DeleteMessage"
 //     at commitRootImpl (chunk-GSZ7ISAW.js?v=c4884d0e:19412:13)
 //     at commitRoot (chunk-GSZ7ISAW.js?v=c4884d0e:19273:13)
 export default function WorkoutLog() {
+
     const [workoutData, setWorkoutData] = useState([])
     // const [workoutData, setWorkoutData] = useState(() => {
     //     const savedData = localStorage.getItem("workoutData")
@@ -45,7 +46,7 @@ export default function WorkoutLog() {
     const [toggleTimerModal, setToggleTimerModal] = useState(false)
     const [toggleCalendar, setToggleCalendar] = useState(false)
     const storedDate = localStorage.getItem("selectedDate")
-    console.log(storedDate)
+    console.log(workoutData)
     const [date, setDate] = useState(storedDate ? new Date(storedDate) : new Date())
     console.log(date)
     const { currentUser } = useOutletContext()
@@ -66,6 +67,40 @@ export default function WorkoutLog() {
     const [year, month, day] = stringDate.split("-")
     const formattedDate = `${month}/${day}/${year}`
     
+
+    const request = indexedDB.open("newWorkoutLogData", 1)
+    request.onupgradeneeded = (e) => {
+        const db = e.target.result
+        if(!db.objectStoreNames.contains("exerciseLogData")) {
+            db.createObjectStore("exerciseLogData", {keyPath: "id"})
+        }
+    }
+
+    request.onsuccess = (e) => {
+        const db = e.target.result
+        console.log("database opened successfully:", db)
+
+        const transaction = db.transaction("exerciseLogData", "readwrite")
+        const objectStore = transaction.objectStore("exerciseLogData")
+
+        workoutData.forEach(item => {
+            console.log(item.name)
+            const addRequest = objectStore.add(item)
+
+            addRequest.onsuccess = () => {
+                console.log(`exerise ${item.name} added successfully.`)
+            }
+
+            addRequest.onerror = () => {
+                console.error("error adding exercise:", e.target.error)
+            }
+        })
+    }
+
+    request.onerror = (e) => {
+        console.error("database error:", e.target.error)
+    }
+
     useEffect(() => {
         setShowSkel(true)
         loadExerciseList(date)
