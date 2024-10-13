@@ -17,24 +17,13 @@ import AddSetModal from "../components/modals/AddSetModal"
 import ExerciseDetail from "./ExerciseDetail"
 import DeleteMessage from "../components/modals/DeleteMessage"
 
-// Receiving this error:
-// chunk-GSZ7ISAW.js?v=c4884d0e:9145 Uncaught QuotaExceededError: Failed to execute 'setItem' on 'Storage': Setting the value of 'workoutData' exceeded the quota.
-//     at WorkoutLog.jsx:61:22
-//     at commitHookEffectListMount (chunk-GSZ7ISAW.js?v=c4884d0e:16904:34)
-//     at commitPassiveMountOnFiber (chunk-GSZ7ISAW.js?v=c4884d0e:18152:19)
-//     at commitPassiveMountEffects_complete (chunk-GSZ7ISAW.js?v=c4884d0e:18125:17)
-//     at commitPassiveMountEffects_begin (chunk-GSZ7ISAW.js?v=c4884d0e:18115:15)
-//     at commitPassiveMountEffects (chunk-GSZ7ISAW.js?v=c4884d0e:18105:11)
-//     at flushPassiveEffectsImpl (chunk-GSZ7ISAW.js?v=c4884d0e:19486:11)
-//     at flushPassiveEffects (chunk-GSZ7ISAW.js?v=c4884d0e:19443:22)
-//     at commitRootImpl (chunk-GSZ7ISAW.js?v=c4884d0e:19412:13)
-//     at commitRoot (chunk-GSZ7ISAW.js?v=c4884d0e:19273:13)
 export default function WorkoutLog() {
-    const [workoutData, setWorkoutData] = useState([])
-    // const [workoutData, setWorkoutData] = useState(() => {
-    //     const savedData = localStorage.getItem("workoutData")
-    //     return savedData ? savedData : []
-    // })
+
+    // const [workoutData, setWorkoutData] = useState([])
+    const [workoutData, setWorkoutData] = useState(() => {
+        const savedData = JSON.parse(localStorage.getItem("workoutData"))
+        return savedData ? savedData : []
+    })
     const [workoutDatesData, setWorkoutDatesData] = useState([])
     const [toggleEditSetModal, setToggleEditSetModal] = useState(false)
     const [toggleAddSetModal, setToggleAddSetModal] = useState(false)
@@ -45,7 +34,7 @@ export default function WorkoutLog() {
     const [toggleTimerModal, setToggleTimerModal] = useState(false)
     const [toggleCalendar, setToggleCalendar] = useState(false)
     const storedDate = localStorage.getItem("selectedDate")
-    console.log(storedDate)
+    console.log(workoutData)
     const [date, setDate] = useState(storedDate ? new Date(storedDate) : new Date())
     console.log(date)
     const { currentUser } = useOutletContext()
@@ -65,15 +54,14 @@ export default function WorkoutLog() {
     const stringDate = date.toISOString().split("T")[0]
     const [year, month, day] = stringDate.split("-")
     const formattedDate = `${month}/${day}/${year}`
-    
+
     useEffect(() => {
         setShowSkel(true)
-        loadExerciseList(date)
+        const fetch = async () => {
+            await loadExerciseList(date)
+        }
+        fetch()
     }, [date])
-
-    // useEffect(() => {
-    //     localStorage.setItem("workoutData", JSON.stringify(workoutData))
-    // }, [workoutData])
 
     useEffect(() => {
         if(deleteSetMessage) {
@@ -90,6 +78,10 @@ export default function WorkoutLog() {
             const data = await retrieveCurrentExSetsRepsAndPRs(usersInDB, currentUser, date)
             const workoutDates = await retrieveAllWorkouts(usersInDB, currentUser)
             if(data) {
+                const jsonString = JSON.stringify(data)
+                const sizeInBytes = new Blob([jsonString]).size
+                console.log(sizeInBytes)
+                localStorage.setItem("workoutData", JSON.stringify(data))
                 setWorkoutData(data.exercises)
                 setShowSkel(false)
             }
@@ -311,23 +303,6 @@ export default function WorkoutLog() {
                     exid={exid}
                     loadExerciseList={loadExerciseList}
                     date={date}
-                    // handleAddSet={e => handleAddSetSubmit(e, {
-                    //     editSingleSet,
-                    //     newSetInfo,
-                    //     usersInDB,
-                    //     currentUser,
-                    //     date,
-                    //     loadExerciseList,
-                    //     toggleAddSet
-                    // }, 
-                    // {
-                    //     setNewSetInfo,
-                    //     setToggleAddSetModal 
-                    // })}
-                    // modalStyles={modalStyles}
-                    // toggle={e => toggleAddSet(e, setToggleAddSetModal)}
-                    // handleChange={handleChange}
-                    // title={newSetInfo.title}
                 />
             }
 
@@ -409,7 +384,7 @@ export default function WorkoutLog() {
                                 <div {...provided.droppableProps} ref={provided.innerRef} className="current-log-inner-container">
                                     <h2>Current Workout {formattedDate}</h2>
                                     <CurrentWorkoutList
-                                        data={workoutData}
+                                        data={workoutData && workoutData}
                                         // prs={PRData}
                                         usersInDB={usersInDB}
                                         currentUser={currentUser}
