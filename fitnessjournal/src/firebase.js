@@ -37,14 +37,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig)
 const db = getFirestore(app)
 const auth = getAuth()
-connectFirestoreEmulator(db, '127.0.0.1', 8081)
-connectAuthEmulator(auth, "http://127.0.0.1:9099")
-
-
-// if(import.meta.env.VITE_NODE_ENV === "development") {
-//     connectFirestoreEmulator(db, '127.0.0.1', 8081)
-//     connectAuthEmulator(auth, "http://127.0.0.1:9099");
-// }
+// connectFirestoreEmulator(db, '127.0.0.1', 8081)
+// connectAuthEmulator(auth, "http://127.0.0.1:9099")
 
 export { auth }
 
@@ -56,7 +50,7 @@ export const usersInDB = collection(db, "users")
 export const currentUserLoggedIn = collection(db, "currentUser")
 
 // add user to collection
-async function addUserToCollection(collectionType, user, { email, name, age, gender, weight, weightType, height1, heightType1, height2, heightType2 }) {
+async function addUserToCollection(collectionType, user, { email, name }) {
     try {
         const docRef = doc(collectionType, user)
         const docSnap = await getDoc(docRef)
@@ -71,16 +65,7 @@ async function addUserToCollection(collectionType, user, { email, name, age, gen
                 userId: user,
                 email: email,
                 name: name,
-                // age: age,
-                // gender: gender,
-                // weight: weight,
-                // weightType: weightType,
-                // height1: height1,
-                // heightType1,
-                // height2: height2,
-                // heightType2: heightType2
             })
-            // console.log(`added user: ${user}`)
         }
     } catch(e) {
         console.log("error adding user: ", e)
@@ -91,12 +76,9 @@ async function addUserToCollection(collectionType, user, { email, name, age, gen
 export async function signUpUser(loginInfo) {
     const email = loginInfo.email
     const password = loginInfo.password
- 
     try {
         const q = query(usersInDB, where("email", "==", email))
         const querySnapshot = await getDocs(q)
-        // console.log(querySnapshot)
-
         if(querySnapshot.empty) {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password)
             const user = userCredential.user.uid
@@ -149,11 +131,6 @@ export async function getUserInfo(userId) {
 export async function editUserInfo(userId, name, email, gender, age, height, weight) {
     try {
         const userDocRef = doc(usersInDB, userId)
-        // const docSnap = await getDoc(userDocRef)
-
-        // if(!docSnap.exists()) {
-
-        // }
         await setDoc(userDocRef, {
             name: name,
             email: email,
@@ -170,23 +147,19 @@ export async function editUserInfo(userId, name, email, gender, age, height, wei
 
 export async function queryWorkoutLogs(userCollection, userId) {
         const today = new Date()
-
         const currentDayOfWeek = today.getDay()
         const daysToSubtract = currentDayOfWeek
         const getPastSunday = new Date()
         getPastSunday.setDate(today.getDate() - daysToSubtract)
         getPastSunday.setHours(0, 0, 0, 0)
         const timstampToCompare = Timestamp.fromDate(getPastSunday)
-
         const userDocRef = doc(userCollection, userId)
         const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
-
         const q = query(currentWorkoutCollectionRef, where("createdAt", ">", timstampToCompare), orderBy("createdAt", "desc"), limit(7))
         const workoutsSnapshot = await getDocs(q)
-
         const workoutsArr = []
-        for(const dateDoc of workoutsSnapshot.docs) {
 
+        for(const dateDoc of workoutsSnapshot.docs) {
             if(dateDoc.data().workoutTime) {
                 const loggedWorkout = {
                     id: dateDoc.id,
@@ -202,14 +175,12 @@ export async function queryWorkoutLogs(userCollection, userId) {
                 workoutsArr.push(loggedWorkout)
             }
         }
-       
         return workoutsArr
 }
 
 // search all exercises using the search tool. reference the user's categories collection, then loop through
 // all docs and all exercises. Return names that match the input of user as they type.
 export async function searchAllExercises(userCollection, userId, searchQuery) {
-   
     const userDocRef = doc(userCollection, userId)
     const categoriesCollectionRef = collection(userDocRef, "categories")
     const categoriesQuery = query(categoriesCollectionRef)
@@ -224,12 +195,10 @@ export async function searchAllExercises(userCollection, userId, searchQuery) {
         for(const exDoc of exercisesSnapshot.docs) {
             
             if(exDoc.data().name.toLowerCase().includes(searchQuery.toLowerCase())) {
-                
                 const exerciseData = {
                     id: exDoc.id,
                     name: exDoc.data().name
                 }
-
                 exList.push(exerciseData)
             }
         }
@@ -238,14 +207,7 @@ export async function searchAllExercises(userCollection, userId, searchQuery) {
 }
 
 export async function getExistingCatsAndEx(userId, existingCatsCollection, userCollection, exerciseData) {
-    // const existingCatsRef = collection(db, "existingCategories")
-    console.log(exerciseData)
     try {
-        // const categoriesArr = []
-
-        // const q = query(existingCatsCollection)
-        // const categoriesSnapshot = await getDocs(q)
-
         for(const category of exerciseData) {
             const catName = category.category
             const userDocRef = doc(userCollection, userId)
@@ -254,11 +216,10 @@ export async function getExistingCatsAndEx(userId, existingCatsCollection, userC
             const newCatDocRef = await setDoc(customCatDocRef, {
                 name: catName
             })
+
             const exercisesArr = []
-            
             for(const exercise of category.exercises) {
                 const exName = exercise
-
                 const exCollectionRef = collection(customCatDocRef, "exercises")
                 const userExDocRef = doc(exCollectionRef)
                 await setDoc(userExDocRef, {
@@ -267,33 +228,6 @@ export async function getExistingCatsAndEx(userId, existingCatsCollection, userC
 
             }
         }
-        // for(const catDoc of categoriesSnapshot.docs) {
-        //     const categoryName = catDoc.data().category
-        //     const userDocRef = doc(userCollection, userId)
-        //     const categoriesCollectionRef = collection(userDocRef, "categories")
-        //     const catDocId = catDoc.id
-        //     const customCatDocRef = doc(categoriesCollectionRef, catDocId)
-        //     const newCatDocRef = await setDoc(customCatDocRef, {
-        //         name: categoryName
-        //     })
-        //     const exercisesArr = []
-        //     const exRef = collection(catDoc.ref, "exercises")
-        //     const exercisesSnapshot = await getDocs(exRef)
-            
-        //     for(const exDoc of exercisesSnapshot.docs) {
-        //         const exName = exDoc.data().exercise
-
-        //         const exCollectionRef = collection(customCatDocRef, "exercises")
-        //         const userExDocRef = doc(exCollectionRef, exDoc.id)
-        //         await setDoc(userExDocRef, {
-        //             name: exName
-        //         })
-
-        //     }
-
-        // }
-        
-        // cloneDataForNewUser(userId, userCollection, categoriesArr)
     } catch(e) {
         console.log("error fetching categories: ", e)
     }
@@ -304,7 +238,6 @@ export async function addNewCat(userCollection, userId, newCat) {
     try {
         const userDocRef = doc(userCollection, userId)
         const categoriesCollectionRef = collection(userDocRef, "categories")
-
         // Query to check if the category already exists
         const q = query(categoriesCollectionRef, where("name", "==", capitalizedCat))
         const querySnapshot = await getDocs(q)
@@ -466,8 +399,6 @@ export async function addUpdateWorkoutList(exerciseId, name, userCollection, use
         const date = new Date(selectedDate).toISOString().split("T")[0]
         const dateObj = new Date(selectedDate)
         const createdAtTimestamp = Timestamp.fromDate(dateObj)
-        
-        console.log(dateObj, "hello")
         const userDocRef = doc(userCollection, userId)
         const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
         const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, date)
@@ -584,7 +515,7 @@ async function sendPRtoDash(userCollection, userId, name, exerciseId, weight, re
         const userDocRef = doc(userCollection, userId)
         const latestPRref = collection(userDocRef, "latestPRs")
         const exSetDocRef = doc(latestPRref, exerciseId)
-        const docSnap = await getDoc(exSetDocRef)
+        // const docSnap = await getDoc(exSetDocRef)
 
         await addDoc(latestPRref, {
             exName: name,
@@ -593,33 +524,6 @@ async function sendPRtoDash(userCollection, userId, name, exerciseId, weight, re
             reps: reps,
             createdAt: createdAt
         })
-
-        // await setDoc(exSetDocRef, {
-        //     exName: name,
-        //     exId: exerciseId,
-        //     weight: weight,
-        //     reps: reps,
-        //     createdAt: createdAt
-        // })
-
-        // if(docSnap.exists()) {
-        //     await updateDoc(exSetDocRef, {
-        //         exName: name,
-        //         exId: exerciseId,
-        //         weight: weight,
-        //         reps: reps,
-        //         createdAt: createdAt
-        //     })
-        // } else {
-        //     await addDoc(doc(latestPRref), {
-        //         exName: name,
-        //         exId: exerciseId,
-        //         weight: weight,
-        //         reps: reps,
-        //         createdAt: createdAt
-        //     })
-        // }
-
     } catch(e) {
         console.error("error sending ", e)
     }
@@ -628,7 +532,6 @@ async function sendPRtoDash(userCollection, userId, name, exerciseId, weight, re
 // grab all workouts from beginning of app usage
 export async function retrieveAllWorkouts(userCollection, userId) {
     let workouts = []
-
     try {
         const userDocRef = doc(userCollection, userId)
         const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
@@ -638,7 +541,6 @@ export async function retrieveAllWorkouts(userCollection, userId) {
         workoutListSnapshot.forEach(workoutDoc => {
             workouts.push(workoutDoc.id)
         })
-    
     return workouts
     } catch(error) {
         console.error("error retrieving all workouts: ", error)
@@ -650,7 +552,6 @@ export async function retrieveAllWorkouts(userCollection, userId) {
 // so when a user makes a change like adding an exercise, adding a set, retrieve the changed data,
 // but keep the old data. I can perhaps do this by saving the inital data to local storage?
 export async function retrieveCurrentExSetsRepsAndPRs(userCollection, userId, selectedDate) {
-    console.log(selectedDate)
     try {
         if (!(selectedDate instanceof Date)) {
             selectedDate = new Date(selectedDate);
@@ -751,8 +652,6 @@ export async function retrieveExDetailedView(userCollection, userId, exId, curre
             weight
         })
     })
-
-    console.log(exerciseData)
     return exerciseData
 }
 
@@ -892,7 +791,6 @@ export async function addSetsReps( exerciseId, weight, reps, weightType, userCol
         const date = new Date(selectedDate).toISOString().split("T")[0]
         const dateObj = new Date(selectedDate)
         const createdAtTimestamp = Timestamp.fromDate(dateObj)
-        console.log(createdAtTimestamp)
         const userDocRef = doc(userCollection, userId)
         const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
         const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, date)
