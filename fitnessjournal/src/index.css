@@ -1339,7 +1339,7 @@ th:last-child, td:last-child {
 .add-ex-form {
   position: fixed;
   background: white;
-  top: 6rem;
+  top: 4rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
