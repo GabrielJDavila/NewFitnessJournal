@@ -17,7 +17,7 @@ export default function CategoryNav(props) {
             const exTimeout = setTimeout(() => {
                 setCloseExToggle(false)
                 setToggleNewExModal(false)
-            }, 2000)
+            }, 1000)
 
             return () => clearTimeout(exTimeout) 
         }
