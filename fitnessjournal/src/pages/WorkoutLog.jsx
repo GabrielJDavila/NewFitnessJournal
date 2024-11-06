@@ -45,6 +45,7 @@ export default function WorkoutLog() {
         setIdToDelete: "",
     })
     const [exid, setExid] = useState("")
+    const [setId, setSetId] = useState("")
     const [newSetInfo, setNewSetInfo] = useState({
         reps: "",
         weight: "",
@@ -145,8 +146,10 @@ export default function WorkoutLog() {
         setToggleAddSetModal(prev => !prev)
     }
 
-    function toggleNote() {
+    function toggleNote(e) {
         setToggleNoteForm(prev => !prev)
+        console.log(e.target.dataset.setid, e.target.dataset.exid)
+        setSetId(e.target.dataset.setid)
     }
 
     function toggleDeleteSetMessage() {

@@ -813,6 +813,25 @@ export async function addSetsReps( exerciseId, weight, reps, weightType, userCol
     }
 }
 
+export async function AddSetNote(userId, userCollection, date, exerciseId, setId, note) {
+    try {
+        const dateString = date.toISOString().split("T")[0]
+        const userDocRef = doc(userCollection, userId)
+        const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
+        const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, dateString)
+        const exercisesCollectionRef = collection(dateOfWorkoutDocRef, "exList")
+        const exDocRef = doc(exercisesCollectionRef, exerciseId)
+        const currentExRef = collection(exDocRef, "currentEx")
+        const setDocRef = doc(currentExRef, setId)
+
+        await updateDoc(setDocRef, {
+            message: note
+        })
+    } catch(error) {
+        console.error("error adding note: ", error)
+    }
+}
+
 export async function editSingleSet(exerciseId, setId, newReps, newWeight, userCollection, userId, selectedDate) {
     try {
         const dateString = selectedDate.toISOString().split("T")[0]
