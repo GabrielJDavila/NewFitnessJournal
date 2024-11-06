@@ -103,7 +103,9 @@ export default function CurrentWorkoutList(props) {
                                         <p className="set-weight">lbs: {set.weight}</p>
                                         <p className="set-reps">reps: {set.reps}</p>
                                         <span
-                                            class="material-symbols-outlined edit-ex"
+                                            className="material-symbols-outlined edit-ex"
+                                            data-addnote={set.setId}
+                                            onClick={e => props.toggleNote(e)}
                                         >
                                             comment
                                         </span>

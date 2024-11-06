@@ -5,9 +5,10 @@ import ConfirmDeleteAllExModal from "../components/modals/ConfirmDeleteAllEx"
 import ConfirmDeleteExModal from "../components/modals/ConfirmDeleteExModal"
 import ConfirmDeleteSetModal from "../components/modals/ConfirmDeleteSetModal"
 import EditSetModal from "../components/modals/EditSetModal"
+import AddNote from "../components/modals/AddNote"
 import TimerModal from "../components/modals/TimerModal"
 import CurrentWorkoutList from "../components/CurrentWorkoutList"
-import { handleDeleteExerciseSubmit, handleDeleteSetSubmit, handleAddSetSubmit, handleEditSetSubmit, handleDeleteAllExSubmit, toggleAddSet, toggleEdit, toggleDelete, toggleDeleteAllEx } from "../Utils"
+import { handleDeleteExerciseSubmit, handleDeleteSetSubmit, handleAddSetSubmit, handleAddNoteSubmit, handleEditSetSubmit, handleDeleteAllExSubmit, toggleAddSet, toggleEdit, toggleDelete, toggleDeleteAllEx } from "../Utils"
 import Calendar from "react-calendar"
 import "../calendar-custom.css"
 // import "react-calendar/dist/Calendar.css"
@@ -33,6 +34,7 @@ export default function WorkoutLog() {
     const [toggleDeleteAllExercisesModal, setToggleDeleteAllExercisesModal] = useState(false)
     const [toggleTimerModal, setToggleTimerModal] = useState(false)
     const [toggleCalendar, setToggleCalendar] = useState(false)
+    const [toggleNoteForm, setToggleNoteForm] = useState(false)
     const storedDate = localStorage.getItem("selectedDate")
     console.log(workoutData)
     const [date, setDate] = useState(storedDate ? new Date(storedDate) : new Date())
@@ -141,6 +143,10 @@ export default function WorkoutLog() {
 
     function toggleAddSet() {
         setToggleAddSetModal(prev => !prev)
+    }
+
+    function toggleNote() {
+        setToggleNoteForm(prev => !prev)
     }
 
     function toggleDeleteSetMessage() {
@@ -349,6 +355,17 @@ export default function WorkoutLog() {
                 />
             }
 
+            {
+                toggleNoteForm &&
+                <AddNote
+                    handleAddNote={e => handleAddNoteSubmit(e, {
+                        usersInDB,
+                        currentUser,
+                        date
+                    })}
+                />
+            }
+
             { toggleDeleteSetModal &&
                 <ConfirmDeleteSetModal
                     handleDeleteSet={e => handleDeleteSetSubmit(e, {
@@ -393,6 +410,7 @@ export default function WorkoutLog() {
                                         toggleDel={e => toggleDelete(e, setCurrentItemToDelete, setToggleDeleteExModal, setToggleDeleteSetModal)}
                                         toggleEdit={e => toggleEdit(e, setNewSetInfo, setToggleEditSetModal)}
                                         toggleAdd={e => toggleAddSet(e)}
+                                        toggleNote={e => toggleNote(e)}
                                     />
                                     {provided.placeholder}
                                 </div>
