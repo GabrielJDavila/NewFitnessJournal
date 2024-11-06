@@ -2,9 +2,9 @@
 
 export default function AddNote() {
     return (
-        <form>
-            <h2>Add Note</h2>
-            <textarea></textarea>
+        <form className="note-form">
+            <h2 className="note-title">Add Note</h2>
+            <textarea className="note"></textarea>
         </form>
     )
 }

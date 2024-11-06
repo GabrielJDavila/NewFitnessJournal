@@ -992,6 +992,13 @@ th:last-child, td:last-child {
   
 }
 
+/* ======= Note Component =============== */
+.note-container {}
+
+.note-title {}
+
+.note {}
+
 /*=============== EditSetModal.jsx styles ====================*/
 
 .edit-set-modal {
