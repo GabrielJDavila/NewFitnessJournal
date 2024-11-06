@@ -96,11 +96,20 @@ export async function handleAddSetSubmit(e, {
 
 // handles submission of adding notes to sets/exercises.
 export async function handleAddNoteSubmit(e, {
+    AddSetNote,
     usersInDB,
     currentUser,
-    date
+    date,
+    exid,
+    setId,
+    note
 }) {
     e.preventDefault()
+    try {
+        AddSetNote(currentUser, usersInDB, date, exid, setId, note)
+    }catch(error) {
+        console.error("error handling add note submit: ", error)
+    }
 }
 
 // // handles the result of user clicking confirm of ConfirmDeleteSetModal.

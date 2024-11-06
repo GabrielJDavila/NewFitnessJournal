@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react"
 import { Link, useOutletContext } from "react-router-dom"
-import { usersInDB, retrieveCurrentExSetsRepsAndPRs, editSingleSet, deleteEx, deleteSingleSet, deleteAllEx, reOrderWorkoutList, retrieveAllWorkouts } from "../firebase"
+import { usersInDB, retrieveCurrentExSetsRepsAndPRs, editSingleSet, deleteEx, deleteSingleSet, deleteAllEx, reOrderWorkoutList, retrieveAllWorkouts, AddSetNote } from "../firebase"
 import ConfirmDeleteAllExModal from "../components/modals/ConfirmDeleteAllEx"
 import ConfirmDeleteExModal from "../components/modals/ConfirmDeleteExModal"
 import ConfirmDeleteSetModal from "../components/modals/ConfirmDeleteSetModal"
@@ -51,6 +51,9 @@ export default function WorkoutLog() {
         weight: "",
         exId: "",
         setId: ""
+    })
+    const [note, setNote] = useState({
+        note: ""
     })
     const [showSkel, setShowSkel] = useState(true)
     const calendarRef = useRef(null)
@@ -107,6 +110,13 @@ export default function WorkoutLog() {
 
     function handleChange(name, value) {
         setNewSetInfo(prev => ({
+            ...prev,
+            [name]: value
+        }))
+    }
+
+    function handleNoteChange(name, value) {
+        setNote(prev => ({
             ...prev,
             [name]: value
         }))
@@ -362,10 +372,14 @@ export default function WorkoutLog() {
                 toggleNoteForm &&
                 <AddNote
                     handleAddNote={e => handleAddNoteSubmit(e, {
+                        AddSetNote,
                         usersInDB,
                         currentUser,
-                        date
+                        date,
+                        exid,
+                        setId
                     })}
+                    handleNoteChange={handleNoteChange}
                 />
             }
 
