@@ -52,14 +52,14 @@ export default function WorkoutLog() {
         exId: "",
         setId: ""
     })
-    const [note, setNote] = useState({
-        note: ""
-    })
+    const [note, setNote] = useState("")
     const [showSkel, setShowSkel] = useState(true)
     const calendarRef = useRef(null)
     const stringDate = date.toISOString().split("T")[0]
     const [year, month, day] = stringDate.split("-")
     const formattedDate = `${month}/${day}/${year}`
+
+    console.log(note)
 
     useEffect(() => {
         setShowSkel(true)
@@ -115,11 +115,12 @@ export default function WorkoutLog() {
         }))
     }
 
-    function handleNoteChange(name, value) {
-        setNote(prev => ({
-            ...prev,
-            [name]: value
-        }))
+    function handleNoteChange(value) {
+        setNote(value)
+        // setNote(prev => ({
+        //     ...prev,
+        //     [name]: value
+        // }))
     }
 
     function handleDateChange(newDate) {
@@ -377,9 +378,12 @@ export default function WorkoutLog() {
                         currentUser,
                         date,
                         exid,
-                        setId
+                        setId,
+                        note
                     })}
                     handleNoteChange={handleNoteChange}
+                    name="note"
+                    value={note}
                 />
             }
 

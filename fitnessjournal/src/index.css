@@ -993,11 +993,34 @@ th:last-child, td:last-child {
 }
 
 /* ======= Note Component =============== */
-.note-container {}
+.note-form {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 300px;
+  width: 90%;
+  z-index: 100;
+  margin: auto;
+  background-color: white;
+  box-shadow: 0 0 8px 2px rgb(103, 103, 103);
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  gap: 1rem;
+}
 
-.note-title {}
+.note-title {margin-top: 1rem;}
 
-.note {}
+.note {
+  width: 80%;
+  height: 150px;
+  margin: auto;
+  border: 2px solid #c65d42;
+  border-radius: 4px;
+  padding: 4px;
+}
 
 /*=============== EditSetModal.jsx styles ====================*/
 

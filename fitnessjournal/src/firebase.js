@@ -827,6 +827,7 @@ export async function AddSetNote(userId, userCollection, date, exerciseId, setId
         await updateDoc(setDocRef, {
             message: note
         })
+        console.log("success")
     } catch(error) {
         console.error("error adding note: ", error)
     }
