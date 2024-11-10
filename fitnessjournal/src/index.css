@@ -1092,10 +1092,18 @@ th:last-child, td:last-child {
 
 /*=============== ExerciseDetail.jsx styles ====================*/
 
+.close-addset {
+  position: absolute;
+  color: skyblue;
+  font-size: 2rem;
+  margin-left: auto;
+}
+
 .set-detail {
   margin-top: 0;
-  padding: 10rem 1rem;
+  padding: 8rem 1rem;
   position: fixed;
+  height: 100%;
   width: 100%;
 }
 
@@ -1167,8 +1175,18 @@ th:last-child, td:last-child {
   margin: 0;
 }
 
+.ex-detail-btn-container {
+  display: flex;
+  flex-direction: row;
+  width: 60%;
+  gap: 1rem;
+  margin: auto;
+}
+
 .add-set-btn {
   color: white;
+  width: 100px;
+  padding: .5rem 0;
 }
 
 /*=============== AllCategories.jsx styles ====================*/

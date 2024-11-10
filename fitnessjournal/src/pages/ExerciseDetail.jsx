@@ -98,8 +98,10 @@ export default function ExerciseDetail(props) {
 
     return (
         <form onSubmit={e => handleAddSetClick(e)} className="set-detail">
-            <ExDetailBackBtn />
-            <p onClick={e => props.toggleAddSet(e)}>cancel</p>
+            {/* <span onClick={e => props.toggleAddSet(e)} class="material-symbols-outlined close-addset">
+                close
+            </span> */}
+            
             <fieldset className="dash-input-fieldset">   
                 <div className="ex-info-container">
                     <p className="ex-info-text weight">Weight (lbs):</p>
@@ -133,8 +135,12 @@ export default function ExerciseDetail(props) {
                     </div>
                 </div>
             </fieldset>
+
+            <div className="ex-detail-btn-container">
+                <button onClick={e => props.toggleAddSet(e)} className="add-set-btn">cancel</button>
+                <button type="submit" className="add-set-btn">Add set</button>
+            </div>
             
-            <button className="add-set-btn">Add set</button>
 
             {showModal && <SetAdded />}
         </form>
