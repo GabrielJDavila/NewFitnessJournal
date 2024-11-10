@@ -102,11 +102,16 @@ export async function handleAddNoteSubmit(e, {
     date,
     exid,
     setId,
-    note
+    note,
+    setNote,
+    setCurrentNote,
+    loadExerciseList
 }) {
     e.preventDefault()
     try {
         AddSetNote(currentUser, usersInDB, date, exid, setId, note)
+        setCurrentNote(note)
+        setNote("")
     }catch(error) {
         console.error("error handling add note submit: ", error)
     }

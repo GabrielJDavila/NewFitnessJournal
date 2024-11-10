@@ -382,13 +382,18 @@ export default function WorkoutLog() {
                         date,
                         exid,
                         setId,
-                        note
+                        note,
+                        setNote,
+                        setCurrentNote,
+                        loadExerciseList
                     })}
                     handleNoteChange={handleNoteChange}
                     toggleNote={e => toggleNote(e)}
                     name="note"
                     value={note}
+                    date={date}
                     message={currentNote && currentNote}
+                    loadExerciseList={loadExerciseList}
                 />
             }
 

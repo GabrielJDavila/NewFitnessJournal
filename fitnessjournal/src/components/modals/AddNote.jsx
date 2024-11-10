@@ -1,7 +1,13 @@
-
+import { useEffect } from "react"
 
 export default function AddNote(props) {
     console.log(props.message)
+
+    useEffect(() => {
+        if(props.message) {
+            props.loadExerciseList(props.date)
+        }
+    }, [props.message])
     return (
         <form onSubmit={props.handleAddNote} className="note-form">
             <h2 className="note-title">Add Note</h2>
