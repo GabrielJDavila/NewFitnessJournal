@@ -158,9 +158,14 @@ export default function WorkoutLog() {
     }
 
     function toggleNote(e) {
+        console.log(e.target.dataset.closenote)
+        if(e.target.dataset.setid) {
+            setSetId(e.target.dataset.setid)
+        }
+        if(e.target.dataset.closenote === true) {
+            setToggleNoteForm(false)
+        }
         setToggleNoteForm(prev => !prev)
-        console.log(e.target.dataset.setid, e.target.dataset.exid)
-        setSetId(e.target.dataset.setid)
     }
 
     function toggleDeleteSetMessage() {
@@ -382,6 +387,7 @@ export default function WorkoutLog() {
                         note
                     })}
                     handleNoteChange={handleNoteChange}
+                    toggleNote={e => toggleNote(e)}
                     name="note"
                     value={note}
                 />
