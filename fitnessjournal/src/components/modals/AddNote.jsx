@@ -1,12 +1,14 @@
 
 
 export default function AddNote(props) {
+    console.log(props.message)
     return (
         <form onSubmit={props.handleAddNote} className="note-form">
             <h2 className="note-title">Add Note</h2>
             <span data-closenote={true} onClick={e => props.toggleNote(e)} class="material-symbols-outlined close-note">
                 close
             </span>
+            <p className="note-text">Note: {props.message && props.message}</p>
             <textarea
                 name={props.name}
                 value={props.value}

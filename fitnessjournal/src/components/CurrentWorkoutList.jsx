@@ -106,6 +106,7 @@ export default function CurrentWorkoutList(props) {
                                             className="material-symbols-outlined edit-ex"
                                             data-setid={set.setId}
                                             data-exid={ex.id}
+                                            data-message={set.message}
                                             onClick={e => props.toggleNote(e)}
                                         >
                                             comment

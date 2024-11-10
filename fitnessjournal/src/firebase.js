@@ -643,11 +643,12 @@ export async function retrieveExDetailedView(userCollection, userId, exId, curre
     }
     setsAndRepsSnapshot.forEach(set => {
         const setId = set.id
-        const { createdAt, reps, weight } = set.data()
+        const { createdAt, message, reps, weight } = set.data()
         // let date = new Date(createdAt).toLocaleString()
         exerciseData.setsReps.push({
             setId,
             createdAt,
+            message,
             reps,
             weight
         })
@@ -726,10 +727,11 @@ async function fetchExData(exDoc) {
 
             repsSetsSnapshot.forEach(set => {
                 const setId = set.id
-                const { createdAt, reps, weight, weightType } = set.data()
+                const { createdAt, message, reps, weight, weightType } = set.data()
                 exerciseData.setsReps.push({
                     setId,
                     createdAt,
+                    message,
                     reps,
                     weight,
                     weightType,

@@ -36,9 +36,7 @@ export default function WorkoutLog() {
     const [toggleCalendar, setToggleCalendar] = useState(false)
     const [toggleNoteForm, setToggleNoteForm] = useState(false)
     const storedDate = localStorage.getItem("selectedDate")
-    console.log(workoutData)
     const [date, setDate] = useState(storedDate ? new Date(storedDate) : new Date())
-    console.log(date)
     const { currentUser } = useOutletContext()
     const [currentItemToDelete, setCurrentItemToDelete] = useState({
         exIdToDelete: "",
@@ -53,13 +51,12 @@ export default function WorkoutLog() {
         setId: ""
     })
     const [note, setNote] = useState("")
+    const [currentNote, setCurrentNote] = useState("")
     const [showSkel, setShowSkel] = useState(true)
     const calendarRef = useRef(null)
     const stringDate = date.toISOString().split("T")[0]
     const [year, month, day] = stringDate.split("-")
     const formattedDate = `${month}/${day}/${year}`
-
-    console.log(note)
 
     useEffect(() => {
         setShowSkel(true)
@@ -161,6 +158,7 @@ export default function WorkoutLog() {
         console.log(e.target.dataset.closenote)
         if(e.target.dataset.setid) {
             setSetId(e.target.dataset.setid)
+            setCurrentNote(e.target.dataset.message)
         }
         if(e.target.dataset.closenote === true) {
             setToggleNoteForm(false)
@@ -390,6 +388,7 @@ export default function WorkoutLog() {
                     toggleNote={e => toggleNote(e)}
                     name="note"
                     value={note}
+                    message={currentNote && currentNote}
                 />
             }
 

@@ -1033,6 +1033,11 @@ th:last-child, td:last-child {
   color: #c65d42;
 }
 
+.note-text {
+  text-align: left;
+  padding: 0 2rem;
+}
+
 /*=============== EditSetModal.jsx styles ====================*/
 
 .edit-set-modal {
