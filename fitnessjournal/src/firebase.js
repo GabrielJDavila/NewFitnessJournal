@@ -738,6 +738,7 @@ async function fetchExData(exDoc) {
                     isPR: false // initialize isPR as false
                 })
             })
+            console.log(exerciseData)
             return exerciseData
 }
 
