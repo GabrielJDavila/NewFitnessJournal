@@ -807,7 +807,7 @@ export async function addSetsReps( exerciseId, weight, reps, weightType, userCol
             weight: weight,
             weightType: weightType,
             reps: reps,
-            createdAt: createdAtTimestamp
+            createdAt: serverTimestamp()
         })
 
     } catch(e) {
