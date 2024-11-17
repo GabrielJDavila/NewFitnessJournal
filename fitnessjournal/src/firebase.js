@@ -716,7 +716,7 @@ export async function retrieveExHistory(userCollection, userId, exId) {
 async function fetchExData(exDoc) {
             const exId = exDoc.id
             const currentExRef = collection(exDoc.ref, "currentEx")
-            const repsSetsQuery = query(currentExRef, orderBy("createdAt", "desc"))
+            const repsSetsQuery = query(currentExRef, orderBy("createdAt", "asc"))
             const repsSetsSnapshot = await getDocs(repsSetsQuery)
 
             const exerciseData = {
