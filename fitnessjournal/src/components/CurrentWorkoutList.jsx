@@ -80,11 +80,6 @@ export default function CurrentWorkoutList(props) {
                                         >
                                             delete
                                         </span>
-                                        {/* <i
-                                            onClick={e => props.toggleDel(e)}
-                                            data-deleteexid={ex.id}
-                                            className="fa-solid fa-trash curr-ex-delete"
-                                        ></i> */}
                                     </div>
                                     
                                 </div>
@@ -127,12 +122,6 @@ export default function CurrentWorkoutList(props) {
                                         >
                                             delete
                                         </span>
-                                        {/* <i
-                                            onClick={e => props.toggleDel(e)}
-                                            id={ex.id}
-                                            data-deletesetid={set.setId}
-                                            className="fa-solid fa-trash delete-set"
-                                        ></i> */}
                                     </li>
                                 ))}
                             </ul>

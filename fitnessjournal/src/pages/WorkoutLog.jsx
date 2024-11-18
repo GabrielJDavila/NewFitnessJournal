@@ -20,7 +20,10 @@ import DeleteMessage from "../components/modals/DeleteMessage"
 
 export default function WorkoutLog() {
 
-    // const [workoutData, setWorkoutData] = useState([])
+    const [workoutDataInStorage, setWorkoutDataInStorage] = useState(() => {
+        const currentWorkout = JSON.parse(localStorage.getItem('exercises'))
+        return currentWorkout ? currentWorkout : []
+    })
     const [workoutData, setWorkoutData] = useState(() => {
         const savedData = JSON.parse(localStorage.getItem("workoutData"))
         return savedData ? savedData : []
@@ -34,6 +37,8 @@ export default function WorkoutLog() {
     const [toggleDeleteAllExercisesModal, setToggleDeleteAllExercisesModal] = useState(false)
     const [toggleTimerModal, setToggleTimerModal] = useState(false)
     const [toggleCalendar, setToggleCalendar] = useState(false)
+    // initializing state for specific calendar day when user clicks calendar day
+    const [toggleCalendarDay, setToggleCalendarDay] = useState(false)
     const [toggleNoteForm, setToggleNoteForm] = useState(false)
     const storedDate = localStorage.getItem("selectedDate")
     const [date, setDate] = useState(storedDate ? new Date(storedDate) : new Date())
@@ -57,6 +62,9 @@ export default function WorkoutLog() {
     const stringDate = date.toISOString().split("T")[0]
     const [year, month, day] = stringDate.split("-")
     const formattedDate = `${month}/${day}/${year}`
+
+    console.log(workoutData)
+    console.log(workoutDataInStorage)
 
     useEffect(() => {
         setShowSkel(true)
