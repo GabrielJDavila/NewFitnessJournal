@@ -5,7 +5,6 @@ import ExDetailBackBtn from "../components/ExDetailBackBtn"
 import SetAdded from "../components/modals/SetAdded"
 
 export default function ExerciseDetail(props) {
-    console.log(props.exid)
     // const params = useParams()
     // Check if params ID in local storage matches. If so, then get the wieght/reps in storage; if not, empty state like below
     const [repsAndWeight, setRepsAndWeight] = useState(() => {
@@ -39,41 +38,19 @@ export default function ExerciseDetail(props) {
 
     function handleAddSetClick(e) {
         e.preventDefault()
-    
-        const newSet = {
-            setId: Date.now(),
-            reps: repsAndWeight.reps,
-            weight: repsAndWeight.weight,
-            weightType: repsAndWeight.weightType,
-            isPR: false,
-            message: ""
-        }
 
-        const workoutData = JSON.parse(localStorage.getItem('exercises')) || []
-        const updatedWorkoutData = workoutData.map(exercise => {
-            if(exercise.id === props.exid) {
-                return {
-                    ...exercise,
-                    setsReps: [...(exercise.setsReps || []), newSet]
-                }
-            }
-            return exercise
-        })
-        localStorage.setItem('exercises', JSON.stringify(updatedWorkoutData))
-        props.loadExerciseList()
-
-        // if (repsAndWeight.reps > 0) {
-        //     props.setWorkoutDataInStorage(prev => {
-        //         prev.map((exercise) => {
-        //             console.log(exercise)
-        //         })
-        //     })
-        //     addSetsReps(props.exid, repsAndWeight.weight, repsAndWeight.reps, repsAndWeight.weightType, usersInDB, currentUser, date)
-        //     setShowModal(true)
-        //     props.loadExerciseList(props.date)
-        // } else {
-        //     alert("Please enter an amount for reps.")
-        // }        
+        if (repsAndWeight.reps > 0) {
+            props.setWorkoutDataInStorage(prev => {
+                prev.map((exercise) => {
+                    console.log(exercise)
+                })
+            })
+            addSetsReps(props.exid, repsAndWeight.weight, repsAndWeight.reps, repsAndWeight.weightType, usersInDB, currentUser, date)
+            setShowModal(true)
+            props.loadExerciseList(props.date)
+        } else {
+            alert("Please enter an amount for reps.")
+        }        
     }
     // handles change of purchaseInfo if user increments/decrements quantity
     function addOrMinusWeight(e) {
