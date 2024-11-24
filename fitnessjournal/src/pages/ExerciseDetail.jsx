@@ -39,13 +39,41 @@ export default function ExerciseDetail(props) {
 
     function handleAddSetClick(e) {
         e.preventDefault()
-        if (repsAndWeight.reps > 0) {
-            addSetsReps(props.exid, repsAndWeight.weight, repsAndWeight.reps, repsAndWeight.weightType, usersInDB, currentUser, date)
-            setShowModal(true)
-            props.loadExerciseList(props.date)
-        } else {
-            alert("Please enter an amount for reps.")
-        }        
+    
+        const newSet = {
+            setId: Date.now(),
+            reps: repsAndWeight.reps,
+            weight: repsAndWeight.weight,
+            weightType: repsAndWeight.weightType,
+            isPR: false,
+            message: ""
+        }
+
+        const workoutData = JSON.parse(localStorage.getItem('exercises')) || []
+        const updatedWorkoutData = workoutData.map(exercise => {
+            if(exercise.id === props.exid) {
+                return {
+                    ...exercise,
+                    setsReps: [...(exercise.setsReps || []), newSet]
+                }
+            }
+            return exercise
+        })
+        localStorage.setItem('exercises', JSON.stringify(updatedWorkoutData))
+        props.loadExerciseList()
+
+        // if (repsAndWeight.reps > 0) {
+        //     props.setWorkoutDataInStorage(prev => {
+        //         prev.map((exercise) => {
+        //             console.log(exercise)
+        //         })
+        //     })
+        //     addSetsReps(props.exid, repsAndWeight.weight, repsAndWeight.reps, repsAndWeight.weightType, usersInDB, currentUser, date)
+        //     setShowModal(true)
+        //     props.loadExerciseList(props.date)
+        // } else {
+        //     alert("Please enter an amount for reps.")
+        // }        
     }
     // handles change of purchaseInfo if user increments/decrements quantity
     function addOrMinusWeight(e) {
