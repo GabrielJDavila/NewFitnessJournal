@@ -259,19 +259,24 @@ export default function WorkoutLog() {
         e.preventDefault()
         const workoutData = JSON.parse(localStorage.getItem('exercises'))
         const updatedWorkoutData = workoutData.map(exercise => {
+            // check to see if exercise matches. If it does, continue with edit
             if(exercise.id === newSetInfo.exId) {
+                // creates a shallow copy of setsReps array in given exercise
                 const updatedSetsReps = [...exercise.setsReps]
+                // updates set at given setIndex with newSetInfo
                 updatedSetsReps[newSetInfo.setIndex] = {
                     setid: newSetInfo.setId,
                     reps: newSetInfo.reps,
                     weight: newSetInfo.weight
                 }
-
+                // returns the exercise info plus the updated sets
                 return {
                     ...exercise,
                     setsReps: updatedSetsReps
                 }
             }
+            // if exercise id doesn't match the exid of the set the user clicks,
+            // returns the unchanged exercise so that other exercises remain the same.
             return exercise
         })
         localStorage.setItem('exercises', JSON.stringify(updatedWorkoutData))
@@ -283,12 +288,15 @@ export default function WorkoutLog() {
         e.preventDefault()
         const workoutData = JSON.parse(localStorage.getItem('exercises'))
         const updatedWorkoutData = workoutData.map(exercise => {
+            // check to see if exercise matches. If it does, continue with deletion
             if(exercise.id === currentItemToDelete.exIdToDelete) {
+                // returns exercise with filtered sets that don't match the chosen to delete item.
                 return {
                     ...exercise,
                     setsReps: exercise.setsReps.filter(set => set.setid !== currentItemToDelete.setIdToDelete)
                 }
             }
+            // if exercise id does not match, returns exercise unchanged
             return exercise
         })
         console.log(updatedWorkoutData)
