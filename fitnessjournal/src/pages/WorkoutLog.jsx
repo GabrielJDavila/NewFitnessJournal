@@ -43,16 +43,15 @@ export default function WorkoutLog() {
         exIdToDelete: "",
         setIdToDelete: "",
     })
-    console.log(currentItemToDelete)
     const [exid, setExid] = useState("")
     const [setId, setSetId] = useState("")
     const [newSetInfo, setNewSetInfo] = useState({
         reps: "",
         weight: "",
         exId: "",
-        setId: ""
+        setId: "",
+        setIndex: ""
     })
-
     const [note, setNote] = useState("")
     const [currentNote, setCurrentNote] = useState("")
     const [showSkel, setShowSkel] = useState(true)
@@ -252,23 +251,48 @@ export default function WorkoutLog() {
         setExid(e.target.dataset.exid)
     }
   
-    function deleteSet(e) {
-        // fix to delete set on click
+    function editSet(e) {
         e.preventDefault()
-    const workoutData = JSON.parse(localStorage.getItem('exercises'))
-    const updatedWorkoutData = workoutData.map(exercise => {
-        if(exercise.id === currentItemToDelete.exIdToDelete) {
-            return {
-                ...exercise,
-                setsReps: exercise.setsReps.filter(set => set.setid !== currentItemToDelete.setIdToDelete)
+        console.log(newSetInfo)
+        
+        const workoutData = JSON.parse(localStorage.getItem('exercises'))
+        const updatedWorkoutData = workoutData.map(exercise => {
+            if(exercise.id === newSetInfo.exId) {
+                const updatedSetsReps = [...exercise.setsReps]
+                updatedSetsReps[newSetInfo.setIndex] = {
+                    setid: newSetInfo.setId,
+                    reps: newSetInfo.reps,
+                    weight: newSetInfo.weight
+                }
+
+                return {
+                    ...exercise,
+                    setsReps: updatedSetsReps
+                }
             }
-        }
-        return exercise
-    })
-    console.log(updatedWorkoutData)
-    localStorage.setItem('exercises', JSON.stringify(updatedWorkoutData))
-    loadExerciseList()
-    setToggleDeleteSetModal(false)
+            return exercise
+        })
+        localStorage.setItem('exercises', JSON.stringify(updatedWorkoutData))
+        loadExerciseList()
+        setToggleEditSetModal(false)
+    }
+
+    function deleteSet(e) {
+        e.preventDefault()
+        const workoutData = JSON.parse(localStorage.getItem('exercises'))
+        const updatedWorkoutData = workoutData.map(exercise => {
+            if(exercise.id === currentItemToDelete.exIdToDelete) {
+                return {
+                    ...exercise,
+                    setsReps: exercise.setsReps.filter(set => set.setid !== currentItemToDelete.setIdToDelete)
+                }
+            }
+            return exercise
+        })
+        console.log(updatedWorkoutData)
+        localStorage.setItem('exercises', JSON.stringify(updatedWorkoutData))
+        loadExerciseList()
+        setToggleDeleteSetModal(false)
     }
 
     document.addEventListener("click", handleClickOutside)
@@ -355,6 +379,7 @@ export default function WorkoutLog() {
 
             { toggleEditSetModal &&
                 <EditSetModal
+                    EditSetClick={e => editSet(e)}
                     handleEditSet={e => handleEditSetSubmit(e, {
                         editSingleSet,
                         newSetInfo,

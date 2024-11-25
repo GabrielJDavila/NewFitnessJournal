@@ -190,11 +190,13 @@ export function toggleEdit(e, setNewSetInfo, setToggleEditSetModal) {
     if(e) {
         const exId = e.target.id
         const setId = e.target.dataset.editsetid
+        const setIndex = e.target.dataset.setindex
 
         setNewSetInfo(prev => ({
             ...prev,
             exId: exId,
-            setId: setId
+            setId: setId,
+            setIndex: setIndex
         }))
     }
     setToggleEditSetModal(prev => !prev)

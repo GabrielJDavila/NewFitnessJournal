@@ -64,12 +64,12 @@ export default function CurrentWorkoutList(props) {
                                             visibility
                                         </span>
                                     </Link>
-                                    <div className="ex-detail-edit-div">
+                                    {/* <div className="ex-detail-edit-div">
                                         <p>Edit</p>
                                         <span className="material-symbols-outlined curr-ex-edit">
                                             edit
                                         </span>
-                                    </div>
+                                    </div> */}
                                     <div className="ex-detail-delete-div">
                                         <p>Delete</p>
                                         <span
@@ -108,6 +108,7 @@ export default function CurrentWorkoutList(props) {
                                         <span
                                             id={ex.id}
                                             data-editsetid={set.setid}
+                                            data-setindex={setIndex}
                                             onClick={e => props.toggleEdit(e)}
                                             className="material-symbols-outlined edit-ex"
                                         >

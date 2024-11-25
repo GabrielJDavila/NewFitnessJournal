@@ -2,7 +2,7 @@ import BackBtn from "../BackBtn"
 
 export default function EditSetModal(props) {
     return (
-        <form onSubmit={(e) => props.handleEditSet(e)} className="edit-set-modal" style={props.modalStyles}>
+        <form onSubmit={(e) => props.EditSetClick(e)} className="edit-set-modal" style={props.modalStyles}>
             <div className="edit-set-title-container">
                 <h2 className="edit-set-title">Edit Set</h2>
                 <i
