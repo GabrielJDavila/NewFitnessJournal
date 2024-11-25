@@ -43,6 +43,7 @@ export default function WorkoutLog() {
         exIdToDelete: "",
         setIdToDelete: "",
     })
+    console.log(currentItemToDelete)
     const [exid, setExid] = useState("")
     const [setId, setSetId] = useState("")
     const [newSetInfo, setNewSetInfo] = useState({
@@ -51,6 +52,7 @@ export default function WorkoutLog() {
         exId: "",
         setId: ""
     })
+
     const [note, setNote] = useState("")
     const [currentNote, setCurrentNote] = useState("")
     const [showSkel, setShowSkel] = useState(true)
@@ -59,7 +61,6 @@ export default function WorkoutLog() {
     const [year, month, day] = stringDate.split("-")
     const formattedDate = `${month}/${day}/${year}`
 
-    console.log(workoutData)
     useEffect(() => {
         setShowSkel(true)
         const fetch = async () => {
@@ -213,7 +214,7 @@ export default function WorkoutLog() {
         background: "white",
         zIndex: "12"
     }
-
+    
     const workoutSkels =
         <div className="workout-skel-div-main">
             <div className="workout-skel-div">
@@ -249,6 +250,25 @@ export default function WorkoutLog() {
         console.log(e.target.dataset.exid)
         console.log(e.currentTarget.getAttribute("data-currentex"))
         setExid(e.target.dataset.exid)
+    }
+  
+    function deleteSet(e) {
+        // fix to delete set on click
+        e.preventDefault()
+    const workoutData = JSON.parse(localStorage.getItem('exercises'))
+    const updatedWorkoutData = workoutData.map(exercise => {
+        if(exercise.id === currentItemToDelete.exIdToDelete) {
+            return {
+                ...exercise,
+                setsReps: exercise.setsReps.filter(set => set.setid !== currentItemToDelete.setIdToDelete)
+            }
+        }
+        return exercise
+    })
+    console.log(updatedWorkoutData)
+    localStorage.setItem('exercises', JSON.stringify(updatedWorkoutData))
+    loadExerciseList()
+    setToggleDeleteSetModal(false)
     }
 
     document.addEventListener("click", handleClickOutside)
@@ -403,6 +423,7 @@ export default function WorkoutLog() {
 
             { toggleDeleteSetModal &&
                 <ConfirmDeleteSetModal
+                    deleteSetClick={e => deleteSet(e)}
                     handleDeleteSet={e => handleDeleteSetSubmit(e, {
                         deleteSingleSet,
                         usersInDB,

@@ -28,7 +28,6 @@ export default function CurrentWorkoutList(props) {
         border: flipView[currentIndex] ? "2px solid black" : "none"
     }
         const currentWorkout = props.data ? props.data.map((ex, index) => {
-            console.log(props.date)
             // fix this to work across all screen sizes. Should only show with ellipses on mobile since its a smaller screen
             const shortenedExName = ex.name.length > 35 ? `${ex.name.slice(0, ex.name.length - 1) + '...'}` : ex.name
             return (
@@ -87,7 +86,7 @@ export default function CurrentWorkoutList(props) {
                             </div>
                             
                             <ul className="all-sets-container">
-                                {ex.setsReps && ex.setsReps.map((set, setIndex) => (
+                                {ex.setsReps && Array.isArray(ex.setsReps) && ex.setsReps.map((set, setIndex) => (
                                     <li key={setIndex} className="set-container">
                                         {set.isPR ?
                                         <span className="material-symbols-outlined pr-icon">
@@ -99,7 +98,7 @@ export default function CurrentWorkoutList(props) {
                                         <p className="set-reps">reps: {set.reps}</p>
                                         <span
                                             className="material-symbols-outlined edit-ex"
-                                            data-setid={set.setId}
+                                            data-setid={set.setid}
                                             data-exid={ex.id}
                                             data-message={set.message}
                                             onClick={e => props.toggleNote(e)}
@@ -108,7 +107,7 @@ export default function CurrentWorkoutList(props) {
                                         </span>
                                         <span
                                             id={ex.id}
-                                            data-editsetid={set.setId}
+                                            data-editsetid={set.setid}
                                             onClick={e => props.toggleEdit(e)}
                                             className="material-symbols-outlined edit-ex"
                                         >
@@ -117,7 +116,7 @@ export default function CurrentWorkoutList(props) {
                                         <span
                                             onClick={e => props.toggleDel(e)}
                                             id={ex.id}
-                                            data-deletesetid={set.setId}
+                                            data-deletesetid={set.setid}
                                             className="material-symbols-outlined delete-set"
                                         >
                                             delete

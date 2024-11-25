@@ -136,7 +136,17 @@ export async function handleDeleteSetSubmit(e, {
     e.preventDefault()
     toggleDelete(e, setCurrentItemToDelete, setToggleDeleteExModal, setToggleDeleteSetModal)
     toggleDeleteSetMessage()
-    await deleteSingleSet(usersInDB, currentUser, date, currentItemToDelete.exIdToDelete, currentItemToDelete.setIdToDelete)
+    // const workoutData = JSON.parse(localStorage.getItem('exercises'))
+    // const updatedWorkoutData = workoutData.map(exercise => {
+    //     if(exercise.id === currentItemToDelete.exIdToDelete) {
+    //         return {
+    //             setsReps: exercise.setsReps.filter(set => set.setid !== currentItemToDelete.setIdToDelete)
+    //         }
+    //     }
+    //     return exercise
+    // })
+    // localStorage.setItem('exercises', JSON.stringify(updatedWorkoutData))
+    // await deleteSingleSet(usersInDB, currentUser, date, currentItemToDelete.exIdToDelete, currentItemToDelete.setIdToDelete)
     await loadExerciseList(date)
 }
 
@@ -147,6 +157,7 @@ export function toggleDeleteAllEx(e, setToggleDeleteAllExercisesModal) {
 
 // Toggles delete set or delete exercise modal
 export function toggleDelete(e, setCurrentItemToDelete, setToggleDeleteExModal, setToggleDeleteSetModal) {
+    console.log(e.target)
     const exId = e.target.dataset.deleteexid
     const setId = e.target.dataset.deletesetid
     const exOfSetId = e.target.id

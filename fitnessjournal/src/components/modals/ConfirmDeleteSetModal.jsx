@@ -2,7 +2,7 @@ import BackBtn from "../BackBtn"
 
 export default function ConfirmDeleteSetModal(props) {
     return (
-        <form onSubmit={e => props.handleDeleteSet(e)} className="confirm-delete-modal" style={props.modalStyles}>
+        <form onSubmit={e => props.deleteSetClick(e)} className="confirm-delete-modal" style={props.modalStyles}>
             <div className="edit-set-title-container">
                 <h2>Delete Set</h2>
                 <i
