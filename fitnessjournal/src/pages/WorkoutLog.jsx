@@ -59,7 +59,7 @@ export default function WorkoutLog() {
     const stringDate = date.toISOString().split("T")[0]
     const [year, month, day] = stringDate.split("-")
     const formattedDate = `${month}/${day}/${year}`
-
+    
     useEffect(() => {
         setShowSkel(true)
         const fetch = async () => {
@@ -253,7 +253,6 @@ export default function WorkoutLog() {
   
     function editSet(e) {
         e.preventDefault()
-        console.log(newSetInfo)
         
         const workoutData = JSON.parse(localStorage.getItem('exercises'))
         const updatedWorkoutData = workoutData.map(exercise => {
@@ -279,6 +278,7 @@ export default function WorkoutLog() {
 
     function deleteSet(e) {
         e.preventDefault()
+        
         const workoutData = JSON.parse(localStorage.getItem('exercises'))
         const updatedWorkoutData = workoutData.map(exercise => {
             if(exercise.id === currentItemToDelete.exIdToDelete) {
