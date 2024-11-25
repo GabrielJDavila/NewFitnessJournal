@@ -49,14 +49,6 @@ export default function AllCategories() {
         toggleDelete()
     }
 
-    // function toggleModal(e) {
-    //     if(e.target.dataset.newcat) {
-    //         setToggleNewCatModal(prev => !prev)
-    //     } else if(e.target.dataset.addex) {
-    //         setToggleNewExModal(prev => !prev)
-    //     }
-    // }
-
     function toggleDelete(e) {
         setOpenConfirmDeleteModal(prev => !prev)
         const itemId = e.target.dataset.delete
@@ -148,15 +140,6 @@ export default function AllCategories() {
                 loadData={loadData}
             />
             <div className="all-ex-page-container">
-                {/* <form className="search-ex-form">
-                    <BackBtn />
-                    <input
-                        type="search"
-                        placeholder="search exercise"
-                        className="search-ex-input"
-                    />
-                    <i className="fa-solid fa-magnifying-glass"></i>
-                </form> */}
                 {toggleEditModal && editModal}
                 {openConfirmDeleteModal && confirmDeleteModal}
                 {loadedCategories.length === 0 ?
@@ -164,7 +147,6 @@ export default function AllCategories() {
                     :
                     renderedCategories
                 }
-                {/* <Link to="NewCat">Create Some Workout Categories!</Link> */}
             </div>
         </div>
     )

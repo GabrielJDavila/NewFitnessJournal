@@ -251,9 +251,12 @@ export default function WorkoutLog() {
         setExid(e.target.dataset.exid)
     }
   
+    function addMessage() {
+        console.log("check")
+    }
+
     function editSet(e) {
         e.preventDefault()
-        
         const workoutData = JSON.parse(localStorage.getItem('exercises'))
         const updatedWorkoutData = workoutData.map(exercise => {
             if(exercise.id === newSetInfo.exId) {
@@ -278,7 +281,6 @@ export default function WorkoutLog() {
 
     function deleteSet(e) {
         e.preventDefault()
-        
         const workoutData = JSON.parse(localStorage.getItem('exercises'))
         const updatedWorkoutData = workoutData.map(exercise => {
             if(exercise.id === currentItemToDelete.exIdToDelete) {
@@ -424,6 +426,7 @@ export default function WorkoutLog() {
             {
                 toggleNoteForm &&
                 <AddNote
+                    addNoteClick={addMessage}
                     handleAddNote={e => handleAddNoteSubmit(e, {
                         AddSetNote,
                         usersInDB,

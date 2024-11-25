@@ -44,11 +44,11 @@ export default function ExerciseDetail(props) {
             const newSet = {
                 setid: uuidv4(),
                 reps: repsAndWeight.reps,
-                weight: repsAndWeight.weight
+                weight: repsAndWeight.weight,
+                message: ''
             }
 
             const workoutData = JSON.parse(localStorage.getItem('exercises')) || []
-            
             const updatedWorkoutData = workoutData.map(exercise => {
                 if (exercise.id === props.exid) {
                     return {
