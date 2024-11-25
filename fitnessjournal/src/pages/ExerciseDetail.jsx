@@ -3,6 +3,7 @@ import { useParams, useOutletContext } from "react-router-dom"
 import { addSetsReps, usersInDB} from "../firebase"
 import ExDetailBackBtn from "../components/ExDetailBackBtn"
 import SetAdded from "../components/modals/SetAdded"
+import { v4 as uuidv4 } from 'uuid'
 
 export default function ExerciseDetail(props) {
     // const params = useParams()
@@ -40,14 +41,34 @@ export default function ExerciseDetail(props) {
         e.preventDefault()
 
         if (repsAndWeight.reps > 0) {
-            props.setWorkoutDataInStorage(prev => {
-                prev.map((exercise) => {
-                    console.log(exercise)
-                })
+            const newSet = {
+                setid: uuidv4(),
+                reps: repsAndWeight.reps,
+                weight: repsAndWeight.weight
+            }
+
+            const workoutData = JSON.parse(localStorage.getItem('exercises')) || []
+            
+            const updatedWorkoutData = workoutData.map(exercise => {
+                if (exercise.id === props.exid) {
+                    return {
+                        ...exercise,
+                        setsReps: [...(exercise.setsReps || []), newSet]
+                    }
+                }
+                return exercise
             })
-            addSetsReps(props.exid, repsAndWeight.weight, repsAndWeight.reps, repsAndWeight.weightType, usersInDB, currentUser, date)
-            setShowModal(true)
+            // console.log(updatedWorkoutData)
+            localStorage.setItem('exercises', JSON.stringify(updatedWorkoutData))
             props.loadExerciseList(props.date)
+            // props.setWorkoutDataInStorage(prev => {
+            //     prev.map((exercise) => {
+            //         console.log(exercise)
+            //     })
+            // })
+            // addSetsReps(props.exid, repsAndWeight.weight, repsAndWeight.reps, repsAndWeight.weightType, usersInDB, currentUser, date)
+            setShowModal(true)
+            
         } else {
             alert("Please enter an amount for reps.")
         }        

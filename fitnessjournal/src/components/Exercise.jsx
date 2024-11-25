@@ -35,6 +35,7 @@ export default function Exercise(props) {
             } else {
                 const newEx = {
                     ...docInfo,
+                    date: new Date().toLocaleDateString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true }),
                     setsReps: []
                 }
                 workoutData.push(newEx)

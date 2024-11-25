@@ -21,7 +21,7 @@ import DeleteMessage from "../components/modals/DeleteMessage"
 // I'm reading/writing to firebase too much. Pull data into local storage, edit/delete from local storage, and then save to firebase.
 export default function WorkoutLog() {
     const [workoutData, setWorkoutData] = useState(() => {
-        const savedData = JSON.parse(localStorage.getItem("workoutData"))
+        const savedData = JSON.parse(localStorage.getItem("exercises"))
         return savedData ? savedData : []
     })
     const [workoutDatesData, setWorkoutDatesData] = useState([])
@@ -59,6 +59,7 @@ export default function WorkoutLog() {
     const [year, month, day] = stringDate.split("-")
     const formattedDate = `${month}/${day}/${year}`
 
+    console.log(workoutData)
     useEffect(() => {
         setShowSkel(true)
         const fetch = async () => {
@@ -78,24 +79,26 @@ export default function WorkoutLog() {
     }, [deleteSetMessage])
 
     async function loadExerciseList(date) {
-        try {
-            const data = await retrieveCurrentExSetsRepsAndPRs(usersInDB, currentUser, date)
-            const workoutDates = await retrieveAllWorkouts(usersInDB, currentUser)
-            if(data) {
-                const jsonString = JSON.stringify(data)
-                const sizeInBytes = new Blob([jsonString]).size
-                console.log(sizeInBytes)
-                localStorage.setItem("workoutData", JSON.stringify(data))
-                setWorkoutData(data.exercises)
-                setShowSkel(false)
-            }
-            if(workoutDates) {
-                setWorkoutDatesData(workoutDates)
-            }
+        setWorkoutData(JSON.parse(localStorage.getItem("exercises")) || [])
+        setShowSkel(false)
+        // try {
+        //     const data = await retrieveCurrentExSetsRepsAndPRs(usersInDB, currentUser, date)
+        //     const workoutDates = await retrieveAllWorkouts(usersInDB, currentUser)
+        //     if(data) {
+        //         const jsonString = JSON.stringify(data)
+        //         const sizeInBytes = new Blob([jsonString]).size
+        //         console.log(sizeInBytes)
+        //         localStorage.setItem("workoutData", JSON.stringify(data))
+        //         setWorkoutData(data.exercises)
+        //         setShowSkel(false)
+        //     }
+        //     if(workoutDates) {
+        //         setWorkoutDatesData(workoutDates)
+        //     }
             
-        } catch(e) {
-            console.log("error fetching exercises list: ", e)
-        }
+        // } catch(e) {
+        //     console.log("error fetching exercises list: ", e)
+        // }
     }
 
     async function reOrderList(exerciseId, newIndex, userCollection, userId, date) {
