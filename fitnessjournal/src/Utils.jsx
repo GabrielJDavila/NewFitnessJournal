@@ -95,27 +95,27 @@ export async function handleAddSetSubmit(e, {
 }
 
 // handles submission of adding notes to sets/exercises.
-export async function handleAddNoteSubmit(e, {
-    AddSetNote,
-    usersInDB,
-    currentUser,
-    date,
-    exid,
-    setId,
-    note,
-    setNote,
-    setCurrentNote,
-    loadExerciseList
-}) {
-    e.preventDefault()
-    try {
-        AddSetNote(currentUser, usersInDB, date, exid, setId, note)
-        setCurrentNote(note)
-        setNote("")
-    }catch(error) {
-        console.error("error handling add note submit: ", error)
-    }
-}
+// export async function handleAddNoteSubmit(e, {
+//     AddSetNote,
+//     usersInDB,
+//     currentUser,
+//     date,
+//     exid,
+//     setId,
+//     note,
+//     setNote,
+//     setCurrentNote,
+//     loadExerciseList
+// }) {
+//     e.preventDefault()
+//     try {
+//         AddSetNote(currentUser, usersInDB, date, exid, setId, note)
+//         setCurrentNote(note)
+//         setNote("")
+//     }catch(error) {
+//         console.error("error handling add note submit: ", error)
+//     }
+// }
 
 // // handles the result of user clicking confirm of ConfirmDeleteSetModal.
 export async function handleDeleteSetSubmit(e, { 
@@ -187,6 +187,7 @@ export function toggleAddSet(e, setToggleAddSetModal) {
 
 // Toggles the edit set modal.
 export function toggleEdit(e, setNewSetInfo, setToggleEditSetModal) {
+
     if(e) {
         const exId = e.target.id
         const setId = e.target.dataset.editsetid

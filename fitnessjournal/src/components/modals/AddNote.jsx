@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 
 export default function AddNote(props) {
-    console.log(props.message)
+    console.log(props.setIndex)
 
     useEffect(() => {
         if(props.message) {
@@ -9,7 +9,7 @@ export default function AddNote(props) {
         }
     }, [props.message])
     return (
-        <form onSubmit={props.handleAddNote} className="note-form">
+        <form onSubmit={e => props.addSetNote(e)} className="note-form">
             <h2 className="note-title">Add Note</h2>
             <span data-closenote={true} onClick={e => props.toggleNote(e)} class="material-symbols-outlined close-note">
                 close

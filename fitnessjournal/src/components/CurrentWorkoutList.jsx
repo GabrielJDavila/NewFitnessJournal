@@ -87,6 +87,7 @@ export default function CurrentWorkoutList(props) {
                             
                             <ul className="all-sets-container">
                                 {ex.setsReps && Array.isArray(ex.setsReps) && ex.setsReps.map((set, setIndex) => (
+                                    
                                     <li key={setIndex} className="set-container">
                                         {set.isPR ?
                                         <span className="material-symbols-outlined pr-icon">
@@ -97,17 +98,18 @@ export default function CurrentWorkoutList(props) {
                                         <p className="set-weight">lbs: {set.weight}</p>
                                         <p className="set-reps">reps: {set.reps}</p>
                                         <span
+                                            id={ex.id}
                                             className="material-symbols-outlined edit-ex"
-                                            data-setid={set.setid}
-                                            data-exid={ex.id}
-                                            data-message={set.message}
+                                            data-setnoteid={set.setId}
+                                            data-setindex={setIndex}
+                                            data-note={set.note}
                                             onClick={e => props.toggleNote(e)}
                                         >
                                             comment
                                         </span>
                                         <span
                                             id={ex.id}
-                                            data-editsetid={set.setid}
+                                            data-editsetid={set.setId}
                                             data-setindex={setIndex}
                                             onClick={e => props.toggleEdit(e)}
                                             className="material-symbols-outlined edit-ex"
@@ -117,7 +119,7 @@ export default function CurrentWorkoutList(props) {
                                         <span
                                             onClick={e => props.toggleDel(e)}
                                             id={ex.id}
-                                            data-deletesetid={set.setid}
+                                            data-deletesetid={set.setId}
                                             className="material-symbols-outlined delete-set"
                                         >
                                             delete

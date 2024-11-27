@@ -8,7 +8,7 @@ import EditSetModal from "../components/modals/EditSetModal"
 import AddNote from "../components/modals/AddNote"
 import TimerModal from "../components/modals/TimerModal"
 import CurrentWorkoutList from "../components/CurrentWorkoutList"
-import { handleDeleteExerciseSubmit, handleDeleteSetSubmit, handleAddSetSubmit, handleAddNoteSubmit, handleEditSetSubmit, handleDeleteAllExSubmit, toggleAddSet, toggleEdit, toggleDelete, toggleDeleteAllEx } from "../Utils"
+import { handleDeleteExerciseSubmit, handleDeleteSetSubmit, handleEditSetSubmit, handleDeleteAllExSubmit, toggleAddSet, toggleEdit, toggleDelete, toggleDeleteAllEx } from "../Utils"
 import Calendar from "react-calendar"
 import "../calendar-custom.css"
 // import "react-calendar/dist/Calendar.css"
@@ -48,6 +48,7 @@ export default function WorkoutLog() {
     const [newSetInfo, setNewSetInfo] = useState({
         reps: "",
         weight: "",
+        note: "",
         exId: "",
         setId: "",
         setIndex: ""
@@ -59,7 +60,7 @@ export default function WorkoutLog() {
     const stringDate = date.toISOString().split("T")[0]
     const [year, month, day] = stringDate.split("-")
     const formattedDate = `${month}/${day}/${year}`
-    
+    console.log(workoutData)
     useEffect(() => {
         setShowSkel(true)
         const fetch = async () => {
@@ -159,10 +160,23 @@ export default function WorkoutLog() {
     }
 
     function toggleNote(e) {
-        console.log(e.target.dataset.closenote)
-        if(e.target.dataset.setid) {
-            setSetId(e.target.dataset.setid)
-            setCurrentNote(e.target.dataset.message)
+        
+        if(e.target.dataset.setnoteid) {
+            const exId = e.target.id
+            const setId = e.target.dataset.setnoteid
+            const setIndex = e.target.dataset.setindex
+            // add data-note from curentWorkoutList?
+            
+        setNewSetInfo(prev => ({
+            ...prev,
+            exId: exId,
+            setId: setId,
+            setIndex: setIndex
+        }))
+
+            // const exId = e.target.id
+            // setSetId(e.target.dataset.setid)
+            // setCurrentNote(e.target.dataset.message)
         }
         if(e.target.dataset.closenote === true) {
             setToggleNoteForm(false)
@@ -246,15 +260,9 @@ export default function WorkoutLog() {
     }
 
     function handleClick(e) {
-        console.log(e.target.dataset.exid)
-        console.log(e.currentTarget.getAttribute("data-currentex"))
         setExid(e.target.dataset.exid)
     }
   
-    function addMessage() {
-        console.log("check")
-    }
-
     function editSet(e) {
         e.preventDefault()
         const workoutData = JSON.parse(localStorage.getItem('exercises'))
@@ -265,7 +273,8 @@ export default function WorkoutLog() {
                 const updatedSetsReps = [...exercise.setsReps]
                 // updates set at given setIndex with newSetInfo
                 updatedSetsReps[newSetInfo.setIndex] = {
-                    setid: newSetInfo.setId,
+                    ...updatedSetsReps[newSetInfo.setIndex],
+                    setId: newSetInfo.setId,
                     reps: newSetInfo.reps,
                     weight: newSetInfo.weight
                 }
@@ -299,10 +308,40 @@ export default function WorkoutLog() {
             // if exercise id does not match, returns exercise unchanged
             return exercise
         })
-        console.log(updatedWorkoutData)
         localStorage.setItem('exercises', JSON.stringify(updatedWorkoutData))
         loadExerciseList()
         setToggleDeleteSetModal(false)
+    }
+    
+    function addSetNote(e) {
+        e.preventDefault()
+        const workoutData = JSON.parse(localStorage.getItem('exercises'))
+        const updatedWorkoutData = workoutData.map(exercise => {
+            // check to see if exercise matches. If it does, continue with edit
+            if(exercise.id === newSetInfo.exId) {
+                // creates a shallow copy of setsReps array in given exercise
+                const updatedSetsReps = [...exercise.setsReps]
+                // updates set at given setIndex with newSetInfo
+                updatedSetsReps[newSetInfo.setIndex] = {
+                    ...updatedSetsReps[newSetInfo.setIndex],
+                    note: note
+                }
+                // returns the exercise info plus the updated sets
+                return {
+                    ...exercise,
+                    setsReps: updatedSetsReps
+                }
+            }
+            // if exercise id doesn't match the exid of the set the user clicks,
+            // returns the unchanged exercise so that other exercises remain the same.
+            return exercise
+        })
+        localStorage.setItem('exercises', JSON.stringify(updatedWorkoutData))
+        
+        loadExerciseList()
+        setCurrentNote(note)
+        setNote("")
+        setToggleNoteForm(false)
     }
 
     document.addEventListener("click", handleClickOutside)
@@ -434,29 +473,36 @@ export default function WorkoutLog() {
             {
                 toggleNoteForm &&
                 <AddNote
-                    addNoteClick={addMessage}
-                    handleAddNote={e => handleAddNoteSubmit(e, {
-                        AddSetNote,
-                        usersInDB,
-                        currentUser,
-                        date,
-                        exid,
-                        setId,
-                        note,
-                        setNote,
-                        setCurrentNote,
-                        loadExerciseList
-                    })}
+                // add note from local storage here. Make sure note is saving!
+                    addSetNote={e => addSetNote(e)}
+                    workoutData={workoutData}
+                    setIndex={newSetInfo.setIndex && newSetInfo.setIndex}
+                    // Add note for each set to correct set. Right now i have repeating notes!
+
+                    // addNoteClick={addMessage}
+                    // handleAddNote={e => handleAddNoteSubmit(e, {
+                    //     AddSetNote,
+                    //     usersInDB,
+                    //     currentUser,
+                    //     date,
+                    //     exid,
+                    //     setId,
+                    //     note,
+                    //     setNote,
+                    //     setCurrentNote,
+                    //     loadExerciseList
+                    // })}
                     handleNoteChange={handleNoteChange}
                     toggleNote={e => toggleNote(e)}
                     name="note"
                     value={note}
                     date={date}
+                    newSetInfo
                     message={currentNote && currentNote}
                     loadExerciseList={loadExerciseList}
                 />
             }
-
+            
             { toggleDeleteSetModal &&
                 <ConfirmDeleteSetModal
                     deleteSetClick={e => deleteSet(e)}

@@ -42,10 +42,12 @@ export default function ExerciseDetail(props) {
 
         if (repsAndWeight.reps > 0) {
             const newSet = {
-                setid: uuidv4(),
+                setId: uuidv4(),
+                exId: "",
                 reps: repsAndWeight.reps,
                 weight: repsAndWeight.weight,
-                message: ''
+                note: "",
+                setIndex: ""
             }
 
             const workoutData = JSON.parse(localStorage.getItem('exercises')) || []
