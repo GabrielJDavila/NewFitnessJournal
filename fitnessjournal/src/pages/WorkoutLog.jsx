@@ -160,11 +160,11 @@ export default function WorkoutLog() {
     }
 
     function toggleNote(e) {
-        
         if(e.target.dataset.setnoteid) {
             const exId = e.target.id
             const setId = e.target.dataset.setnoteid
             const setIndex = e.target.dataset.setindex
+            console.log(setIndex)
             // add data-note from curentWorkoutList?
             
         setNewSetInfo(prev => ({
@@ -214,7 +214,7 @@ export default function WorkoutLog() {
         
         await reOrderList(draggedItemId, newIndex, usersInDB, currentUser, date)
     }
-
+   
     const modalStyles = {
         position: "sticky",
         top: "100px",
@@ -476,6 +476,8 @@ export default function WorkoutLog() {
                 // add note from local storage here. Make sure note is saving!
                     addSetNote={e => addSetNote(e)}
                     workoutData={workoutData}
+                    currentEx={newSetInfo.exId && newSetInfo.exId}
+                    currentSet={newSetInfo.setId && newSetInfo.setId}
                     setIndex={newSetInfo.setIndex && newSetInfo.setIndex}
                     // Add note for each set to correct set. Right now i have repeating notes!
 

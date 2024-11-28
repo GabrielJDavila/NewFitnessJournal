@@ -86,9 +86,9 @@ export default function CurrentWorkoutList(props) {
                             </div>
                             
                             <ul className="all-sets-container">
-                                {ex.setsReps && Array.isArray(ex.setsReps) && ex.setsReps.map((set, setIndex) => (
+                                {ex.setsReps && Array.isArray(ex.setsReps) && ex.setsReps.map((set, index) => (
                                     
-                                    <li key={setIndex} className="set-container">
+                                    <li key={index} className="set-container">
                                         {set.isPR ?
                                         <span className="material-symbols-outlined pr-icon">
                                             trophy
@@ -101,7 +101,7 @@ export default function CurrentWorkoutList(props) {
                                             id={ex.id}
                                             className="material-symbols-outlined edit-ex"
                                             data-setnoteid={set.setId}
-                                            data-setindex={setIndex}
+                                            data-setindex={index}
                                             data-note={set.note}
                                             onClick={e => props.toggleNote(e)}
                                         >
@@ -110,7 +110,7 @@ export default function CurrentWorkoutList(props) {
                                         <span
                                             id={ex.id}
                                             data-editsetid={set.setId}
-                                            data-setindex={setIndex}
+                                            data-setindex={index}
                                             onClick={e => props.toggleEdit(e)}
                                             className="material-symbols-outlined edit-ex"
                                         >
