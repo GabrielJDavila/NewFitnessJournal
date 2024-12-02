@@ -20,6 +20,8 @@ import DeleteMessage from "../components/modals/DeleteMessage"
 
 // I'm reading/writing to firebase too much. Pull data into local storage, edit/delete from local storage, and then save to firebase.
 export default function WorkoutLog() {
+    const storedDate = localStorage.getItem("selectedDate")
+    const [date, setDate] = useState(storedDate ? new Date(storedDate) : new Date())
     const [workoutData, setWorkoutData] = useState(() => {
         const savedData = JSON.parse(localStorage.getItem("exercises"))
         return savedData ? savedData : []
@@ -36,8 +38,6 @@ export default function WorkoutLog() {
     // initializing state for specific calendar day when user clicks calendar day
     const [toggleCalendarDay, setToggleCalendarDay] = useState(false)
     const [toggleNoteForm, setToggleNoteForm] = useState(false)
-    const storedDate = localStorage.getItem("selectedDate")
-    const [date, setDate] = useState(storedDate ? new Date(storedDate) : new Date())
     const { currentUser } = useOutletContext()
     const [currentItemToDelete, setCurrentItemToDelete] = useState({
         exIdToDelete: "",
@@ -60,7 +60,7 @@ export default function WorkoutLog() {
     const stringDate = date.toISOString().split("T")[0]
     const [year, month, day] = stringDate.split("-")
     const formattedDate = `${month}/${day}/${year}`
-    console.log(workoutData)
+    console.log(date, workoutData)
     useEffect(() => {
         setShowSkel(true)
         const fetch = async () => {
@@ -101,7 +101,19 @@ export default function WorkoutLog() {
         //     console.log("error fetching exercises list: ", e)
         // }
     }
-
+    
+    const filteredDateWorkoutData = workoutData.map(exercise => {
+        const exDate = new Date(exercise.date)
+        exDate.setHours(0, 0, 0, 0)
+        const dateState = new Date(date)
+        dateState.setHours(0, 0, 0, 0)
+        if(exDate.getTime() === dateState.getTime()) {
+            return exercise
+        } else {
+            return null
+        }
+    }).filter(exercise => exercise !== null)
+    
     async function reOrderList(exerciseId, newIndex, userCollection, userId, date) {
         try {
             await reOrderWorkoutList(exerciseId, newIndex, userCollection, userId, date)
@@ -119,10 +131,6 @@ export default function WorkoutLog() {
 
     function handleNoteChange(value) {
         setNote(value)
-        // setNote(prev => ({
-        //     ...prev,
-        //     [name]: value
-        // }))
     }
 
     function handleDateChange(newDate) {
@@ -174,9 +182,6 @@ export default function WorkoutLog() {
             setIndex: setIndex
         }))
 
-            // const exId = e.target.id
-            // setSetId(e.target.dataset.setid)
-            // setCurrentNote(e.target.dataset.message)
         }
         if(e.target.dataset.closenote === true) {
             setToggleNoteForm(false)
@@ -541,7 +546,7 @@ export default function WorkoutLog() {
                                 <div {...provided.droppableProps} ref={provided.innerRef} className="current-log-inner-container">
                                     <h2>Current Workout {formattedDate}</h2>
                                     <CurrentWorkoutList
-                                        data={workoutData && workoutData}
+                                        data={filteredDateWorkoutData && filteredDateWorkoutData}
                                         usersInDB={usersInDB}
                                         currentUser={currentUser}
                                         date={date}
