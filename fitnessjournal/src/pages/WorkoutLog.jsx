@@ -60,7 +60,7 @@ export default function WorkoutLog() {
     const stringDate = date.toISOString().split("T")[0]
     const [year, month, day] = stringDate.split("-")
     const formattedDate = `${month}/${day}/${year}`
-    console.log(date, workoutData)
+    
     useEffect(() => {
         setShowSkel(true)
         const fetch = async () => {
@@ -79,6 +79,9 @@ export default function WorkoutLog() {
         }
     }, [deleteSetMessage])
 
+    async function saveWorkout() {
+        // this function will save workout to firestore
+    }
     async function loadExerciseList(date) {
         setWorkoutData(JSON.parse(localStorage.getItem("exercises")) || [])
         setShowSkel(false)
@@ -538,13 +541,14 @@ export default function WorkoutLog() {
                 {showSkel &&
                     workoutSkels
                 }
-                {/* workoutData > 0 */}
-                { workoutData && !showSkel &&
+                
+                { filteredDateWorkoutData && !showSkel && filteredDateWorkoutData.length > 0 &&
                     <DragDropContext onDragEnd={handleDragEnd}>
                         <Droppable droppableId="workoutData">
                             {(provided) => (
                                 <div {...provided.droppableProps} ref={provided.innerRef} className="current-log-inner-container">
                                     <h2>Current Workout {formattedDate}</h2>
+                                    <button onClick={saveWorkout} className="save-workout-btn">Save workout</button>
                                     <CurrentWorkoutList
                                         data={filteredDateWorkoutData && filteredDateWorkoutData}
                                         usersInDB={usersInDB}
@@ -562,6 +566,13 @@ export default function WorkoutLog() {
                             )}
                         </Droppable>
                     </DragDropContext>
+                }
+                {filteredDateWorkoutData.length === 0 &&
+                    <div className="no-current-workout-container">
+                        {formattedDate}
+                        <p className="no-current-text">No workout for this date</p>
+                        <Link to='AllCategories' className="link-btn">Add some exercises!</Link>
+                    </div>
                 }
                 {deleteSetMessage && <DeleteMessage />}
                 {!showSkel && !workoutData && <h1 className="current-log-title">Workout Log Empty {formattedDate}</h1>}

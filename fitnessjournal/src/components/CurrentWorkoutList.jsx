@@ -134,7 +134,11 @@ export default function CurrentWorkoutList(props) {
                     )}
                 </Draggable>
             )
-        }): <p>No current workout</p>
+        }):
+            <div className="no-current-workout-container">
+                <p className="no-current-text">No workout for this date</p>
+                <Link to='AllCategories' className="link-btn">Add some exercises!</Link>
+            </div>
 
         return (
             currentWorkout
