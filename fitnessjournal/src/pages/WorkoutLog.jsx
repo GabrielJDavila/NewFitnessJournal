@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react"
 import { Link, useOutletContext } from "react-router-dom"
-import { usersInDB, retrieveCurrentExSetsRepsAndPRs, editSingleSet, deleteEx, deleteSingleSet, deleteAllEx, reOrderWorkoutList, retrieveAllWorkouts, AddSetNote } from "../firebase"
+import { usersInDB, retrieveCurrentExSetsRepsAndPRs, editSingleSet, deleteEx, deleteSingleSet, deleteAllEx, reOrderWorkoutList, retrieveAllWorkouts, AddSetNote, saveDataToFirestore } from "../firebase"
 import ConfirmDeleteAllExModal from "../components/modals/ConfirmDeleteAllEx"
 import ConfirmDeleteExModal from "../components/modals/ConfirmDeleteExModal"
 import ConfirmDeleteSetModal from "../components/modals/ConfirmDeleteSetModal"
@@ -60,6 +60,7 @@ export default function WorkoutLog() {
     const stringDate = date.toISOString().split("T")[0]
     const [year, month, day] = stringDate.split("-")
     const formattedDate = `${month}/${day}/${year}`
+    const [savedWorkout, setSavedWorkout] = useState(false)
     
     useEffect(() => {
         setShowSkel(true)
@@ -81,7 +82,19 @@ export default function WorkoutLog() {
 
     async function saveWorkout() {
         // this function will save workout to firestore
+        try {
+            const result = await saveDataToFirestore(date, usersInDB, currentUser, workoutData)
+            if(result.success) {
+                setSavedWorkout(true)
+                console.log(result.message)
+            } else {
+                console.warn(result.message)
+            }
+        } catch(err) {
+            console.error('error saving data: ', err)
+        }
     }
+
     async function loadExerciseList(date) {
         setWorkoutData(JSON.parse(localStorage.getItem("exercises")) || [])
         setShowSkel(false)
@@ -235,31 +248,6 @@ export default function WorkoutLog() {
         background: "white",
         zIndex: "12"
     }
-    
-    const workoutSkels =
-        <div className="workout-skel-div-main">
-            <div className="workout-skel-div">
-                <div className="workout-skel-mini">
-                <Skeleton variant="rounded" width="50%" />
-                <Skeleton variant="rounded" width="20%" />
-                </div>
-                <Skeleton variant="rounded" width="100%" height="100%" />
-            </div>
-            <div className="workout-skel-div">
-                <div className="workout-skel-mini">
-                <Skeleton variant="rounded" width="50%" />
-                <Skeleton variant="rounded" width="20%" />
-                </div>
-                <Skeleton variant="rounded" width="100%" height="100%" />
-            </div>
-            <div className="workout-skel-div">
-                <div className="workout-skel-mini">
-                <Skeleton variant="rounded" width="50%" />
-                <Skeleton variant="rounded" width="20%" />
-                </div>
-                <Skeleton variant="rounded" width="100%" height="100%" />
-            </div>
-        </div>
 
     const handleClickOutside = (e) => {
         if(calendarRef.current && !calendarRef.current.contains(e.target)) {
@@ -352,8 +340,33 @@ export default function WorkoutLog() {
         setToggleNoteForm(false)
     }
 
-    document.addEventListener("click", handleClickOutside)
+    const workoutSkels =
+        <div className="workout-skel-div-main">
+            <div className="workout-skel-div">
+                <div className="workout-skel-mini">
+                <Skeleton variant="rounded" width="50%" />
+                <Skeleton variant="rounded" width="20%" />
+                </div>
+                <Skeleton variant="rounded" width="100%" height="100%" />
+            </div>
+            <div className="workout-skel-div">
+                <div className="workout-skel-mini">
+                <Skeleton variant="rounded" width="50%" />
+                <Skeleton variant="rounded" width="20%" />
+                </div>
+                <Skeleton variant="rounded" width="100%" height="100%" />
+            </div>
+            <div className="workout-skel-div">
+                <div className="workout-skel-mini">
+                <Skeleton variant="rounded" width="50%" />
+                <Skeleton variant="rounded" width="20%" />
+                </div>
+                <Skeleton variant="rounded" width="100%" height="100%" />
+            </div>
+        </div>
 
+    document.addEventListener("click", handleClickOutside)
+    
     return (
         <div className="workout-log">
             <section className="hero-section log-hero">
@@ -548,7 +561,7 @@ export default function WorkoutLog() {
                             {(provided) => (
                                 <div {...provided.droppableProps} ref={provided.innerRef} className="current-log-inner-container">
                                     <h2>Current Workout {formattedDate}</h2>
-                                    <button onClick={saveWorkout} className="save-workout-btn">Save workout</button>
+                                    <button onClick={saveWorkout} className="save-workout-btn">{saveWorkout ? 'Workout saved': 'Save workout'}</button>
                                     <CurrentWorkoutList
                                         data={filteredDateWorkoutData && filteredDateWorkoutData}
                                         usersInDB={usersInDB}
@@ -571,7 +584,7 @@ export default function WorkoutLog() {
                     <div className="no-current-workout-container">
                         {formattedDate}
                         <p className="no-current-text">No workout for this date</p>
-                        <Link to='AllCategories' className="link-btn">Add some exercises!</Link>
+                        <Link to='AllCategories' className="link-btn" onClick={() => localStorage.clear()}>Add some exercises!</Link>
                     </div>
                 }
                 {deleteSetMessage && <DeleteMessage />}

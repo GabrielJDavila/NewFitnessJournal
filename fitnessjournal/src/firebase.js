@@ -392,6 +392,70 @@ export async function retrieveDoc(collectionType, itemId) {
     return docSnap
 }
 
+export async function saveDataToFirestore(dateInput, userCollection, userId, workoutData) {
+    console.log(workoutData)
+    try {
+        const foramttedDate = new Date(dateInput).toISOString().split('T')[0]
+        const dateObj = new Date(dateInput)
+        const createdAtTimestamp = Timestamp.fromDate(dateObj)
+        
+        const userDocRef = doc(userCollection, userId)
+        const workoutCollectionRef =  collection(userDocRef, 'savedWorkouts')
+        const dateOfWorkoutDocRef = doc(workoutCollectionRef, foramttedDate)
+
+        await setDoc(dateOfWorkoutDocRef, {
+            createdAt: createdAtTimestamp
+        })
+
+        const exerciseListRef = collection(dateOfWorkoutDocRef, 'exList')
+        for(const exercise of workoutData) {
+            const exDocRef = doc(exerciseListRef, exercise.id)
+            const docSnap = await getDoc(exDocRef)
+
+            if(docSnap.exists()) {
+                // alert("exercise already in workout")
+                return {
+                    success: false,
+                    message: `Exercise ${exercise.name} is already saved.`
+                }
+
+            } else {
+                const snapshot = await getDocs(exerciseListRef)
+                const currentIndex = snapshot.docs.length
+
+                await setDoc(exDocRef, {
+                    id: exercise.id,
+                    name: exercise.name,
+                    createdAt: createdAtTimestamp,
+                    index: currentIndex
+                })
+
+                for(const set of exercise.setsReps) {
+                    const setsAndRepsRef = collection(exDocRef, "setsAndReps")
+                    await addDoc(setsAndRepsRef, {
+                        weight: set.weight,
+                        reps: set.reps,
+                        note: set.note,
+                        setIndex: set.setIndex,
+                        setId: set.setId,
+                        exId: exercise.id,
+                        createdAt: serverTimestamp()
+                    })
+                }
+            }
+        }
+
+        return {
+            success: true,
+            message: 'Workout data saved successfully!'
+        }
+        
+    } catch(err) {
+        console.error('error saving data to firestore: ', err)
+        throw err
+    }
+}
+
 // add or udpdate current workout exercises
 export async function addUpdateWorkoutList(exerciseId, name, userCollection, userId) {
     try {
