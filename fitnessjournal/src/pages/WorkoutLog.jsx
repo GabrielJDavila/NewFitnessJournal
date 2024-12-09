@@ -98,10 +98,22 @@ export default function WorkoutLog() {
         }
     }, [savedWorkout, alreadySavedWorkout])
 
+    const filteredDateWorkoutData = workoutData.map(exercise => {
+        const exDate = new Date(exercise.date)
+        exDate.setHours(0, 0, 0, 0)
+        const dateState = new Date(date)
+        dateState.setHours(0, 0, 0, 0)
+        if(exDate.getTime() === dateState.getTime()) {
+            return exercise
+        } else {
+            return null
+        }
+    }).filter(exercise => exercise !== null)
+
     async function saveWorkout() {
         // this function will save workout to firestore
         try {
-            const result = await saveDataToFirestore(date, usersInDB, currentUser, workoutData)
+            const result = await saveDataToFirestore(date, usersInDB, currentUser, filteredDateWorkoutData)
             if(result.success) {
                 setSavedWorkout(true)
                 console.log(result.message)
@@ -136,18 +148,6 @@ export default function WorkoutLog() {
         //     console.log("error fetching exercises list: ", e)
         // }
     }
-    
-    const filteredDateWorkoutData = workoutData.map(exercise => {
-        const exDate = new Date(exercise.date)
-        exDate.setHours(0, 0, 0, 0)
-        const dateState = new Date(date)
-        dateState.setHours(0, 0, 0, 0)
-        if(exDate.getTime() === dateState.getTime()) {
-            return exercise
-        } else {
-            return null
-        }
-    }).filter(exercise => exercise !== null)
     
     async function reOrderList(exerciseId, newIndex, userCollection, userId, date) {
         try {
