@@ -149,6 +149,26 @@ export default function WorkoutLog() {
         // }
     }
     
+    async function loadWorkoutFromFirestore() {
+        try {
+        //     const data = await retrieveCurrentExSetsRepsAndPRs(usersInDB, currentUser, date)
+        //     const workoutDates = await retrieveAllWorkouts(usersInDB, currentUser)
+        //     if(data) {
+        //         const jsonString = JSON.stringify(data)
+        //         const sizeInBytes = new Blob([jsonString]).size
+        //         console.log(sizeInBytes)
+        //         localStorage.setItem("workoutData", JSON.stringify(data))
+        //         setWorkoutData(data.exercises)
+        //         setShowSkel(false)
+        //     }
+        //     if(workoutDates) {
+        //         setWorkoutDatesData(workoutDates)
+        //     }
+        } catch(err) {
+            console.error('error grabbing from firestore: ', err)
+        }
+    }
+    
     async function reOrderList(exerciseId, newIndex, userCollection, userId, date) {
         try {
             await reOrderWorkoutList(exerciseId, newIndex, userCollection, userId, date)
