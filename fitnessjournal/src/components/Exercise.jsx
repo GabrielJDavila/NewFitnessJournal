@@ -25,6 +25,7 @@ export default function Exercise(props) {
 
     // function to handle button click of adding exercise
     async function handleAddExClick(e) {
+        
         if(e.target.dataset.id === docInfo.id) {
             const workoutData = JSON.parse(localStorage.getItem('exercises') || '[]')
             const exerciseExists = workoutData.some(ex => ex.id === docInfo.id)
@@ -35,9 +36,11 @@ export default function Exercise(props) {
             } else {
                 const newEx = {
                     ...docInfo,
-                    date: new Date().toLocaleDateString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true }),
+                    date: new Date(localStorage.getItem("selectedDate")),
                     setsReps: []
                 }
+                
+                console.log(newEx.date)
                 workoutData.push(newEx)
                 localStorage.setItem('exercises', JSON.stringify(workoutData))
                 props.setToggleModal(true)

@@ -61,6 +61,7 @@ export default function WorkoutLog() {
     const [year, month, day] = stringDate.split("-")
     const formattedDate = `${month}/${day}/${year}`
     const [savedWorkout, setSavedWorkout] = useState(false)
+    const [alreadySavedWorkout, setAlreadySavedWorkout] = useState(false)
     
     useEffect(() => {
         setShowSkel(true)
@@ -80,6 +81,23 @@ export default function WorkoutLog() {
         }
     }, [deleteSetMessage])
 
+    useEffect(() => {
+        if(savedWorkout) {
+            const timout = setTimeout(() => {
+                setSavedWorkout(false)
+            }, 3000)
+
+            return () => clearTimeout(timout)
+        }
+        if(alreadySavedWorkout) {
+            const secondTimout = setTimeout(() => {
+                setAlreadySavedWorkout(false)
+            }, 3000)
+
+            return () => clearTimeout(secondTimout)
+        }
+    }, [savedWorkout, alreadySavedWorkout])
+
     async function saveWorkout() {
         // this function will save workout to firestore
         try {
@@ -88,6 +106,7 @@ export default function WorkoutLog() {
                 setSavedWorkout(true)
                 console.log(result.message)
             } else {
+                setAlreadySavedWorkout(true)
                 console.warn(result.message)
             }
         } catch(err) {
@@ -152,8 +171,11 @@ export default function WorkoutLog() {
     function handleDateChange(newDate) {
         setDate(newDate)
         localStorage.setItem("selectedDate", newDate.toISOString())
+        console.log(localStorage.getItem('selectedDate'))
         handleToggleCalendar()
+        setSavedWorkout(false)
     }
+    console.log(date)
 
     // function to check place previous workout dates on corresponding tiles in react calendar
     function tileClassName({ date, view }) {
@@ -561,7 +583,9 @@ export default function WorkoutLog() {
                             {(provided) => (
                                 <div {...provided.droppableProps} ref={provided.innerRef} className="current-log-inner-container">
                                     <h2>Current Workout {formattedDate}</h2>
-                                    <button onClick={saveWorkout} className="save-workout-btn">{saveWorkout ? 'Workout saved': 'Save workout'}</button>
+                                    <button onClick={saveWorkout} className="save-workout-btn">Save workout</button>
+                                    <p>{savedWorkout && 'Workout saved!'}</p>
+                                    <p>{alreadySavedWorkout && 'Workout already saved.'}</p>
                                     <CurrentWorkoutList
                                         data={filteredDateWorkoutData && filteredDateWorkoutData}
                                         usersInDB={usersInDB}
@@ -584,7 +608,7 @@ export default function WorkoutLog() {
                     <div className="no-current-workout-container">
                         {formattedDate}
                         <p className="no-current-text">No workout for this date</p>
-                        <Link to='AllCategories' className="link-btn" onClick={() => localStorage.clear()}>Add some exercises!</Link>
+                        <Link to='AllCategories' className="link-btn" >Add some exercises!</Link>
                     </div>
                 }
                 {deleteSetMessage && <DeleteMessage />}
