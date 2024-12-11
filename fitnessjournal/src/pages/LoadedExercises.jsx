@@ -24,7 +24,7 @@ export default function LoadedExercises() {
     useEffect(() => {
         window.scrollTo(0, 0)
     })
-
+    
     const skeletonArr = Array.from({length: 7}, (_, index) => index)
 
     const renderedSkelCategories = skeletonArr.map((_, index) => {

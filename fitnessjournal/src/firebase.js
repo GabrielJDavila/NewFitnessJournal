@@ -675,7 +675,7 @@ export async function retrieveCurrentExSetsRepsAndPRs(userCollection, userId, se
                 console.log(`no sets yet for ${exercise.name}`)
             }
         }
-        return { exercises, exercisePRs }
+        return [exercises, exercisePRs]
     } catch(error) {
         console.error("error fetching current workout data and PRs: ", error)
     }

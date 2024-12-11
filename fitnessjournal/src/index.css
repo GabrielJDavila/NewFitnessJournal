@@ -1734,10 +1734,12 @@ footer {
 
 .set-added-modal {
   position: fixed;
-  background: rgb(220, 104, 75);
+  z-index: 100;
+  background: rgb(0, 0, 0);
+  opacity: .5;
   padding: .5rem;
   color: black;
-  bottom: 10px;
+  bottom: 84px;
   right: 0;
   left: 0;
 }

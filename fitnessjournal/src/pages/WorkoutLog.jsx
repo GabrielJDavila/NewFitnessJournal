@@ -101,7 +101,6 @@ export default function WorkoutLog() {
 
     // check to see if workoutData exists. If it does, map through and filter exercises by date.
     const filteredDateWorkoutData = workoutData ? workoutData.map(exercise => {
-        console.log(exercise)
         const exDate = new Date(exercise.date)
         exDate.setHours(0, 0, 0, 0)
         const dateState = new Date(date)
@@ -112,7 +111,7 @@ export default function WorkoutLog() {
             return null
         }
     }).filter(exercise => exercise !== null) : ""
-
+    console.log(filteredDateWorkoutData)
     async function saveWorkout() {
         // this function will save workout to firestore
         try {
@@ -128,19 +127,25 @@ export default function WorkoutLog() {
             console.error('error saving data: ', err)
         }
     }
-
+    
     async function loadExerciseList(date) {
         // setWorkoutData(JSON.parse(localStorage.getItem("exercises")) || [])
         // setShowSkel(false)
         // try to pull workout from firestore. if no workout exists, pull from localStorage. if none exist, create empty array.
         try {
             const data = await retrieveCurrentExSetsRepsAndPRs(usersInDB, currentUser, date)
-            if(data) {
+            // for now, this works. But I need to be aware of certain use cases:
+            // if the user is on an unsaved day, creates a workout, then switches days
+            // to view another day and then returns to the current day, the data will be lost
+            // because of localStorage.clear(). Currently I'm using it because it
+            // clears the data to make way for either saved workout data or local storage data.
+            // Need to work on this.
+            if(data.length > 0) {
+                localStorage.clear()
                 const jsonString = JSON.stringify(data)
                 const sizeInBytes = new Blob([jsonString]).size
                 localStorage.setItem("workoutData", JSON.stringify(data))
-                setWorkoutData(data.exercises)
-                console.log(data.exercises)
+                setWorkoutData(data[0])
                 setShowSkel(false)
             } else {
                 setWorkoutData(JSON.parse(localStorage.getItem("exercises")) || [])
