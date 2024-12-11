@@ -67,6 +67,7 @@ export default function WorkoutLog() {
         setShowSkel(true)
         const fetch = async () => {
             await loadExerciseList(date)
+            
         }
         fetch()
     }, [date])
@@ -98,7 +99,9 @@ export default function WorkoutLog() {
         }
     }, [savedWorkout, alreadySavedWorkout])
 
-    const filteredDateWorkoutData = workoutData.map(exercise => {
+    // check to see if workoutData exists. If it does, map through and filter exercises by date.
+    const filteredDateWorkoutData = workoutData ? workoutData.map(exercise => {
+        console.log(exercise)
         const exDate = new Date(exercise.date)
         exDate.setHours(0, 0, 0, 0)
         const dateState = new Date(date)
@@ -108,7 +111,7 @@ export default function WorkoutLog() {
         } else {
             return null
         }
-    }).filter(exercise => exercise !== null)
+    }).filter(exercise => exercise !== null) : ""
 
     async function saveWorkout() {
         // this function will save workout to firestore
@@ -127,47 +130,44 @@ export default function WorkoutLog() {
     }
 
     async function loadExerciseList(date) {
-        setWorkoutData(JSON.parse(localStorage.getItem("exercises")) || [])
-        setShowSkel(false)
-        // try {
-        //     const data = await retrieveCurrentExSetsRepsAndPRs(usersInDB, currentUser, date)
-        //     const workoutDates = await retrieveAllWorkouts(usersInDB, currentUser)
-        //     if(data) {
-        //         const jsonString = JSON.stringify(data)
-        //         const sizeInBytes = new Blob([jsonString]).size
-        //         console.log(sizeInBytes)
-        //         localStorage.setItem("workoutData", JSON.stringify(data))
-        //         setWorkoutData(data.exercises)
-        //         setShowSkel(false)
-        //     }
-        //     if(workoutDates) {
-        //         setWorkoutDatesData(workoutDates)
-        //     }
-            
-        // } catch(e) {
-        //     console.log("error fetching exercises list: ", e)
-        // }
-    }
-    
-    async function loadWorkoutFromFirestore() {
+        // setWorkoutData(JSON.parse(localStorage.getItem("exercises")) || [])
+        // setShowSkel(false)
+        // try to pull workout from firestore. if no workout exists, pull from localStorage. if none exist, create empty array.
         try {
-        //     const data = await retrieveCurrentExSetsRepsAndPRs(usersInDB, currentUser, date)
-        //     const workoutDates = await retrieveAllWorkouts(usersInDB, currentUser)
-        //     if(data) {
-        //         const jsonString = JSON.stringify(data)
-        //         const sizeInBytes = new Blob([jsonString]).size
-        //         console.log(sizeInBytes)
-        //         localStorage.setItem("workoutData", JSON.stringify(data))
-        //         setWorkoutData(data.exercises)
-        //         setShowSkel(false)
-        //     }
-        //     if(workoutDates) {
-        //         setWorkoutDatesData(workoutDates)
-        //     }
-        } catch(err) {
-            console.error('error grabbing from firestore: ', err)
+            const data = await retrieveCurrentExSetsRepsAndPRs(usersInDB, currentUser, date)
+            if(data) {
+                const jsonString = JSON.stringify(data)
+                const sizeInBytes = new Blob([jsonString]).size
+                localStorage.setItem("workoutData", JSON.stringify(data))
+                setWorkoutData(data.exercises)
+                console.log(data.exercises)
+                setShowSkel(false)
+            } else {
+                setWorkoutData(JSON.parse(localStorage.getItem("exercises")) || [])
+                setShowSkel(false)
+            }
+            
+        } catch(e) {
+            console.log("error fetching exercises list: ", e)
         }
     }
+    
+    // async function loadWorkoutFromFirestore(date) {
+    //     try {
+    //         const data = await retrieveCurrentExSetsRepsAndPRs(usersInDB, currentUser, date)
+    //         if(data) {
+    //             // const jsonString = JSON.stringify(data)
+    //             // const sizeInBytes = new Blob([jsonString]).size
+                
+    //             localStorage.setItem("workoutData", JSON.stringify(data.exercises))
+    //             setWorkoutData(data.exercises)
+    //             setShowSkel(false)
+    //         }
+            
+    //     } catch(err) {
+    //         console.error('error grabbing from firestore: ', err)
+    //     }
+    // }
     
     async function reOrderList(exerciseId, newIndex, userCollection, userId, date) {
         try {
@@ -191,11 +191,9 @@ export default function WorkoutLog() {
     function handleDateChange(newDate) {
         setDate(newDate)
         localStorage.setItem("selectedDate", newDate.toISOString())
-        console.log(localStorage.getItem('selectedDate'))
         handleToggleCalendar()
         setSavedWorkout(false)
     }
-    console.log(date)
 
     // function to check place previous workout dates on corresponding tiles in react calendar
     function tileClassName({ date, view }) {

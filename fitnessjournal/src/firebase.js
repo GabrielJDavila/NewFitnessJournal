@@ -618,11 +618,12 @@ export async function retrieveAllWorkouts(userCollection, userId) {
 export async function retrieveCurrentExSetsRepsAndPRs(userCollection, userId, selectedDate) {
     try {
         if (!(selectedDate instanceof Date)) {
-            selectedDate = new Date(selectedDate);
+            selectedDate = new Date(selectedDate)
         }
         const dateString = selectedDate.toISOString().split("T")[0]
+        console.log(dateString)
         const userDocRef = doc(userCollection, userId)
-        const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
+        const currentWorkoutCollectionRef = collection(userDocRef, "savedWorkouts")
         const latestPRsCollectionRef = collection(userDocRef, "latestPRs")
         const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, dateString)
         const dateDocSnap = await getDoc(dateOfWorkoutDocRef)
@@ -779,13 +780,14 @@ export async function retrieveExHistory(userCollection, userId, exId) {
 
 async function fetchExData(exDoc) {
             const exId = exDoc.id
-            const currentExRef = collection(exDoc.ref, "currentEx")
+            const currentExRef = collection(exDoc.ref, "setsAndReps")
             const repsSetsQuery = query(currentExRef, orderBy("createdAt", "asc"))
             const repsSetsSnapshot = await getDocs(repsSetsQuery)
 
             const exerciseData = {
                 id: exId,
                 name: exDoc.data().name,
+                date: new Date(localStorage.getItem("selectedDate")),
                 setsReps: []
             }
 
@@ -802,7 +804,6 @@ async function fetchExData(exDoc) {
                     isPR: false // initialize isPR as false
                 })
             })
-            console.log(exerciseData)
             return exerciseData
 }
 
@@ -822,7 +823,7 @@ async function fetchAllExPRs(exercisesCollectionRef, latestPRsCollectionRef) {
         // the data types match the types returned in above functions.
 
         for(const exercise of exerciseSnapshot.docs) {
-            const repsAndSetsRef = collection(exercise.ref, "currentEx")
+            const repsAndSetsRef = collection(exercise.ref, "setsAndReps")
             const currentExQuery = query(repsAndSetsRef)
             const currentExSnapshot = await getDocs(currentExQuery)
             currentExSnapshot.forEach(doc => {

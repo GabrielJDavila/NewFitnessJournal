@@ -27,6 +27,8 @@ export default function CurrentWorkoutList(props) {
         height: flipView[currentIndex] ? "100px" : "0px",
         border: flipView[currentIndex] ? "2px solid black" : "none"
     }
+
+    console.log(props.data)
         const currentWorkout = props.data && props.data.length > 0 ? props.data.map((ex, index) => {
             // fix this to work across all screen sizes. Should only show with ellipses on mobile since its a smaller screen
             const shortenedExName = ex.name.length > 35 ? `${ex.name.slice(0, ex.name.length - 1) + '...'}` : ex.name
