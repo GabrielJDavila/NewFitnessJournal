@@ -488,7 +488,7 @@ header {
 }
 
 .analysis-section {
-  background: url("./assets/progressgraph.png");
+  background: url("/progressgraph.png");
   color: white;
   background-size: cover;
   background-position: center;
@@ -702,7 +702,7 @@ th:last-child, td:last-child {
 }
 
 .log-hero {
-  background: url("./assets/dumbbell.png");
+  background: url("/dumbbell.png");
   color: white;
   background-size: cover;
   background-position: center;
