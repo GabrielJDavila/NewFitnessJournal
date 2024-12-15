@@ -99,19 +99,6 @@ export default function WorkoutLog() {
         }
     }, [savedWorkout, alreadySavedWorkout])
 
-    // check to see if workoutData exists. If it does, map through and filter exercises by date.
-    const filteredDateWorkoutData = workoutData ? workoutData.map(exercise => {
-        const exDate = new Date(exercise.date)
-        exDate.setHours(0, 0, 0, 0)
-        const dateState = new Date(date)
-        dateState.setHours(0, 0, 0, 0)
-        if(exDate.getTime() === dateState.getTime()) {
-            return exercise
-        } else {
-            return null
-        }
-    }).filter(exercise => exercise !== null) : ""
-    console.log(filteredDateWorkoutData)
     async function saveWorkout() {
         // this function will save workout to firestore
         try {
@@ -140,14 +127,16 @@ export default function WorkoutLog() {
             // because of localStorage.clear(). Currently I'm using it because it
             // clears the data to make way for either saved workout data or local storage data.
             // Need to work on this.
-            if(data.length > 0) {
-                localStorage.clear()
-                const jsonString = JSON.stringify(data)
-                const sizeInBytes = new Blob([jsonString]).size
-                localStorage.setItem("workoutData", JSON.stringify(data))
-                setWorkoutData(data[0])
+            if(data.exercises) {
+                
+                // console.log(data)
+                // const jsonString = JSON.stringify(data)
+                // const sizeInBytes = new Blob([jsonString]).size
+                localStorage.setItem("workoutData", JSON.stringify(data.exercises))
+                setWorkoutData(data.exercises)
                 setShowSkel(false)
             } else {
+                console.log(JSON.parse(localStorage.getItem("exercises")))
                 setWorkoutData(JSON.parse(localStorage.getItem("exercises")) || [])
                 setShowSkel(false)
             }
@@ -156,6 +145,20 @@ export default function WorkoutLog() {
             console.log("error fetching exercises list: ", e)
         }
     }
+
+    // check to see if workoutData exists. If it does, map through and filter exercises by date.
+    const filteredDateWorkoutData = workoutData ? workoutData.map(exercise => {
+        const exDate = new Date(exercise.date)
+        exDate.setHours(0, 0, 0, 0)
+        const dateState = new Date(date)
+        dateState.setHours(0, 0, 0, 0)
+        if(exDate.getTime() === dateState.getTime()) {
+            return exercise
+        } else {
+            return null
+        }
+    }).filter(exercise => exercise !== null) : ""
+    console.log(filteredDateWorkoutData)
     
     // async function loadWorkoutFromFirestore(date) {
     //     try {
@@ -607,8 +610,8 @@ export default function WorkoutLog() {
                                 <div {...provided.droppableProps} ref={provided.innerRef} className="current-log-inner-container">
                                     <h2>Current Workout {formattedDate}</h2>
                                     <button onClick={saveWorkout} className="save-workout-btn">Save workout</button>
-                                    <p>{savedWorkout && 'Workout saved!'}</p>
-                                    <p>{alreadySavedWorkout && 'Workout already saved.'}</p>
+                                    <p>{savedWorkout && 'Workout saved.'}</p>
+                                    <p>{alreadySavedWorkout && 'Workout is aleady saved.'}</p>
                                     <CurrentWorkoutList
                                         data={filteredDateWorkoutData && filteredDateWorkoutData}
                                         usersInDB={usersInDB}
