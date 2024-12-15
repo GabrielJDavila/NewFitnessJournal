@@ -630,7 +630,7 @@ export default function WorkoutLog() {
                         </Droppable>
                     </DragDropContext>
                 }
-                {filteredDateWorkoutData.length === 0 &&
+                {filteredDateWorkoutData.length === 0 && !showSkel &&
                     <div className="no-current-workout-container">
                         {formattedDate}
                         <p className="no-current-text">No workout for this date</p>
