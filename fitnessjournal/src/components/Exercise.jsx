@@ -5,6 +5,14 @@ import ExAdded from "./modals/ExAdded"
 
 export default function Exercise(props) {
     // const [ toggleModal, setToggleModal ] = useState(false)
+    const splitName = props.name.split(' ')
+    const capitalizedWords = splitName.map((string) => {
+        const firstChar = string.charAt(0).toUpperCase()
+        const slicedString = string.slice(1)
+        const combinedString = firstChar + slicedString
+        return combinedString
+    }).join(' ')
+    
     const [docInfo, setDocInfo] = useState({
         id: props.id,
         name: props.name,
@@ -12,6 +20,7 @@ export default function Exercise(props) {
         unit: props.unit
     })
     const { currentUser } = useOutletContext()
+
 
     useEffect(() => {
         if(props.toggleModal) {
@@ -65,7 +74,7 @@ export default function Exercise(props) {
     return (
         <div>
             <div className="exercise-container">
-                <p className="exercise-name">{props.name}</p>
+                <p className="exercise-name">{capitalizedWords}</p>
                 <button
                     data-id={props.id}
                     className="add-btn"

@@ -2,7 +2,10 @@ import { useState } from "react"
 import { Link, useSearchParams } from "react-router-dom"
 
 export default function Category(props) {
-
+    const firstLetter = props.name.charAt(0).toUpperCase()
+    const restOfCatName = props.name.slice(1)
+    const combinedCatName = firstLetter + restOfCatName
+    
     return (
         <div className="category-container">
             <Link
@@ -10,7 +13,7 @@ export default function Category(props) {
                 className="category-name-link"
                 data-id={props.id}
             >
-                <p className="category-name">{props.name}</p>
+                <p className="category-name">{combinedCatName}</p>
             </Link>
             <div className="category-component-btns">
                 <i

@@ -30,8 +30,15 @@ export default function CurrentWorkoutList(props) {
 
     console.log(props.data)
         const currentWorkout = props.data && props.data.length > 0 ? props.data.map((ex, index) => {
+            const splitName = ex.name.split(' ')
+            const capitalizedWords = splitName.map((string) => {
+                const firstChar = string.charAt(0).toUpperCase()
+                const slicedString = string.slice(1)
+                const combinedString = firstChar + slicedString
+                return combinedString
+            }).join(' ')
             // fix this to work across all screen sizes. Should only show with ellipses on mobile since its a smaller screen
-            const shortenedExName = ex.name.length > 35 ? `${ex.name.slice(0, ex.name.length - 1) + '...'}` : ex.name
+            const shortenedExName = capitalizedWords.length > 35 ? `${capitalizedWords.slice(0, capitalizedWords.length - 1) + '...'}` : capitalizedWords
             return (
                 <Draggable key={ex.id} draggableId={ex.id} index={index}>
                     {(provided) => (
