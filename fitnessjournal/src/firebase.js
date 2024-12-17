@@ -304,16 +304,29 @@ export async function getAllCategories(userCollection, userId) {
 
 // add new exercise to category
 export async function addExToCategory(userCollection, userId, name, categoryId) {
+    const capitalizedEx = name.charAt(0).toUpperCase() + name.slice(1)
+    const lowercaseEx = name.toLowerCase()
     try {
         const userDocRef = doc(userCollection, userId)
         const categoriesCollectionRef = collection(userDocRef, "categories")
         const categoryDocRef = doc(categoriesCollectionRef, categoryId)
         const exercisesCollectionRef = collection(categoryDocRef, "exercises")
-        await addDoc(exercisesCollectionRef, {
-            name: name
-        })
+        const q = query(exercisesCollectionRef, where("name", "==", lowercaseEx))
+        const querySnapshot = await getDocs(q)
+        if(querySnapshot.empty) {
+            await addDoc(exercisesCollectionRef, {
+                name: lowercaseEx
+            })
+            console.log(`Exercise ${capitalizedEx} added successfully.`)
+        } else {
+            console.log(`Exercise ${capitalizedEx} already exists.`)
+        }
+
+        // await addDoc(exercisesCollectionRef, {
+        //     name: name
+        // })
     } catch(e) {
-        console.log("error adding doc: ", e)
+        console.log("error adding exercise doc: ", e)
     }
 }
 
