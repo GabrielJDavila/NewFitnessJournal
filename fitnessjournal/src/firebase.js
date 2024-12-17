@@ -235,16 +235,17 @@ export async function getExistingCatsAndEx(userId, existingCatsCollection, userC
 
 export async function addNewCat(userCollection, userId, newCat) {
     const capitalizedCat = newCat.charAt(0).toUpperCase() + newCat.slice(1)
+    const lowercaseCat = newCat.toLowerCase()
     try {
         const userDocRef = doc(userCollection, userId)
         const categoriesCollectionRef = collection(userDocRef, "categories")
         // Query to check if the category already exists
-        const q = query(categoriesCollectionRef, where("name", "==", capitalizedCat))
+        const q = query(categoriesCollectionRef, where("name", "==", lowercaseCat))
         const querySnapshot = await getDocs(q)
 
         if(querySnapshot.empty) {
             await addDoc(categoriesCollectionRef, {
-                name: capitalizedCat
+                name: lowercaseCat
             })
             console.log(`Category ${capitalizedCat} added successfully.`)
         } else {
