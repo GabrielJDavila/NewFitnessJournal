@@ -317,14 +317,19 @@ export async function addExToCategory(userCollection, userId, name, categoryId) 
             await addDoc(exercisesCollectionRef, {
                 name: lowercaseEx
             })
+            return {
+                success: true,
+                message: `Exercise ${capitalizedEx} added successfully.`
+            }
             console.log(`Exercise ${capitalizedEx} added successfully.`)
         } else {
+            return {
+                success: false,
+                message: `Exercise ${capitalizedEx} already exists.`
+            }
             console.log(`Exercise ${capitalizedEx} already exists.`)
         }
 
-        // await addDoc(exercisesCollectionRef, {
-        //     name: name
-        // })
     } catch(e) {
         console.log("error adding exercise doc: ", e)
     }
@@ -407,7 +412,6 @@ export async function retrieveDoc(collectionType, itemId) {
 }
 
 export async function saveDataToFirestore(dateInput, userCollection, userId, workoutData) {
-    console.log(workoutData)
     try {
         const foramttedDate = new Date(dateInput).toISOString().split('T')[0]
         const dateObj = new Date(dateInput)

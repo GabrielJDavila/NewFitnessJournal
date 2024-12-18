@@ -3,6 +3,8 @@ import { useOutletContext, useParams } from "react-router-dom"
 import { getAllCategories, usersInDB, addExToCategory } from "../firebase"
 
 export default function NewEx(props) {
+    const [message, setMessage] = useState()
+    console.log(message)
     const [newExFormData, setNewExFormData] = useState({
         name: "",
         category: props.currentCatId? props.currentCatId : "",
@@ -31,26 +33,46 @@ export default function NewEx(props) {
         if(toggle) {
             const timeout = setTimeout(() => {
                 setToggleMessageState(false)
-            }, 1000)
+            }, 3000)
 
             return () => clearTimeout(timeout)
         }
     }, [toggle])
 
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault()
         const selectedCategory = loadedCategories.find(cat => cat.name === newExFormData.category)
-        if(selectedCategory) {
-            const exFlip = true
-            addExToCategory(usersInDB, currentUser, newExFormData.name, selectedCategory.id)
-            clearForm()
-            toggle()
-            props.flipExModal(exFlip)
-            props.reloadExData()
-            props.toggleModal()
-        } else {
-            console.log("invalid category selected")
+        try {
+            if(selectedCategory) {
+                const result = await addExToCategory(usersInDB, currentUser, newExFormData.name, selectedCategory.id)
+                if(result.success) {
+                    setMessage(result.message)
+                    const exFlip = true
+                    clearForm()
+                    toggle()
+                    props.flipExModal(exFlip)
+                    props.reloadExData()
+                    props.toggleModal()
+                } else {
+                    toggle()
+                    setMessage(result.message)
+                }
+            }
+        } catch(err) {
+            console.error('error adding ex to category: ', err)
         }
+        // if(selectedCategory) {
+        //     const result = await addExToCategory(usersInDB, currentUser, newExFormData.name, selectedCategory.id)
+        //     const exFlip = true
+        //     // addExToCategory(usersInDB, currentUser, newExFormData.name, selectedCategory.id)
+        //     clearForm()
+        //     toggle()
+        //     props.flipExModal(exFlip)
+        //     props.reloadExData()
+        //     props.toggleModal()
+        // } else {
+        //     console.log("invalid category selected")
+        // }
     }
 
     function handleChange(name, value, stateSetter) {
@@ -141,7 +163,7 @@ export default function NewEx(props) {
             <button className="confirm-btn" data-closenewex>add exercise</button>
             </div>
             
-            { toggleMessageState && <p className="message">exercise saved!</p>}
+            { toggleMessageState && <p className="message">{message}</p>}
         </form>
     )
 }
