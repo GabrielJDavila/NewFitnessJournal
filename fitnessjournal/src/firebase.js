@@ -247,9 +247,15 @@ export async function addNewCat(userCollection, userId, newCat) {
             await addDoc(categoriesCollectionRef, {
                 name: lowercaseCat
             })
-            console.log(`Category ${capitalizedCat} added successfully.`)
+            return {
+                success: true,
+                message: `Exercise ${capitalizedCat} added successfully.`
+            }
         } else {
-            console.log(`Category ${capitalizedCat} already exists.`)
+            return {
+                success: false,
+                message: `Exercise ${capitalizedCat} already exists.`
+            }
         }
         
     } catch(e) {
@@ -321,13 +327,11 @@ export async function addExToCategory(userCollection, userId, name, categoryId) 
                 success: true,
                 message: `Exercise ${capitalizedEx} added successfully.`
             }
-            console.log(`Exercise ${capitalizedEx} added successfully.`)
         } else {
             return {
                 success: false,
                 message: `Exercise ${capitalizedEx} already exists.`
             }
-            console.log(`Exercise ${capitalizedEx} already exists.`)
         }
 
     } catch(e) {

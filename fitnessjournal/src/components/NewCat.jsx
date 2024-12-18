@@ -3,18 +3,27 @@ import { useOutletContext } from "react-router-dom"
 import { addNewCat, usersInDB } from "../firebase"
 
 export default function NewCat(props) {
+    const [message, setMessage] = useState()
     const [newCatName, setNewCatName] = useState({
         name: ""
     })
+    console.log(message)
     const { currentUser } = useOutletContext()
 
-    console.log(currentUser)
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault()
-        const catFlip = true
-        addNewCat(usersInDB, currentUser, newCatName.name)
-        props.flipCatModal(catFlip)
-        props.loadCats()
+        try {
+            const result = await addNewCat(usersInDB, currentUser, newCatName.name)
+            if(result.success) {
+                setMessage(result.message)
+                props.flipCatModal(catFlip)
+                props.loadCats()
+            } else {
+                setMessage(result.message)
+            }
+        } catch(err) {
+            console.error('error adding ex to category: ', err)
+        }
     }
 
     function handleChange(name, value, stateSetter) {
@@ -38,6 +47,7 @@ export default function NewCat(props) {
                 <p onClick={props.toggleModal} data-newcat className="cancel-btn">cancel</p>
                 <button className="confirm-btn">save</button>
             </div>
+            { message && <p className="message">{message}</p>}
         </form>
     )
 }
