@@ -62,7 +62,7 @@ export default function WorkoutLog() {
     const formattedDate = `${month}/${day}/${year}`
     const [savedWorkout, setSavedWorkout] = useState(false)
     const [alreadySavedWorkout, setAlreadySavedWorkout] = useState(false)
-    
+
     useEffect(() => {
         setShowSkel(true)
         const fetch = async () => {
@@ -113,6 +113,11 @@ export default function WorkoutLog() {
         } catch(err) {
             console.error('error saving data: ', err)
         }
+    }
+
+    function clearData() {
+        localStorage.clear()
+        loadExerciseList(date)
     }
     
     async function loadExerciseList(date) {
@@ -607,7 +612,11 @@ export default function WorkoutLog() {
                             {(provided) => (
                                 <div {...provided.droppableProps} ref={provided.innerRef} className="current-log-inner-container">
                                     <h2>Current Workout {formattedDate}</h2>
-                                    <button onClick={saveWorkout} className="save-workout-btn">Save workout</button>
+                                    <div className="workout-list-btn-container">
+                                        <button onClick={saveWorkout} className="save-workout-btn">Save workout</button>
+                                        <button onClick={clearData} className="save-workout-btn">Clear unsaved workout</button>
+                                    </div>
+                                    
                                     <p>{savedWorkout && 'Workout saved.'}</p>
                                     <p>{alreadySavedWorkout && 'Workout is aleady saved.'}</p>
                                     <CurrentWorkoutList

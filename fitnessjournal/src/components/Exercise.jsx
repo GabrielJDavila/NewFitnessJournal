@@ -37,8 +37,7 @@ export default function Exercise(props) {
         const storedDate = localStorage.getItem("selectedDate")
         if(e.target.dataset.id === docInfo.id) {
             const workoutData = JSON.parse(localStorage.getItem('exercises') || '[]')
-            console.log(storedDate, workoutData[0].date)
-            const exerciseExists = workoutData.some(ex => ex.id === docInfo.id && storedDate === ex.date)
+            const exerciseExists = workoutData ? workoutData.some(ex => ex.id === docInfo.id && storedDate === ex.date) : false
 
             if(exerciseExists) {
                 props.setToggleModal(true)
