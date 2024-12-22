@@ -136,7 +136,6 @@ export default function WorkoutLog() {
                 setWorkoutData(data.exercises)
                 setShowSkel(false)
             } else {
-                console.log(JSON.parse(localStorage.getItem("exercises")))
                 setWorkoutData(JSON.parse(localStorage.getItem("exercises")) || [])
                 setShowSkel(false)
             }
@@ -158,7 +157,6 @@ export default function WorkoutLog() {
             return null
         }
     }).filter(exercise => exercise !== null) : ""
-    console.log(filteredDateWorkoutData)
     
     // async function loadWorkoutFromFirestore(date) {
     //     try {
