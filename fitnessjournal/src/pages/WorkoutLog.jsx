@@ -22,6 +22,8 @@ import DeleteMessage from "../components/modals/DeleteMessage"
 export default function WorkoutLog() {
     const storedDate = localStorage.getItem("selectedDate")
     const [date, setDate] = useState(storedDate ? new Date(storedDate) : new Date())
+    // if exercises exist in local storage, they are pulled from "exercises". If not, empty array
+    // to be used later when storing data.
     const [workoutData, setWorkoutData] = useState(() => {
         const savedData = JSON.parse(localStorage.getItem("exercises"))
         return savedData ? savedData : []
@@ -121,24 +123,17 @@ export default function WorkoutLog() {
     }
     
     async function loadExerciseList(date) {
-        // setWorkoutData(JSON.parse(localStorage.getItem("exercises")) || [])
-        // setShowSkel(false)
         // try to pull workout from firestore. if no workout exists, pull from localStorage. if none exist, create empty array.
         try {
             const data = await retrieveCurrentExSetsRepsAndPRs(usersInDB, currentUser, date)
-            // for now, this works. But I need to be aware of certain use cases:
-            // if the user is on an unsaved day, creates a workout, then switches days
-            // to view another day and then returns to the current day, the data will be lost
-            // because of localStorage.clear(). Currently I'm using it because it
-            // clears the data to make way for either saved workout data or local storage data.
-            // Need to work on this.
+            // if data exists in firestore, it will be stored in workoutData and load that data.
+            // If it doesn't, it will load the data in exercises storage, as that could be the only
+            // other option. Now I can also can both workoutData and exercises in storage, so that way
+            // data persists when a user changes the date. Data only fully clears if user clears unsaved workout.
             if(data.exercises) {
-                
-                // console.log(data)
-                // const jsonString = JSON.stringify(data)
-                // const sizeInBytes = new Blob([jsonString]).size
                 localStorage.setItem("workoutData", JSON.stringify(data.exercises))
                 setWorkoutData(data.exercises)
+
                 setShowSkel(false)
             } else {
                 setWorkoutData(JSON.parse(localStorage.getItem("exercises")) || [])
@@ -162,23 +157,6 @@ export default function WorkoutLog() {
             return null
         }
     }).filter(exercise => exercise !== null) : ""
-    
-    // async function loadWorkoutFromFirestore(date) {
-    //     try {
-    //         const data = await retrieveCurrentExSetsRepsAndPRs(usersInDB, currentUser, date)
-    //         if(data) {
-    //             // const jsonString = JSON.stringify(data)
-    //             // const sizeInBytes = new Blob([jsonString]).size
-                
-    //             localStorage.setItem("workoutData", JSON.stringify(data.exercises))
-    //             setWorkoutData(data.exercises)
-    //             setShowSkel(false)
-    //         }
-            
-    //     } catch(err) {
-    //         console.error('error grabbing from firestore: ', err)
-    //     }
-    // }
     
     async function reOrderList(exerciseId, newIndex, userCollection, userId, date) {
         try {
@@ -310,6 +288,8 @@ export default function WorkoutLog() {
         setExid(e.target.dataset.exid)
     }
   
+    // currently it works to edit sets that are saved in local storage 'exercises',
+    // now to make it able to edit exercises saved from firestore.
     function editSet(e) {
         e.preventDefault()
         const workoutData = JSON.parse(localStorage.getItem('exercises'))
@@ -336,10 +316,12 @@ export default function WorkoutLog() {
             return exercise
         })
         localStorage.setItem('exercises', JSON.stringify(updatedWorkoutData))
-        loadExerciseList()
+        loadExerciseList(date)
         setToggleEditSetModal(false)
     }
 
+    // currently it works to delete sets that are saved in local storage 'exercises',
+    // now to make it able to delete exercises saved from firestore.
     function deleteSet(e) {
         e.preventDefault()
         const workoutData = JSON.parse(localStorage.getItem('exercises'))
@@ -349,14 +331,14 @@ export default function WorkoutLog() {
                 // returns exercise with filtered sets that don't match the chosen to delete item.
                 return {
                     ...exercise,
-                    setsReps: exercise.setsReps.filter(set => set.setid !== currentItemToDelete.setIdToDelete)
+                    setsReps: exercise.setsReps.filter(set => set.setId !== currentItemToDelete.setIdToDelete)
                 }
             }
             // if exercise id does not match, returns exercise unchanged
             return exercise
         })
         localStorage.setItem('exercises', JSON.stringify(updatedWorkoutData))
-        loadExerciseList()
+        loadExerciseList(date)
         setToggleDeleteSetModal(false)
     }
     

@@ -55,19 +55,6 @@ export default function Exercise(props) {
                 props.setToggleModal(true)
                 props.setClickedEx(`${docInfo.name} added to workout`)
             }
-            // try {
-            //     const data = await addUpdateWorkoutList(docInfo.id, docInfo.name, usersInDB, currentUser)
-            //     if(data === "exercise already added to workout!" && typeof data === "string") {
-            //         props.setToggleModal(true)
-            //         props.setClickedEx(data)
-            //     } else {
-            //         addUpdateWorkoutList(docInfo.id, docInfo.name, usersInDB, currentUser)
-            //         props.setToggleModal(true)
-            //         props.setClickedEx(`${docInfo.name} added to workout`)
-            //     }
-            // } catch {
-
-            // }
         }
         
     }

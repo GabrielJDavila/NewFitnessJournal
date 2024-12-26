@@ -157,11 +157,10 @@ export function toggleDeleteAllEx(e, setToggleDeleteAllExercisesModal) {
 
 // Toggles delete set or delete exercise modal
 export function toggleDelete(e, setCurrentItemToDelete, setToggleDeleteExModal, setToggleDeleteSetModal) {
-    console.log(e.target)
     const exId = e.target.dataset.deleteexid
     const setId = e.target.dataset.deletesetid
     const exOfSetId = e.target.id
-
+    
     setCurrentItemToDelete(prev => ({
         ...prev,
         exIdToDelete: exOfSetId ? exOfSetId : exId,
