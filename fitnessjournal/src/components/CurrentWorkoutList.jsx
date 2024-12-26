@@ -73,12 +73,6 @@ export default function CurrentWorkoutList(props) {
                                             visibility
                                         </span>
                                     </Link>
-                                    {/* <div className="ex-detail-edit-div">
-                                        <p>Edit</p>
-                                        <span className="material-symbols-outlined curr-ex-edit">
-                                            edit
-                                        </span>
-                                    </div> */}
                                     <div className="ex-detail-delete-div">
                                         <p>Delete</p>
                                         <span
