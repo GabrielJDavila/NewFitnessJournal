@@ -28,6 +28,7 @@ export default function WorkoutLog() {
         const savedData = JSON.parse(localStorage.getItem("exercises"))
         return savedData ? savedData : []
     })
+    console.log(workoutData)
     const [workoutDatesData, setWorkoutDatesData] = useState([])
     const [toggleEditSetModal, setToggleEditSetModal] = useState(false)
     const [toggleAddSetModal, setToggleAddSetModal] = useState(false)
@@ -64,6 +65,7 @@ export default function WorkoutLog() {
     const formattedDate = `${month}/${day}/${year}`
     const [savedWorkout, setSavedWorkout] = useState(false)
     const [alreadySavedWorkout, setAlreadySavedWorkout] = useState(false)
+    const [editMode, setEditMode] = useState(false)
 
     useEffect(() => {
         setShowSkel(true)
@@ -92,14 +94,14 @@ export default function WorkoutLog() {
 
             return () => clearTimeout(timout)
         }
-        if(alreadySavedWorkout) {
-            const secondTimout = setTimeout(() => {
-                setAlreadySavedWorkout(false)
-            }, 3000)
+        // if(alreadySavedWorkout) {
+        //     const secondTimout = setTimeout(() => {
+        //         setAlreadySavedWorkout(false)
+        //     }, 3000)
 
-            return () => clearTimeout(secondTimout)
-        }
-    }, [savedWorkout, alreadySavedWorkout])
+        //     return () => clearTimeout(secondTimout)
+        // }
+    }, [savedWorkout])
 
     async function saveWorkout() {
         // this function will save workout to firestore
@@ -133,10 +135,11 @@ export default function WorkoutLog() {
             if(data.exercises) {
                 localStorage.setItem("workoutData", JSON.stringify(data.exercises))
                 setWorkoutData(data.exercises)
-
+                setAlreadySavedWorkout(true)
                 setShowSkel(false)
             } else {
                 setWorkoutData(JSON.parse(localStorage.getItem("exercises")) || [])
+                setAlreadySavedWorkout(false)
                 setShowSkel(false)
             }
             
@@ -157,7 +160,7 @@ export default function WorkoutLog() {
             return null
         }
     }).filter(exercise => exercise !== null) : ""
-    
+
     async function reOrderList(exerciseId, newIndex, userCollection, userId, date) {
         try {
             await reOrderWorkoutList(exerciseId, newIndex, userCollection, userId, date)
@@ -210,6 +213,10 @@ export default function WorkoutLog() {
 
     function toggleAddSet() {
         setToggleAddSetModal(prev => !prev)
+    }
+
+    function flipEditMode() {
+        setEditMode(prev => !prev)
     }
 
     function toggleNote(e) {
@@ -290,32 +297,50 @@ export default function WorkoutLog() {
   
     // currently it works to edit sets that are saved in local storage 'exercises',
     // now to make it able to edit exercises saved from firestore.
-    function editSet(e) {
+    async function editSet(e) {
         e.preventDefault()
-        const workoutData = JSON.parse(localStorage.getItem('exercises'))
-        const updatedWorkoutData = workoutData.map(exercise => {
-            // check to see if exercise matches. If it does, continue with edit
-            if(exercise.id === newSetInfo.exId) {
-                // creates a shallow copy of setsReps array in given exercise
-                const updatedSetsReps = [...exercise.setsReps]
-                // updates set at given setIndex with newSetInfo
-                updatedSetsReps[newSetInfo.setIndex] = {
-                    ...updatedSetsReps[newSetInfo.setIndex],
-                    setId: newSetInfo.setId,
-                    reps: newSetInfo.reps,
-                    weight: newSetInfo.weight
+        const editableWorkoutData = !alreadySavedWorkout ? JSON.parse(localStorage.getItem('exercises')):
+        JSON.parse(localStorage.getItem('workoutData'))
+        if(!alreadySavedWorkout) {
+            const updatedWorkoutData = editableWorkoutData.map(exercise => {
+                // check to see if exercise matches. If it does, continue with edit
+                if(exercise.id === newSetInfo.exId) {
+                    // creates a shallow copy of setsReps array in given exercise
+                    const updatedSetsReps = [...exercise.setsReps]
+                    // updates set at given setIndex with newSetInfo
+                    updatedSetsReps[newSetInfo.setIndex] = {
+                        ...updatedSetsReps[newSetInfo.setIndex],
+                        setId: newSetInfo.setId,
+                        reps: newSetInfo.reps,
+                        weight: newSetInfo.weight
+                    }
+                    // returns the exercise info plus the updated sets
+                    return {
+                        ...exercise,
+                        setsReps: updatedSetsReps
+                    }
                 }
-                // returns the exercise info plus the updated sets
-                return {
-                    ...exercise,
-                    setsReps: updatedSetsReps
-                }
+                // if exercise id doesn't match the exid of the set the user clicks,
+                // returns the unchanged exercise so that other exercises remain the same.
+                return exercise
+            })
+
+            localStorage.setItem('exercises', JSON.stringify(updatedWorkoutData))
+        } else if(alreadySavedWorkout) {
+            // if workout is already saved, go through each exercise in workoutData state
+            // check to see if the ids match, if they do then call editSingleSet firestore function.
+            // This function edits the data in firestore using the data passed in.
+            try {
+                workoutData.forEach((exercise, index) => {
+                    if(exercise.id === newSetInfo.exId) {
+                        editSingleSet(exercise.id, newSetInfo.setId, newSetInfo.reps, newSetInfo.weight, usersInDB, currentUser, date)
+                    }
+                })
+            } catch(err) {
+                console.error('error updating set: ', err)
             }
-            // if exercise id doesn't match the exid of the set the user clicks,
-            // returns the unchanged exercise so that other exercises remain the same.
-            return exercise
-        })
-        localStorage.setItem('exercises', JSON.stringify(updatedWorkoutData))
+        }
+  
         loadExerciseList(date)
         setToggleEditSetModal(false)
     }
@@ -594,13 +619,20 @@ export default function WorkoutLog() {
                             {(provided) => (
                                 <div {...provided.droppableProps} ref={provided.innerRef} className="current-log-inner-container">
                                     <h2>Current Workout {formattedDate}</h2>
-                                    <div className="workout-list-btn-container">
-                                        <button onClick={saveWorkout} className="save-workout-btn">Save workout</button>
-                                        <button onClick={clearData} className="save-workout-btn">Clear unsaved workout</button>
-                                    </div>
+                                    { !alreadySavedWorkout ?
+                                        <div className="workout-list-btn-container">
+                                            <button onClick={saveWorkout} className="save-workout-btn">Save workout</button>
+                                            <button onClick={clearData} className="save-workout-btn">Clear unsaved workout</button>
+                                        </div>
+                                        :
+                                        <div className="workout-list-btn-container">
+                                        <p className="save-workout-btn">Workout Saved</p>
+                                        <button className="save-workout-btn">Edit workout</button>
+                                        </div>
+                                    }
                                     
                                     <p>{savedWorkout && 'Workout saved.'}</p>
-                                    <p>{alreadySavedWorkout && 'Workout is aleady saved.'}</p>
+                                    {/* <p>{alreadySavedWorkout && 'Workout is aleady saved.'}</p> */}
                                     <CurrentWorkoutList
                                         data={filteredDateWorkoutData && filteredDateWorkoutData}
                                         usersInDB={usersInDB}

@@ -40,9 +40,28 @@ export async function handleDeleteExerciseSubmit(e, {
     setToggleDeleteSetModal
 }) {
     e.preventDefault()
-    await deleteEx(usersInDB, currentUser, date, currentItemToDelete.exIdToDelete)
+    try {
+        const workoutData = JSON.parse(localStorage.getItem('exercises'))
+        const updatedWorkoutData = workoutData.filter(exercise => exercise.id !== currentItemToDelete.exIdToDelete)
+            // check to see if exercise matches. If it does, continue with deletion
+            // if(exercise.id === currentItemToDelete.exIdToDelete) {
+                
+                // return {
+                //     ...exercise,
+                //     setsReps: exercise.setsReps.filter(set => set.setId !== currentItemToDelete.setIdToDelete)
+                // }
+            // }
+            // if exercise id does not match, returns exercise unchanged
+            // return exercise
+        // })
+        localStorage.setItem('exercises', JSON.stringify(updatedWorkoutData))
+
+    // await deleteEx(usersInDB, currentUser, date, currentItemToDelete.exIdToDelete)
     await loadExerciseList(date)
     toggleDelete(e, setCurrentItemToDelete, setToggleDeleteExModal, setToggleDeleteSetModal)
+    } catch(err) {
+        console.error('error deleting exercise: ', err)
+    }
 }
 
 // handles the result of user clicking confirm of EditSetModal.
