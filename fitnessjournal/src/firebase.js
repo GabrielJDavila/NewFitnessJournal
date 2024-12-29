@@ -927,11 +927,11 @@ export async function editSingleSet(exerciseId, setId, newReps, newWeight, userC
     try {
         const dateString = selectedDate.toISOString().split("T")[0]
         const userDocRef = doc(userCollection, userId)
-        const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
+        const currentWorkoutCollectionRef = collection(userDocRef, "savedWorkouts")
         const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, dateString)
         const exercisesCollectionRef = collection(dateOfWorkoutDocRef, "exList")
         const exDocRef = doc(exercisesCollectionRef, exerciseId)
-        const currentExRef = collection(exDocRef, "currentEx")
+        const currentExRef = collection(exDocRef, "setsAndReps")
         const setDocRef = doc(currentExRef, setId)
 
         await updateDoc(setDocRef, {

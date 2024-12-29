@@ -28,6 +28,7 @@ export default function WorkoutLog() {
         const savedData = JSON.parse(localStorage.getItem("exercises"))
         return savedData ? savedData : []
     })
+    console.log(workoutData)
     const [workoutDatesData, setWorkoutDatesData] = useState([])
     const [toggleEditSetModal, setToggleEditSetModal] = useState(false)
     const [toggleAddSetModal, setToggleAddSetModal] = useState(false)
@@ -158,7 +159,7 @@ export default function WorkoutLog() {
             return null
         }
     }).filter(exercise => exercise !== null) : ""
-    
+
     async function reOrderList(exerciseId, newIndex, userCollection, userId, date) {
         try {
             await reOrderWorkoutList(exerciseId, newIndex, userCollection, userId, date)
@@ -291,32 +292,70 @@ export default function WorkoutLog() {
   
     // currently it works to edit sets that are saved in local storage 'exercises',
     // now to make it able to edit exercises saved from firestore.
-    function editSet(e) {
+    async function editSet(e) {
         e.preventDefault()
-        const workoutData = JSON.parse(localStorage.getItem('exercises'))
-        const updatedWorkoutData = workoutData.map(exercise => {
-            // check to see if exercise matches. If it does, continue with edit
-            if(exercise.id === newSetInfo.exId) {
-                // creates a shallow copy of setsReps array in given exercise
-                const updatedSetsReps = [...exercise.setsReps]
-                // updates set at given setIndex with newSetInfo
-                updatedSetsReps[newSetInfo.setIndex] = {
-                    ...updatedSetsReps[newSetInfo.setIndex],
-                    setId: newSetInfo.setId,
-                    reps: newSetInfo.reps,
-                    weight: newSetInfo.weight
+        const editableWorkoutData = !alreadySavedWorkout ? JSON.parse(localStorage.getItem('exercises')):
+        JSON.parse(localStorage.getItem('workoutData'))
+        if(!alreadySavedWorkout) {
+            const updatedWorkoutData = editableWorkoutData.map(exercise => {
+                // check to see if exercise matches. If it does, continue with edit
+                if(exercise.id === newSetInfo.exId) {
+                    // creates a shallow copy of setsReps array in given exercise
+                    const updatedSetsReps = [...exercise.setsReps]
+                    // updates set at given setIndex with newSetInfo
+                    updatedSetsReps[newSetInfo.setIndex] = {
+                        ...updatedSetsReps[newSetInfo.setIndex],
+                        setId: newSetInfo.setId,
+                        reps: newSetInfo.reps,
+                        weight: newSetInfo.weight
+                    }
+                    // returns the exercise info plus the updated sets
+                    return {
+                        ...exercise,
+                        setsReps: updatedSetsReps
+                    }
                 }
-                // returns the exercise info plus the updated sets
-                return {
-                    ...exercise,
-                    setsReps: updatedSetsReps
-                }
+                // if exercise id doesn't match the exid of the set the user clicks,
+                // returns the unchanged exercise so that other exercises remain the same.
+                return exercise
+            })
+
+            localStorage.setItem('exercises', JSON.stringify(updatedWorkoutData))
+        } else if(alreadySavedWorkout) {
+            try {
+                workoutData.forEach((exercise, index) => {
+                    if(exercise.id === newSetInfo.exId) {
+                        // creates a shallow copy of setsReps array in given exercise
+                        // const updatedSetsReps = [...exercise.setsReps]
+
+                        editSingleSet(exercise.id, newSetInfo.setId, newSetInfo.reps, newSetInfo.weight, usersInDB, currentUser, date)
+                        // updates set at given setIndex with newSetInfo
+                        // updatedSetsReps[newSetInfo.setIndex] = {
+                        //     ...updatedSetsReps[newSetInfo.setIndex],
+                        //     setId: newSetInfo.setId,
+                        //     reps: newSetInfo.reps,
+                        //     weight: newSetInfo.weight
+                        // }
+
+                        // returns the exercise info plus the updated sets
+                        // return {
+                        //     ...exercise,
+                        //     setsReps: updatedSetsReps
+                        // }
+                    }
+                })
+            } catch(err) {
+                console.error('error updating set: ', err)
             }
-            // if exercise id doesn't match the exid of the set the user clicks,
-            // returns the unchanged exercise so that other exercises remain the same.
-            return exercise
-        })
-        localStorage.setItem('exercises', JSON.stringify(updatedWorkoutData))
+        }
+  
+        // if(!alreadySavedWorkout) {
+        //     localStorage.setItem('exercises', JSON.stringify(updatedWorkoutData))
+        //     console.log("exercises")
+        // } else if(alreadySavedWorkout) {
+        //     localStorage.setItem('exercises', JSON.stringify(updatedWorkoutData))
+        //     console.log('workout data')
+        // }
         loadExerciseList(date)
         setToggleEditSetModal(false)
     }
