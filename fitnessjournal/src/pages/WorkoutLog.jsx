@@ -65,6 +65,7 @@ export default function WorkoutLog() {
     const formattedDate = `${month}/${day}/${year}`
     const [savedWorkout, setSavedWorkout] = useState(false)
     const [alreadySavedWorkout, setAlreadySavedWorkout] = useState(false)
+    const [editMode, setEditMode] = useState(false)
 
     useEffect(() => {
         setShowSkel(true)
@@ -214,6 +215,10 @@ export default function WorkoutLog() {
         setToggleAddSetModal(prev => !prev)
     }
 
+    function flipEditMode() {
+        setEditMode(prev => !prev)
+    }
+
     function toggleNote(e) {
         if(e.target.dataset.setnoteid) {
             const exId = e.target.id
@@ -322,26 +327,13 @@ export default function WorkoutLog() {
 
             localStorage.setItem('exercises', JSON.stringify(updatedWorkoutData))
         } else if(alreadySavedWorkout) {
+            // if workout is already saved, go through each exercise in workoutData state
+            // check to see if the ids match, if they do then call editSingleSet firestore function.
+            // This function edits the data in firestore using the data passed in.
             try {
                 workoutData.forEach((exercise, index) => {
                     if(exercise.id === newSetInfo.exId) {
-                        // creates a shallow copy of setsReps array in given exercise
-                        // const updatedSetsReps = [...exercise.setsReps]
-
                         editSingleSet(exercise.id, newSetInfo.setId, newSetInfo.reps, newSetInfo.weight, usersInDB, currentUser, date)
-                        // updates set at given setIndex with newSetInfo
-                        // updatedSetsReps[newSetInfo.setIndex] = {
-                        //     ...updatedSetsReps[newSetInfo.setIndex],
-                        //     setId: newSetInfo.setId,
-                        //     reps: newSetInfo.reps,
-                        //     weight: newSetInfo.weight
-                        // }
-
-                        // returns the exercise info plus the updated sets
-                        // return {
-                        //     ...exercise,
-                        //     setsReps: updatedSetsReps
-                        // }
                     }
                 })
             } catch(err) {
@@ -349,13 +341,6 @@ export default function WorkoutLog() {
             }
         }
   
-        // if(!alreadySavedWorkout) {
-        //     localStorage.setItem('exercises', JSON.stringify(updatedWorkoutData))
-        //     console.log("exercises")
-        // } else if(alreadySavedWorkout) {
-        //     localStorage.setItem('exercises', JSON.stringify(updatedWorkoutData))
-        //     console.log('workout data')
-        // }
         loadExerciseList(date)
         setToggleEditSetModal(false)
     }
