@@ -54,6 +54,8 @@ export default function CurrentWorkoutList(props) {
                             <div className="ex-name-container">
                                 <p className="ex-number">{index + 1}</p>
                                 <p className="current-ex-name">{shortenedExName}</p>
+                                { props.editMode &&
+                                <div>
                                 {!flipView[index] ?
                                 <i onClick={e => handleFlipView(e)} data-flipview={index} style={{transform: flipView[index] ? "rotate(90deg)" : "rotate(0deg)", transition: ".2s ease all"}} className="fa-solid fa-ellipsis-vertical"></i>
                                 :
@@ -86,6 +88,8 @@ export default function CurrentWorkoutList(props) {
                                     
                                 </div>
                                 }
+                                </div>
+                                }
                             </div>
                             
                             <ul className="all-sets-container">
@@ -100,6 +104,7 @@ export default function CurrentWorkoutList(props) {
                                         }
                                         <p className="set-weight">lbs: {set.weight}</p>
                                         <p className="set-reps">reps: {set.reps}</p>
+                                        { props.editMode &&
                                         <span
                                             id={ex.id}
                                             className="material-symbols-outlined edit-ex"
@@ -110,6 +115,9 @@ export default function CurrentWorkoutList(props) {
                                         >
                                             comment
                                         </span>
+                                        }
+
+                                        { props.editMode ?
                                         <span
                                             id={ex.id}
                                             data-editsetid={set.setId}
@@ -119,6 +127,10 @@ export default function CurrentWorkoutList(props) {
                                         >
                                             edit
                                         </span>
+                                        :
+                                        <span className="hidden-el">h</span>
+                                        }
+                                        { props.editMode ?
                                         <span
                                             onClick={e => props.toggleDel(e)}
                                             id={ex.id}
@@ -127,6 +139,9 @@ export default function CurrentWorkoutList(props) {
                                         >
                                             delete
                                         </span>
+                                        :
+                                        <span className="hidden-el">h</span>
+                                        }
                                     </li>
                                 ))}
                             </ul>

@@ -618,7 +618,7 @@ export default function WorkoutLog() {
                         <Droppable droppableId="workoutData">
                             {(provided) => (
                                 <div {...provided.droppableProps} ref={provided.innerRef} className="current-log-inner-container">
-                                    <h2>Current Workout {formattedDate}</h2>
+                                    <h2>Date: {formattedDate}</h2>
                                     { !alreadySavedWorkout ?
                                         <div className="workout-list-btn-container">
                                             <button onClick={saveWorkout} className="save-workout-btn">Save workout</button>
@@ -626,18 +626,19 @@ export default function WorkoutLog() {
                                         </div>
                                         :
                                         <div className="workout-list-btn-container">
-                                        <p className="save-workout-btn">Workout Saved</p>
-                                        <button className="save-workout-btn">Edit workout</button>
+                                        <p className="workout-saved-text">Workout Saved.</p>
+                                        <button onClick={flipEditMode} className="save-workout-btn">{editMode ? 'Cancel Edit' : 'Edit Workout'}</button>
                                         </div>
                                     }
                                     
-                                    <p>{savedWorkout && 'Workout saved.'}</p>
+                                    <p className="workout-saved-text">{savedWorkout && 'Workout saved!'}</p>
                                     {/* <p>{alreadySavedWorkout && 'Workout is aleady saved.'}</p> */}
                                     <CurrentWorkoutList
                                         data={filteredDateWorkoutData && filteredDateWorkoutData}
                                         usersInDB={usersInDB}
                                         currentUser={currentUser}
                                         date={date}
+                                        editMode={editMode}
                                         handleClick={handleClick}
                                         toggleDel={e => toggleDelete(e, setCurrentItemToDelete, setToggleDeleteExModal, setToggleDeleteSetModal)}
                                         toggleEdit={e => toggleEdit(e, setNewSetInfo, setToggleEditSetModal)}
