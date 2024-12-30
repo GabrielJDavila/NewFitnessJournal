@@ -754,6 +754,10 @@ th:last-child, td:last-child {
   justify-content: space-between;
 }
 
+.workout-saved-text {
+  color: rgb(77, 228, 31);
+}
+
 /* rendered workout styles */
 
 .ex-name-container {
