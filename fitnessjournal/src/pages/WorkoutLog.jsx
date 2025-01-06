@@ -639,6 +639,7 @@ export default function WorkoutLog() {
                                         currentUser={currentUser}
                                         date={date}
                                         editMode={editMode}
+                                        alreadySavedWorkout={alreadySavedWorkout}
                                         handleClick={handleClick}
                                         toggleDel={e => toggleDelete(e, setCurrentItemToDelete, setToggleDeleteExModal, setToggleDeleteSetModal)}
                                         toggleEdit={e => toggleEdit(e, setNewSetInfo, setToggleEditSetModal)}
