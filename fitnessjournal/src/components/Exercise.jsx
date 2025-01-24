@@ -35,6 +35,7 @@ export default function Exercise(props) {
     // function to handle button click of adding exercise
     async function handleAddExClick(e) {
         const storedDate = localStorage.getItem("selectedDate")
+        
         if(e.target.dataset.id === docInfo.id) {
             const workoutData = JSON.parse(localStorage.getItem('exercises') || '[]')
             const exerciseExists = workoutData ? workoutData.some(ex => ex.id === docInfo.id && storedDate === ex.date) : false
@@ -43,6 +44,7 @@ export default function Exercise(props) {
                 props.setToggleModal(true)
                 props.setClickedEx("Exercise already added to workout!")
             } else {
+                
                 const newEx = {
                     ...docInfo,
                     date: new Date(localStorage.getItem("selectedDate")),

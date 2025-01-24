@@ -94,13 +94,6 @@ export default function WorkoutLog() {
 
             return () => clearTimeout(timout)
         }
-        // if(alreadySavedWorkout) {
-        //     const secondTimout = setTimeout(() => {
-        //         setAlreadySavedWorkout(false)
-        //     }, 3000)
-
-        //     return () => clearTimeout(secondTimout)
-        // }
     }, [savedWorkout])
 
     async function saveWorkout() {
@@ -120,10 +113,12 @@ export default function WorkoutLog() {
     }
 
     function clearData() {
+        
         localStorage.clear()
+        localStorage.setItem('selectedDate', date)
         loadExerciseList(date)
     }
-    
+
     async function loadExerciseList(date) {
         // try to pull workout from firestore. if no workout exists, pull from localStorage. if none exist, create empty array.
         try {
@@ -639,6 +634,7 @@ export default function WorkoutLog() {
                                         currentUser={currentUser}
                                         date={date}
                                         editMode={editMode}
+                                        alreadySavedWorkout={alreadySavedWorkout}
                                         handleClick={handleClick}
                                         toggleDel={e => toggleDelete(e, setCurrentItemToDelete, setToggleDeleteExModal, setToggleDeleteSetModal)}
                                         toggleEdit={e => toggleEdit(e, setNewSetInfo, setToggleEditSetModal)}

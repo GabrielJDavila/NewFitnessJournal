@@ -54,7 +54,7 @@ export default function CurrentWorkoutList(props) {
                             <div className="ex-name-container">
                                 <p className="ex-number">{index + 1}</p>
                                 <p className="current-ex-name">{shortenedExName}</p>
-                                { props.editMode &&
+                                { props.editMode && props.alreadySavedWorkout &&
                                 <div>
                                 {!flipView[index] ?
                                 <i onClick={e => handleFlipView(e)} data-flipview={index} style={{transform: flipView[index] ? "rotate(90deg)" : "rotate(0deg)", transition: ".2s ease all"}} className="fa-solid fa-ellipsis-vertical"></i>
