@@ -717,7 +717,7 @@ th:last-child, td:last-child {
 }
 
 .current-log-container {
-  margin-top: 1rem;
+  margin-top: 0;
 }
 
 .current-workout-skel-container {
@@ -754,9 +754,43 @@ th:last-child, td:last-child {
   justify-content: space-between;
 }
 
-.workout-saved-text {
-  color: rgb(77, 228, 31);
+.workout-list-btn-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 100%;
+  color: white;
+  background-color: rgb(59, 119, 157);
+  border: 3px solid rgb(34, 67, 88);
 }
+
+.wlbc-item1, .wlbc-item2, .wlbc-item3, .wlbc-item4 {
+  width: 33.33%;
+  padding: 1rem 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.wlbc-item1, .wlbc-item2, .wlbc-item3 {
+  border-right: 1px solid white;
+}
+
+.save-workout-btn, .save-workout-btn-2 {
+  color: white;
+  background-color: rgb(59, 119, 157);
+  
+  border-radius: 0;
+  transition: .2s ease all;
+  padding: 1rem 0;
+}
+
+.save-workout-btn:hover {
+  background-color: rgb(84, 163, 212);
+}
+
 
 /* rendered workout styles */
 

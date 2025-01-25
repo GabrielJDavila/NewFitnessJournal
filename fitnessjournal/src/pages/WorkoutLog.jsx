@@ -103,6 +103,7 @@ export default function WorkoutLog() {
             if(result.success) {
                 setSavedWorkout(true)
                 console.log(result.message)
+                loadExerciseList(date)
             } else {
                 setAlreadySavedWorkout(true)
                 console.warn(result.message)
@@ -464,13 +465,7 @@ export default function WorkoutLog() {
                     />
                 </div>
             }
-            { toggleTimerModal &&
-                <TimerModal
-                    toggleTimer={handleToggleTimerModal}
-                    date={date}
-                    userId={currentUser}
-                />
-            }
+
             { toggleDeleteAllExercisesModal &&
                 <ConfirmDeleteAllExModal
                     handleDeleteAllEx={e => handleDeleteAllExSubmit(e, {
@@ -613,19 +608,49 @@ export default function WorkoutLog() {
                         <Droppable droppableId="workoutData">
                             {(provided) => (
                                 <div {...provided.droppableProps} ref={provided.innerRef} className="current-log-inner-container">
-                                    <h2>Date: {formattedDate}</h2>
-                                    { !alreadySavedWorkout ?
-                                        <div className="workout-list-btn-container">
-                                            <button onClick={saveWorkout} className="save-workout-btn">Save workout</button>
-                                            <button onClick={clearData} className="save-workout-btn">Clear unsaved workout</button>
-                                        </div>
-                                        :
-                                        <div className="workout-list-btn-container">
-                                        <p className="workout-saved-text">Workout Saved.</p>
-                                        <button onClick={flipEditMode} className="save-workout-btn">{editMode ? 'Cancel Edit' : 'Edit Workout'}</button>
-                                        </div>
+                                        {!alreadySavedWorkout &&
+                                            <div className="workout-list-btn-container">
+                                                <h2 className="wlbc-item1">{formattedDate}</h2>
+                                                <div className="wlbc-item2" style={{backgroundColor: '#dc944b'}}>
+                                                    <span class="material-symbols-outlined">
+                                                        circle
+                                                    </span>
+                                                    <p className="workout-unsaved-text">Unsaved</p>
+                                                </div>
+                                                <div onClick={saveWorkout} className="save-workout-btn wlbc-item3">
+                                                    <span class="material-symbols-outlined">
+                                                        check
+                                                    </span>
+                                                    <button className="save-workout-btn">Save</button>
+                                                </div>
+                                                <div onClick={clearData} className="save-workout-btn wlbc-item4">
+                                                    <span class="material-symbols-outlined">
+                                                        remove
+                                                    </span>
+                                                    <button className="save-workout-btn">Clear Log</button>
+                                                </div>
+                                                
+                                            </div>
+                                        }
+                                        {alreadySavedWorkout &&
+                                            <div className="workout-list-btn-container">
+                                                <h2 className="wlbc-item1">{formattedDate}</h2>
+                                                <div className="wlbc-item2" style={{backgroundColor: 'rgb(44, 210, 44)'}}>
+                                                    <span class="material-symbols-outlined">
+                                                        check_circle
+                                                    </span>
+                                                    <p className="workout-saved-text">Saved!</p>
+                                                </div>
+                                                <button onClick={flipEditMode} className="save-workout-btn wlbc-item4">{editMode ? 'Cancel Edit' : 'Edit'}</button>
+                                            </div>
+                                        }
+                                    { toggleTimerModal &&
+                                        <TimerModal
+                                            toggleTimer={handleToggleTimerModal}
+                                            date={date}
+                                            userId={currentUser}
+                                        />
                                     }
-                                    
                                     <p className="workout-saved-text">{savedWorkout && 'Workout saved!'}</p>
                                     {/* <p>{alreadySavedWorkout && 'Workout is aleady saved.'}</p> */}
                                     <CurrentWorkoutList
