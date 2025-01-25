@@ -8,8 +8,9 @@
  - Allows users to look at their progress workout by workout / day by day.
 
 # What I'm Using to Build it:
- - React Router
+ - React.js
+ - React Router implementation
  - JavaScript
  - HTML
- - CSS (might implement Tailwind)
+ - CSS
  - Firestore
