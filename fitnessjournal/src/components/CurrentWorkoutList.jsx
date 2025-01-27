@@ -90,6 +90,42 @@ export default function CurrentWorkoutList(props) {
                                 }
                                 </div>
                                 }
+                                {!props.alreadySavedWorkout &&
+                                    <div>
+                                        {!flipView[index] ?
+                                        <i onClick={e => handleFlipView(e)} data-flipview={index} style={{transform: flipView[index] ? "rotate(90deg)" : "rotate(0deg)", transition: ".2s ease all"}} className="fa-solid fa-ellipsis-vertical"></i>
+                                        :
+                                        <i onClick={e => resetFlipView()} data-flipview={index} style={{transform: flipView[index] ? "rotate(0deg)" : "rotate(90deg)", transition: ".2s ease all"}} className="fa-solid fa-ellipsis"></i>
+                                        }
+                                        {flipView[index] &&
+                                        <div
+                                            style={{
+                                                height: flipView[index] ? "auto" : "0px",
+                                                width: flipView[index] ? "100px" : "0px"
+                                            }}
+                                            className="ex-detail-div"
+                                        >
+                                            <Link to={`ExDetailedView/${ex.id}`} state={{ date: props.date }} className="ex-detail-view-div">
+                                                <p>View</p>
+                                                <span class="material-symbols-outlined curr-ex-view">
+                                                    visibility
+                                                </span>
+                                            </Link>
+                                            <div className="ex-detail-delete-div">
+                                                <p>Delete</p>
+                                                <span
+                                                    className="material-symbols-outlined curr-ex-delete"
+                                                    onClick={e => props.toggleDel(e)}
+                                                    data-deleteexid={ex.id}
+                                                >
+                                                    delete
+                                                </span>
+                                            </div>
+                                            
+                                        </div>
+                                        }
+                                    </div>
+                                }
                             </div>
                             
                             <ul className="all-sets-container">
