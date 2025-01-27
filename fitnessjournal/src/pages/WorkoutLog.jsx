@@ -113,13 +113,6 @@ export default function WorkoutLog() {
         }
     }
 
-    function clearData() {
-        
-        localStorage.clear()
-        localStorage.setItem('selectedDate', date)
-        loadExerciseList(date)
-    }
-
     async function loadExerciseList(date) {
         // try to pull workout from firestore. if no workout exists, pull from localStorage. if none exist, create empty array.
         try {
@@ -142,6 +135,12 @@ export default function WorkoutLog() {
         } catch(e) {
             console.log("error fetching exercises list: ", e)
         }
+    }
+
+    function clearData() {
+        localStorage.clear()
+        localStorage.setItem('selectedDate', date)
+        loadExerciseList(date)
     }
 
     // check to see if workoutData exists. If it does, map through and filter exercises by date.
