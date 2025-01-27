@@ -781,10 +781,12 @@ th:last-child, td:last-child {
 .save-workout-btn, .save-workout-btn-2 {
   color: white;
   background-color: rgb(59, 119, 157);
-  
   border-radius: 0;
   transition: .2s ease all;
   padding: 1rem 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .save-workout-btn:hover {

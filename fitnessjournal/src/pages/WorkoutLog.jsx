@@ -611,21 +611,16 @@ export default function WorkoutLog() {
                                         {!alreadySavedWorkout &&
                                             <div className="workout-list-btn-container">
                                                 <h2 className="wlbc-item1">{formattedDate}</h2>
-                                                <div className="wlbc-item2" style={{backgroundColor: '#dc944b'}}>
-                                                    <span class="material-symbols-outlined">
-                                                        circle
-                                                    </span>
-                                                    <p className="workout-unsaved-text">Unsaved</p>
-                                                </div>
+                                                
                                                 <div onClick={saveWorkout} className="save-workout-btn wlbc-item3">
                                                     <span class="material-symbols-outlined">
-                                                        check
+                                                        circle
                                                     </span>
                                                     <button className="save-workout-btn">Save</button>
                                                 </div>
                                                 <div onClick={clearData} className="save-workout-btn wlbc-item4">
                                                     <span class="material-symbols-outlined">
-                                                        remove
+                                                        close
                                                     </span>
                                                     <button className="save-workout-btn">Clear Log</button>
                                                 </div>
@@ -641,7 +636,13 @@ export default function WorkoutLog() {
                                                     </span>
                                                     <p className="workout-saved-text">Saved!</p>
                                                 </div>
-                                                <button onClick={flipEditMode} className="save-workout-btn wlbc-item4">{editMode ? 'Cancel Edit' : 'Edit'}</button>
+                                                <div onClick={flipEditMode} className="save-workout-btn wlbc-item4">
+                                                    <span class="material-symbols-outlined">
+                                                        edit
+                                                    </span>
+                                                    <button className="save-workout-btn wlbc-item4">{editMode ? 'Cancel Edit' : 'Edit'}</button>
+                                                </div>
+                                                
                                             </div>
                                         }
                                     { toggleTimerModal &&
@@ -675,7 +676,7 @@ export default function WorkoutLog() {
                 }
                 {filteredDateWorkoutData.length === 0 && !showSkel &&
                     <div className="no-current-workout-container">
-                        {formattedDate}
+                        <p className="no-current-text">{formattedDate}</p>
                         <p className="no-current-text">No workout for this date</p>
                         <Link to='AllCategories' className="link-btn" >Add some exercises!</Link>
                     </div>
