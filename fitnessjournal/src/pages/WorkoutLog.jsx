@@ -113,13 +113,6 @@ export default function WorkoutLog() {
         }
     }
 
-    function clearData() {
-        
-        localStorage.clear()
-        localStorage.setItem('selectedDate', date)
-        loadExerciseList(date)
-    }
-
     async function loadExerciseList(date) {
         // try to pull workout from firestore. if no workout exists, pull from localStorage. if none exist, create empty array.
         try {
@@ -142,6 +135,12 @@ export default function WorkoutLog() {
         } catch(e) {
             console.log("error fetching exercises list: ", e)
         }
+    }
+
+    function clearData() {
+        localStorage.clear()
+        localStorage.setItem('selectedDate', date)
+        loadExerciseList(date)
     }
 
     // check to see if workoutData exists. If it does, map through and filter exercises by date.
@@ -345,20 +344,35 @@ export default function WorkoutLog() {
     // now to make it able to delete exercises saved from firestore.
     function deleteSet(e) {
         e.preventDefault()
-        const workoutData = JSON.parse(localStorage.getItem('exercises'))
-        const updatedWorkoutData = workoutData.map(exercise => {
-            // check to see if exercise matches. If it does, continue with deletion
-            if(exercise.id === currentItemToDelete.exIdToDelete) {
-                // returns exercise with filtered sets that don't match the chosen to delete item.
-                return {
-                    ...exercise,
-                    setsReps: exercise.setsReps.filter(set => set.setId !== currentItemToDelete.setIdToDelete)
+        const workoutData = !alreadySavedWorkout ? JSON.parse(localStorage.getItem('exercises')):
+        JSON.parse(localStorage.getItem('workoutData'))
+        console.log(alreadySavedWorkout)
+        if(!alreadySavedWorkout) {
+            const updatedWorkoutData = workoutData.map(exercise => {
+                // check to see if exercise matches. If it does, continue with deletion
+                if(exercise.id === currentItemToDelete.exIdToDelete) {
+                    // returns exercise with filtered sets that don't match the chosen to delete item.
+                    return {
+                        ...exercise,
+                        setsReps: exercise.setsReps.filter(set => set.setId !== currentItemToDelete.setIdToDelete)
+                    }
                 }
+                // if exercise id does not match, returns exercise unchanged
+                return exercise
+            })
+            localStorage.setItem('exercises', JSON.stringify(updatedWorkoutData))
+        } else if(alreadySavedWorkout) {
+            try {
+                workoutData.forEach(exercise => {
+                    if(exercise.id === currentItemToDelete.exIdToDelete) {
+                        deleteSingleSet(usersInDB, currentUser, date, exercise.id, currentItemToDelete.setIdToDelete)
+                    }
+                })
+            } catch(err) {
+                console.error("error deleting set: ", err)
             }
-            // if exercise id does not match, returns exercise unchanged
-            return exercise
-        })
-        localStorage.setItem('exercises', JSON.stringify(updatedWorkoutData))
+        }
+        
         loadExerciseList(date)
         setToggleDeleteSetModal(false)
     }

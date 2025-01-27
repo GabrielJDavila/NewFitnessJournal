@@ -127,7 +127,8 @@ export default function CurrentWorkoutList(props) {
                                     </div>
                                 }
                             </div>
-                            
+
+                            {props.alreadySavedWorkout &&
                             <ul className="all-sets-container">
                                 {ex.setsReps && Array.isArray(ex.setsReps) && ex.setsReps.map((set, index) => (
                                     
@@ -181,6 +182,57 @@ export default function CurrentWorkoutList(props) {
                                     </li>
                                 ))}
                             </ul>
+                            }
+                            {!props.alreadySavedWorkout &&
+                            <ul className="all-sets-container">
+                                {ex.setsReps && Array.isArray(ex.setsReps) && ex.setsReps.map((set, index) => (
+                                    
+                                    <li key={index} className="set-container">
+
+                                        {set.isPR ?
+                                        <span className="material-symbols-outlined pr-icon">
+                                            trophy
+                                        </span> :
+                                        <p className="hidden-el">h</p>
+                                        }
+
+                                        <p className="set-weight">lbs: {set.weight}</p>
+                                        <p className="set-reps">reps: {set.reps}</p>
+
+                                        <span
+                                            id={ex.id}
+                                            className="material-symbols-outlined edit-ex"
+                                            data-setnoteid={set.setId}
+                                            data-setindex={index}
+                                            data-note={set.note}
+                                            onClick={e => props.toggleNote(e)}
+                                        >
+                                            comment
+                                        </span>
+
+                                        <span
+                                            id={ex.id}
+                                            data-editsetid={set.setId}
+                                            data-setindex={index}
+                                            onClick={e => props.toggleEdit(e)}
+                                            className="material-symbols-outlined edit-ex"
+                                        >
+                                            edit
+                                        </span>
+
+                                        <span
+                                            onClick={e => props.toggleDel(e)}
+                                            id={ex.id}
+                                            data-deletesetid={set.setId}
+                                            className="material-symbols-outlined delete-set"
+                                        >
+                                            delete
+                                        </span>
+                                        
+                                    </li>
+                                ))}
+                            </ul>
+                            }
                             {/* <Link to={`ExerciseDetail/${ex.id}`} className="add-set-link"> */}
                                 <button data-exid={ex.id} onClick={e => props.toggleAdd(e)} className="add-set-btn">Add set</button>
                             {/* </Link> */}
