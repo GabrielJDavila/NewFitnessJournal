@@ -948,12 +948,12 @@ export async function deleteSingleSet(userCollection, userId, selectedDate, exer
     try {
         const dateString = selectedDate.toISOString().split("T")[0]
         const userDocRef = doc(userCollection, userId)
-        const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
-        const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, dateString)
+        const savedWorkoutCollectionRef = collection(userDocRef, "savedWorkouts")
+        const dateOfWorkoutDocRef = doc(savedWorkoutCollectionRef, dateString)
         const exercisesCollectionRef = collection(dateOfWorkoutDocRef, "exList")
         const exDocRef = doc(exercisesCollectionRef, exerciseId)
-        const currentExRef = collection(exDocRef, "currentEx")
-        const setDocRef = doc(currentExRef, setId)
+        const setsAndRepsRef = collection(exDocRef, "setsAndReps")
+        const setDocRef = doc(setsAndRepsRef, setId)
 
         await deleteDoc(setDocRef)
     } catch(e) {
