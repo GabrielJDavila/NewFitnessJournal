@@ -1,10 +1,10 @@
 import { useEffect } from "react"
 
 export default function AddNote(props) {
+    console.log(props)
     const filteredEx = props.workoutData ? props.workoutData.filter(exercise => exercise.id === props.currentEx) : ""
     const filteredSet = filteredEx[0].setsReps.find(set => set.setId === props.currentSet)
     const noteMessage = filteredSet.note ? filteredSet.note : ""
-    console.log(noteMessage)
 
     useEffect(() => {
         if(props.message) {
