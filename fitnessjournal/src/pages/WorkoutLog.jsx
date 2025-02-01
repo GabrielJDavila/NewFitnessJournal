@@ -268,14 +268,14 @@ export default function WorkoutLog() {
     }
    
     const modalStyles = {
-        position: "sticky",
-        top: "100px",
+        position: "fixed",
+        top: "0",
         bottom: "0",
         right: "0",
         left: "0",
-        width: "95%",
-        height: "500px",
-        margin: "auto",
+        width: "100%",
+        height: "100vh",
+        marginTop: "4rem",
         background: "white",
         zIndex: "12"
     }

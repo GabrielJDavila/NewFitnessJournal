@@ -10,19 +10,19 @@ export default function EditSetModal(props) {
                     className="fa-solid fa-close edit-set-close"
                 ></i>
             </div>
-            <div className="new-reps-container">
-                <p className="edit-set-text">rep:</p>
+            <div className="new-weight-container">
+                <p className="edit-set-text">Weight:</p>
                 <input
-                    name="reps"
+                    name="weight"
                     onChange={e => props.handleChange(e.target.name, e.target.value)}
                     value={props.title}
                     className="edit-set-input"
                 />
             </div>
-            <div className="new-weight-container">
-                <p className="edit-set-text">lbs:</p>
+            <div className="new-reps-container">
+                <p className="edit-set-text">Reps:</p>
                 <input
-                    name="weight"
+                    name="reps"
                     onChange={e => props.handleChange(e.target.name, e.target.value)}
                     value={props.title}
                     className="edit-set-input"
