@@ -1,4 +1,3 @@
-console.log("test")
 export default function ConfirmDeleteAllExModal(props) {
     return (
         <form onSubmit={e => props.handleDeleteAllEx(e)} className="confirm-delete-modal" style={props.modalStyles}>

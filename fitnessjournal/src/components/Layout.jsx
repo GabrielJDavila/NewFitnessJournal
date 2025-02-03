@@ -30,7 +30,6 @@ export default function Layout() {
         uid: ""
     })
  
-    console.log(showPassword)
     useEffect(() => {
         const unsubcribe = onAuthStateChanged(auth, user => {
             if(user) {

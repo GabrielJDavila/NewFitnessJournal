@@ -27,8 +27,7 @@ export default function CurrentWorkoutList(props) {
         height: flipView[currentIndex] ? "100px" : "0px",
         border: flipView[currentIndex] ? "2px solid black" : "none"
     }
-
-    console.log(props.data)
+    
         const currentWorkout = props.data && props.data.length > 0 ? props.data.map((ex, index) => {
             const splitName = ex.name.split(' ')
             const capitalizedWords = splitName.map((string) => {

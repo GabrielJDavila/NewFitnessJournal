@@ -1,11 +1,28 @@
 import { useEffect } from "react"
 
 export default function AddNote(props) {
-    console.log(props)
-    const filteredEx = props.workoutData ? props.workoutData.filter(exercise => exercise.id === props.currentEx) : ""
-    const filteredSet = filteredEx[0].setsReps.find(set => set.setId === props.currentSet)
-    const noteMessage = filteredSet.note ? filteredSet.note : ""
-
+    let noteMessage = ''
+    if(!props.alreadySavedWorkout) {
+        const date = new Date(props.date)
+        const convertedDate = date.toISOString()
+        const filteredWorkoutDataByDate = props.workoutData ? props.workoutData.filter(exercise => exercise.date === convertedDate) : null
+        const filteredEx = filteredWorkoutDataByDate ? filteredWorkoutDataByDate.filter(exercise => exercise.id === props.currentEx) : null
+        const filteredSet = filteredEx ? filteredEx[0].setsReps.find(set => set.setId === props.currentSet) : null
+        noteMessage = filteredSet.note ? filteredSet.note : ""
+    } 
+    // need to fix issue with saved workout notes not rendering properly.
+    // else if(props.alreadySavedWorkout) {
+    //     const date = new Date(props.date)
+    //     const convertedDate = date.toISOString()
+    //     con
+    //     const filteredWorkoutDataByDate = props.workoutData ? props.workoutData.filter(exercise => exercise.date === convertedDate) : null
+    //     console.log(filteredWorkoutDataByDate)
+    //     const filteredEx = filteredWorkoutDataByDate ? filteredWorkoutDataByDate.filter(exercise => exercise.id === props.currentEx) : null
+    //     const filteredSet = filteredEx ? filteredEx[0].setsReps.find(set => set.setId === props.currentSet) : null
+    //     noteMessage = filteredSet.note ? filteredSet.note : ""
+    // }
+    
+    
     useEffect(() => {
         if(props.message) {
             props.loadExerciseList(props.date)

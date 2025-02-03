@@ -643,7 +643,6 @@ export async function retrieveCurrentExSetsRepsAndPRs(userCollection, userId, se
             selectedDate = new Date(selectedDate)
         }
         const dateString = selectedDate.toISOString().split("T")[0]
-        console.log(dateString)
         const userDocRef = doc(userCollection, userId)
         const currentWorkoutCollectionRef = collection(userDocRef, "savedWorkouts")
         const latestPRsCollectionRef = collection(userDocRef, "latestPRs")

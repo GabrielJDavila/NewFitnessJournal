@@ -28,7 +28,7 @@ export default function WorkoutLog() {
         const savedData = JSON.parse(localStorage.getItem("exercises"))
         return savedData ? savedData : []
     })
-    console.log(workoutData)
+    
     const [workoutDatesData, setWorkoutDatesData] = useState([])
     const [toggleEditSetModal, setToggleEditSetModal] = useState(false)
     const [toggleAddSetModal, setToggleAddSetModal] = useState(false)
@@ -384,8 +384,10 @@ export default function WorkoutLog() {
 
         if(!alreadySavedWorkout) {
             const updatedWorkoutData = workoutData.map(exercise => {
+                const newDate = new Date(date)
+                const convertedDate = newDate.toISOString()
                 // check to see if exercise matches. If it does, continue with edit
-                if(exercise.id === newSetInfo.exId) {
+                if(exercise.id === newSetInfo.exId && exercise.date === convertedDate) {
                     // creates a shallow copy of setsReps array in given exercise
                     const updatedSetsReps = [...exercise.setsReps]
                     // updates set at given setIndex with newSetInfo
@@ -576,24 +578,10 @@ export default function WorkoutLog() {
                 // add note from local storage here. Make sure note is saving!
                     addSetNote={e => addSetNote(e)}
                     workoutData={workoutData}
+                    alreadySavedWorkout={alreadySavedWorkout}
                     currentEx={newSetInfo.exId && newSetInfo.exId}
                     currentSet={newSetInfo.setId && newSetInfo.setId}
                     setIndex={newSetInfo.setIndex && newSetInfo.setIndex}
-                    // Add note for each set to correct set. Right now i have repeating notes!
-
-                    // addNoteClick={addMessage}
-                    // handleAddNote={e => handleAddNoteSubmit(e, {
-                    //     AddSetNote,
-                    //     usersInDB,
-                    //     currentUser,
-                    //     date,
-                    //     exid,
-                    //     setId,
-                    //     note,
-                    //     setNote,
-                    //     setCurrentNote,
-                    //     loadExerciseList
-                    // })}
                     handleNoteChange={handleNoteChange}
                     toggleNote={e => toggleNote(e)}
                     name="note"
