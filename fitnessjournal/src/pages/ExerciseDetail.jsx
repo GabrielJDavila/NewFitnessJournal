@@ -44,6 +44,7 @@ export default function ExerciseDetail(props) {
             const newSet = {
                 setId: uuidv4(),
                 exId: "",
+                date: props.date,
                 reps: repsAndWeight.reps,
                 weight: repsAndWeight.weight,
                 note: "",
@@ -52,7 +53,10 @@ export default function ExerciseDetail(props) {
 
             const workoutData = JSON.parse(localStorage.getItem('exercises')) || []
             const updatedWorkoutData = workoutData.map(exercise => {
-                if (exercise.id === props.exid) {
+                const newDate = new Date(newSet.date)
+                const convertedDate = newDate.toISOString()
+                
+                if (exercise.id === props.exid && exercise.date === convertedDate) {
                     return {
                         ...exercise,
                         setsReps: [...(exercise.setsReps || []), newSet]

@@ -28,7 +28,7 @@ export default function WorkoutLog() {
         const savedData = JSON.parse(localStorage.getItem("exercises"))
         return savedData ? savedData : []
     })
-    console.log(workoutData)
+    
     const [workoutDatesData, setWorkoutDatesData] = useState([])
     const [toggleEditSetModal, setToggleEditSetModal] = useState(false)
     const [toggleAddSetModal, setToggleAddSetModal] = useState(false)
@@ -268,14 +268,14 @@ export default function WorkoutLog() {
     }
    
     const modalStyles = {
-        position: "sticky",
-        top: "100px",
+        position: "fixed",
+        top: "0",
         bottom: "0",
         right: "0",
         left: "0",
-        width: "95%",
-        height: "500px",
-        margin: "auto",
+        width: "100%",
+        height: "100vh",
+        marginTop: "4rem",
         background: "white",
         zIndex: "12"
     }
@@ -346,7 +346,7 @@ export default function WorkoutLog() {
         e.preventDefault()
         const workoutData = !alreadySavedWorkout ? JSON.parse(localStorage.getItem('exercises')):
         JSON.parse(localStorage.getItem('workoutData'))
-        console.log(alreadySavedWorkout)
+        
         if(!alreadySavedWorkout) {
             const updatedWorkoutData = workoutData.map(exercise => {
                 // check to see if exercise matches. If it does, continue with deletion
@@ -379,28 +379,47 @@ export default function WorkoutLog() {
     
     function addSetNote(e) {
         e.preventDefault()
-        const workoutData = JSON.parse(localStorage.getItem('exercises'))
-        const updatedWorkoutData = workoutData.map(exercise => {
-            // check to see if exercise matches. If it does, continue with edit
-            if(exercise.id === newSetInfo.exId) {
-                // creates a shallow copy of setsReps array in given exercise
-                const updatedSetsReps = [...exercise.setsReps]
-                // updates set at given setIndex with newSetInfo
-                updatedSetsReps[newSetInfo.setIndex] = {
-                    ...updatedSetsReps[newSetInfo.setIndex],
-                    note: note
+        const workoutData = !alreadySavedWorkout ? JSON.parse(localStorage.getItem('exercises')):
+        JSON.parse(localStorage.getItem('workoutData'))
+
+        if(!alreadySavedWorkout) {
+            const updatedWorkoutData = workoutData.map(exercise => {
+                const newDate = new Date(date)
+                const convertedDate = newDate.toISOString()
+                // check to see if exercise matches. If it does, continue with edit
+                if(exercise.id === newSetInfo.exId && exercise.date === convertedDate) {
+                    // creates a shallow copy of setsReps array in given exercise
+                    const updatedSetsReps = [...exercise.setsReps]
+                    // updates set at given setIndex with newSetInfo
+                    updatedSetsReps[newSetInfo.setIndex] = {
+                        ...updatedSetsReps[newSetInfo.setIndex],
+                        note: note
+                    }
+                    // returns the exercise info plus the updated sets
+                    return {
+                        ...exercise,
+                        setsReps: updatedSetsReps
+                    }
                 }
-                // returns the exercise info plus the updated sets
-                return {
-                    ...exercise,
-                    setsReps: updatedSetsReps
-                }
+                
+                // if exercise id doesn't match the exid of the set the user clicks,
+                // returns the unchanged exercise so that other exercises remain the same.
+                return exercise
+            })
+            localStorage.setItem('exercises', JSON.stringify(updatedWorkoutData))
+        } else if(alreadySavedWorkout) {
+            try {
+                workoutData.forEach(exercise => {
+                    if(exercise.id === newSetInfo.exId) {
+                        console.log(exercise.id, newSetInfo.exId, newSetInfo.setId)
+                        AddSetNote(currentUser, usersInDB, date, exercise.id, newSetInfo.setId, note)
+                    }
+                })
+                
+            } catch(err) {
+                console.error('error saving note: ', err)
             }
-            // if exercise id doesn't match the exid of the set the user clicks,
-            // returns the unchanged exercise so that other exercises remain the same.
-            return exercise
-        })
-        localStorage.setItem('exercises', JSON.stringify(updatedWorkoutData))
+        }
         
         loadExerciseList()
         setCurrentNote(note)
@@ -552,31 +571,17 @@ export default function WorkoutLog() {
                     modalStyles={modalStyles}
                 />
             }
-
+   
             {
                 toggleNoteForm &&
                 <AddNote
                 // add note from local storage here. Make sure note is saving!
                     addSetNote={e => addSetNote(e)}
                     workoutData={workoutData}
+                    alreadySavedWorkout={alreadySavedWorkout}
                     currentEx={newSetInfo.exId && newSetInfo.exId}
                     currentSet={newSetInfo.setId && newSetInfo.setId}
                     setIndex={newSetInfo.setIndex && newSetInfo.setIndex}
-                    // Add note for each set to correct set. Right now i have repeating notes!
-
-                    // addNoteClick={addMessage}
-                    // handleAddNote={e => handleAddNoteSubmit(e, {
-                    //     AddSetNote,
-                    //     usersInDB,
-                    //     currentUser,
-                    //     date,
-                    //     exid,
-                    //     setId,
-                    //     note,
-                    //     setNote,
-                    //     setCurrentNote,
-                    //     loadExerciseList
-                    // })}
                     handleNoteChange={handleNoteChange}
                     toggleNote={e => toggleNote(e)}
                     name="note"

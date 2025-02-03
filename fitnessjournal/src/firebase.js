@@ -643,7 +643,6 @@ export async function retrieveCurrentExSetsRepsAndPRs(userCollection, userId, se
             selectedDate = new Date(selectedDate)
         }
         const dateString = selectedDate.toISOString().split("T")[0]
-        console.log(dateString)
         const userDocRef = doc(userCollection, userId)
         const currentWorkoutCollectionRef = collection(userDocRef, "savedWorkouts")
         const latestPRsCollectionRef = collection(userDocRef, "latestPRs")
@@ -730,12 +729,12 @@ export async function retrieveExDetailedView(userCollection, userId, exId, curre
     }
     setsAndRepsSnapshot.forEach(set => {
         const setId = set.id
-        const { createdAt, message, reps, weight } = set.data()
+        const { createdAt, note, reps, weight } = set.data()
         // let date = new Date(createdAt).toLocaleString()
         exerciseData.setsReps.push({
             setId,
             createdAt,
-            message,
+            note,
             reps,
             weight
         })
@@ -815,11 +814,11 @@ async function fetchExData(exDoc) {
 
             repsSetsSnapshot.forEach(set => {
                 const setId = set.id
-                const { createdAt, message, reps, weight, weightType } = set.data()
+                const { createdAt, note, reps, weight, weightType } = set.data()
                 exerciseData.setsReps.push({
                     setId,
                     createdAt,
-                    message,
+                    note,
                     reps,
                     weight,
                     weightType,
@@ -907,15 +906,15 @@ export async function AddSetNote(userId, userCollection, date, exerciseId, setId
     try {
         const dateString = date.toISOString().split("T")[0]
         const userDocRef = doc(userCollection, userId)
-        const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
+        const currentWorkoutCollectionRef = collection(userDocRef, "savedWorkouts")
         const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, dateString)
         const exercisesCollectionRef = collection(dateOfWorkoutDocRef, "exList")
         const exDocRef = doc(exercisesCollectionRef, exerciseId)
-        const currentExRef = collection(exDocRef, "currentEx")
-        const setDocRef = doc(currentExRef, setId)
+        const setsAndRepsRef = collection(exDocRef, "setsAndReps")
+        const setDocRef = doc(setsAndRepsRef, setId)
 
         await updateDoc(setDocRef, {
-            message: note
+            note: note
         })
         console.log("success")
     } catch(error) {

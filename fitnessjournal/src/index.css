@@ -1104,9 +1104,9 @@ th:last-child, td:last-child {
   text-align: center;
   box-shadow: 0 0 10px 2px rgb(176, 176, 176);
   border-radius: 6px;
-  margin: auto;
+  margin: 0;
   background: white;
-  padding: 1rem;
+  padding: 5rem 1rem 1rem;
   display: flex;
   flex-direction: column;
   gap: 3rem;
@@ -1136,6 +1136,7 @@ th:last-child, td:last-child {
 
 .edit-set-text {
   font-size: 1.5rem;
+  margin-right: auto;
 }
 
 .edit-set-input {
@@ -1143,11 +1144,12 @@ th:last-child, td:last-child {
   border-radius: 6px;
   height: 50px;
   width: 70%;
+  margin-left: auto;
   font-size: 1.5rem;
 }
 
 .confirm-edit-set-btn {
-  margin: auto 0 0;
+  margin-top: 2rem;
 }
 
 /*=============== ExerciseDetail.jsx styles ====================*/
