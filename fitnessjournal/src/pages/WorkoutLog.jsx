@@ -219,7 +219,6 @@ export default function WorkoutLog() {
             const exId = e.target.id
             const setId = e.target.dataset.setnoteid
             const setIndex = e.target.dataset.setindex
-            console.log(setIndex)
             // add data-note from curentWorkoutList?
             
         setNewSetInfo(prev => ({
@@ -411,7 +410,6 @@ export default function WorkoutLog() {
             try {
                 workoutData.forEach(exercise => {
                     if(exercise.id === newSetInfo.exId) {
-                        console.log(exercise.id, newSetInfo.exId, newSetInfo.setId)
                         AddSetNote(currentUser, usersInDB, date, exercise.id, newSetInfo.setId, note)
                     }
                 })
@@ -588,7 +586,7 @@ export default function WorkoutLog() {
                     value={note}
                     date={date}
                     newSetInfo
-                    message={currentNote && currentNote}
+                    note={currentNote && currentNote}
                     loadExerciseList={loadExerciseList}
                 />
             }

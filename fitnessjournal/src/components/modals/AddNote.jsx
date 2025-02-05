@@ -11,20 +11,16 @@ export default function AddNote(props) {
         noteMessage = filteredSet.note ? filteredSet.note : ""
     } 
     // need to fix issue with saved workout notes not rendering properly.
-    // else if(props.alreadySavedWorkout) {
-    //     const date = new Date(props.date)
-    //     const convertedDate = date.toISOString()
-    //     con
-    //     const filteredWorkoutDataByDate = props.workoutData ? props.workoutData.filter(exercise => exercise.date === convertedDate) : null
-    //     console.log(filteredWorkoutDataByDate)
-    //     const filteredEx = filteredWorkoutDataByDate ? filteredWorkoutDataByDate.filter(exercise => exercise.id === props.currentEx) : null
-    //     const filteredSet = filteredEx ? filteredEx[0].setsReps.find(set => set.setId === props.currentSet) : null
-    //     noteMessage = filteredSet.note ? filteredSet.note : ""
-    // }
+    else if(props.alreadySavedWorkout) {
+        const filteredWorkoutDataByDate = props.workoutData ? props.workoutData.filter(exercise => new Date(exercise.date).toISOString() === new Date(props.date).toISOString()) : null
+        const filteredEx = filteredWorkoutDataByDate ? filteredWorkoutDataByDate.filter(exercise => exercise.id === props.currentEx) : null
+        const filteredSet = filteredEx ? filteredEx[0].setsReps.find(set => set.setId === props.currentSet) : null
+        noteMessage = filteredSet.note ? filteredSet.note : ""
+    }
     
     
     useEffect(() => {
-        if(props.message) {
+        if(props.note) {
             props.loadExerciseList(props.date)
         }
     }, [props.message])
