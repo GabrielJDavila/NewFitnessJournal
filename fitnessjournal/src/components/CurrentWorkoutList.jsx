@@ -2,30 +2,36 @@ import { useEffect, useState } from "react"
 import { Link, useOutletContext } from "react-router-dom"
 import { Draggable } from "react-beautiful-dnd"
 export default function CurrentWorkoutList(props) {
-    const [flipView, setFlipView] = useState(new Array(props.data.length).fill(false))
-    const [currentIndex, setCurrentindex] = useState(null)
+    // I should send the flipView, CurrentIndex, handleFlipView state and functions up to parent.
+    // That way I can control the state better and manipulate toggle functionality of flipView when
+    // delete ex element is toggled and rendered.
+
+    // const [flipView, setFlipView] = useState(new Array(props.data.length).fill(false))
+    // const [currentIndex, setCurrentindex] = useState(null)
 
     // function to reset flipView to close any existing edit/view modals
-    function resetFlipView() {
-        setFlipView(new Array(flipView.length).fill(false))
-    }
+
+    // function resetFlipView() {
+    //     setFlipView(new Array(flipView.length).fill(false))
+    // }
 
     // function to flip current flipView boolean to true. Allows for edit/view modal to pop up for given exercise.
-    function handleFlipView(e) {
-        resetFlipView()
-        console.log(e.target.dataset.flipview)
-        const index = Number(e.target.dataset.flipview)
-        setFlipView(prev => {
-            const boolArr = [...prev]
-            boolArr[index] = !boolArr[index]
-            return boolArr
-        })
-        setCurrentindex(index)
-    }
+
+    // function handleFlipView(e) {
+    //     resetFlipView()
+    //     console.log(e.target.dataset.flipview)
+    //     const index = Number(e.target.dataset.flipview)
+    //     setFlipView(prev => {
+    //         const boolArr = [...prev]
+    //         boolArr[index] = !boolArr[index]
+    //         return boolArr
+    //     })
+    //     setCurrentindex(index)
+    // }
     
     const divStyles = {
-        height: flipView[currentIndex] ? "100px" : "0px",
-        border: flipView[currentIndex] ? "2px solid black" : "none"
+        height: props.flipView[props.currentIndex] ? "100px" : "0px",
+        border: props.flipView[props.currentIndex] ? "2px solid black" : "none"
     }
     
         const currentWorkout = props.data && props.data.length > 0 ? props.data.map((ex, index) => {
@@ -55,16 +61,16 @@ export default function CurrentWorkoutList(props) {
                                 <p className="current-ex-name">{shortenedExName}</p>
                                 { props.editMode && props.alreadySavedWorkout &&
                                 <div>
-                                {!flipView[index] ?
-                                <i onClick={e => handleFlipView(e)} data-flipview={index} style={{transform: flipView[index] ? "rotate(90deg)" : "rotate(0deg)", transition: ".2s ease all"}} className="fa-solid fa-ellipsis-vertical"></i>
+                                {!props.flipView[index] ?
+                                <i onClick={e => props.handleFlipView(e)} data-flipview={index} style={{transform: props.flipView[index] ? "rotate(90deg)" : "rotate(0deg)", transition: ".2s ease all"}} className="fa-solid fa-ellipsis-vertical"></i>
                                 :
-                                <i onClick={e => resetFlipView()} data-flipview={index} style={{transform: flipView[index] ? "rotate(0deg)" : "rotate(90deg)", transition: ".2s ease all"}} className="fa-solid fa-ellipsis"></i>
+                                <i onClick={e => props.resetFlipView()} data-flipview={index} style={{transform: props.flipView[index] ? "rotate(0deg)" : "rotate(90deg)", transition: ".2s ease all"}} className="fa-solid fa-ellipsis"></i>
                                 }
-                                {flipView[index] &&
+                                {props.flipView[index] &&
                                 <div
                                     style={{
-                                        height: flipView[index] ? "auto" : "0px",
-                                        width: flipView[index] ? "100px" : "0px"
+                                        height: props.flipView[index] ? "auto" : "0px",
+                                        width: props.flipView[index] ? "100px" : "0px"
                                     }}
                                     className="ex-detail-div"
                                 >
@@ -91,16 +97,16 @@ export default function CurrentWorkoutList(props) {
                                 }
                                 {!props.alreadySavedWorkout &&
                                     <div>
-                                        {!flipView[index] ?
-                                        <i onClick={e => handleFlipView(e)} data-flipview={index} style={{transform: flipView[index] ? "rotate(90deg)" : "rotate(0deg)", transition: ".2s ease all"}} className="fa-solid fa-ellipsis-vertical"></i>
+                                        {!props.flipView[index] ?
+                                        <i onClick={e => props.handleFlipView(e)} data-flipview={index} style={{transform: props.flipView[index] ? "rotate(90deg)" : "rotate(0deg)", transition: ".2s ease all"}} className="fa-solid fa-ellipsis-vertical"></i>
                                         :
-                                        <i onClick={e => resetFlipView()} data-flipview={index} style={{transform: flipView[index] ? "rotate(0deg)" : "rotate(90deg)", transition: ".2s ease all"}} className="fa-solid fa-ellipsis"></i>
+                                        <i onClick={e => props.resetFlipView()} data-flipview={index} style={{transform: props.flipView[index] ? "rotate(0deg)" : "rotate(90deg)", transition: ".2s ease all"}} className="fa-solid fa-ellipsis"></i>
                                         }
-                                        {flipView[index] &&
+                                        {props.flipView[index] &&
                                         <div
                                             style={{
-                                                height: flipView[index] ? "auto" : "0px",
-                                                width: flipView[index] ? "100px" : "0px"
+                                                height: props.flipView[index] ? "auto" : "0px",
+                                                width: props.flipView[index] ? "100px" : "0px"
                                             }}
                                             className="ex-detail-div"
                                         >
@@ -116,6 +122,8 @@ export default function CurrentWorkoutList(props) {
                                                     className="material-symbols-outlined curr-ex-delete"
                                                     onClick={e => props.toggleDel(e)}
                                                     data-deleteexid={ex.id}
+                                                    // Do I need this data attribute? To flip "flipView" state
+                                                    data-index={index}
                                                 >
                                                     delete
                                                 </span>
