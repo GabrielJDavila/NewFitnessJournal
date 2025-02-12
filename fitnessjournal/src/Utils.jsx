@@ -175,7 +175,7 @@ export function toggleDeleteAllEx(e, setToggleDeleteAllExercisesModal) {
 }
 
 // Toggles delete set or delete exercise modal
-export function toggleDelete(e, setCurrentItemToDelete, setToggleDeleteExModal, setToggleDeleteSetModal) {
+export function toggleDelete(e, setCurrentItemToDelete, setToggleDeleteExModal, setToggleDeleteSetModal, resetFlipView) {
     const exId = e.target.dataset.deleteexid
     const setId = e.target.dataset.deletesetid
     const exOfSetId = e.target.id
@@ -194,6 +194,7 @@ export function toggleDelete(e, setCurrentItemToDelete, setToggleDeleteExModal, 
         setToggleDeleteExModal(false)
         setToggleDeleteSetModal(false)
     }
+    resetFlipView()
 
 }
 

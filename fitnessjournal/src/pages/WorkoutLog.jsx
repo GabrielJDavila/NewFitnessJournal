@@ -67,6 +67,22 @@ export default function WorkoutLog() {
     const [alreadySavedWorkout, setAlreadySavedWorkout] = useState(false)
     const [editMode, setEditMode] = useState(false)
 
+    // check to see if workoutData exists. If it does, map through and filter exercises by date.
+    const filteredDateWorkoutData = workoutData ? workoutData.map(exercise => {
+        const exDate = new Date(exercise.date)
+        exDate.setHours(0, 0, 0, 0)
+        const dateState = new Date(date)
+        dateState.setHours(0, 0, 0, 0)
+        if(exDate.getTime() === dateState.getTime()) {
+            return exercise
+        } else {
+            return null
+        }
+    }).filter(exercise => exercise !== null) : ""
+    
+    const [flipView, setFlipView] = useState(new Array(filteredDateWorkoutData && filteredDateWorkoutData.length).fill(false))
+    const [currentIndex, setCurrentindex] = useState(null)
+
     useEffect(() => {
         setShowSkel(true)
         const fetch = async () => {
@@ -143,19 +159,6 @@ export default function WorkoutLog() {
         loadExerciseList(date)
     }
 
-    // check to see if workoutData exists. If it does, map through and filter exercises by date.
-    const filteredDateWorkoutData = workoutData ? workoutData.map(exercise => {
-        const exDate = new Date(exercise.date)
-        exDate.setHours(0, 0, 0, 0)
-        const dateState = new Date(date)
-        dateState.setHours(0, 0, 0, 0)
-        if(exDate.getTime() === dateState.getTime()) {
-            return exercise
-        } else {
-            return null
-        }
-    }).filter(exercise => exercise !== null) : ""
-
     async function reOrderList(exerciseId, newIndex, userCollection, userId, date) {
         try {
             await reOrderWorkoutList(exerciseId, newIndex, userCollection, userId, date)
@@ -182,6 +185,18 @@ export default function WorkoutLog() {
         setSavedWorkout(false)
     }
 
+    function handleFlipView(e) {
+        resetFlipView()
+        console.log(e.target.dataset.flipview)
+        const index = Number(e.target.dataset.flipview)
+        setFlipView(prev => {
+            const boolArr = [...prev]
+            boolArr[index] = !boolArr[index]
+            return boolArr
+        })
+        setCurrentindex(index)
+    }
+
     // function to check place previous workout dates on corresponding tiles in react calendar
     function tileClassName({ date, view }) {
         const workoutDatesSet = new Set(workoutDatesData)
@@ -204,6 +219,11 @@ export default function WorkoutLog() {
 
     function ToggleDeleteAll() {
         setToggleDeleteAllExercisesModal(prev => !prev)
+    }
+
+    // function to reset flipView to close any existing edit/view modals
+    function resetFlipView() {
+        setFlipView(new Array(flipView.length).fill(false))
     }
 
     function toggleAddSet() {
@@ -679,10 +699,14 @@ export default function WorkoutLog() {
                                         editMode={editMode}
                                         alreadySavedWorkout={alreadySavedWorkout}
                                         handleClick={handleClick}
-                                        toggleDel={e => toggleDelete(e, setCurrentItemToDelete, setToggleDeleteExModal, setToggleDeleteSetModal)}
+                                        toggleDel={e => toggleDelete(e, setCurrentItemToDelete, setToggleDeleteExModal, setToggleDeleteSetModal, resetFlipView)}
                                         toggleEdit={e => toggleEdit(e, setNewSetInfo, setToggleEditSetModal)}
                                         toggleAdd={e => toggleAddSet(e)}
                                         toggleNote={e => toggleNote(e)}
+                                        flipView={flipView}
+                                        currentIndex={currentIndex}
+                                        handleFlipView={handleFlipView}
+                                        resetFlipView={resetFlipView}
                                     />
                                     {provided.placeholder}
                                 </div>
