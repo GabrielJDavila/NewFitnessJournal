@@ -823,6 +823,10 @@ th:last-child, td:last-child {
   z-index: 100;
 }
 
+.fa-ellipsis-vertical {
+  transition: .2s ease-in-out all;
+}
+
 .ex-detail-view-div, .ex-detail-edit-div, .ex-detail-delete-div {
   display: flex;
   flex-direction: row;
@@ -1552,6 +1556,7 @@ th:last-child, td:last-child {
   height: 40px;
   cursor: pointer;
   transition: .2s ease-in-out;
+  padding: 0;
 }
 
 .cancel-cat:hover, .save-cat:hover {

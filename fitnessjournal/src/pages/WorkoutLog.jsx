@@ -187,7 +187,7 @@ export default function WorkoutLog() {
 
     function handleFlipView(e) {
         resetFlipView()
-        console.log(e.target.dataset.flipview)
+        
         const index = Number(e.target.dataset.flipview)
         setFlipView(prev => {
             const boolArr = [...prev]
