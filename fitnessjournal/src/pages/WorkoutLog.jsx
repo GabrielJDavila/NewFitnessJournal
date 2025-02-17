@@ -62,7 +62,7 @@ export default function WorkoutLog() {
     const calendarRef = useRef(null)
     const stringDate = date.toISOString().split("T")[0]
     const [year, month, day] = stringDate.split("-")
-    const formattedDate = `${month}/${day}/${year}`
+    const formattedDate = `${month}/${day}/${year.slice(2)}`
     const [savedWorkout, setSavedWorkout] = useState(false)
     const [alreadySavedWorkout, setAlreadySavedWorkout] = useState(false)
     const [editMode, setEditMode] = useState(false)
@@ -114,8 +114,9 @@ export default function WorkoutLog() {
 
     async function saveWorkout() {
         // this function will save workout to firestore
+        const timer = JSON.parse(localStorage.getItem('timer')) || 0
         try {
-            const result = await saveDataToFirestore(date, usersInDB, currentUser, filteredDateWorkoutData)
+            const result = await saveDataToFirestore(date, usersInDB, currentUser, filteredDateWorkoutData, timer)
             if(result.success) {
                 setSavedWorkout(true)
                 console.log(result.message)
@@ -187,7 +188,7 @@ export default function WorkoutLog() {
 
     function handleFlipView(e) {
         resetFlipView()
-        console.log(e.target.dataset.flipview)
+        
         const index = Number(e.target.dataset.flipview)
         setFlipView(prev => {
             const boolArr = [...prev]
@@ -308,7 +309,7 @@ export default function WorkoutLog() {
     function handleClick(e) {
         setExid(e.target.dataset.exid)
     }
-  
+
     // currently it works to edit sets that are saved in local storage 'exercises',
     // now to make it able to edit exercises saved from firestore.
     async function editSet(e) {
@@ -398,7 +399,7 @@ export default function WorkoutLog() {
     
     function addSetNote(e) {
         e.preventDefault()
-        const workoutData = !alreadySavedWorkout ? JSON.parse(localStorage.getItem('exercises')):
+        const workoutData = !alreadySavedWorkout ? JSON.parse(localStorage.getItem('exercises')) :
         JSON.parse(localStorage.getItem('workoutData'))
 
         if(!alreadySavedWorkout) {
@@ -484,12 +485,12 @@ export default function WorkoutLog() {
                     </span>
                     <p className="link-text">Add To Log</p>
                 </Link>
-                <div className="date-dash">
+                {/* <div className="date-dash">
                     <span className="material-symbols-outlined" onClick={ToggleDeleteAll}>
                         delete
                     </span>
                     <p className="link-text">Delete</p>
-                </div>
+                </div> */}
                 <div onClick={handleToggleTimerModal} className="workout-timer-container date-dash">
                     <span className="material-symbols-outlined">
                         timer
@@ -526,7 +527,9 @@ export default function WorkoutLog() {
                         date,
                         loadExerciseList,
                         toggleDeleteAllEx,
-                        setWorkoutData
+                        setWorkoutData,
+                        alreadySavedWorkout,
+                        clearData
                     },
                     {
                         setToggleDeleteAllExercisesModal
@@ -655,7 +658,7 @@ export default function WorkoutLog() {
                                                     </span>
                                                     <button className="save-workout-btn">Save</button>
                                                 </div>
-                                                <div onClick={clearData} className="save-workout-btn wlbc-item4">
+                                                <div onClick={ToggleDeleteAll} className="save-workout-btn wlbc-item4">
                                                     <span class="material-symbols-outlined">
                                                         close
                                                     </span>
@@ -673,7 +676,15 @@ export default function WorkoutLog() {
                                                     </span>
                                                     <p className="workout-saved-text">Saved!</p>
                                                 </div>
-                                                <div onClick={flipEditMode} className="save-workout-btn wlbc-item4">
+                                                {editMode &&
+                                                <div onClick={ToggleDeleteAll} className="save-workout-btn wlbc-item4">
+                                                    <span class="material-symbols-outlined">
+                                                        close
+                                                    </span>
+                                                    <button className="save-workout-btn">Clear Log</button>
+                                                </div>
+                                                }
+                                                <div onClick={flipEditMode} className="save-workout-btn wlbc-item4 wlbc-edit-btn">
                                                     <span class="material-symbols-outlined">
                                                         edit
                                                     </span>
@@ -687,6 +698,7 @@ export default function WorkoutLog() {
                                             toggleTimer={handleToggleTimerModal}
                                             date={date}
                                             userId={currentUser}
+                                            alreadySavedWorkout={alreadySavedWorkout}
                                         />
                                     }
                                     <p className="workout-saved-text">{savedWorkout && 'Workout saved!'}</p>

@@ -7,16 +7,23 @@ export async function handleDeleteAllExSubmit(e, {
     date,
     loadExerciseList,
     toggleDeleteAllEx,
-    setWorkoutData
+    setWorkoutData,
+    alreadySavedWorkout,
+    clearData
 },
 {
     setToggleDeleteAllExercisesModal
 }) {
     e.preventDefault()
     try {
-        await deleteAllEx(usersInDB, currentUser, date)
-        await loadExerciseList(date)
-        // setWorkoutData([])
+        if(!alreadySavedWorkout) {
+            clearData()
+        } else if(alreadySavedWorkout) {
+            await deleteAllEx(usersInDB, currentUser, date)
+            clearData()
+            await loadExerciseList(date)
+        }
+        
         toggleDeleteAllEx(e, setToggleDeleteAllExercisesModal)
     } catch(err) {
         console.error("error deleting log: ", err)

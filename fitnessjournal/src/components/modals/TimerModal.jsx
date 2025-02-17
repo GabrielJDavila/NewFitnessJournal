@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { saveTimerWorkout, usersInDB } from "../../firebase"
-import { useOutletContext } from "react-router-dom"
+import { json, useOutletContext } from "react-router-dom"
 
 export default function TimerModal(props) {
     const [startTime, setStartTime] = useState(false)
@@ -63,9 +63,10 @@ export default function TimerModal(props) {
 
     function saveTimer() {
         if(timer.seconds > 0) {
-            saveTimerWorkout(usersInDB, props.userId, props.date, timer)
+            !props.alreadySavedWorkout ? localStorage.setItem('timer', JSON.stringify(timer)) : saveTimerWorkout(usersInDB, props.userId, props.date, timer)
             setStartTime(false)
         }
+        console.log(JSON.parse(localStorage.getItem('timer')))
         setShowSavedText(prev => !prev)
     }
 

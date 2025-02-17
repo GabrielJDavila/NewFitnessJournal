@@ -415,7 +415,7 @@ export async function retrieveDoc(collectionType, itemId) {
     return docSnap
 }
 
-export async function saveDataToFirestore(dateInput, userCollection, userId, workoutData) {
+export async function saveDataToFirestore(dateInput, userCollection, userId, workoutData, timer) {
     try {
         const foramttedDate = new Date(dateInput).toISOString().split('T')[0]
         const dateObj = new Date(dateInput)
@@ -426,7 +426,8 @@ export async function saveDataToFirestore(dateInput, userCollection, userId, wor
         const dateOfWorkoutDocRef = doc(workoutCollectionRef, foramttedDate)
 
         await setDoc(dateOfWorkoutDocRef, {
-            createdAt: createdAtTimestamp
+            createdAt: createdAtTimestamp,
+            lengthOfWorkout: timer
         })
 
         const exerciseListRef = collection(dateOfWorkoutDocRef, 'exList')
@@ -996,7 +997,7 @@ export async function deleteAllEx(userCollection, userId, selectedDate) {
     try {
         const dateString = selectedDate.toISOString().split("T")[0]
         const userDocRef = doc(userCollection, userId)
-        const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
+        const currentWorkoutCollectionRef = collection(userDocRef, "savedWorkouts")
         const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, dateString)
 
         const exercisesCollectionRef = collection(dateOfWorkoutDocRef, "exList")
@@ -1004,7 +1005,7 @@ export async function deleteAllEx(userCollection, userId, selectedDate) {
 
         for(const exDoc of currentExListSnapshot.docs) {
             // const exId = exDoc.id
-            const currentExRef = collection(exDoc.ref, "currentEx")
+            const currentExRef = collection(exDoc.ref, "setsAndReps")
             const repsSetsSnapshot = await getDocs(currentExRef)
             for(const setDoc of repsSetsSnapshot.docs) {
                 await deleteDoc(setDoc.ref)
