@@ -766,7 +766,7 @@ th:last-child, td:last-child {
 
 .wlbc-item1, .wlbc-item2, .wlbc-item3, .wlbc-item4 {
   width: 33.33%;
-  padding: 1rem 0;
+  padding: 1rem .5rem;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -778,12 +778,16 @@ th:last-child, td:last-child {
   border-right: 1px solid white;
 }
 
+.wlbc-edit-btn {
+  border-left: 1px solid white;
+}
+
 .save-workout-btn, .save-workout-btn-2 {
   color: white;
   background-color: rgb(59, 119, 157);
   border-radius: 0;
   transition: .2s ease all;
-  padding: 1rem 0;
+  padding: 1rem .5rem;
   display: flex;
   flex-direction: row;
   align-items: center;
