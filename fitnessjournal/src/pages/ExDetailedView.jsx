@@ -67,11 +67,11 @@ export default function ExDetailedView() {
         //     }))
         // }
     }
-
+    console.log(exSetsData.exReps)
     function handleSubmit(e) {
         e.preventDefault()
         if(exSetsData.exReps > 0) {
-            addSetsReps(params.id, exSetsData.exWeight, exSetsData.exReps, "lbs", usersInDB, currentUser)
+            addSetsReps(params.id, exSetsData.exWeight, exSetsData.exReps, usersInDB, currentUser)
             grabExDetailedView()
         }
         

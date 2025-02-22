@@ -546,6 +546,7 @@ export default function WorkoutLog() {
                     exid={exid}
                     loadExerciseList={loadExerciseList}
                     date={date}
+                    alreadySavedWorkout={alreadySavedWorkout}
                 />
             }
 
