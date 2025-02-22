@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react"
-import { useParams, useLocation, useOutletContext } from "react-router-dom"
+import { useParams, useLocation, useOutletContext, useSearchParams } from "react-router-dom"
 import { usersInDB, retrieveExDetailedView, addSetsReps } from "../firebase"
 
 export default function ExDetailedView() {
     const params = useParams()
+    const [searchParams] = useSearchParams()
+    const alreadySavedWorkout = searchParams.get('saved') === 'true'
     const storedDate = localStorage.getItem("selectedDate")
     const [date, setDate] = useState(storedDate ? new Date(storedDate) : new Date())
     const { currentUser } = useOutletContext()
@@ -13,7 +15,7 @@ export default function ExDetailedView() {
         exWeight: 0,
         exReps: 0,
     })
-    console.log(date)
+    
     useEffect(() => {
         grabExDetailedView()
     }, [])
@@ -67,7 +69,11 @@ export default function ExDetailedView() {
         //     }))
         // }
     }
-    console.log(exSetsData.exReps)
+
+    const exLocalStorageData = !alreadySavedWorkout ? JSON.parse(localStorage.getItem('exercises')) : ''
+    const filteredData = exLocalStorageData.filter(ex => ex.id === params.id)
+    console.log(filteredData[0].setsReps)
+
     function handleSubmit(e) {
         e.preventDefault()
         if(exSetsData.exReps > 0) {
@@ -122,7 +128,17 @@ export default function ExDetailedView() {
                 <button className="ex-detail-add-set-btn">Add set</button>
             </form>
             <div className="ex-detail-current-sets">
-                {exData.setsReps && exData.setsReps.length > 0 &&
+                {!alreadySavedWorkout && filteredData[0].setsReps.length > 0 &&
+                    filteredData[0].setsReps.map((set, index) => {
+                        return (
+                            <div key={index} style={{display: "flex", flexDirection: "row", gap: "1rem", justifyContent: "center"}} className="ex-detail-rendered-set">
+                                <p>Weight: {set.weight}</p>
+                                <p>Reps: {set.reps}</p>
+                            </div>
+                        )
+                    })
+                }
+                {alreadySavedWorkout && exData.setsReps && exData.setsReps.length > 0 &&
                     exData.setsReps.map((set, index) => {
                         return (
                             // Turn this into a form element that can be edited. Will send back to firebase to update.

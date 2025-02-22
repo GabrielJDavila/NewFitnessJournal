@@ -74,7 +74,7 @@ export default function CurrentWorkoutList(props) {
                                     }}
                                     className="ex-detail-div"
                                 >
-                                    <Link to={`ExDetailedView/${ex.id}`} state={{ date: props.date }} className="ex-detail-view-div">
+                                    <Link to={`ExDetailedView/${ex.id}?saved=${props.alreadySavedWorkout}`} className="ex-detail-view-div">
                                         <p>View</p>
                                         <span class="material-symbols-outlined curr-ex-view">
                                             visibility

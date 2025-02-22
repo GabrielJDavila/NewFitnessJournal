@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react"
-import { Link, useOutletContext } from "react-router-dom"
+import { Link, useOutletContext, Outlet } from "react-router-dom"
 import { usersInDB, retrieveCurrentExSetsRepsAndPRs, editSingleSet, deleteEx, deleteSingleSet, deleteAllEx, reOrderWorkoutList, retrieveAllWorkouts, AddSetNote, saveDataToFirestore } from "../firebase"
 import ConfirmDeleteAllExModal from "../components/modals/ConfirmDeleteAllEx"
 import ConfirmDeleteExModal from "../components/modals/ConfirmDeleteExModal"
