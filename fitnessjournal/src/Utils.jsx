@@ -39,7 +39,8 @@ export async function handleDeleteExerciseSubmit(e, {
     date,
     currentItemToDelete,
     loadExerciseList,
-    toggleDelete
+    toggleDelete,
+    alreadySavedWorkout
 },
 {
     setCurrentItemToDelete,
@@ -48,8 +49,9 @@ export async function handleDeleteExerciseSubmit(e, {
 }) {
     e.preventDefault()
     try {
-        const workoutData = JSON.parse(localStorage.getItem('exercises'))
-        const updatedWorkoutData = workoutData.filter(exercise => exercise.id !== currentItemToDelete.exIdToDelete)
+        if(!alreadySavedWorkout) {
+            const workoutData = JSON.parse(localStorage.getItem('exercises'))
+            const updatedWorkoutData = workoutData.filter(exercise => exercise.id !== currentItemToDelete.exIdToDelete)
             // check to see if exercise matches. If it does, continue with deletion
             // if(exercise.id === currentItemToDelete.exIdToDelete) {
                 
@@ -60,10 +62,11 @@ export async function handleDeleteExerciseSubmit(e, {
             // }
             // if exercise id does not match, returns exercise unchanged
             // return exercise
-        // })
-        localStorage.setItem('exercises', JSON.stringify(updatedWorkoutData))
-
-    // await deleteEx(usersInDB, currentUser, date, currentItemToDelete.exIdToDelete)
+            // })
+            localStorage.setItem('exercises', JSON.stringify(updatedWorkoutData))
+        } else if(alreadySavedWorkout) {
+            await deleteEx(usersInDB, currentUser, date, currentItemToDelete.exIdToDelete)
+        }
     await loadExerciseList(date)
     toggleDelete(e, setCurrentItemToDelete, setToggleDeleteExModal, setToggleDeleteSetModal)
     } catch(err) {
@@ -182,6 +185,7 @@ export function toggleDeleteAllEx(e, setToggleDeleteAllExercisesModal) {
 }
 
 // Toggles delete set or delete exercise modal
+// FIX DELETE_EX ERROR. I'm passing in resetFlipView here but not when I'm invoking it. Need to fix/optimize.
 export function toggleDelete(e, setCurrentItemToDelete, setToggleDeleteExModal, setToggleDeleteSetModal, resetFlipView) {
     const exId = e.target.dataset.deleteexid
     const setId = e.target.dataset.deletesetid

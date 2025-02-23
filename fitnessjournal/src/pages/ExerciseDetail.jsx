@@ -51,28 +51,31 @@ export default function ExerciseDetail(props) {
                 setIndex: ""
             }
 
-            const workoutData = JSON.parse(localStorage.getItem('exercises')) || []
-            const updatedWorkoutData = workoutData.map(exercise => {
-                const newDate = new Date(newSet.date)
-                const convertedDate = newDate.toISOString()
-                
-                if (exercise.id === props.exid && exercise.date === convertedDate) {
-                    return {
-                        ...exercise,
-                        setsReps: [...(exercise.setsReps || []), newSet]
+            if(!props.alreadySavedWorkout) {
+                const workoutData = JSON.parse(localStorage.getItem('exercises')) || []
+                const updatedWorkoutData = workoutData.map(exercise => {
+                    const newDate = new Date(newSet.date)
+                    const convertedDate = newDate.toISOString()
+                    
+                    if (exercise.id === props.exid && exercise.date === convertedDate) {
+                        return {
+                            ...exercise,
+                            setsReps: [...(exercise.setsReps || []), newSet]
+                        }
                     }
-                }
-                return exercise
-            })
-            // console.log(updatedWorkoutData)
-            localStorage.setItem('exercises', JSON.stringify(updatedWorkoutData))
+                    return exercise
+                })
+                // console.log(updatedWorkoutData)
+                localStorage.setItem('exercises', JSON.stringify(updatedWorkoutData))
+            } else if(props.alreadySavedWorkout) {
+                addSetsReps(props.exid, repsAndWeight.weight, repsAndWeight.reps, usersInDB, currentUser)
+            }
             props.loadExerciseList(props.date)
             // props.setWorkoutDataInStorage(prev => {
             //     prev.map((exercise) => {
             //         console.log(exercise)
             //     })
             // })
-            // addSetsReps(props.exid, repsAndWeight.weight, repsAndWeight.reps, repsAndWeight.weightType, usersInDB, currentUser, date)
             setShowModal(true)
             
         } else {

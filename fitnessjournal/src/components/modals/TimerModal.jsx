@@ -4,13 +4,14 @@ import { json, useOutletContext } from "react-router-dom"
 
 export default function TimerModal(props) {
     const [startTime, setStartTime] = useState(false)
+    // send timer state up a level to WorkoutLog. That way it can be deleted/saved/edited easier.
     const [timer, setTimer] = useState({
         hours: 0,
         minutes: 0,
         seconds: 0
     })
     const [showSavedText, setShowSavedText] = useState(false)
-   
+   console.log(timer)
     useEffect(() => {
         if(startTime) {
             const interval = setInterval(() => {
