@@ -969,17 +969,17 @@ export async function deleteEx(userCollection, userId, selectedDate, exerciseId)
 
         const dateString = selectedDate.toISOString().split("T")[0]
         const userDocRef = doc(userCollection, userId)
-        const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
+        const currentWorkoutCollectionRef = collection(userDocRef, "savedWorkouts")
         const dateOfWorkoutDocRef = doc(currentWorkoutCollectionRef, dateString)
         const exercisesCollectionRef = collection(dateOfWorkoutDocRef, "exList")
         const exDocRef = doc(exercisesCollectionRef, exerciseId)
-        const setsRepsCollectionRef = collection(exDocRef, "currentEx")
+        const setsRepsCollectionRef = collection(exDocRef, "setsAndReps")
         const setsRepsSnapshot = await getDocs(setsRepsCollectionRef)
         // const currentExListSnapshot = await getDocs(exercisesCollectionRef)
 
         for(const exDoc of setsRepsSnapshot.docs) {
             // const exId = exDoc.id
-            const currentExRef = collection(exDoc.ref, "currentEx")
+            const currentExRef = collection(exDoc.ref, "setsAndReps")
             const repsSetsSnapshot = await getDocs(currentExRef)
             for(const setDoc of repsSetsSnapshot.docs) {
                 await deleteDoc(setDoc.ref)

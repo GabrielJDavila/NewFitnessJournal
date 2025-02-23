@@ -582,7 +582,8 @@ export default function WorkoutLog() {
                         date,
                         currentItemToDelete,
                         loadExerciseList,
-                        toggleDelete
+                        toggleDelete,
+                        alreadySavedWorkout
                     },
                     {
                         setCurrentItemToDelete,
