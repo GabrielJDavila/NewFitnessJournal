@@ -155,7 +155,7 @@ export async function handleDeleteSetSubmit(e, {
     currentItemToDelete,
     loadExerciseList,
     toggleDelete,
-    toggleDeleteSetMessage 
+    toggleDeleteSetMessage,
 }, 
 { 
     setCurrentItemToDelete,
