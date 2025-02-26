@@ -1,5 +1,14 @@
+import { useState } from "react"
 
 export default function ProgramIntake() {
+
+    const [formData, setFormData] = useState({
+        currentLevel: "",
+        goals: "",
+        workoutDaysTarget: "",
+        equipment: ""
+    })
+
     return (
         <form className="program-intake-form">
             <h1 className="title">Program Creation</h1>
@@ -23,6 +32,30 @@ export default function ProgramIntake() {
                         <option value="weight-loss">Weight loss</option>
                         <option value="build-muscle">Build Muscle</option>
                         <option value="both">Both</option>
+                    </select>
+                </fieldset>
+
+                <fieldset>
+                    <legend>How many sessions per week would you like to train?</legend>
+                    <p>* Generally, it's recommended to start with an easily attainable frequency of training.
+                        Training should be sustainable!
+                    </p>
+                    <select name="workoutDaysTarget" className="program-select">
+                        <option value="1">1 session</option>
+                        <option value="2">2 sessions</option>
+                        <option value="3">3 sessions (recommended)</option>
+                        <option value="4">4 sessions (recommended)</option>
+                        <option value="5">5 sessions</option>
+                        <option value="6">6 sessions</option>
+                    </select>
+                </fieldset>
+
+                <fieldset>
+                    <legend>What kind of equipment would you be using?</legend>
+                    <select name="equipment" className="program-select">
+                        <option value="commercial-gym">commercial gym equipment (large variety of equipment)</option>
+                        <option value="home-gym">home gym setup (mix of dumbbells, barbells, cables, etc.)</option>
+                        <option value="bodyweight">bodyweight</option>
                     </select>
                 </fieldset>
             </div>

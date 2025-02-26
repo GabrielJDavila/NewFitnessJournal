@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function ProgramSnapshot({currentProgram}) {
@@ -5,7 +6,7 @@ export default function ProgramSnapshot({currentProgram}) {
     return (
         <div className="log-analysis-container">
             <div className="log-analysis">
-                <h2 className="log-analysis-title2">Personal Records</h2>
+                <h2 className="log-analysis-title2">Current Program</h2>
                 <div>
                     {currentProgram ?
                         currentProgram
