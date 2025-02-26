@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function ProgramSnapshot({currentProgram}) {
 
     return (
@@ -10,7 +12,11 @@ export default function ProgramSnapshot({currentProgram}) {
                         :
                         <div>
                             <p>No current program</p>
-                            <button>create a program</button>
+                            <Link to='ProgramIntake'>
+                                <button>
+                                create a program
+                                </button>
+                            </Link>
                         </div>
                     }
                 </div>
