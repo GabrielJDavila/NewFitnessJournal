@@ -154,7 +154,7 @@ export async function queryWorkoutLogs(userCollection, userId) {
         getPastSunday.setHours(0, 0, 0, 0)
         const timstampToCompare = Timestamp.fromDate(getPastSunday)
         const userDocRef = doc(userCollection, userId)
-        const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
+        const currentWorkoutCollectionRef = collection(userDocRef, "savedWorkouts")
         const q = query(currentWorkoutCollectionRef, where("createdAt", ">", timstampToCompare), orderBy("createdAt", "desc"), limit(7))
         const workoutsSnapshot = await getDocs(q)
         const workoutsArr = []

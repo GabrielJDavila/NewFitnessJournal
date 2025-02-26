@@ -12,13 +12,15 @@ import { queryWorkoutLogs } from "../firebase"
 import Button from "@mui/material/Button"
 import { Skeleton } from "@mui/material"
 import Analysis from "./Analysis"
+import ProgramSnapshot from "./ProgramSnapshot"
 
 
 export default function Dashboard() {
     const [totalWorkouts, setTotalWorkouts] = useState()
     const [averageLoggedTime, setAverageLoggedTime] = useState()
     const [newPR, setNewPR] = useState()
-    const [allPRs, setAllPRs] = useState([])
+    const [currentProgram, setCurrentProgram] = useState(false)
+    // const [allPRs, setAllPRs] = useState([])
     const { currentUser } = useOutletContext()
 
     useEffect(() => {
@@ -41,8 +43,8 @@ export default function Dashboard() {
             setTotalWorkouts(data)
             const prData = await grabLatestPR(usersInDB, currentUser)
             setNewPR(prData)
-            const allPRsData = await RetrieveAllPRs(usersInDB, currentUser)
-            setAllPRs(allPRsData)
+            // const allPRsData = await RetrieveAllPRs(usersInDB, currentUser)
+            // setAllPRs(allPRsData)
         } catch(e) {
             console.error("error fetching logged workouts: ", e)
         }
@@ -159,11 +161,11 @@ export default function Dashboard() {
                 }
             </div>
             <div className="dashboard-bottom-container">
-                {allPRs ?
-                    <Analysis
-                        allPRs={allPRs}
-
-                    /> :
+                {totalWorkouts ?
+                    <ProgramSnapshot 
+                        currentProgram={currentProgram}
+                    />
+                    :
                     <div className="log-container">
                         <div className="log-title-container">
                             <Skeleton variant="circular" width={25} height={25}/>
