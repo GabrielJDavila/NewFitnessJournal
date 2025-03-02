@@ -154,7 +154,7 @@ export async function queryWorkoutLogs(userCollection, userId) {
         getPastSunday.setHours(0, 0, 0, 0)
         const timstampToCompare = Timestamp.fromDate(getPastSunday)
         const userDocRef = doc(userCollection, userId)
-        const currentWorkoutCollectionRef = collection(userDocRef, "currentWorkout")
+        const currentWorkoutCollectionRef = collection(userDocRef, "savedWorkouts")
         const q = query(currentWorkoutCollectionRef, where("createdAt", ">", timstampToCompare), orderBy("createdAt", "desc"), limit(7))
         const workoutsSnapshot = await getDocs(q)
         const workoutsArr = []
@@ -249,12 +249,12 @@ export async function addNewCat(userCollection, userId, newCat) {
             })
             return {
                 success: true,
-                message: `Exercise ${capitalizedCat} added successfully.`
+                message: `Category ${capitalizedCat} added successfully.`
             }
         } else {
             return {
                 success: false,
-                message: `Exercise ${capitalizedCat} already exists.`
+                message: `Category ${capitalizedCat} already exists.`
             }
         }
         

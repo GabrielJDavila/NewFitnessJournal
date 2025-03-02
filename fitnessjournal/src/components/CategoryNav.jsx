@@ -61,11 +61,10 @@ export default function CategoryNav(props) {
         }
     }
 
-    function flipCatModal(catFlip) {
-        if(catFlip) {
+    function flipCatModal() {
             setCloseCatToggle(true)
+            setToggleNewCatModal(false)
             console.log("cat flipped")
-        }
     }
 
     return (

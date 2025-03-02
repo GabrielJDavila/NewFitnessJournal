@@ -681,9 +681,33 @@ th:last-child, td:last-child {
   border-radius: 50px;
 }
 
+/* ========= Program Intake Form Styles ========== */
+.program-intake-form {
+  margin-top: 6rem;
+  padding: 1rem;
+}
+
+.title {
+  font-size: 2rem;
+}
+
+.program-intake-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: 3rem;
+  margin-top: 1rem;
+}
+
+.program-select {
+  width: 100%;
+  margin: auto;
+  text-align: center;
+}
+
 /* ======= WorkoutLogLayout Styles ========= */
 .link-btn {
-  color: white;;
+  color: white;
 }
 
 .no-current-workout-container {

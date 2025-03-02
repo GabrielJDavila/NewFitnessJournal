@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useOutletContext } from "react-router-dom"
 import { addNewCat, usersInDB } from "../firebase"
 
@@ -7,16 +7,23 @@ export default function NewCat(props) {
     const [newCatName, setNewCatName] = useState({
         name: ""
     })
-    console.log(message)
     const { currentUser } = useOutletContext()
-
+    console.log(message)
+    useEffect(() => {
+        if(message) {
+            const timeout = setTimeout(() => {
+                props.flipCatModal()
+            }, 2000)
+    
+            return () => clearTimeout(timeout)
+        }
+    }, [message])
     async function handleSubmit(e) {
         e.preventDefault()
         try {
             const result = await addNewCat(usersInDB, currentUser, newCatName.name)
             if(result.success) {
                 setMessage(result.message)
-                props.flipCatModal(catFlip)
                 props.loadCats()
             } else {
                 setMessage(result.message)
