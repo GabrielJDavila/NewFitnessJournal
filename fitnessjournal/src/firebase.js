@@ -249,12 +249,12 @@ export async function addNewCat(userCollection, userId, newCat) {
             })
             return {
                 success: true,
-                message: `Exercise ${capitalizedCat} added successfully.`
+                message: `Category ${capitalizedCat} added successfully.`
             }
         } else {
             return {
                 success: false,
-                message: `Exercise ${capitalizedCat} already exists.`
+                message: `Category ${capitalizedCat} already exists.`
             }
         }
         
