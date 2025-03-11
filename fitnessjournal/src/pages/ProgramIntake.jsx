@@ -9,6 +9,13 @@ export default function ProgramIntake() {
         equipment: ""
     })
 
+    function handleChange(name, value) {
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }))
+    }
+    console.log(formData)
     return (
         <form className="program-intake-form">
             <h1 className="title">Program Creation</h1>
@@ -18,7 +25,13 @@ export default function ProgramIntake() {
                     <p>* Note: years of lifting experience doesn't necessarily equate to experience level.
                         If you find that you have multiple years of experience but gains are more in line with
                         a certain category, pick the appropriate one.</p>
-                    <select name="trainingLevel" className="program-select">
+                    <select
+                        name="currentLevel"
+                        className="program-select"
+                        value={formData.currentLevel}
+                        onChange={e => handleChange(e.target.name, e.target.value)}
+                    >
+                        <option value="">--Please choose an option--</option>
                         <option value="beginner">Beginner (no experience)</option>
                         <option value="novice">Novice (6 months - 1 year experience)</option>
                         <option value="intermediate">Intermediate (1 - 3 years experience)</option>
@@ -28,7 +41,13 @@ export default function ProgramIntake() {
 
                 <fieldset>
                     <legend>Goals:</legend>
-                    <select name="goals" className="program-select">
+                    <select
+                        name="goals"
+                        className="program-select"
+                        value={formData.goals}
+                        onChange={e => handleChange(e.target.name, e.target.value)}
+                    >
+                        <option value="">--Please choose an option--</option>
                         <option value="weight-loss">Weight loss</option>
                         <option value="build-muscle">Build Muscle</option>
                         <option value="both">Both</option>
@@ -40,7 +59,13 @@ export default function ProgramIntake() {
                     <p>* Generally, it's recommended to start with an easily attainable frequency of training.
                         Training should be sustainable!
                     </p>
-                    <select name="workoutDaysTarget" className="program-select">
+                    <select
+                        name="workoutDaysTarget"
+                        className="program-select"
+                        value={formData.workoutDaysTarget}
+                        onChange={e => handleChange(e.target.name, e.target.value)}
+                    >
+                        <option value="">--Please choose an option--</option>
                         <option value="1">1 session</option>
                         <option value="2">2 sessions</option>
                         <option value="3">3 sessions (recommended)</option>
@@ -52,7 +77,13 @@ export default function ProgramIntake() {
 
                 <fieldset>
                     <legend>What kind of equipment would you be using?</legend>
-                    <select name="equipment" className="program-select">
+                    <select
+                        name="equipment"
+                        className="program-select"
+                        value={formData.equipment}
+                        onChange={e => handleChange(e.target.name, e.target.value)}
+                    >
+                        <option value="">--Please choose an option--</option>
                         <option value="commercial-gym">commercial gym equipment (large variety of equipment)</option>
                         <option value="home-gym">home gym setup (mix of dumbbells, barbells, cables, etc.)</option>
                         <option value="bodyweight">bodyweight</option>
