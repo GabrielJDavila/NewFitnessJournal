@@ -705,6 +705,11 @@ th:last-child, td:last-child {
   text-align: center;
 }
 
+/* ========== Program Preview =========== */
+.program-preview {
+  margin-top: 6rem;
+}
+
 /* ======= WorkoutLogLayout Styles ========= */
 .link-btn {
   color: white;

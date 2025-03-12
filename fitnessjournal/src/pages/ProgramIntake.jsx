@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 export default function ProgramIntake() {
 
@@ -8,6 +9,7 @@ export default function ProgramIntake() {
         workoutDaysTarget: "",
         equipment: ""
     })
+    let navigate = useNavigate()
 
     function handleChange(name, value) {
         setFormData(prev => ({
@@ -15,9 +17,14 @@ export default function ProgramIntake() {
             [name]: value
         }))
     }
-    console.log(formData)
+    
+    function handleSubmit(e) {
+        e.preventDefault()
+
+        navigate("/program-preview")
+    }
     return (
-        <form className="program-intake-form">
+        <form onSubmit={handleSubmit} className="program-intake-form">
             <h1 className="title">Program Creation</h1>
             <div className="program-intake-container">
                 <fieldset>
@@ -90,6 +97,7 @@ export default function ProgramIntake() {
                     </select>
                 </fieldset>
             </div>
+            <button>Create Routine</button>
         </form>
     )
 }
