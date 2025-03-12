@@ -55,9 +55,10 @@ export default function ProgramIntake() {
                         onChange={e => handleChange(e.target.name, e.target.value)}
                     >
                         <option value="">--Please choose an option--</option>
-                        <option value="weight-loss">Weight loss</option>
-                        <option value="build-muscle">Build Muscle</option>
-                        <option value="both">Both</option>
+                        <option value="weight loss">Weight loss</option>
+                        <option value="build strength">Strength</option>
+                        <option value="build muscle">Hypertrophy</option>
+                        <option value="build endurance">Endurance</option>
                     </select>
                 </fieldset>
 
@@ -96,6 +97,11 @@ export default function ProgramIntake() {
                         <option value="bodyweight">bodyweight</option>
                     </select>
                 </fieldset>
+
+                {/* instead of having a fieldset for injury considerations, I should just offer
+                    the alternative when user is viewing exercises. So on workout log, there should
+                    be an option to swap exercises for common injuries - knee, shoulder, low back, etc.
+                */}
             </div>
             <button>Create Routine</button>
         </form>
