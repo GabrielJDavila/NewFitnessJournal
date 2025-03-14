@@ -7,11 +7,22 @@ export default function ProgramIntake() {
         currentLevel: "",
         goals: "",
         workoutDaysTarget: "",
-        equipment: ""
+        equipment: []
     })
     let navigate = useNavigate()
+    console.log(formData.equipment)
+    function handleChange() {
+        const { name, value, type, checked } = event.target
 
-    function handleChange(name, value) {
+        if(type === "checkbox") {
+            setFormData(prev => ({
+                ...prev,
+                equipment: checked
+                ? [...prev.equipment, value]
+                : prev.equipment.filter(equip => equip !== value)
+            }))
+        }
+
         setFormData(prev => ({
             ...prev,
             [name]: value
@@ -83,9 +94,67 @@ export default function ProgramIntake() {
                     </select>
                 </fieldset>
 
-                <fieldset>
+                <fieldset className="equipment-fieldset">
                     <legend>What kind of equipment would you be using?</legend>
-                    <select
+                    <p>* Select all that apply.</p>
+                    <div className="checkbox-container">
+                        <div className="checkbox-div">
+                            <input
+                                id="machines"
+                                type="checkbox"
+                                value="machines"
+                                onChange={handleChange}
+                                checked={formData.equipment.includes("machines")}
+                            />
+                            <label htmlFor="machines">Machines</label>
+                        </div>
+
+                        <div className="checkbox-div">
+                            <input
+                                id="barbells"
+                                type="checkbox"
+                                value="barbells"
+                                onChange={handleChange}
+                                checked={formData.equipment.includes("barbells")}
+                            />
+                            <label htmlFor="barbells">Barbells</label>
+                        </div>
+
+                        <div className="checkbox-div">
+                            <input
+                                id="dumbbells"
+                                type="checkbox"
+                                value="dumbbells"
+                                onChange={handleChange}
+                                checked={formData.equipment.includes("dumbbells")}
+                            />
+                            <label htmlFor="dumbbells">Dumbells</label>
+                        </div>
+                        
+                        <div className="checkbox-div">
+                            <input
+                                id="kettlebells"
+                                type="checkbox"
+                                value="kettlebells"
+                                onChange={handleChange}
+                                checked={formData.equipment.includes("kettlebells")}
+                            />
+                            <label htmlFor="Kettlebells">Kettlebells</label>
+                        </div>
+                        
+                        <div className="checkbox-div">
+                            <input
+                                id="bodyweight"
+                                type="checkbox"
+                                value="bodyweight"
+                                onChange={handleChange}
+                                checked={formData.equipment.includes("bodyweight")}
+                            />
+                            <label htmlFor="bodyweight">Bodyweight</label>
+                        </div>
+                    </div>
+                    
+                    {/* <select
                         name="equipment"
                         className="program-select"
                         value={formData.equipment}
@@ -95,7 +164,7 @@ export default function ProgramIntake() {
                         <option value="commercial-gym">commercial gym equipment (large variety of equipment)</option>
                         <option value="home-gym">home gym setup (mix of dumbbells, barbells, cables, etc.)</option>
                         <option value="bodyweight">bodyweight</option>
-                    </select>
+                    </select> */}
                 </fieldset>
 
                 {/* instead of having a fieldset for injury considerations, I should just offer

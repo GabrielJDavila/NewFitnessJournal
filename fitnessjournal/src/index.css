@@ -705,6 +705,21 @@ th:last-child, td:last-child {
   text-align: center;
 }
 
+.equipment-fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+}
+
+.checkbox-container {
+  margin: 1rem 0;
+}
+
+.checkbox-div {
+  display: flex;
+  gap: .5rem;
+}
+
 /* ========== Program Preview =========== */
 .program-preview {
   margin-top: 6rem;
