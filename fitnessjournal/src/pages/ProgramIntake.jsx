@@ -1,5 +1,7 @@
-import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useState, useEffect } from "react"
+import { useNavigate, useOutletContext } from "react-router-dom"
+import { createWorkoutRoutines, usersInDB } from "../firebase"
+import { WorkoutRoutines } from "../ex-programs"
 
 export default function ProgramIntake() {
 
@@ -9,8 +11,21 @@ export default function ProgramIntake() {
         workoutDaysTarget: "",
         equipment: []
     })
+    const { currentUser } = useOutletContext()
     let navigate = useNavigate()
-    console.log(formData.equipment)
+    
+    async function loadData() {
+        try {
+            const data = await createWorkoutRoutines(usersInDB, currentUser, WorkoutRoutines)
+        } catch(e) {
+            console.log("error retrieving data: ", e)
+        }
+    }
+
+    useEffect(() => {
+        loadData() 
+    }, [])
+
     function handleChange() {
         const { name, value, type, checked } = event.target
 
@@ -31,7 +46,7 @@ export default function ProgramIntake() {
     
     function handleSubmit(e) {
         e.preventDefault()
-
+        loadData()
         navigate("/program-preview")
     }
     return (

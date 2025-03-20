@@ -20,6 +20,7 @@ import {
 } from "firebase/firestore"
 import { connectAuthEmulator, createUserWithEmailAndPassword, fetchSignInMethodsForEmail, getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth"
 import { exerciseData } from "./exerciseData"
+// import { WorkoutRoutines } from "./ex-programs"
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -204,6 +205,31 @@ export async function searchAllExercises(userCollection, userId, searchQuery) {
         }
     }
     return exList
+}
+
+export async function createWorkoutRoutines(userCollection, userId, WorkoutRoutines) {
+    try {
+        for(const routine of WorkoutRoutines) {
+            const programType = routine.programType
+            const userDocRef = doc(userCollection, userId)
+            const workoutRoutinesCollectionRef = collection(userDocRef, "preMadeRoutines")
+            const workoutTemplateDocRef = doc(workoutRoutinesCollectionRef)
+            const newWorkoutDocRef = await setDoc(workoutTemplateDocRef, {
+                name: programType
+            })
+
+            for(const workoutDay of routine.days) {
+                const workoutOfWeek = workoutDay.day
+                const workoutDaysCollection = collection(workoutTemplateDocRef, "days")
+                // for(const exercise of workoutDay.exercises) {
+
+                // }
+            }
+        }
+    }
+    catch(err) {
+        console.error("error adding routines to firestore: ", err)
+    }
 }
 
 export async function getExistingCatsAndEx(userId, existingCatsCollection, userCollection, exerciseData) {
