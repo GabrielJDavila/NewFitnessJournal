@@ -208,23 +208,30 @@ export async function searchAllExercises(userCollection, userId, searchQuery) {
 }
 
 export async function createWorkoutRoutines(userCollection, userId, WorkoutRoutines) {
+    console.log(WorkoutRoutines)
     try {
         for(const routine of WorkoutRoutines) {
+       
             const programType = routine.programType
             const userDocRef = doc(userCollection, userId)
             const workoutRoutinesCollectionRef = collection(userDocRef, "preMadeRoutines")
             const workoutTemplateDocRef = doc(workoutRoutinesCollectionRef)
-            const newWorkoutDocRef = await setDoc(workoutTemplateDocRef, {
-                name: programType
-            })
-
-            for(const workoutDay of routine.days) {
-                const workoutOfWeek = workoutDay.day
-                const workoutDaysCollection = collection(workoutTemplateDocRef, "days")
-                // for(const exercise of workoutDay.exercises) {
-
+            const q = query(workoutRoutinesCollectionRef, where("name", "==", routine.programType))
+            const querySnapshot = await getDocs(q)
+            if(querySnapshot.empty) {
+                await setDoc(workoutTemplateDocRef, {
+                    name: programType
+                })
+    
+                // for(const workoutDay of routine.days) {
+                //     const workoutOfWeek = workoutDay.day
+                //     const workoutDaysCollection = collection(workoutTemplateDocRef, "days")
+                //     // for(const exercise of workoutDay.exercises) {
+    
+                //     // }
                 // }
             }
+            
         }
     }
     catch(err) {
