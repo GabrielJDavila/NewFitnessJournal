@@ -208,7 +208,6 @@ export async function searchAllExercises(userCollection, userId, searchQuery) {
 }
 
 export async function createWorkoutRoutines(userCollection, userId, WorkoutRoutines) {
-    console.log(WorkoutRoutines)
     try {
         for(const routine of WorkoutRoutines) {
        
@@ -254,6 +253,29 @@ export async function createWorkoutRoutines(userCollection, userId, WorkoutRouti
         console.error("error adding routines to firestore: ", err)
     }
 }
+
+export async function previewWorkoutRoutines(userId, userCollection) {
+    let loadedWorkoutRoutines = []
+    try {
+        const userDocRef = doc(userCollection, userId)
+        const preMadeWorkoutCollectionRef = collection(userDocRef, "preMadeRoutines")
+        const programListQuery = query(preMadeWorkoutCollectionRef)
+        const programListSnapshot = await getDocs(programListQuery)
+
+        programListSnapshot.forEach(programDoc => {
+            let programDocData = {
+                programType: programDoc.data().name,
+                workoutDays: []
+            }
+            console.log(programDocData)
+
+            // loadedWorkoutRoutines.push(programDoc.id)
+        })
+
+    } catch(err) {
+        console.error("error loading routines from firestore: ", err)
+    }
+} 
 
 export async function getExistingCatsAndEx(userId, existingCatsCollection, userCollection, exerciseData) {
     try {
