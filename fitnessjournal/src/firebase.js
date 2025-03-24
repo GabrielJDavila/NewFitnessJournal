@@ -216,20 +216,36 @@ export async function createWorkoutRoutines(userCollection, userId, WorkoutRouti
             const userDocRef = doc(userCollection, userId)
             const workoutRoutinesCollectionRef = collection(userDocRef, "preMadeRoutines")
             const workoutTemplateDocRef = doc(workoutRoutinesCollectionRef)
-            const q = query(workoutRoutinesCollectionRef, where("name", "==", routine.programType))
+            const q = query(workoutRoutinesCollectionRef, where("name", "==", programType))
             const querySnapshot = await getDocs(q)
             if(querySnapshot.empty) {
                 await setDoc(workoutTemplateDocRef, {
                     name: programType
                 })
     
-                // for(const workoutDay of routine.days) {
-                //     const workoutOfWeek = workoutDay.day
-                //     const workoutDaysCollection = collection(workoutTemplateDocRef, "days")
-                //     // for(const exercise of workoutDay.exercises) {
-    
-                //     // }
-                // }
+                for(const workoutDay of routine.days) {
+                    const workoutOfTheDay = workoutDay.day
+                    const workoutDaysCollection = collection(workoutTemplateDocRef, "workoutDays")
+                    const workoutDayTemplateDocRef = doc(workoutDaysCollection)
+                    const daysQuery = query(workoutDaysCollection, where("name", "==", workoutOfTheDay))
+                    const workoutQuerySnapshot = await getDocs(daysQuery)
+                    if(workoutQuerySnapshot.empty) {
+                        await setDoc(workoutDayTemplateDocRef, {
+                            name: workoutOfTheDay
+                        })
+
+                        for(const exercise of workoutDay.exercises) {
+                            const exCollectionRef = collection(workoutDayTemplateDocRef, "exercises")
+                            const exDocRef = doc(exCollectionRef)
+                            await setDoc(exDocRef, {
+                                order: exercise.order,
+                                name: exercise.name,
+                                goalSets: exercise.goalSets,
+                                goalReps: exercise.goalReps
+                            })
+                        }
+                    }
+                }
             }
             
         }
