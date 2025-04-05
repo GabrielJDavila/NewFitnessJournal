@@ -259,19 +259,51 @@ export async function previewWorkoutRoutines(userId, userCollection) {
     try {
         const userDocRef = doc(userCollection, userId)
         const preMadeWorkoutCollectionRef = collection(userDocRef, "preMadeRoutines")
-        const programListQuery = query(preMadeWorkoutCollectionRef)
-        const programListSnapshot = await getDocs(programListQuery)
+        // const programListQuery = query(preMadeWorkoutCollectionRef)
+        const programListSnapshot = await getDocs(preMadeWorkoutCollectionRef)
 
-        programListSnapshot.forEach(programDoc => {
+        for(const programDoc of programListSnapshot.docs) {
             let programDocData = {
                 programType: programDoc.data().name,
                 workoutDays: []
             }
-            console.log(programDocData)
 
+            const workoutDaysRef = collection(programDoc.ref, "workoutDays")
+            // const workoutDayQuery = query(workoutDaysRef)
+            const workoutDaysSnapshot = await getDocs(workoutDaysRef)
+
+            for(const workoutDayDoc of workoutDaysSnapshot.docs) {
+                let workoutDayData = {
+                    order: workoutDayDoc.data().order,
+                    day: workoutDayDoc.data().name,
+                    exercises: []
+                }
+
+                const exercisesRef = collection(workoutDayDoc.ref, "exercises")
+                const exercisesSnapshot = await getDocs(exercisesRef)
+
+                for(const exerciseDoc of exercisesSnapshot.docs) {
+                    let exerciseData = {
+                        order: exerciseDoc.data().order,
+                        name: exerciseDoc.data().name,
+                        goalSets: exerciseDoc.data().goalSets,
+                        goalReps: exerciseDoc.data().goalReps
+                    }
+
+                    workoutDayData.exercises.push(exerciseData)
+                }
+                
+                programDocData.workoutDays.push(workoutDayData)
+            }
+
+            loadedWorkoutRoutines.push(programDocData)
+            // now forEach workoutDays collection, and push days
+            // to workoutDays array for that specific programDocData obj.
+            // Then, push object to loadedWorkoutRoutines array.
             // loadedWorkoutRoutines.push(programDoc.id)
-        })
-
+        }
+        
+        console.log(loadedWorkoutRoutines)
     } catch(err) {
         console.error("error loading routines from firestore: ", err)
     }
