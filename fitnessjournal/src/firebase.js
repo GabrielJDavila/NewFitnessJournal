@@ -303,7 +303,7 @@ export async function previewWorkoutRoutines(userId, userCollection) {
             // loadedWorkoutRoutines.push(programDoc.id)
         }
         
-        console.log(loadedWorkoutRoutines)
+        return loadedWorkoutRoutines
     } catch(err) {
         console.error("error loading routines from firestore: ", err)
     }

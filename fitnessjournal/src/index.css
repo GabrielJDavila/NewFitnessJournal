@@ -722,7 +722,33 @@ th:last-child, td:last-child {
 
 /* ========== Program Preview =========== */
 .program-preview {
-  margin-top: 6rem;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* ========== Spinner =========== */
+
+.spinner {
+  width: 200px;
+  height: 200px;
+  border: 12px solid #f3f3f3;
+  border-top: 12px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* ======= WorkoutLogLayout Styles ========= */
