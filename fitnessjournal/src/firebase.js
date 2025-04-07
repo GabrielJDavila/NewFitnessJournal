@@ -20,6 +20,7 @@ import {
 } from "firebase/firestore"
 import { connectAuthEmulator, createUserWithEmailAndPassword, fetchSignInMethodsForEmail, getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth"
 import { exerciseData } from "./exerciseData"
+// import { WorkoutRoutines } from "./ex-programs"
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -205,6 +206,108 @@ export async function searchAllExercises(userCollection, userId, searchQuery) {
     }
     return exList
 }
+
+export async function createWorkoutRoutines(userCollection, userId, WorkoutRoutines) {
+    try {
+        for(const routine of WorkoutRoutines) {
+       
+            const programType = routine.programType
+            const userDocRef = doc(userCollection, userId)
+            const workoutRoutinesCollectionRef = collection(userDocRef, "preMadeRoutines")
+            const workoutTemplateDocRef = doc(workoutRoutinesCollectionRef)
+            const q = query(workoutRoutinesCollectionRef, where("name", "==", programType))
+            const querySnapshot = await getDocs(q)
+            if(querySnapshot.empty) {
+                await setDoc(workoutTemplateDocRef, {
+                    name: programType
+                })
+    
+                for(const workoutDay of routine.days) {
+                    const workoutOfTheDay = workoutDay.day
+                    const workoutDaysCollection = collection(workoutTemplateDocRef, "workoutDays")
+                    const workoutDayTemplateDocRef = doc(workoutDaysCollection)
+                    const daysQuery = query(workoutDaysCollection, where("name", "==", workoutOfTheDay))
+                    const workoutQuerySnapshot = await getDocs(daysQuery)
+                    if(workoutQuerySnapshot.empty) {
+                        await setDoc(workoutDayTemplateDocRef, {
+                            name: workoutOfTheDay
+                        })
+
+                        for(const exercise of workoutDay.exercises) {
+                            const exCollectionRef = collection(workoutDayTemplateDocRef, "exercises")
+                            const exDocRef = doc(exCollectionRef)
+                            await setDoc(exDocRef, {
+                                order: exercise.order,
+                                name: exercise.name,
+                                goalSets: exercise.goalSets,
+                                goalReps: exercise.goalReps
+                            })
+                        }
+                    }
+                }
+            }
+            
+        }
+    }
+    catch(err) {
+        console.error("error adding routines to firestore: ", err)
+    }
+}
+
+export async function previewWorkoutRoutines(userId, userCollection) {
+    let loadedWorkoutRoutines = []
+    try {
+        const userDocRef = doc(userCollection, userId)
+        const preMadeWorkoutCollectionRef = collection(userDocRef, "preMadeRoutines")
+        // const programListQuery = query(preMadeWorkoutCollectionRef)
+        const programListSnapshot = await getDocs(preMadeWorkoutCollectionRef)
+
+        for(const programDoc of programListSnapshot.docs) {
+            let programDocData = {
+                programType: programDoc.data().name,
+                workoutDays: []
+            }
+
+            const workoutDaysRef = collection(programDoc.ref, "workoutDays")
+            // const workoutDayQuery = query(workoutDaysRef)
+            const workoutDaysSnapshot = await getDocs(workoutDaysRef)
+
+            for(const workoutDayDoc of workoutDaysSnapshot.docs) {
+                let workoutDayData = {
+                    order: workoutDayDoc.data().order,
+                    day: workoutDayDoc.data().name,
+                    exercises: []
+                }
+
+                const exercisesRef = collection(workoutDayDoc.ref, "exercises")
+                const exercisesSnapshot = await getDocs(exercisesRef)
+
+                for(const exerciseDoc of exercisesSnapshot.docs) {
+                    let exerciseData = {
+                        order: exerciseDoc.data().order,
+                        name: exerciseDoc.data().name,
+                        goalSets: exerciseDoc.data().goalSets,
+                        goalReps: exerciseDoc.data().goalReps
+                    }
+
+                    workoutDayData.exercises.push(exerciseData)
+                }
+                
+                programDocData.workoutDays.push(workoutDayData)
+            }
+
+            loadedWorkoutRoutines.push(programDocData)
+            // now forEach workoutDays collection, and push days
+            // to workoutDays array for that specific programDocData obj.
+            // Then, push object to loadedWorkoutRoutines array.
+            // loadedWorkoutRoutines.push(programDoc.id)
+        }
+        
+        return loadedWorkoutRoutines
+    } catch(err) {
+        console.error("error loading routines from firestore: ", err)
+    }
+} 
 
 export async function getExistingCatsAndEx(userId, existingCatsCollection, userCollection, exerciseData) {
     try {

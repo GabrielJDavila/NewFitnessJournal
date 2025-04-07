@@ -24,6 +24,7 @@ import ExDetailedViewLayout from "./components/ExDetailedViewLayout"
 import ExDetailedView from "./pages/ExDetailedView"
 import ExDetailedHistory from "./pages/ExDetailedHistory"
 import ProgramIntake from "./pages/ProgramIntake"
+import ProgramPreview from "./ProgramPreview"
 
 function App() {
 
@@ -35,6 +36,7 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route index element={<Dashboard />} />
             <Route path="ProgramIntake" element={<ProgramIntake />} />
+            <Route path="program-preview" element={<ProgramPreview />} />
             <Route path="Settings" element={<SettingsLayout />}>
               <Route index element={<Settings />} />
               <Route path="UserProfile" element={<UserProfile />} />

@@ -1,4 +1,7 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useNavigate, useOutletContext } from "react-router-dom"
+import { createWorkoutRoutines, usersInDB } from "../firebase"
+import { WorkoutRoutines } from "../ex-programs"
 
 export default function ProgramIntake() {
 
@@ -6,18 +9,48 @@ export default function ProgramIntake() {
         currentLevel: "",
         goals: "",
         workoutDaysTarget: "",
-        equipment: ""
+        equipment: []
     })
+    const { currentUser } = useOutletContext()
+    let navigate = useNavigate()
+    
+    async function loadData() {
+        try {
+            const data = await createWorkoutRoutines(usersInDB, currentUser, WorkoutRoutines)
+        } catch(e) {
+            console.log("error retrieving data: ", e)
+        }
+    }
 
-    function handleChange(name, value) {
+    useEffect(() => {
+        loadData() 
+    }, [])
+
+    function handleChange() {
+        const { name, value, type, checked } = event.target
+
+        if(type === "checkbox") {
+            setFormData(prev => ({
+                ...prev,
+                equipment: checked
+                ? [...prev.equipment, value]
+                : prev.equipment.filter(equip => equip !== value)
+            }))
+        }
+
         setFormData(prev => ({
             ...prev,
             [name]: value
         }))
     }
-    console.log(formData)
+    
+    function handleSubmit(e) {
+        e.preventDefault()
+        loadData()
+        navigate("/program-preview")
+    }
     return (
-        <form className="program-intake-form">
+        <form onSubmit={handleSubmit} className="program-intake-form">
             <h1 className="title">Program Creation</h1>
             <div className="program-intake-container">
                 <fieldset>
@@ -48,9 +81,10 @@ export default function ProgramIntake() {
                         onChange={e => handleChange(e.target.name, e.target.value)}
                     >
                         <option value="">--Please choose an option--</option>
-                        <option value="weight-loss">Weight loss</option>
-                        <option value="build-muscle">Build Muscle</option>
-                        <option value="both">Both</option>
+                        <option value="weight loss">Weight loss</option>
+                        <option value="build strength">Strength</option>
+                        <option value="build muscle">Hypertrophy</option>
+                        <option value="build endurance">Endurance</option>
                     </select>
                 </fieldset>
 
@@ -75,9 +109,67 @@ export default function ProgramIntake() {
                     </select>
                 </fieldset>
 
-                <fieldset>
+                <fieldset className="equipment-fieldset">
                     <legend>What kind of equipment would you be using?</legend>
-                    <select
+                    <p>* Select all that apply.</p>
+                    <div className="checkbox-container">
+                        <div className="checkbox-div">
+                            <input
+                                id="machines"
+                                type="checkbox"
+                                value="machines"
+                                onChange={handleChange}
+                                checked={formData.equipment.includes("machines")}
+                            />
+                            <label htmlFor="machines">Machines</label>
+                        </div>
+
+                        <div className="checkbox-div">
+                            <input
+                                id="barbells"
+                                type="checkbox"
+                                value="barbells"
+                                onChange={handleChange}
+                                checked={formData.equipment.includes("barbells")}
+                            />
+                            <label htmlFor="barbells">Barbells</label>
+                        </div>
+
+                        <div className="checkbox-div">
+                            <input
+                                id="dumbbells"
+                                type="checkbox"
+                                value="dumbbells"
+                                onChange={handleChange}
+                                checked={formData.equipment.includes("dumbbells")}
+                            />
+                            <label htmlFor="dumbbells">Dumbells</label>
+                        </div>
+                        
+                        <div className="checkbox-div">
+                            <input
+                                id="kettlebells"
+                                type="checkbox"
+                                value="kettlebells"
+                                onChange={handleChange}
+                                checked={formData.equipment.includes("kettlebells")}
+                            />
+                            <label htmlFor="Kettlebells">Kettlebells</label>
+                        </div>
+                        
+                        <div className="checkbox-div">
+                            <input
+                                id="bodyweight"
+                                type="checkbox"
+                                value="bodyweight"
+                                onChange={handleChange}
+                                checked={formData.equipment.includes("bodyweight")}
+                            />
+                            <label htmlFor="bodyweight">Bodyweight</label>
+                        </div>
+                    </div>
+                    
+                    {/* <select
                         name="equipment"
                         className="program-select"
                         value={formData.equipment}
@@ -87,9 +179,15 @@ export default function ProgramIntake() {
                         <option value="commercial-gym">commercial gym equipment (large variety of equipment)</option>
                         <option value="home-gym">home gym setup (mix of dumbbells, barbells, cables, etc.)</option>
                         <option value="bodyweight">bodyweight</option>
-                    </select>
+                    </select> */}
                 </fieldset>
+
+                {/* instead of having a fieldset for injury considerations, I should just offer
+                    the alternative when user is viewing exercises. So on workout log, there should
+                    be an option to swap exercises for common injuries - knee, shoulder, low back, etc.
+                */}
             </div>
+            <button>Create Routine</button>
         </form>
     )
 }

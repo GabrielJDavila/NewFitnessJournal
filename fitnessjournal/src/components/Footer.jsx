@@ -66,7 +66,7 @@ export default function Footer() {
                         <p className="footer-nav-item-text">Workouts</p>
                     </Link>
                     <Link to="Settings" className="footer-menu-item-link">
-                        <span class="material-symbols-outlined">
+                        <span className="material-symbols-outlined">
                             settings
                         </span>
                         <p className="footer-nav-item-text">Settings</p>
