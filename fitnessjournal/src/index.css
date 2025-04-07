@@ -722,12 +722,88 @@ th:last-child, td:last-child {
 
 /* ========== Program Preview =========== */
 .program-preview {
-  margin: auto;
+  margin-top: 5rem;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+
+.rendered-program-preview {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+
+.routine-preview {
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 1rem;
+  border: 2px solid lightgray;
+}
+
+.routine-preview-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  gap: 1rem;
+}
+
+.workout-day-preview {
+  border: 2px solid lightgray;
+  padding: 8px;
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  gap: 1rem;
+}
+
+.workout-day-exercises-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.exercises-preview {
+  width: 100%;
+  max-width: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.exercises-preview-name {
+  background: #c65d42;
+  color: white;
+  padding: 1rem;
+  border-radius: 5px 5px 0 0;
+} 
+
+.reps-and-sets-preview {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  border: 2px solid darkgray;
+  border-top: none;
+  width: 100%;
+  padding: 1rem;
+  border-radius: 0 0 5px 5px;
 }
 
 /* ========== Spinner =========== */
