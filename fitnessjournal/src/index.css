@@ -746,7 +746,13 @@ th:last-child, td:last-child {
   justify-content: center;
   align-items: center;
   gap: 1rem;
-  border: 2px solid lightgray;
+  padding: .5rem;
+  border-radius: 5px;
+  background: #DC684B;
+}
+
+.routine-type {
+  color: white;
 }
 
 .routine-preview-container {
@@ -760,9 +766,16 @@ th:last-child, td:last-child {
   gap: 1rem;
 }
 
+.routine-button {
+  background: #3498db;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .workout-day-preview {
   border: 2px solid lightgray;
-  padding: 8px;
   width: 100%;
   max-width: 500px;
   display: flex;
@@ -770,6 +783,8 @@ th:last-child, td:last-child {
   justify-content: center;
   text-align: center;
   gap: 1rem;
+  background: white;
+  border-radius: 5px;
 }
 
 .workout-day-exercises-container {

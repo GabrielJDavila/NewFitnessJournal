@@ -6,12 +6,13 @@ export default function Routine({routines}) {
     
     return (
         <div className="routine-preview">
-            <h2>{routines.programType}</h2>
+            <h2 className="routine-type">{routines.programType}</h2>
             <div className="routine-preview-container">
                 {sortedRoutines.map((day, index) => (
                     <WorkoutDay key={index} day={day} />
                 ))}
             </div>
+            <button className="routine-button">Choose this program</button>
         </div>
     )
 }
