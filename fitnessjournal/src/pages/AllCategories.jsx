@@ -15,6 +15,10 @@ export default function AllCategories() {
     const [editCategoryTitle, setEditCategoryTitle] = useState({
         title: ""
     })
+    const [selectedValueOption, setSelectedValueOption] = useState({
+        selectedValue: ""
+    })
+    console.log(selectedValueOption.selectedValue)
     const { currentUser } = useOutletContext()
     const skeletonArr = Array.from({length: 7}, (_, index) => index)
 
@@ -63,10 +67,17 @@ export default function AllCategories() {
     }
 
     function handleChange(name, value) {
-        setEditCategoryTitle(prev => ({
-            ...prev,
-            [name]: value
-        }))
+        if (name === "title") {
+            setEditCategoryTitle(prev => ({
+                ...prev,
+                [name]: value
+            }))
+        } else {
+            setSelectedValueOption(prev => ({
+                ...prev,
+                [name]: value
+            }))
+        }
     }
 
     function clearForm() {
@@ -139,6 +150,15 @@ export default function AllCategories() {
                 toggleModal={e => toggleModal(e)}
                 loadData={loadData}
             />
+            <select
+                name="selectedValue"
+                value={selectedValueOption.selectedValue}
+                onChange={e => handleChange(e.target.name, e.target.value)}
+            >
+                <option value="categories">Categories</option>
+                <option value="routines">Existing Programs</option>
+                <option value="create routine">Create Program</option>
+            </select>
             <div className="all-ex-page-container">
                 {toggleEditModal && editModal}
                 {openConfirmDeleteModal && confirmDeleteModal}
