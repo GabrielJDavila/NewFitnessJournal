@@ -1484,6 +1484,10 @@ th:last-child, td:last-child {
   padding: 1rem 0;
 }
 
+.all-categories-select-menu {
+  width: 100%;
+}
+
 .category-container,
 .exercise-container,
 .skeleton-cat-container,

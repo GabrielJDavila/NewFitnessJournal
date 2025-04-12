@@ -22,6 +22,8 @@ export default function AllCategories() {
     const { currentUser } = useOutletContext()
     const skeletonArr = Array.from({length: 7}, (_, index) => index)
 
+    // create if statement: if state equals one value, load categories; if state equals
+    // another value, load existing programs; if state equals last value, create program.
     async function loadData() {
         try {
             const data = await getAllCategories(usersInDB, currentUser)
@@ -154,6 +156,7 @@ export default function AllCategories() {
                 name="selectedValue"
                 value={selectedValueOption.selectedValue}
                 onChange={e => handleChange(e.target.name, e.target.value)}
+                className="all-categories-select-menu"
             >
                 <option value="categories">Categories</option>
                 <option value="routines">Existing Programs</option>
