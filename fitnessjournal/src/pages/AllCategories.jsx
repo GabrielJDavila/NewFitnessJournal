@@ -12,21 +12,25 @@ import RenderedCategories from "../components/RenderedCategories"
 export default function AllCategories() {
     const [toggleEditModal, setToggleEditModal] = useState(false)
     const [openConfirmDeleteModal, setOpenConfirmDeleteModal] = useState(false)
-    const [loadedCategories, setLoadedCategories] = useState([])
-    const [loadedRoutines, setLoadedRoutines] = useState()
+    const [loadedCategories, setLoadedCategories] = useState(() => {
+        const savedCategoriesData = JSON.parse(localStorage.getItem("categories"))
+        return savedCategoriesData ? savedCategoriesData : []
+    })
+    const [loadedRoutines, setLoadedRoutines] = useState(() => {
+        const savedRoutineData = JSON.parse(localStorage.getItem("existingPrograms"))
+        return savedRoutineData ? savedRoutineData : []
+    })
     const [hideCategories, setHideCategories] = useState(false)
     const [hideRoutines, setHideRoutines] = useState(false)
     const [currentId, setCurrentId] = useState(null)
     const [editCategoryTitle, setEditCategoryTitle] = useState({
         title: ""
     })
-    
     const [selectedValueOption, setSelectedValueOption] = useState({
         selectedValue: "all exercises"
     })
     const { currentUser } = useOutletContext()
     const skeletonArr = Array.from({length: 7}, (_, index) => index)
-
     // create if statement: if state equals one value, load categories; if state equals
     // another value, load existing programs; if state equals last value, create program.
     async function loadData() {
@@ -36,6 +40,7 @@ export default function AllCategories() {
                 setHideCategories(false)
                 const data = await getAllCategories(usersInDB, currentUser)
                 if(data) {
+                    localStorage.setItem("categories", JSON.stringify(data))
                     setLoadedCategories(data)
                 }
             } else if (selectedValueOption.selectedValue === "existing programs") {
@@ -43,13 +48,14 @@ export default function AllCategories() {
                 setHideRoutines(false)
                 const data = await previewWorkoutRoutines(currentUser, usersInDB)
                 if(data) {
+                    localStorage.setItem("existingPrograms", JSON.stringify(data))
                     setLoadedRoutines(data)
                 }
             } else if (selectedValueOption.selectedValue === "create a program") {
                 console.log("create a program")
             }
         } catch(e) {
-            console.log("error retrieving data: ", e)
+            console.error("error retrieving data: ", e)
         }
     }
 
@@ -144,27 +150,6 @@ export default function AllCategories() {
                 <button className="confirm-btn">delete</button>
             </div>
         </form>
-
-    // const renderedCategories = loadedCategories.map(obj => {
-    //     return (
-    //         <Category
-    //             key={obj.id}
-    //             id={obj.id}
-    //             name={obj.name}
-    //             toggleEdit={(e) => toggleEdit(e)}
-    //             toggleDelete={(e) => toggleDelete(e)}
-    //         />
-    //     )
-    // })
-
-    // const renderedSkelCategories = skeletonArr.map((_, index) => {
-    //     return (
-    //         <div key={index} className="skeleton-cat-container">
-    //             <Skeleton width="50%" height={50}/>
-    //             <Skeleton width={75} height={50}/>
-    //         </div>
-    //     )
-    // })
     
     return (
         <div className="all-cats-container">
