@@ -1,5 +1,5 @@
 
-export default function WorkoutDay({day}) {
+export default function WorkoutDay({day, programConfirmed}) {
 
     const sortedExercises = day.exercises.sort((a, b) => a.order - b.order)
 
@@ -8,7 +8,17 @@ export default function WorkoutDay({day}) {
             <table>
                 <thead>
                     <tr>
-                        <th>{day.day}</th>
+                        <th className="table-head-container">
+                            <p className="table-head-title">{day.day}</p>
+                            <div className="workoutday-interface-btn-container">
+                                <button className="workoutday-interface-btn">
+                                    <span data-addex className="material-symbols-outlined">
+                                        add
+                                    </span>
+                                </button>
+                                <p className="workoutday-interface-btn-text">Log all</p>
+                            </div>
+                        </th>
                         <th>Goal Sets</th>
                         <th>Goal Reps</th>
                     </tr>
