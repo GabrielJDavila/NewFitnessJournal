@@ -5,6 +5,7 @@ export default function WorkoutDay({day, programConfirmed}) {
 
     return (
         <div className="workout-day-preview">
+            {programConfirmed ?
             <table>
                 <thead>
                     <tr>
@@ -33,6 +34,28 @@ export default function WorkoutDay({day, programConfirmed}) {
                 ))}
                 </tbody>
             </table>
+            :
+            <table>
+                <thead>
+                    <tr>
+                        <th className="table-head-container">
+                            {day.day}
+                        </th>
+                        <th>Goal Sets</th>
+                        <th>Goal Reps</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {sortedExercises.map((exercise, index) => (
+                    <tr key={index}>
+                        <td>{exercise.name}</td>
+                        <td>{exercise.goalSets}</td>
+                        <td>{exercise.goalReps}</td>
+                    </tr>
+                ))}
+                </tbody>
+            </table>
+            }
         </div>
     )
 }
