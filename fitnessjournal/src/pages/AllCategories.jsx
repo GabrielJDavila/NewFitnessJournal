@@ -1,35 +1,67 @@
 import Category from "../components/Category"
 import { useState, useEffect } from "react"
 import { Link, useOutletContext } from "react-router-dom"
-import { getAllCategories, usersInDB, editCategoryName, deleteCategory } from "../firebase"
+import { getAllCategories, usersInDB, editCategoryName, deleteCategory, previewWorkoutRoutines } from "../firebase"
 import CategoryNav from "../components/CategoryNav"
 import NewCat from "../components/NewCat"
 import NewEx from "./NewEx"
+import ProgramPreview from "../components/ProgramPreview"
 import { Skeleton } from "@mui/material"
+import RenderedCategories from "../components/RenderedCategories"
 
 export default function AllCategories() {
     const [toggleEditModal, setToggleEditModal] = useState(false)
     const [openConfirmDeleteModal, setOpenConfirmDeleteModal] = useState(false)
-    const [loadedCategories, setLoadedCategories] = useState([])
+    const [loadedCategories, setLoadedCategories] = useState(() => {
+        const savedCategoriesData = JSON.parse(localStorage.getItem("categories"))
+        return savedCategoriesData ? savedCategoriesData : []
+    })
+    const [loadedRoutines, setLoadedRoutines] = useState(() => {
+        const savedRoutineData = JSON.parse(localStorage.getItem("existingPrograms"))
+        return savedRoutineData ? savedRoutineData : []
+    })
+    const [hideCategories, setHideCategories] = useState(false)
+    const [hideRoutines, setHideRoutines] = useState(false)
     const [currentId, setCurrentId] = useState(null)
     const [editCategoryTitle, setEditCategoryTitle] = useState({
         title: ""
     })
+    const [selectedValueOption, setSelectedValueOption] = useState({
+        selectedValue: "all exercises"
+    })
     const { currentUser } = useOutletContext()
     const skeletonArr = Array.from({length: 7}, (_, index) => index)
-
+    // create if statement: if state equals one value, load categories; if state equals
+    // another value, load existing programs; if state equals last value, create program.
     async function loadData() {
         try {
-            const data = await getAllCategories(usersInDB, currentUser)
-            setLoadedCategories(data)
+            if(selectedValueOption.selectedValue === "all exercises") {
+                setHideRoutines(true)
+                setHideCategories(false)
+                const data = await getAllCategories(usersInDB, currentUser)
+                if(data) {
+                    localStorage.setItem("categories", JSON.stringify(data))
+                    setLoadedCategories(data)
+                }
+            } else if (selectedValueOption.selectedValue === "existing programs") {
+                setHideCategories(true)
+                setHideRoutines(false)
+                const data = await previewWorkoutRoutines(currentUser, usersInDB)
+                if(data) {
+                    localStorage.setItem("existingPrograms", JSON.stringify(data))
+                    setLoadedRoutines(data)
+                }
+            } else if (selectedValueOption.selectedValue === "create a program") {
+                console.log("create a program")
+            }
         } catch(e) {
-            console.log("error retrieving data: ", e)
+            console.error("error retrieving data: ", e)
         }
     }
 
     useEffect(() => {
-        loadData() 
-    }, [])
+        loadData()
+    }, [selectedValueOption.selectedValue])
 
     useEffect(() => {
         window.scrollTo(0, 0)
@@ -60,6 +92,13 @@ export default function AllCategories() {
         const itemId = e.target.dataset.edit
         setCurrentId(itemId)
         clearForm()
+    }
+
+    function handleSelectChange(name, value) {
+        setSelectedValueOption(prev => ({
+            ...prev,
+            [name]: value
+        }))
     }
 
     function handleChange(name, value) {
@@ -111,41 +150,34 @@ export default function AllCategories() {
                 <button className="confirm-btn">delete</button>
             </div>
         </form>
-
-    const renderedCategories = loadedCategories.map(obj => {
-        return (
-            <Category
-                key={obj.id}
-                id={obj.id}
-                name={obj.name}
-                toggleEdit={(e) => toggleEdit(e)}
-                toggleDelete={(e) => toggleDelete(e)}
-            />
-        )
-    })
-
-    const renderedSkelCategories = skeletonArr.map((_, index) => {
-        return (
-            <div key={index} className="skeleton-cat-container">
-                <Skeleton width="50%" height={50}/>
-                <Skeleton width={75} height={50}/>
-            </div>
-        )
-    })
-
+    
     return (
         <div className="all-cats-container">
             <CategoryNav
                 toggleModal={e => toggleModal(e)}
                 loadData={loadData}
             />
+            <select
+                name="selectedValue"
+                value={selectedValueOption.selectedValue}
+                onChange={e => handleSelectChange(e.target.name, e.target.value)}
+                className="all-categories-select-menu"
+            >
+                <option value="all exercises">All Exercises</option>
+                <option value="existing programs">Existing Programs</option>
+                <option value="create a program">Create Program</option>
+            </select>
+
             <div className="all-ex-page-container">
                 {toggleEditModal && editModal}
                 {openConfirmDeleteModal && confirmDeleteModal}
-                {loadedCategories.length === 0 ?
-                    renderedSkelCategories
-                    :
-                    renderedCategories
+                {
+                    !hideCategories && 
+                    <RenderedCategories loadedCategories={loadedCategories} skeletonArr={skeletonArr} />
+                }
+                {
+                    !hideRoutines && 
+                    <ProgramPreview loadedRoutines={loadedRoutines}/>
                 }
             </div>
         </div>

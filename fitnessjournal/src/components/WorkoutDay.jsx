@@ -1,22 +1,61 @@
 
-export default function WorkoutDay({day}) {
+export default function WorkoutDay({day, programConfirmed}) {
 
     const sortedExercises = day.exercises.sort((a, b) => a.order - b.order)
 
     return (
         <div className="workout-day-preview">
-            <h2>{day.day}</h2>
-            <div className="workout-day-exercises-container">
+            {programConfirmed ?
+            <table>
+                <thead>
+                    <tr>
+                        <th className="table-head-container">
+                            <p className="table-head-title">{day.day}</p>
+                            <div className="workoutday-interface-btn-container">
+                                <button className="workoutday-interface-btn">
+                                    <span data-addex className="material-symbols-outlined">
+                                        add
+                                    </span>
+                                </button>
+                                <p className="workoutday-interface-btn-text">Log all</p>
+                            </div>
+                        </th>
+                        <th>Goal Sets</th>
+                        <th>Goal Reps</th>
+                    </tr>
+                </thead>
+                <tbody>
                 {sortedExercises.map((exercise, index) => (
-                    <div key={index} className="exercises-preview">
-                        <p className="exercises-preview-name">{exercise.name}</p>
-                        <div className="reps-and-sets-preview">
-                            <p>Goal Sets: {exercise.goalSets}</p>
-                            <p>Goal Reps: {exercise.goalReps}</p>
-                        </div>
-                    </div>
+                    <tr key={index}>
+                        <td>{exercise.name}</td>
+                        <td>{exercise.goalSets}</td>
+                        <td>{exercise.goalReps}</td>
+                    </tr>
                 ))}
-            </div>
+                </tbody>
+            </table>
+            :
+            <table>
+                <thead>
+                    <tr>
+                        <th className="table-head-container">
+                            {day.day}
+                        </th>
+                        <th>Goal Sets</th>
+                        <th>Goal Reps</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {sortedExercises.map((exercise, index) => (
+                    <tr key={index}>
+                        <td>{exercise.name}</td>
+                        <td>{exercise.goalSets}</td>
+                        <td>{exercise.goalReps}</td>
+                    </tr>
+                ))}
+                </tbody>
+            </table>
+            }
         </div>
     )
 }

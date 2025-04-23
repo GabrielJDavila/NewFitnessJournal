@@ -396,6 +396,7 @@ export async function editCategoryName(userCollection, userId, categoryId, newNa
 
 // Get all categories from firestore
 export async function getAllCategories(userCollection, userId) {
+    let categories = []
     try {
         const userDocRef = doc(userCollection, userId)
         const categoriesCollectionRef = collection(userDocRef, "categories")
