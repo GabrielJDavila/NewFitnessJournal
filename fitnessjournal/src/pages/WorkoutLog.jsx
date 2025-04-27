@@ -29,6 +29,8 @@ export default function WorkoutLog() {
         return savedData ? savedData : []
     })
     
+    console.log(workoutData)
+    
     const [workoutDatesData, setWorkoutDatesData] = useState([])
     const [toggleEditSetModal, setToggleEditSetModal] = useState(false)
     const [toggleAddSetModal, setToggleAddSetModal] = useState(false)
