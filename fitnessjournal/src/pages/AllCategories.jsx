@@ -20,6 +20,7 @@ export default function AllCategories() {
         const savedRoutineData = JSON.parse(localStorage.getItem("existingPrograms"))
         return savedRoutineData ? savedRoutineData : []
     })
+   
     const [hideCategories, setHideCategories] = useState(false)
     const [hideRoutines, setHideRoutines] = useState(false)
     const [currentId, setCurrentId] = useState(null)

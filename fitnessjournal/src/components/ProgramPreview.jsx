@@ -19,7 +19,7 @@ export default function ProgramPreview({loadedRoutines}) {
     }
 
     const sortedRoutine = programConfirmed ? selectedRoutine.workoutDays.sort((a, b) => a.order - b.order) : ""
-
+    
     const renderedRoutines = loadedRoutines?.map((routine, index) => (
         <Routine
             key={index}
@@ -52,7 +52,7 @@ export default function ProgramPreview({loadedRoutines}) {
             </div>
         </div>
 
-    console.log(selectedRoutine)
+    
     return (
         <div className="program-preview">
             {!loadedRoutines &&

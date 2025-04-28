@@ -18,7 +18,7 @@ export default function Routine({routines, setSelectedRoutine, setProgramConfirm
     const sortedRoutines = routines.workoutDays.sort((a, b) => a.order - b.order)
 
     // const sortedRoutine = programConfirmed ? selectedRoutine.workoutDays.sort((a, b) => a.order - b.order) : ""
-
+   
     const confirmationPopup =
     <div className="program-confirmation">
         <p>Are you sure you want to add {routines.programType} to log?</p>

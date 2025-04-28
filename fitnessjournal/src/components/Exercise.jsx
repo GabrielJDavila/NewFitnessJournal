@@ -51,7 +51,6 @@ export default function Exercise(props) {
                     setsReps: []
                 }
                 
-                console.log(newEx.date)
                 workoutData.push(newEx)
                 localStorage.setItem('exercises', JSON.stringify(workoutData))
                 props.setToggleModal(true)

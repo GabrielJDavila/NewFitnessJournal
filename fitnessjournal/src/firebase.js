@@ -285,9 +285,11 @@ export async function previewWorkoutRoutines(userId, userCollection) {
                 for(const exerciseDoc of exercisesSnapshot.docs) {
                     let exerciseData = {
                         order: exerciseDoc.data().order,
+                        id: exerciseDoc.id,
                         name: exerciseDoc.data().name,
                         goalSets: exerciseDoc.data().goalSets,
-                        goalReps: exerciseDoc.data().goalReps
+                        goalReps: exerciseDoc.data().goalReps,
+                        setsReps: []
                     }
 
                     workoutDayData.exercises.push(exerciseData)
