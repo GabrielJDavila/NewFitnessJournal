@@ -165,8 +165,8 @@ export default function AllCategories() {
                 className="all-categories-select-menu"
             >
                 <option value="all exercises">All Exercises</option>
-                <option value="existing programs">Existing Programs</option>
-                <option value="create a program">Create Program</option>
+                <option value="existing programs">Programs</option>
+                
             </select>
 
             <div className="all-ex-page-container">

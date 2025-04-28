@@ -18,6 +18,10 @@ export default function ProgramPreview({loadedRoutines}) {
        setSelectedRoutine(routines)
     }
 
+    function handleCreateProgram() {
+        console.log("create program")
+    }
+
     const sortedRoutine = programConfirmed ? selectedRoutine.workoutDays.sort((a, b) => a.order - b.order) : ""
     
     const renderedRoutines = loadedRoutines?.map((routine, index) => (
@@ -60,6 +64,9 @@ export default function ProgramPreview({loadedRoutines}) {
                     <p>Loading your templates now...</p>
                     <Spinner />
                 </div>
+            }
+            {loadedRoutines && !programConfirmed &&
+                <button onClick={handleCreateProgram}>Create a program</button>
             }
             {loadedRoutines && !programConfirmed ?
                 renderedRoutines

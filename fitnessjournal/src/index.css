@@ -722,7 +722,7 @@ th:last-child, td:last-child {
 
 /* ========== Program Preview =========== */
 .program-preview {
-  margin-top: 5rem;
+  margin-top: 3rem;
   padding: 0;
   display: flex;
   flex-direction: column;
