@@ -5,7 +5,7 @@ export default function WorkoutDay({day, programConfirmed}) {
         ...ex,
         date: new Date(localStorage.getItem("selectedDate")),
     }))
-    console.log(sortedExercises)
+    
     function handleAddClick() {
         localStorage.setItem("exercises", JSON.stringify(sortedExercises))
     }

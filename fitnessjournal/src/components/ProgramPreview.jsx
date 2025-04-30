@@ -8,7 +8,7 @@ import WorkoutDay from "./WorkoutDay"
 // show recommended programs based on user inputs, but still give the option to choose other routines,
 // Or create their own.
 
-export default function ProgramPreview({loadedRoutines}) {
+export default function ProgramPreview({loadedRoutines, toggleShowCreateRoutine}) {
     const [programConfirmed, setProgramConfirmed] = useState(false)
     const [selectedRoutine, setSelectedRoutine] = useState()
 
@@ -19,7 +19,7 @@ export default function ProgramPreview({loadedRoutines}) {
     }
 
     function handleCreateProgram() {
-        console.log("create program")
+       toggleShowCreateRoutine()
     }
 
     const sortedRoutine = programConfirmed ? selectedRoutine.workoutDays.sort((a, b) => a.order - b.order) : ""

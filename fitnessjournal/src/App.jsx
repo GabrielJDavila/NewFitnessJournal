@@ -23,6 +23,7 @@ import Analysis from "./pages/Analysis"
 import ExDetailedViewLayout from "./components/ExDetailedViewLayout"
 import ExDetailedView from "./pages/ExDetailedView"
 import ExDetailedHistory from "./pages/ExDetailedHistory"
+import CreateRoutine from "./pages/CreateRoutine"
 // import ProgramIntake from "./pages/ProgramIntake"
 // import ProgramPreview from "./ProgramPreview"
 
@@ -49,7 +50,7 @@ function App() {
                 <Route index element={<ExDetailedView />}/>
                 <Route path="ExDetailedHistory" element={<ExDetailedHistory/>}/>
               </Route>
-              
+              <Route path="CreateRoutine" element={<CreateRoutine />}/>
               <Route path="AllCategories" element={<AllCategories />} />
               <Route path="AllCategories/:id" element={<LoadedExercises />}/>
               <Route path="ExerciseDetail/:id" element={<ExerciseDetail />} />

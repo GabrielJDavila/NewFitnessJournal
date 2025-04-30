@@ -20,6 +20,7 @@ export default function AllCategories() {
         const savedRoutineData = JSON.parse(localStorage.getItem("existingPrograms"))
         return savedRoutineData ? savedRoutineData : []
     })
+    const [showCreateRoutine, setShowCreateRoutine] = useState(false)
    
     const [hideCategories, setHideCategories] = useState(false)
     const [hideRoutines, setHideRoutines] = useState(false)
@@ -115,6 +116,10 @@ export default function AllCategories() {
         }))
     }
 
+    function toggleShowCreateRoutine() {
+        setShowCreateRoutine(prev => !prev)
+    }
+    console.log(showCreateRoutine)
     const modalStyles = {
         position: "fixed",
         top: "100px",
@@ -178,7 +183,7 @@ export default function AllCategories() {
                 }
                 {
                     !hideRoutines && 
-                    <ProgramPreview loadedRoutines={loadedRoutines}/>
+                    <ProgramPreview loadedRoutines={loadedRoutines} toggleShowCreateRoutine={toggleShowCreateRoutine}/>
                 }
             </div>
         </div>
