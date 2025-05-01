@@ -65,9 +65,10 @@ export default function ProgramPreview({loadedRoutines, toggleShowCreateRoutine}
                     <Spinner />
                 </div>
             }
-            {loadedRoutines && !programConfirmed &&
-                <button onClick={handleCreateProgram}>Create a program</button>
-            }
+            
+            {/* loadedRoutines && !programConfirmed &&
+                <button onClick={handleCreateProgram}>Create a program</button> */}
+            
             {loadedRoutines && !programConfirmed ?
                 renderedRoutines
                 :

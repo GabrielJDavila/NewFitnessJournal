@@ -8,6 +8,7 @@ import NewEx from "./NewEx"
 import ProgramPreview from "../components/ProgramPreview"
 import { Skeleton } from "@mui/material"
 import RenderedCategories from "../components/RenderedCategories"
+import CreateRoutine from "./CreateRoutine"
 
 export default function AllCategories() {
     const [toggleEditModal, setToggleEditModal] = useState(false)
@@ -20,8 +21,8 @@ export default function AllCategories() {
         const savedRoutineData = JSON.parse(localStorage.getItem("existingPrograms"))
         return savedRoutineData ? savedRoutineData : []
     })
-    const [showCreateRoutine, setShowCreateRoutine] = useState(false)
-   
+    
+    const [hideCreateRoutine, setHideCreateRoutine] = useState(false)
     const [hideCategories, setHideCategories] = useState(false)
     const [hideRoutines, setHideRoutines] = useState(false)
     const [currentId, setCurrentId] = useState(null)
@@ -38,6 +39,7 @@ export default function AllCategories() {
     async function loadData() {
         try {
             if(selectedValueOption.selectedValue === "all exercises") {
+                setHideCreateRoutine(true)
                 setHideRoutines(true)
                 setHideCategories(false)
                 const data = await getAllCategories(usersInDB, currentUser)
@@ -46,6 +48,7 @@ export default function AllCategories() {
                     setLoadedCategories(data)
                 }
             } else if (selectedValueOption.selectedValue === "existing programs") {
+                setHideCreateRoutine(true)
                 setHideCategories(true)
                 setHideRoutines(false)
                 const data = await previewWorkoutRoutines(currentUser, usersInDB)
@@ -54,7 +57,9 @@ export default function AllCategories() {
                     setLoadedRoutines(data)
                 }
             } else if (selectedValueOption.selectedValue === "create a program") {
-                console.log("create a program")
+                setHideCategories(true)
+                setHideRoutines(true)
+                setHideCreateRoutine(false)
             }
         } catch(e) {
             console.error("error retrieving data: ", e)
@@ -116,10 +121,6 @@ export default function AllCategories() {
         }))
     }
 
-    function toggleShowCreateRoutine() {
-        setShowCreateRoutine(prev => !prev)
-    }
-    console.log(showCreateRoutine)
     const modalStyles = {
         position: "fixed",
         top: "100px",
@@ -170,7 +171,8 @@ export default function AllCategories() {
                 className="all-categories-select-menu"
             >
                 <option value="all exercises">All Exercises</option>
-                <option value="existing programs">Programs</option>
+                <option value="existing programs">Existing Routines</option>
+                <option value="create a program">Create a Routine</option>
                 
             </select>
 
@@ -183,7 +185,11 @@ export default function AllCategories() {
                 }
                 {
                     !hideRoutines && 
-                    <ProgramPreview loadedRoutines={loadedRoutines} toggleShowCreateRoutine={toggleShowCreateRoutine}/>
+                    <ProgramPreview loadedRoutines={loadedRoutines}/>
+                }
+                {
+                    !hideCreateRoutine &&
+                    <CreateRoutine />
                 }
             </div>
         </div>
