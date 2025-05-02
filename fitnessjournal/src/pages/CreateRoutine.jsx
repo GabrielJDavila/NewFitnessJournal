@@ -9,9 +9,9 @@ export default function CreateRoutine() {
     return (
         <div className="create-routine-container">
             <form className="create-routine-form">
-                <label className="routine-name">
+                <label className="routine-label">
                     Routine Name
-                    <input type="text"/>
+                    <input type="text" name="routineTitle" className="routine-title"/>
                 </label>
                 <button>
                     <span class="material-symbols-outlined">
